@@ -18,7 +18,7 @@ ThemeData getApplicationTheme() {
       accentColor: ColorManager.grey,
       // card view theme
       cardTheme: CardTheme(
-          color: ColorManager.white,
+          color: Colors.white,
           shadowColor: ColorManager.grey,
           elevation: AppSize.s4),
       // App bar theme
@@ -28,7 +28,7 @@ ThemeData getApplicationTheme() {
           elevation: AppSize.s4,
           shadowColor: ColorManager.primaryOpacity70,
           titleTextStyle: getRegularStyle(
-              color: ColorManager.white, fontSize: FontSize.s16)),
+              color: Colors.white, fontSize: FontSize.s16)),
       // Button theme
       buttonTheme: ButtonThemeData(
           shape: StadiumBorder(),
@@ -39,7 +39,7 @@ ThemeData getApplicationTheme() {
       // elevated button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              textStyle: getRegularStyle(color: ColorManager.white),
+              textStyle: getRegularStyle(color: Colors.white),
               primary: ColorManager.primary,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSize.s12)))),
