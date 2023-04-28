@@ -1,3 +1,4 @@
+import 'package:complete_advanced_flutter/presentation/login/verifyotp.dart';
 import 'package:flutter/material.dart';
 
 import '../forgot_password/forgot_password.dart';
@@ -17,6 +18,7 @@ class Routes {
   static const String forgotPasswordRoute = "/forgotPassword";
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
+  static const String verifyOtpRoute = "/verify_otp";
 }
 
 class RouteGenerator {
@@ -36,6 +38,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
         return MaterialPageRoute(builder: (_) => StoreDetailsView());
+      case Routes.verifyOtpRoute:
+        return MaterialPageRoute(builder: (_) => verify_otp());
       default:
         return unDefinedRoute();
     }
