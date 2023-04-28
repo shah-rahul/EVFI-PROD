@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/src/foundation/key.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
+class verify_otp extends StatefulWidget {
+  const verify_otp({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  State<verify_otp> createState() => _verify_otpState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _verify_otpState extends State<verify_otp> {
   final _phoneController = TextEditingController();
   final _otpController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +49,9 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
               onPressed: () {
                 //  mobile number verification logic here
-                      Navigator.pushNamed(context, '/verify_otp');
+                  Navigator.pushNamed(context, '/onBoarding');
               },
-              child: Text('Get OTP'),
+              child: Text('Verify OTP'),
             ),
           ],
         ),
