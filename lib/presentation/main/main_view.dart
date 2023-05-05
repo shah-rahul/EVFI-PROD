@@ -26,6 +26,7 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       bottomNavigationBar: Container(
         padding: EdgeInsets.all(12),
         margin: EdgeInsets.only(left: 24, right: 24, bottom: 12),

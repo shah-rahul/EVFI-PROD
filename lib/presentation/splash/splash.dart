@@ -18,7 +18,7 @@ class _SplashViewState extends State<SplashView> {
 
   _startDelay() {
     _timer = Timer(Duration(seconds: 3), 
-      () => Navigator.pushReplacementNamed(context, Routes.loginRoute)
+      () => Navigator.pushReplacementNamed(context, Routes.mainRoute)
     );
   }
 
