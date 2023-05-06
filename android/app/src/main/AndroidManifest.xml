@@ -4,6 +4,8 @@
         android:label="EVFI"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDG1sJB_Uf_MGfWfPpr2A-qh9Dzv87fmd4"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
