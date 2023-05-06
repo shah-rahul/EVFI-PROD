@@ -16,7 +16,7 @@ class SplashView extends StatefulWidget {
 class _SplashViewState extends State<SplashView> {
   Timer? _timer;
 
-  _startDelay() 
+  _startDelay() {
     _timer = Timer(Duration(seconds: 3),
         () => Navigator.pushReplacementNamed(context, Routes.loginRoute));
 
