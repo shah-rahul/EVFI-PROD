@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
+import '../resources/routes_manager.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:otp_text_field/otp_text_field.dart';
@@ -49,7 +50,7 @@ class _verify_otpState extends State<verify_otp> {
             ElevatedButton(
               onPressed: () {
                 //  mobile number verification logic here
-                  Navigator.pushNamed(context, '/onBoarding');
+                Navigator.pushNamed(context, Routes.onBoardingRoute);
               },
               child: Text('Verify OTP'),
             ),
