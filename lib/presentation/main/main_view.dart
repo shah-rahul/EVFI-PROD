@@ -1,3 +1,4 @@
+import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../resources/color_manager.dart';
@@ -8,7 +9,6 @@ import '../pages/chargeStation.dart';
 import '../pages/bookings.dart';
 
 class MainView extends StatefulWidget {
-
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -28,55 +28,46 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Container(
-        padding: EdgeInsets.all(12),
-        margin: EdgeInsets.only(left: 24, right: 24, bottom: 12),
-        decoration: BoxDecoration(
-          color: ColorManager.appBlack,
-          borderRadius: BorderRadius.all(Radius.circular(40)),
-        ),
-        child: BottomNavigationBar(
+        child: DotNavigationBar(
           currentIndex: _currentScreen,
-          type: BottomNavigationBarType.fixed,
+          //margin: EdgeInsets.symmetric(horizontal: 10.0),
+          marginR: EdgeInsets.all(25),
           backgroundColor: ColorManager.appBlack,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          selectedItemColor: Colors.amberAccent,
-          unselectedItemColor: Colors.white,
+          dotIndicatorColor: ColorManager.appBlack,
           onTap: (value) => setState(() {
             _currentScreen = value;
           }),
-          items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+          items: <DotNavigationBarItem>[
+            DotNavigationBarItem(
               icon: Image.asset(
                 'assets/images/navbar_icons/home_outlined.png',
-                height: 30,
+                height: 24,
                 color: _currentScreen == 0
                     ? ColorManager.primary
                     : ColorManager.lightGrey,
               ),
-              label: 'Home',
             ),
-            BottomNavigationBarItem(
+            DotNavigationBarItem(
               icon: Image.asset(
                 'assets/images/navbar_icons/chargeStation.png',
-                height: 30,
+                height: 24,
                 color: _currentScreen == 1
                     ? ColorManager.primary
                     : ColorManager.lightGrey,
               ),
-              label: 'Charge Station',
+              //label: 'Charge Station',
             ),
-            BottomNavigationBarItem(
+            DotNavigationBarItem(
               icon: Image.asset(
                 'assets/images/navbar_icons/bookings_icon.png',
-                height: 30,
+                height: 24,
                 color: _currentScreen == 2
                     ? ColorManager.primary
                     : ColorManager.lightGrey,
               ),
-              label: 'Bookings',
+              //label: 'Bookings',
             ),
-            BottomNavigationBarItem(
+            DotNavigationBarItem(
               icon: Image.asset(
                 'assets/images/navbar_icons/account_icon.png',
                 height: 32,
@@ -84,32 +75,9 @@ class _MainViewState extends State<MainView> {
                     ? ColorManager.primary
                     : ColorManager.lightGrey,
               ),
-              label: 'Account',
+              //label: 'Account',
             ),
           ],
-
-          /*
-            iconSize: 30,
-            selectedItemColor: Colors.amberAccent,
-            unselectedItemColor: Colors.white,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                label: 'Home',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.thunderstorm_outlined),
-                label: 'Bookings',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.charging_station_outlined),
-                label: 'EVSE',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outlined),//Image.asset('assets/images/account.jpg'),
-                label: 'Profile',
-              ),
-            ],*/
         ),
       ),
       body: screens.elementAt(_currentScreen),

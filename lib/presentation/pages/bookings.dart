@@ -11,8 +11,10 @@ class _BookingsState extends State<Bookings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black26,
       body: Center(child: Text("Bookings",
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),),
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headlineMedium,),
       ),
     );
   }

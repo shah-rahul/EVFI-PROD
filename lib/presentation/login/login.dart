@@ -83,7 +83,6 @@ class _LoginViewState extends State<LoginView> {
                   verificationCompleted:
                       (PhoneAuthCredential credential) async {
                     //  Authenticate user with credential
-                   
 
                   },
                   verificationFailed: (FirebaseAuthException e) {

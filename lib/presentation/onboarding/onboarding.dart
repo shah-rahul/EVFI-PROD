@@ -1,14 +1,15 @@
-import '../../domain/model.dart';
-import 'package:complete_advanced_flutter/presentation/onboarding/onboarding_viewmodel.dart';
-import 'package:complete_advanced_flutter/presentation/resources/assets_manager.dart';
-import 'package:complete_advanced_flutter/presentation/resources/color_manager.dart';
-import 'package:complete_advanced_flutter/presentation/resources/routes_manager.dart';
-import 'package:complete_advanced_flutter/presentation/resources/strings_manager.dart';
-import 'package:complete_advanced_flutter/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../../domain/model.dart';
+import '../onboarding/onboarding_viewmodel.dart';
+import '../resources/assets_manager.dart';
+import '../resources/color_manager.dart';
+import '../resources/routes_manager.dart';
+import '../resources/strings_manager.dart';
+import '../resources/values_manager.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -74,11 +75,11 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed(Routes.homeRoute);
+                          .pushReplacementNamed(Routes.mainRoute);
                     },
                     child: Text(
                       AppStrings.skip,
-                      style: TextStyle(color: ColorManager.yellowPrimary),
+                      style: TextStyle(color: ColorManager.appBlack),
                       textAlign: TextAlign.end,
                     ),
                   )),
@@ -92,7 +93,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 
   Widget _getBottomSheetWidget(SliderViewObject sliderViewObject) {
     return Container(
-      color: ColorManager.yellowPrimary,
+      color: ColorManager.primary,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

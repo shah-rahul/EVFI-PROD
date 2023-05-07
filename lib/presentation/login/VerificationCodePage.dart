@@ -1,7 +1,8 @@
-import 'package:complete_advanced_flutter/presentation/onboarding/onboarding.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../onboarding/onboarding.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationCodePage extends StatefulWidget {

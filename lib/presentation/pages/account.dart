@@ -11,8 +11,10 @@ class _AccountState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pinkAccent,
       body: Center(child: Text("Profile",
-      style: TextStyle(fontSize: 25, fontWeight: FontWeight.w400),),
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.headlineMedium,),
       ),
     );
   }
