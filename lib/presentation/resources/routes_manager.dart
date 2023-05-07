@@ -1,14 +1,13 @@
-import 'package:complete_advanced_flutter/presentation/login/verifyotp.dart';
 import 'package:flutter/material.dart';
 
 import '../forgot_password/forgot_password.dart';
+import '../login/verifyotp.dart';
 import '../login/login.dart';
 import '../main/main_view.dart';
 import '../onboarding/onboarding.dart';
 import '../register/register.dart';
 import '../resources/strings_manager.dart';
 import '../splash/splash.dart';
-import '../pages/home.dart';
 import '../store_details/store_details.dart';
 
 class Routes {
@@ -20,7 +19,7 @@ class Routes {
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
   static const String verifyOtpRoute = "/verify_otp";
-  static const String homeRoute = "/home";
+  //static const String homeRoute = "/home";
 }
 
 class RouteGenerator {
@@ -42,8 +41,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => StoreDetailsView());
       case Routes.verifyOtpRoute:
         return MaterialPageRoute(builder: (_) => verify_otp());
-      case Routes.homeRoute:
-        return MaterialPageRoute(builder: (_) => Home());
+      /*case Routes.homeRoute:
+        return MaterialPageRoute(builder: (_) => Home());*/
       default:
         return unDefinedRoute();
     }
