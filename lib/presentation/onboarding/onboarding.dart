@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:EVFI/presentation/resources/font_manager.dart';
 
 import '../../domain/model.dart';
-import '../onboarding/onboarding_viewmodel.dart';
+import './onboarding_viewmodel.dart';
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
@@ -41,14 +40,33 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         });
   }
 
+  AnimatedContainer _buildDots({
+    int? currentIndex,
+    int? index,
+  }) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(50),
+        ),
+        color: Color(0xFF000000),
+      ),
+      margin: const EdgeInsets.only(right: 5),
+      height: 10,
+      curve: Curves.easeIn,
+      width: currentIndex == index ? 20 : 10,
+    );
+  }
+
   Widget _getContentWidget(SliderViewObject? sliderViewObject) {
     if (sliderViewObject == null) {
       return Container();
     } else
       return Scaffold(
-        backgroundColor: ColorManager.primary,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: ColorManager.primary,
+          backgroundColor: ColorManager.appBlack,
           elevation: AppSize.s4,
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: Colors.white,
@@ -56,104 +74,94 @@ class _OnBoardingViewState extends State<OnBoardingView> {
             statusBarIconBrightness: Brightness.dark,
           ),
         ),
-        body: PageView.builder(
-            controller: _pageController,
-            itemCount: sliderViewObject.numOfSlides,
-            onPageChanged: (index) {
-              _viewModel.onPageChanged(index);
-            },
-            itemBuilder: (context, index) {
-              return OnBoardingPage(sliderViewObject.sliderObject);
-            }),
-        bottomSheet: Container(
-          color: ColorManager.primary,
-          height: AppSize.s100,
-          child: Column(
-            children: [
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushReplacementNamed(Routes.mainRoute);
-                    },
-                    child: Text(
-                      AppStrings.skip,
-                      style: TextStyle(color: ColorManager.appBlack),
-                      textAlign: TextAlign.end,
+        body: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: sliderViewObject.numOfSlides,
+                  onPageChanged: (index) {
+                    _viewModel.onPageChanged(index);
+                  },
+                  itemBuilder: (context, index) {
+                    return OnBoardingPage(sliderViewObject.sliderObject);
+                  }),
+            ),
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (int i = 0; i < sliderViewObject.numOfSlides; i++)
+                            Padding(
+                              padding: EdgeInsets.all(AppPadding.p8),
+                              child: _buildDots(
+                                index: sliderViewObject.currentIndex,
+                                currentIndex: i,
+                              ),
+                            ),
+                        ]),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(AppMargin.m40),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushReplacementNamed(Routes.mainRoute);
+                          },
+                          style: TextButton.styleFrom(
+                            elevation: 0,
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: AppSize.s18,
+                            ),
+                          ),
+                          child: Text(
+                            AppStrings.skip,
+                            style: TextStyle(color: ColorManager.appBlack),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            int ind = _viewModel.goNext();
+                            ind != sliderViewObject.currentIndex
+                                ? _pageController.animateToPage(ind,
+                                    duration: Duration(
+                                        milliseconds: DurationConstant.d300),
+                                    curve: Curves.bounceInOut)
+                                : Navigator.of(context)
+                                    .pushNamed(Routes.mainRoute);
+                          },
+                          child: const Text("NEXT"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            textStyle: TextStyle(fontSize: AppSize.s18),
+                          ),
+                        ),
+                      ],
                     ),
-                  )),
-              // add layout for indicator and arrows
-              _getBottomSheetWidget(sliderViewObject)
-            ],
-          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       );
-  }
-
-  Widget _getBottomSheetWidget(SliderViewObject sliderViewObject) {
-    return Container(
-      color: ColorManager.primary,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // left arrow
-          Padding(
-            padding: EdgeInsets.all(AppPadding.p14),
-            child: GestureDetector(
-              child: SizedBox(
-                height: AppSize.s20,
-                width: AppSize.s20,
-                child: SvgPicture.asset(ImageAssets.leftArrow),
-              ),
-              onTap: () {
-                // go to previous slide
-                _pageController.animateToPage(_viewModel.goPrevious(),
-                    duration: Duration(milliseconds: DurationConstant.d300),
-                    curve: Curves.bounceInOut);
-              },
-            ),
-          ),
-
-          // circles indicator
-          Row(
-            children: [
-              for (int i = 0; i < sliderViewObject.numOfSlides; i++)
-                Padding(
-                  padding: EdgeInsets.all(AppPadding.p8),
-                  child: _getProperCircle(i, sliderViewObject.currentIndex),
-                )
-            ],
-          ),
-
-          // right arrow
-          Padding(
-            padding: EdgeInsets.all(AppPadding.p14),
-            child: GestureDetector(
-              child: SizedBox(
-                height: AppSize.s20,
-                width: AppSize.s20,
-                child: SvgPicture.asset(ImageAssets.rightArrow),
-              ),
-              onTap: () {
-                // go to next slide
-                _pageController.animateToPage(_viewModel.goNext(),
-                    duration: Duration(milliseconds: DurationConstant.d300),
-                    curve: Curves.bounceInOut);
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _getProperCircle(int index, int _currentIndex) {
-    if (index == _currentIndex) {
-      return SvgPicture.asset(ImageAssets.filledCircle); // selected slider
-    } else {
-      return SvgPicture.asset(ImageAssets.unfilledCircle); // unselected slider
-    }
   }
 
   @override
@@ -170,36 +178,43 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SizedBox(height: AppSize.s40),
-        Padding(
-          padding: const EdgeInsets.all(AppPadding.p8),
-          child: Text(
+    return Padding(
+      padding: const EdgeInsets.all(40.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: AppMargin.m20),
+            child: Image.asset(
+              _sliderObject.image,
+              width: MediaQuery.of(context).size.width - AppSize.s60,
+              height: MediaQuery.of(context).size.height - 600,
+              // height: SizeConfig.blockV! * 35,
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text(
             _sliderObject.title,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headline1,
+            style: TextStyle(
+              fontFamily: FontConstants.fontFamily,
+              fontWeight: FontWeight.w600,
+              fontSize: AppSize.s20,
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(AppPadding.p8),
-          child: Text(
+          const SizedBox(height: 10),
+          Text(
             _sliderObject.subTitle,
+            style: TextStyle(
+              fontFamily: "Mulish",
+              fontWeight: FontWeight.w300,
+              fontSize: 14,
+            ),
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-        ),
-        SizedBox(
-          height: AppSize.s60,
-        ),
-        Image.asset(
-          _sliderObject.image,
-          width: AppSize.s100,
-          height: AppSize.s100,
-        ),
-        // image widget
-      ],
+          )
+        ],
+      ),
     );
   }
 }

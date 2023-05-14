@@ -66,13 +66,7 @@ flutter:
      - assets/images/navbar_icons/
      - assets/images/map_icons/
      - assets/images/lightning_icon.png
-     - assets/images/onboardingLogo1.jpg
-     - assets/images/onboardingLogo2.jpg
-     - assets/images/onboardingLogo3.jpg
-     - assets/images/filledCircle.svg
-     - assets/images/UnfilledCircle.svg
-     - assets/images/leftArrow.svg
-     - assets/images/rightArrow.svg
+     - assets/images/onboarding/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

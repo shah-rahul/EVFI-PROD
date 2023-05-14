@@ -19,7 +19,7 @@ class Routes {
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
   static const String verifyOtpRoute = "/verify_otp";
-  //static const String homeRoute = "/home";
+  static const String homeRoute = "/home";
 }
 
 class RouteGenerator {
