@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../onboarding/onboarding.dart';
+import '../register/register.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationCodePage extends StatefulWidget {
@@ -68,6 +69,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => OnBoardingView()),
+                    // MaterialPageRoute(builder: (context) => RegisterView()),
                   );
                 } on FirebaseAuthException catch (e) {
                   //  Handle authentication failure
