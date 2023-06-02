@@ -1,5 +1,7 @@
+import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/home.dart';
 import '../resources/color_manager.dart';
 
 class RegisterView extends StatefulWidget {
@@ -34,7 +36,7 @@ class _RegisterViewState extends State<RegisterView> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
                     child: const Text(
-                      'Sign in',
+                      'Register',
                       style: TextStyle(fontSize: 20),
                     )),
                 Container(
@@ -73,6 +75,10 @@ class _RegisterViewState extends State<RegisterView> {
                     child: ElevatedButton(
                       child: const Text('Login'),
                       onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainView()),
+                        );
                         // print(nameController.text);
                         // print(passwordController.text);
                       },
@@ -84,7 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
                       child: const Text(
                         'Sign up',
                         style:
-                            TextStyle(fontSize: 20, color:Colors.amberAccent),
+                            TextStyle(fontSize: 20, color: Colors.amberAccent),
                       ),
                       onPressed: () {
                         //signup screen
