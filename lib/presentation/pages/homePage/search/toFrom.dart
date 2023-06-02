@@ -65,11 +65,10 @@ class _ToFromState extends State<ToFrom> {
 
     //not working
     void _swap() {
-      TextEditingController tempController = controller1;
+      String tempController = controller1.text;
       controller1.text = controller2.text;
-      controller2.text = tempController.text;
+      controller2.text = tempController;
       setState(() {});
-      print(controller1.text);
     }
 
     return LayoutBuilder(
