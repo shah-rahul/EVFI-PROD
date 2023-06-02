@@ -63,7 +63,6 @@ class _ToFromState extends State<ToFrom> {
       textInputAction: TextInputAction.done,
     );
 
-    //not working
     void _swap() {
       String tempController = controller1.text;
       controller1.text = controller2.text;
