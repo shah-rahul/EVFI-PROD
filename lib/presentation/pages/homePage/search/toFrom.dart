@@ -12,17 +12,18 @@ class _ToFromState extends State<ToFrom> {
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
 
-    @override
-    void initState() {
-      super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-      controller1.addListener(() {
-        setState(() {});
-      });
-      controller2.addListener(() {
-        setState(() {});
-      });
-    }
+    controller1.addListener(() {
+      setState(() {});
+    });
+    controller2.addListener(() {
+      setState(() {});
+    });
+  }
+
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
 
@@ -32,6 +33,7 @@ class _ToFromState extends State<ToFrom> {
       keyboardType: TextInputType.streetAddress,
       decoration: InputDecoration(
         hintText: 'Choose start location',
+        contentPadding: EdgeInsets.all(10),
         suffixIcon: controller1.text.isEmpty
             ? Container(width: 0)
             : IconButton(
@@ -50,6 +52,7 @@ class _ToFromState extends State<ToFrom> {
       keyboardType: TextInputType.streetAddress,
       decoration: InputDecoration(
         hintText: 'Choose destination',
+        contentPadding: EdgeInsets.all(10),
         suffixIcon: controller2.text.isEmpty
             ? Container(width: 0)
             : IconButton(
@@ -63,13 +66,11 @@ class _ToFromState extends State<ToFrom> {
       textInputAction: TextInputAction.done,
     );
 
-    //not working
     void _swap() {
-      TextEditingController tempController = controller1;
+      String tempController = controller1.text;
       controller1.text = controller2.text;
-      controller2.text = tempController.text;
+      controller2.text = tempController;
       setState(() {});
-      print(controller1.text);
     }
 
     return LayoutBuilder(
@@ -148,6 +149,8 @@ class _ToFromState extends State<ToFrom> {
                 children: [
                   Container(
                     width: constraints.maxWidth * 0.35,
+                    padding:
+                        EdgeInsets.only(bottom: constraints.maxHeight * 0.1),
                     child: t1,
                   ),
                   Container(
@@ -162,6 +165,8 @@ class _ToFromState extends State<ToFrom> {
                   ),
                   Container(
                     width: constraints.maxWidth * 0.35,
+                    padding:
+                        EdgeInsets.only(bottom: constraints.maxHeight * 0.1),
                     child: t2,
                   ),
                   SizedBox(width: constraints.maxWidth * 0.04),
