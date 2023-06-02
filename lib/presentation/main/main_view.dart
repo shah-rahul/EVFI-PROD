@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../resources/color_manager.dart';
 
-import '../pages/home.dart';
+import '../pages/homePage/home.dart';
 import '../pages/account.dart';
 import '../pages/chargeStation.dart';
 import '../pages/bookings.dart';
@@ -32,6 +32,7 @@ class _MainViewState extends State<MainView> {
           currentIndex: _currentScreen,
           //margin: EdgeInsets.symmetric(horizontal: 10.0),
           marginR: EdgeInsets.all(25),
+          borderRadius: 40,
           backgroundColor: ColorManager.appBlack,
           dotIndicatorColor: ColorManager.appBlack,
           onTap: (value) => setState(() {

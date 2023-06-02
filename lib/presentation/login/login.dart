@@ -44,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
               },
               decoration: InputDecoration(
                 labelText: 'Phone Number',
-                suffixIcon: _phoneController.text.length > 9
+                suffixIcon: _phoneController.text.length > 11
                     ? Container(
                         height: 20,
                         width: 20,

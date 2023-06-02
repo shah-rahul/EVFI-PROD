@@ -17,10 +17,10 @@ class _SplashViewState extends State<SplashView> {
   Timer? _timer;
 
   _startDelay() {
-    _timer = Timer(Duration(seconds: 3),
-        () => Navigator.pushReplacementNamed(context, Routes.loginRoute/*Routes.loginRoute*/));
-
-
+    _timer = Timer(
+        Duration(seconds: 3),
+        () => Navigator.pushReplacementNamed(
+            context, /*Routes.onBoardingRoute*/ Routes.loginRoute));
   }
 
   @override
@@ -42,8 +42,8 @@ class _SplashViewState extends State<SplashView> {
       body: Center(
         child: Image(
           image: AssetImage(ImageAssets.splashlogo),
-          width: 150,
-          height: 150,
+          width: 250,
+          height: 250,
         ),
       ),
     );

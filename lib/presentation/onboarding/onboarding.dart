@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:EVFI/presentation/resources/font_manager.dart';
 
 import '../../domain/model.dart';
@@ -7,8 +9,6 @@ import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class OnBoardingView extends StatefulWidget {
   const OnBoardingView({Key? key}) : super(key: key);
