@@ -1,7 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:flutter/material.dart';
 
-import '../pages/home.dart';
+// import '../pages/home.dart';
 import '../resources/color_manager.dart';
 
 class RegisterView extends StatefulWidget {
