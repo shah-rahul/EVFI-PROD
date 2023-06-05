@@ -7,7 +7,8 @@ import '../../resources/color_manager.dart';
 import '../../resources/routes_manager.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  List<LatLng> routeSet = [];
+  Home({required this.routeSet});
 
   @override
   State<Home> createState() => _HomeState();
@@ -16,35 +17,82 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
+
+  Set<Polyline> polylines = {};
+  LatLng? initialCoordinate, finalCoordinate;
+  Marker? sourceMarker, destMarker;
+
   static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(29.969390, 76.844990),
-    zoom: 14.4746,
-    tilt: 20,
+    target: LatLng(28.6001740, 77.2105709),
+    zoom: 17.537, //14.4746,
+    tilt: 18,
   );
 
-  List list = [];
+  void updatePolyline(List<LatLng> polylineCoordinates) {
+    PolylineId polylineId = const PolylineId('polyline_1');
+    print('In updatePolyline');
+    Polyline polyline = Polyline(
+      polylineId: polylineId,
+      points: polylineCoordinates,
+      color: Colors.deepPurpleAccent,
+      width: 7,
+    );
+
+    setState(() {
+      polylines.add(polyline);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    updatePolyline(widget.routeSet);
+
+    if (widget.routeSet.isNotEmpty) {
+      initialCoordinate = widget.routeSet[0]; // Set initial coordinate of camera view for polyline
+      sourceMarker = Marker(
+        markerId: const MarkerId('sourceMarker'),
+        position: initialCoordinate!,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+      );
+      finalCoordinate = widget.routeSet[widget.routeSet.length - 1]; 
+      destMarker = Marker(
+        markerId: const MarkerId('_destMarker'),
+        position: finalCoordinate!,
+        icon: BitmapDescriptor.defaultMarker,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: ColorManager.lightGrey,
-        body: Container(
+        body: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: [
-              GFLoader(type: GFLoaderType.circle),
+              const GFLoader(type: GFLoaderType.circle),
               GoogleMap(
                 mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
+                markers: (widget.routeSet.isNotEmpty)
+                    ? {sourceMarker!, destMarker!}
+                    : {},
+                initialCameraPosition: (initialCoordinate != null)
+                    ? CameraPosition(
+                        target: initialCoordinate!, zoom: 27.845, tilt: 18)
+                    : _kGooglePlex,
                 onMapCreated: (GoogleMapController controller) {
                   _controller.complete(controller);
                 },
+                polylines: polylines,
                 zoomControlsEnabled: false,
                 compassEnabled: false,
+                // mapToolbarEnabled: false,
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.072),
+                    top: MediaQuery.of(context).size.height * 0.07),
                 child: InkWell(
                   onTap: () {
                     Navigator.pushReplacementNamed(
@@ -53,8 +101,8 @@ class _HomeState extends State<Home> {
                   child: Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.072,
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.symmetric(
                       horizontal: 25,
                     ),
                     decoration: BoxDecoration(
@@ -72,18 +120,17 @@ class _HomeState extends State<Home> {
                           color: ColorManager.primary,
                           size: 30,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
-                        Text(
+                        const Text(
                           'Search evfi',
                           style: TextStyle(
                             color: Colors.white70,
                           ),
                         ),
-                        Spacer(),
-                        Icon(Icons.search_rounded,
-                            color: ColorManager.primary)
+                        const Spacer(),
+                        Icon(Icons.search_rounded, color: ColorManager.primary)
                       ],
                     ),
                   ),

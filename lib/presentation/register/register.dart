@@ -78,6 +78,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     )),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,                  
                   children: <Widget>[
                     const Text('Does not have account?'),
                     TextButton(
@@ -92,7 +93,6 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     )
                   ],
-                  mainAxisAlignment: MainAxisAlignment.center,
                 ),
               ],
             )));
