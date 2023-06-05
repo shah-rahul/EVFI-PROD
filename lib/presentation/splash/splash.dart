@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
@@ -10,23 +11,24 @@ class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
 
   @override
-  _SplashViewState createState() => _SplashViewState();
+  SplashViewState createState() => SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class SplashViewState extends State<SplashView> {
   Timer? _timer;
-
-  _startDelay() {
-    _timer = Timer(
-        const Duration(seconds: 3),
-        () => Navigator.pushReplacementNamed(
-            context, Routes.onBoardingRoute /*Routes.loginRoute*/));
-  }
+   static const String KEYLOGIN = "login";
+  // _startDelay() {
+  //   _timer = Timer(
+  //       Duration(seconds: 3),
+  //       () => Navigator.pushReplacementNamed(
+  //           context, /*Routes.onBoardingRoute*/ Routes.loginRoute));
+  // }
 
   @override
   void initState() {
     super.initState();
-    _startDelay();
+    // _startDelay();
+    whereToGo();
   }
 
   @override
@@ -46,6 +48,29 @@ class _SplashViewState extends State<SplashView> {
           height: 250,
         ),
       ),
+    );
+  }
+
+  void whereToGo() async {
+    var sharedPref = await SharedPreferences.getInstance();
+    var isLoggedIn = sharedPref.getBool(KEYLOGIN);
+    //var isLoggedIn=
+    Timer(
+      const Duration(seconds: 2),
+      () {
+        if (isLoggedIn != null) {
+          if (isLoggedIn) {
+            Navigator.pushReplacementNamed(
+                context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
+          } else {
+            Navigator.pushReplacementNamed(
+                context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+          }
+        } else {
+          Navigator.pushReplacementNamed(
+              context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+        }
+      },
     );
   }
 }

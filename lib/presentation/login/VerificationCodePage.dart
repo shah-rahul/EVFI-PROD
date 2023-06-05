@@ -1,8 +1,11 @@
+import 'package:EVFI/presentation/splash/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../onboarding/onboarding.dart';
+import '../register/register.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationCodePage extends StatefulWidget {
@@ -62,12 +65,17 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       .signInWithCredential(credential);
                   //  Handle successful authentication
 
-                  // SharedPreferences prefs =
-                  //     await SharedPreferences.getInstance();
+                  var sharedPref = await SharedPreferences.getInstance();
+                  sharedPref.setBool(SplashViewState.KEYLOGIN,true);
+                  
                   // prefs.setString('uid', userCredential.user!.uid);
+
+                  //If Successfully Logged in(Creds are correct)
+
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => OnBoardingView()),
+                    // MaterialPageRoute(builder: (context) => RegisterView()),
                   );
                 } on FirebaseAuthException catch (e) {
                   //  Handle authentication failure
