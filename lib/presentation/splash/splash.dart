@@ -16,7 +16,7 @@ class SplashView extends StatefulWidget {
 
 class SplashViewState extends State<SplashView> {
   Timer? _timer;
-  static const String KEYLOGIN = "login";
+   static const String KEYLOGIN = "login";
   // _startDelay() {
   //   _timer = Timer(
   //       Duration(seconds: 3),
@@ -41,7 +41,7 @@ class SplashViewState extends State<SplashView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.appBlack,
-      body: Center(
+      body: const Center(
         child: Image(
           image: AssetImage(ImageAssets.splashlogo),
           width: 250,
@@ -56,7 +56,7 @@ class SplashViewState extends State<SplashView> {
     var isLoggedIn = sharedPref.getBool(KEYLOGIN);
     //var isLoggedIn=
     Timer(
-      Duration(seconds: 3),
+      const Duration(seconds: 2),
       () {
         if (isLoggedIn != null) {
           if (isLoggedIn) {

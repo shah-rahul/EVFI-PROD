@@ -62,13 +62,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   Widget _getContentWidget(SliderViewObject? sliderViewObject) {
     if (sliderViewObject == null) {
       return Container();
-    } else
+    } else {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: ColorManager.appBlack,
           elevation: AppSize.s4,
-          systemOverlayStyle: SystemUiOverlayStyle(
+          systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.white,
             statusBarBrightness: Brightness.dark,
             statusBarIconBrightness: Brightness.dark,
@@ -100,7 +100,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         children: [
                           for (int i = 0; i < sliderViewObject.numOfSlides; i++)
                             Padding(
-                              padding: EdgeInsets.all(AppPadding.p8),
+                              padding: const EdgeInsets.all(AppPadding.p8),
                               child: _buildDots(
                                 index: sliderViewObject.currentIndex,
                                 currentIndex: i,
@@ -109,7 +109,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ]),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(AppMargin.m40),
+                    padding: const EdgeInsets.all(AppMargin.m40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -120,7 +120,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                           },
                           style: TextButton.styleFrom(
                             elevation: 0,
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: AppSize.s18,
                             ),
@@ -135,13 +135,12 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                             int ind = _viewModel.goNext();
                             ind != sliderViewObject.currentIndex
                                 ? _pageController.animateToPage(ind,
-                                    duration: Duration(
+                                    duration: const Duration(
                                         milliseconds: DurationConstant.d300),
                                     curve: Curves.bounceInOut)
                                 : Navigator.of(context)
                                     .pushNamed(Routes.mainRoute);
                           },
-                          child: const Text("NEXT"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
@@ -150,8 +149,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 25, vertical: 15),
-                            textStyle: TextStyle(fontSize: AppSize.s18),
+                            textStyle: const TextStyle(fontSize: AppSize.s18),
                           ),
+                          child: const Text("NEXT"),
                         ),
                       ],
                     ),
@@ -162,6 +162,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
           ],
         ),
       );
+    }
   }
 
   @override

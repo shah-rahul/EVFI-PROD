@@ -27,23 +27,23 @@ class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Routes.splashRoute:
-        return MaterialPageRoute(builder: (_) => SplashView());
+        return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (_) => LoginView());
+        return MaterialPageRoute(builder: (_) => const LoginView());
       case Routes.onBoardingRoute:
-        return MaterialPageRoute(builder: (_) => OnBoardingView());
+        return MaterialPageRoute(builder: (_) => const OnBoardingView());
       case Routes.registerRoute:
-        return MaterialPageRoute(builder: (_) => RegisterView());
+        return MaterialPageRoute(builder: (_) => const RegisterView());
       case Routes.forgotPasswordRoute:
-        return MaterialPageRoute(builder: (_) => ForgotPasswordView());
+        return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
       case Routes.mainRoute:
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
-        return MaterialPageRoute(builder: (_) => StoreDetailsView());
+        return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       case Routes.verifyOtpRoute:
-        return MaterialPageRoute(builder: (_) => verify_otp());
+        return MaterialPageRoute(builder: (_) => const verify_otp());
       case Routes.searchBarRoute:
-        return MaterialPageRoute(builder: (_) => SearchPage());
+        return MaterialPageRoute(builder: (_) => const SearchPage());
       default:
         return unDefinedRoute();
     }
@@ -53,9 +53,9 @@ class RouteGenerator {
     return MaterialPageRoute(
         builder: (_) => Scaffold(
               appBar: AppBar(
-                title: Text(AppStrings.noRouteFound),
+                title: const Text(AppStrings.noRouteFound),
               ),
-              body: Center(child: Text(AppStrings.noRouteFound)),
+              body: const Center(child: Text(AppStrings.noRouteFound)),
             ));
   }
 }
