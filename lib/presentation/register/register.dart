@@ -37,43 +37,49 @@ class _RegisterViewState extends State<RegisterView> {
                     padding: const EdgeInsets.all(10),
                     child: const Text(
                       'Register',
-                      style: TextStyle(fontSize: 20),
+                      style: TextStyle(color: Colors.black),
+                     // style: TextStyle(fontSize: 20),
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
+                    style: TextStyle(color: Colors.black),
                     controller: nameController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'User Name',
+
                     ),
                   ),
                 ),
                 Container(
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
-                    obscureText: true,
+                    style: TextStyle(color: Colors.black),
+                   // obscureText: true,
                     controller: passwordController,
                     decoration: const InputDecoration(
+
                       border: OutlineInputBorder(),
-                      labelText: 'Password',
+                      labelText: 'Mobile Number',
                     ),
+                    keyboardType: TextInputType.phone,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    //forgot password screen
-                  },
-                  child: const Text(
-                    'Forgot Password',
-                    style: TextStyle(fontSize: 18, color: Colors.amberAccent),
-                  ),
-                ),
+                // TextButton(
+                //   onPressed: () {
+                //     //forgot password screen
+                //   },
+                //   child: const Text(
+                //     'Forgot Password',
+                //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
+                //   ),
+                // ),
                 Container(
                     height: 50,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
-                      child: const Text('Login'),
+                      child: const Text('Register'),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -83,23 +89,23 @@ class _RegisterViewState extends State<RegisterView> {
                         // print(passwordController.text);
                       },
                     )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,                  
-                  children: <Widget>[
-                    const Text('Does not have account?'),
-                    TextButton(
-                      child: const Text(
-                        'Sign up',
-                        style:
-                            TextStyle(fontSize: 20, color: Colors.amberAccent),
-                      ),
-                      onPressed: () {
-                        //signup screen
-                        Navigator.pushNamed(context, '/login');
-                      },
-                    )
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,                  
+                //   children: <Widget>[
+                //     const Text('Does not have account?'),
+                //     TextButton(
+                //       child: const Text(
+                //         'Sign up',
+                //         style:
+                //             TextStyle(fontSize: 20, color: Colors.amberAccent),
+                //       ),
+                //       onPressed: () {
+                //         //signup screen
+                //         Navigator.pushNamed(context, '/login');
+                //       },
+                //     )
+                //   ],
+                // ),
               ],
             )));
   }
