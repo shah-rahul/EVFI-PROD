@@ -16,7 +16,7 @@ class SplashView extends StatefulWidget {
 
 class SplashViewState extends State<SplashView> {
   Timer? _timer;
-   static const String KEYLOGIN = "login";
+  static const String KEYLOGIN = "login";
   // _startDelay() {
   //   _timer = Timer(
   //       Duration(seconds: 3),
@@ -61,14 +61,14 @@ class SplashViewState extends State<SplashView> {
         if (isLoggedIn != null) {
           if (isLoggedIn) {
             Navigator.pushReplacementNamed(
-                context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
+                context, /*Routes.onBoardingRoute*/ Routes.registerRoute);
           } else {
             Navigator.pushReplacementNamed(
-                context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+                context, /*Routes.onBoardingRoute*/ Routes.registerRoute);
           }
         } else {
           Navigator.pushReplacementNamed(
-              context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+              context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
         }
       },
     );

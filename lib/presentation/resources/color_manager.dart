@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorManager {
   static Color primary = HexColor.fromHex("#ffd80f"); //app yellow
-  static Color appBlack = HexColor.fromHex("#0D0907"); //app black shade
+  static Color appBlack = HexColor.fromHex("#111111"); //app black shade
   static Color lightGrey =
       HexColor.fromHex("#F0F0F0"); //app grey for unselected navbar icons
   static Color darkGrey = HexColor.fromHex("#525252");

@@ -1,19 +1,19 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
-import './vehicleform.dart';
+
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
+class ChargerForm extends StatefulWidget {
+  const ChargerForm({Key? key}) : super(key: key);
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  _ChargerFormState createState() => _ChargerFormState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _ChargerFormState extends State<ChargerForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController verifypasswordController = TextEditingController();
@@ -55,7 +55,7 @@ class _RegisterViewState extends State<RegisterView> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     child: Text(
-                      AppStrings.registertitle,
+                      AppStrings.vehicleformTitle,
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
@@ -67,7 +67,7 @@ class _RegisterViewState extends State<RegisterView> {
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      AppStrings.registertitle2,
+                      'Create your Account',
                       style: TextStyle(
                         fontSize: 14,
                         color: ColorManager.primary,
@@ -84,25 +84,32 @@ class _RegisterViewState extends State<RegisterView> {
                     padding: EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
-                        GestureDetector(
-                          child: Container(
-                            child: Image.asset(ImageAssets.registerDp,
-                                width: MediaQuery.of(context).size.width -
-                                    AppSize.s200),
-                          ),
+                        // child: CircleAvatar(
+                        //   backgroundColor: ColorManager.primary,
+                        //   radius: 42,
+                        //   child: CircleAvatar(
+                        //     radius: 50,
+                        //     backgroundImage:
+                        //         AssetImage(ImageAssets.registerDp),
+                        //   ),
+                        // ),
 
-                          // child: CircleAvatar(
-                          //   backgroundColor: ColorManager.primary,
-                          //   radius: 42,
-                          //   child: CircleAvatar(
-                          //     radius: 50,
-                          //     backgroundImage:
-                          //         AssetImage(ImageAssets.registerDp),
-                          //   ),
-                          // ),
-                          onTap: () {
-                            //upload prfile dp
-                          },
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p8,
+                              vertical: AppPadding.p8),
+                          child: TextField(
+                            controller: nameController,
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: ColorManager.darkGrey,
+                                  ),
+                                ),
+                                labelText: 'Vehicle Manufacturer',
+                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                          ),
                         ),
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -117,7 +124,7 @@ class _RegisterViewState extends State<RegisterView> {
                                     color: ColorManager.darkGrey,
                                   ),
                                 ),
-                                labelText: 'User Name',
+                                labelText: 'Vehicle Registration Number',
                                 labelStyle: TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
@@ -202,7 +209,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text(AppStrings.registercancel),
+                                child: const Text(AppStrings.skip),
                               ),
 
                               // print(nameController.text);
@@ -219,7 +226,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => VehicleForm()),
+                                        builder: (context) => MainView()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -234,7 +241,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text(AppStrings.registerSignup),
+                                child: const Text("Save"),
                               ),
 
                               // print(nameController.text);
