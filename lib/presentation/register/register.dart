@@ -9,7 +9,7 @@ import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/values_manager.dart';
-
+import '../login/login.dart';
 import 'package:EVFI/presentation/store_details/user_model.dart';
 //import 'package:controller/controller.dart';
 
@@ -20,18 +20,17 @@ import '../login/signup_controller.dart';
 import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key, }) : super(key: key);
-  
-  
+  const RegisterView({
+    Key? key,
+  }) : super(key: key);
 
- 
   @override
   _RegisterViewState createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController nameController = TextEditingController();
-  String phoneNumber ="";
+  String phoneNumber = "";
   bool loading = false;
   //Reference for firebase realtime database name as user
   final databaseRef = FirebaseDatabase.instance.ref('user');
@@ -236,12 +235,40 @@ class _RegisterViewState extends State<RegisterView> {
                                   //     fullName: nameController.text.trim(),
                                   //     phoneNo: phoneNumber);
                                   // var phoneController;
-                                  databaseRef.child('1').set({
+                                  // Generate a unique key for each user
+                                  // void _getPhoneNumber(String phoneNumber) {
+                                  //   this.phoneNumber;
+                                  // }
+
+                                  var userKey =
+                                      databaseRef.child('user').push().key;
+
+// Create a new user object
+                                  var newUser = {
                                     'name': nameController.text.toString(),
                                     'phone': phoneNumber,
-                                  }).then((Value) {
-                                   
+                                  };
+// Add the new user under the unique key
+                                  databaseRef
+                                      .child('users/$userKey')
+                                      .set(newUser)
+                                      .then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                    print('User added successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    print('Error adding user: $error');
                                   });
+                                  // databaseRef.set({
+                                  //   'name': nameController.text.toString(),
+                                  //   'phone': phoneNumber,
+                                  // }).then((value) {
+                                  //   // Code to execute after the data is successfully saved.
+                                  //   print('Data saved successfully!');
+                                  // }).catchError((error) {
+                                  //   // Code to handle any errors that occurred during the data saving process.
+                                  //   print('Error saving data: $error');
+                                  // });
                                   // SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,

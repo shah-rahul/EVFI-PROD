@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
-
+import '../register/register.dart';
 import '../onboarding/onboarding.dart';
 import 'VerificationCodePage.dart';
 
@@ -16,7 +16,7 @@ class LoginView extends StatefulWidget {
 class LoginViewState extends State<LoginView> {
   final phoneController = TextEditingController();
   final _otpController = TextEditingController();
- 
+
   @override
   Widget build(BuildContext context) {
     phoneController.selection = TextSelection.fromPosition(
@@ -78,6 +78,7 @@ class LoginViewState extends State<LoginView> {
               onPressed: () async {
                 //  mobile number verification logic here
                 final String phoneNumber = phoneController.text.trim();
+              //  getPhoneNumber(phoneNumber);
                 await FirebaseAuth.instance.verifyPhoneNumber(
                   phoneNumber: phoneNumber,
                   verificationCompleted:
