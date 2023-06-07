@@ -2,8 +2,10 @@ import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import './vehicleform.dart';
+import 'package:page_transition/page_transition.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
+import '../resources/routes_manager.dart';
 import '../resources/values_manager.dart';
 
 class RegisterView extends StatefulWidget {
@@ -15,8 +17,6 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController verifypasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -183,11 +183,8 @@ class _RegisterViewState extends State<RegisterView> {
                                   left: AppPadding.p8, right: AppPadding.p8),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainView()),
-                                  );
+                                  Navigator.pushReplacementNamed(
+                                      context, Routes.loginRoute);
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -218,8 +215,9 @@ class _RegisterViewState extends State<RegisterView> {
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => VehicleForm()),
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: VehicleForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

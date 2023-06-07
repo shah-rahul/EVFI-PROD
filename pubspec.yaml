@@ -27,7 +27,8 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   getwidget: ^3.1.1
   dot_navigation_bar: ^1.0.1+4
-
+  page_transition: "^2.0.9"
+  dropdown_textfield: ^1.0.8
   firebase_auth: ^4.5.0
   shared_preferences: ^2.1.1 #shared preferences
   otp_text_field: ^1.1.3
@@ -79,7 +80,7 @@ flutter:
      - assets/images/map_icons/
      - assets/images/lightning_icon.png
      - assets/images/onboarding/
-     - assets/images/RegisterScreen/profileDp.jpg
+     - assets/images/RegisterScreen/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

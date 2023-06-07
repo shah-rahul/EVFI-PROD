@@ -1,7 +1,9 @@
 import 'package:EVFI/presentation/main/main_view.dart';
+import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
-
+import 'package:page_transition/page_transition.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -14,12 +16,11 @@ class ChargerForm extends StatefulWidget {
 }
 
 class _ChargerFormState extends State<ChargerForm> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController verifypasswordController = TextEditingController();
+  TextEditingController chargerspeedController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    FocusNode myfocus = FocusNode();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -28,9 +29,9 @@ class _ChargerFormState extends State<ChargerForm> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100),
-              height: AppSize.s100 + 80,
-              child: Image.asset(ImageAssets.logo),
+              margin: EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
+              height: AppSize.s100 + AppSize.s100,
+              child: Image.asset(ImageAssets.chargerform),
             ),
             // Container(
             //   alignment: Alignment.center,
@@ -55,25 +56,25 @@ class _ChargerFormState extends State<ChargerForm> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     child: Text(
-                      AppStrings.vehicleformTitle,
+                      AppStrings.chargerformtitle,
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      'Create your Account',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorManager.primary,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   margin: EdgeInsets.only(left: AppMargin.m12),
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Text(
+                  //     'Create your Account',
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       color: ColorManager.primary,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 20),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
@@ -98,17 +99,35 @@ class _ChargerFormState extends State<ChargerForm> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p8,
                               vertical: AppPadding.p8),
-                          child: TextField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: ColorManager.darkGrey,
-                                  ),
+                          child: DropDownTextField(
+                            dropDownItemCount: 3,
+                            clearOption: false,
+                            dropDownList: const [
+                              DropDownValueModel(
+                                  name: 'Type A', value: "Type A"),
+                              DropDownValueModel(
+                                  name: 'Type B', value: "Type B"),
+                              DropDownValueModel(
+                                  name: 'Type C', value: "Type C"),
+                            ],
+                            dropdownColor: ColorManager.darkGrey,
+                            textFieldDecoration: InputDecoration(
+                              hoverColor: ColorManager.primary,
+                              iconColor: ColorManager.primary,
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: ColorManager.darkGrey,
                                 ),
-                                labelText: 'Vehicle Manufacturer',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                              ),
+                              labelText: 'Charger Type',
+                              labelStyle: TextStyle(
+                                fontSize: AppSize.s14,
+                              ),
+                            ),
+                            onChanged: (val) {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                            },
                           ),
                         ),
                         Container(
@@ -116,7 +135,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               horizontal: AppPadding.p8,
                               vertical: AppPadding.p8),
                           child: TextField(
-                            controller: nameController,
+                            controller: chargerspeedController,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -124,7 +143,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                     color: ColorManager.darkGrey,
                                   ),
                                 ),
-                                labelText: 'Vehicle Registration Number',
+                                labelText: 'Charger Speed',
                                 labelStyle: TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
@@ -179,21 +198,54 @@ class _ChargerFormState extends State<ChargerForm> {
                         //   ),
                         // ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.3,
+                              height: AppSize.s60 - 10,
+                              width: width * 0.23,
                               margin: EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
-                              padding: const EdgeInsets.only(
-                                  left: AppPadding.p8, right: AppPadding.p8),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.leftToRight,
+                                          ctx: context,
+                                          child: VehicleForm()));
+                                  ;
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      ColorManager.darkGrey.withOpacity(0.4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  // side: BorderSide(color: Colors.white)),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 15),
+                                  textStyle:
+                                      const TextStyle(fontSize: AppSize.s18),
+                                ),
+                                child: const Text("Back"),
+                              ),
+                            ),
+                            Container(
+                              height: AppSize.s60 - 10,
+                              width: width * 0.23,
+                              margin: EdgeInsets.only(
+                                top: AppMargin.m20,
+                              ),
+
                               child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainView()),
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: MainView()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -216,17 +268,19 @@ class _ChargerFormState extends State<ChargerForm> {
                               // print(passwordController.text);
                             ),
                             Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.43,
+                              height: AppSize.s60 - 10,
+                              width: width * 0.3,
                               margin: EdgeInsets.only(
-                                  top: AppMargin.m20, left: AppMargin.m20),
+                                top: AppMargin.m20,
+                              ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
                                   Navigator.pushReplacement(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MainView()),
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: MainView()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

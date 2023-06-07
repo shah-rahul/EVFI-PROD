@@ -15,4 +15,6 @@ class AppStrings {
   static const registertitle2 = "Create your Account";
 
   static const vehicleformTitle = "Vehicle Info";
+
+  static const chargerformtitle = "Charger Info";
 }
