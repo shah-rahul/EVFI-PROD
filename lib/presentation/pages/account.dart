@@ -1,5 +1,7 @@
+import 'package:EVFI/presentation/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../register/register.dart';
 
@@ -25,11 +27,11 @@ class _AccountState extends State<Account> {
 
           child: ElevatedButton(
             child: Text("LogOut"),
-            onPressed: () {
-              signOut();
+            onPressed: () async {
+              await signOut();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => RegisterView()),
+                MaterialPageRoute(builder: (context) => LoginView()),
               );
             },
           ),
@@ -42,7 +44,9 @@ class _AccountState extends State<Account> {
 
   signOut() async {
     await auth.signOut();
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => RegisterView()));
+    var sharedPref = await SharedPreferences.getInstance();
+    await sharedPref.clear();
+    // Navigator.pushReplacement(
+    //     context, MaterialPageRoute(builder: (context) => RegisterView()));
   }
 }
