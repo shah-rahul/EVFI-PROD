@@ -17,13 +17,6 @@ class SplashView extends StatefulWidget {
 class SplashViewState extends State<SplashView> {
   Timer? _timer;
   static const String KEYLOGIN = "login";
-  // _startDelay() {
-  //   _timer = Timer(
-  //       Duration(seconds: 3),
-  //       () => Navigator.pushReplacementNamed(
-  //           context, /*Routes.onBoardingRoute*/ Routes.loginRoute));
-  // }
-
   @override
   void initState() {
     super.initState();

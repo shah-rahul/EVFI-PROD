@@ -34,7 +34,7 @@ class _HomeState extends State<Home> {
     Polyline polyline = Polyline(
       polylineId: polylineId,
       points: polylineCoordinates,
-      color: Colors.deepPurpleAccent,
+      color: Colors.black,
       width: 7,
     );
 
