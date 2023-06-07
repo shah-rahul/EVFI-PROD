@@ -16,7 +16,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final _phoneController = TextEditingController();
   final _otpController = TextEditingController();
-
+ 
   @override
   Widget build(BuildContext context) {
     _phoneController.selection = TextSelection.fromPosition(
@@ -83,12 +83,9 @@ class _LoginViewState extends State<LoginView> {
                   verificationCompleted:
                       (PhoneAuthCredential credential) async {
                     //  Authenticate user with credential
-
                   },
                   verificationFailed: (FirebaseAuthException e) {
                     //  Handle verification failure
-                    
-
                   },
                   codeSent: (String verificationId, int? resendToken) {
                     // Save verification ID and navigate to verification code page

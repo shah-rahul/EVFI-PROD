@@ -1,8 +1,12 @@
 import 'package:EVFI/presentation/main/main_view.dart';
+import 'package:EVFI/presentation/store_details/user_model.dart';
+//import 'package:controller/controller.dart';
 import 'package:flutter/material.dart';
-
+import 'package:EVFI/presentation/store_details/user_model.dart';
 // import '../pages/home.dart';
+import '../login/signup_controller.dart';
 import '../resources/color_manager.dart';
+import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -12,11 +16,12 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController fullnameController = TextEditingController();
+  TextEditingController phoneNoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignUpController());
     return Scaffold(
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -38,17 +43,16 @@ class _RegisterViewState extends State<RegisterView> {
                     child: const Text(
                       'Register',
                       style: TextStyle(color: Colors.black),
-                     // style: TextStyle(fontSize: 20),
+                      // style: TextStyle(fontSize: 20),
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
-                    controller: nameController,
+                    controller: fullnameController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'User Name',
-
                     ),
                   ),
                 ),
@@ -56,10 +60,9 @@ class _RegisterViewState extends State<RegisterView> {
                   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                   child: TextField(
                     style: TextStyle(color: Colors.black),
-                   // obscureText: true,
-                    controller: passwordController,
+                    // obscureText: true,
+                    controller: phoneNoController,
                     decoration: const InputDecoration(
-
                       border: OutlineInputBorder(),
                       labelText: 'Mobile Number',
                     ),
@@ -75,12 +78,21 @@ class _RegisterViewState extends State<RegisterView> {
                 //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
                 //   ),
                 // ),
+                SizedBox(height: 20),
                 Container(
                     height: 50,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       child: const Text('Register'),
                       onPressed: () {
+                        // Get User And phoneNumber it to controller
+
+                        final user = UserModel(
+                          fullName: fullnameController.text.trim(),
+                          phoneNo: phoneNoController.text.trim(),
+                        );
+                        SignUpController.instance.createUser(user);
+
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => MainView()),
@@ -90,7 +102,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     )),
                 // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,                  
+                //   mainAxisAlignment: MainAxisAlignment.center,
                 //   children: <Widget>[
                 //     const Text('Does not have account?'),
                 //     TextButton(
