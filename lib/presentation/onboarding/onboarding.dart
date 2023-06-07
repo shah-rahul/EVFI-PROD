@@ -88,6 +88,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     return OnBoardingPage(sliderViewObject.sliderObject);
                   }),
             ),
+            SizedBox(
+              height: AppSize.s20,
+            ),
             Expanded(
               flex: 1,
               child: Column(
@@ -187,8 +190,8 @@ class OnBoardingPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: AppMargin.m20),
             child: Image.asset(
               _sliderObject.image,
-              width: MediaQuery.of(context).size.width - AppSize.s60,
-              height: MediaQuery.of(context).size.height - 600,
+              width: MediaQuery.of(context).size.width - 150,
+              height: MediaQuery.of(context).size.height - 520,
               // height: SizeConfig.blockV! * 35,
             ),
           ),

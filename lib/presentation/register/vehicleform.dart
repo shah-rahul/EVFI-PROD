@@ -1,49 +1,39 @@
 import 'package:EVFI/presentation/main/main_view.dart';
-
+import 'package:EVFI/presentation/register/register.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
-import './vehicleform.dart';
-import 'package:page_transition/page_transition.dart';
+
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
-import '../resources/routes_manager.dart';
+import './chargerform.dart';
+
+import 'package:page_transition/page_transition.dart';
 import '../resources/values_manager.dart';
 
-import 'package:EVFI/presentation/store_details/user_model.dart';
-//import 'package:controller/controller.dart';
-
-import '../store_details/user_model.dart';
-// import '../pages/home.dart';
-import '../login/signup_controller.dart';
-
-import 'package:get/get.dart';
-
-class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
+class VehicleForm extends StatefulWidget {
+  const VehicleForm({Key? key}) : super(key: key);
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  _VehicleFormState createState() => _VehicleFormState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
-  TextEditingController nameController = TextEditingController();
-  String phoneNumber = "";
+class _VehicleFormState extends State<VehicleForm> {
+  TextEditingController vehicleManufacturerController = TextEditingController();
+  TextEditingController vehicleregistrationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(SignUpController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: ColorManager.appBlack,
       body: SingleChildScrollView(
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100),
+              margin: EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
               height: AppSize.s100 + 80,
-              child: Image.asset(ImageAssets.logo),
+              child: Image.asset(ImageAssets.vehicleForm),
             ),
             // Container(
             //   alignment: Alignment.center,
@@ -58,7 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
             //   ),
             // ),
             SizedBox(
-              height: AppSize.s40,
+              height: AppSize.s60,
             ),
             Container(
               height: height * 0.7,
@@ -68,25 +58,25 @@ class _RegisterViewState extends State<RegisterView> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     child: Text(
-                      AppStrings.registertitle,
+                      AppStrings.vehicleformTitle,
                       style: TextStyle(
                         fontSize: 24,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      AppStrings.registertitle2,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorManager.primary,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   margin: EdgeInsets.only(left: AppMargin.m12),
+                  //   padding: const EdgeInsets.all(10),
+                  //   child: Text(
+                  //     'Create your Account',
+                  //     style: TextStyle(
+                  //       fontSize: 14,
+                  //       color: ColorManager.primary,
+                  //     ),
+                  //   ),
+                  // ),
                   SizedBox(height: 20),
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
@@ -97,32 +87,22 @@ class _RegisterViewState extends State<RegisterView> {
                     padding: EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
-                        GestureDetector(
-                          child: Container(
-                            child: Image.asset(ImageAssets.registerDp,
-                                width: MediaQuery.of(context).size.width -
-                                    AppSize.s200),
-                          ),
+                        // child: CircleAvatar(
+                        //   backgroundColor: ColorManager.primary,
+                        //   radius: 42,
+                        //   child: CircleAvatar(
+                        //     radius: 50,
+                        //     backgroundImage:
+                        //         AssetImage(ImageAssets.registerDp),
+                        //   ),
+                        // ),
 
-                          // child: CircleAvatar(
-                          //   backgroundColor: ColorManager.primary,
-                          //   radius: 42,
-                          //   child: CircleAvatar(
-                          //     radius: 50,
-                          //     backgroundImage:
-                          //         AssetImage(ImageAssets.registerDp),
-                          //   ),
-                          // ),
-                          onTap: () {
-                            //upload prfile dp
-                          },
-                        ),
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p8,
                               vertical: AppPadding.p8),
                           child: TextField(
-                            controller: nameController,
+                            controller: vehicleManufacturerController,
                             decoration: InputDecoration(
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
@@ -130,7 +110,24 @@ class _RegisterViewState extends State<RegisterView> {
                                     color: ColorManager.darkGrey,
                                   ),
                                 ),
-                                labelText: 'User Name',
+                                labelText: 'Vehicle Manufacturer',
+                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p8,
+                              vertical: AppPadding.p8),
+                          child: TextField(
+                            controller: vehicleregistrationController,
+                            decoration: InputDecoration(
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                    width: 1,
+                                    color: ColorManager.darkGrey,
+                                  ),
+                                ),
+                                labelText: 'Vehicle Registration Number',
                                 labelStyle: TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
@@ -185,19 +182,22 @@ class _RegisterViewState extends State<RegisterView> {
                         //   ),
                         // ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.3,
+                              height: AppSize.s60 - 10,
+                              width: width * 0.23,
                               margin: EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
-                              padding: const EdgeInsets.only(
-                                  left: AppPadding.p8, right: AppPadding.p8),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, Routes.loginRoute);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.leftToRight,
+                                          ctx: context,
+                                          child: RegisterView()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -212,29 +212,60 @@ class _RegisterViewState extends State<RegisterView> {
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text(AppStrings.registercancel),
+                                child: const Text("Back"),
+                              ),
+                            ),
+                            Container(
+                              height: AppSize.s60 - 10,
+                              width: width * 0.23,
+                              margin: EdgeInsets.only(
+                                top: AppMargin.m20,
+                              ),
+
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        ctx: context,
+                                        child: ChargerForm()),
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      ColorManager.darkGrey.withOpacity(0.4),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  // side: BorderSide(color: Colors.white)),
+                                  elevation: 0,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25, vertical: 15),
+                                  textStyle:
+                                      const TextStyle(fontSize: AppSize.s18),
+                                ),
+                                child: const Text(AppStrings.skip),
                               ),
 
                               // print(nameController.text);
                               // print(passwordController.text);
                             ),
                             Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.43,
+                              height: AppSize.s60 - 10,
+                              width: width * 0.3,
                               margin: EdgeInsets.only(
-                                  top: AppMargin.m20, left: AppMargin.m20),
+                                top: AppMargin.m20,
+                              ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  final user = UserModel(
-                                      fullName: nameController.text.trim(),
-                                      phoneNo: phoneNumber);
-                                  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: VehicleForm()),
+                                        ctx: context,
+                                        child: ChargerForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -249,7 +280,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text(AppStrings.registerSignup),
+                                child: const Text("Save"),
                               ),
 
                               // print(nameController.text);
@@ -258,25 +289,25 @@ class _RegisterViewState extends State<RegisterView> {
                           ],
                         ),
                       ],
-
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     const Text('Does not have account?'),
-                      //     TextButton(
-                      //       child: const Text(
-                      //         'Sign up',
-                      //         style: TextStyle(
-                      //             fontSize: 20, color: Colors.amberAccent),
-                      //       ),
-                      //       onPressed: () {
-                      //         //signup screen
-                      //         Navigator.pushNamed(context, '/login');
-                      //       },
-                      //     )
-                      // ],
                     ),
                   ),
+
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: <Widget>[
+                  //     const Text('Does not have account?'),
+                  //     TextButton(
+                  //       child: const Text(
+                  //         'Sign up',
+                  //         style: TextStyle(
+                  //             fontSize: 20, color: Colors.amberAccent),
+                  //       ),
+                  //       onPressed: () {
+                  //         //signup screen
+                  //         Navigator.pushNamed(context, '/login');
+                  //       },
+                  //     )
+                  // ],
                 ],
               ),
             ),

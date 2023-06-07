@@ -16,7 +16,7 @@ class SplashView extends StatefulWidget {
 
 class SplashViewState extends State<SplashView> {
   Timer? _timer;
-   static const String KEYLOGIN = "login";
+  static const String KEYLOGIN = "login";
   // _startDelay() {
   //   _timer = Timer(
   //       Duration(seconds: 3),
