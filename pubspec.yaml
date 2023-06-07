@@ -36,7 +36,8 @@ dependencies:
   cloud_firestore: ^4.8.0 #fire store cloud
   get: ^4.6.5 #Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
   controller: ^0.1.12 #Write HTTP servers with metadata annotated classes with support for validation and security.
-
+  firebase_database: ^10.2.2 #Flutter plugin for Firebase Database, a cloud-hosted NoSQL database with realtime data syncing across Android and iOS clients, and offline access.
+  #basic_utils: ^5.6.0 #Common util classes for Strings, Dates, X509, PKCS, Cryptographie and more.
   google_maps_flutter: ^2.2.6
   #google_map_polyline: ^0.3.0+2
   geolocator: ^9.0.2

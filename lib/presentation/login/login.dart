@@ -10,18 +10,18 @@ class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
 
   @override
-  _LoginViewState createState() => _LoginViewState();
+  LoginViewState createState() => LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
-  final _phoneController = TextEditingController();
+class LoginViewState extends State<LoginView> {
+  final phoneController = TextEditingController();
   final _otpController = TextEditingController();
  
   @override
   Widget build(BuildContext context) {
-    _phoneController.selection = TextSelection.fromPosition(
+    phoneController.selection = TextSelection.fromPosition(
       TextPosition(
-        offset: _phoneController.text.length,
+        offset: phoneController.text.length,
       ),
     );
     return Scaffold(
@@ -36,15 +36,15 @@ class _LoginViewState extends State<LoginView> {
           children: <Widget>[
             TextFormField(
               style: TextStyle(color: Colors.black),
-              controller: _phoneController,
+              controller: phoneController,
               onChanged: (value) {
                 setState(() {
-                  _phoneController.text = value;
+                  phoneController.text = value;
                 });
               },
               decoration: InputDecoration(
                 labelText: 'Phone Number',
-                suffixIcon: _phoneController.text.length > 11
+                suffixIcon: phoneController.text.length > 11
                     ? Container(
                         height: 20,
                         width: 20,
@@ -77,7 +77,7 @@ class _LoginViewState extends State<LoginView> {
             ElevatedButton(
               onPressed: () async {
                 //  mobile number verification logic here
-                final String phoneNumber = _phoneController.text.trim();
+                final String phoneNumber = phoneController.text.trim();
                 await FirebaseAuth.instance.verifyPhoneNumber(
                   phoneNumber: phoneNumber,
                   verificationCompleted:

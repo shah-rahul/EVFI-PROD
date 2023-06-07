@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import './vehicleform.dart';
 import 'package:page_transition/page_transition.dart';
@@ -19,16 +20,21 @@ import '../login/signup_controller.dart';
 import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({Key? key}) : super(key: key);
+  const RegisterView({Key? key, }) : super(key: key);
+  
+  
 
+ 
   @override
   _RegisterViewState createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController nameController = TextEditingController();
-  String phoneNumber = "";
-
+  String phoneNumber ="";
+  bool loading = false;
+  //Reference for firebase realtime database name as user
+  final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
@@ -226,10 +232,17 @@ class _RegisterViewState extends State<RegisterView> {
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  final user = UserModel(
-                                      fullName: nameController.text.trim(),
-                                      phoneNo: phoneNumber);
-                                  SignUpController.instance.createUser(user);
+                                  // final user = UserModel(
+                                  //     fullName: nameController.text.trim(),
+                                  //     phoneNo: phoneNumber);
+                                  // var phoneController;
+                                  databaseRef.child('1').set({
+                                    'name': nameController.text.toString(),
+                                    'phone': phoneNumber,
+                                  }).then((Value) {
+                                   
+                                  });
+                                  // SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
