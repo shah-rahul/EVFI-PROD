@@ -74,8 +74,10 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
 
                   Navigator.pushReplacement(
                     context,
-                    //  MaterialPageRoute(builder: (context) => OnBoardingView()),
-                    MaterialPageRoute(builder: (context) => RegisterView()),
+
+                  //  MaterialPageRoute(builder: (context) => OnBoardingView()),
+                     MaterialPageRoute(builder: (context) => RegisterView()),
+
                   );
                 } on FirebaseAuthException catch (e) {
                   //  Handle authentication failure

@@ -1,4 +1,5 @@
 import 'package:EVFI/presentation/main/main_view.dart';
+
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import './vehicleform.dart';
@@ -8,6 +9,16 @@ import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/values_manager.dart';
 
+import 'package:EVFI/presentation/store_details/user_model.dart';
+//import 'package:controller/controller.dart';
+
+import 'package:EVFI/presentation/store_details/user_model.dart';
+// import '../pages/home.dart';
+import '../login/signup_controller.dart';
+;
+import 'package:get/get.dart';
+
+
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
 
@@ -16,12 +27,15 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
+
   TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+     final controller = Get.put(SignUpController())
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: ColorManager.appBlack,
       body: SingleChildScrollView(
@@ -66,6 +80,7 @@ class _RegisterViewState extends State<RegisterView> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     padding: const EdgeInsets.all(10),
+
                     child: Text(
                       AppStrings.registertitle2,
                       style: TextStyle(
@@ -213,6 +228,11 @@ class _RegisterViewState extends State<RegisterView> {
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
+                                   final user = UserModel(
+                          fullName: nameController.text.trim(),
+                       
+                        );
+                        SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
@@ -241,8 +261,9 @@ class _RegisterViewState extends State<RegisterView> {
                           ],
                         ),
                       ],
-                    ),
-                  ),
+
+                   
+
 
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.center,
@@ -267,5 +288,5 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
-  }
-}
+
+          
