@@ -12,12 +12,11 @@ import '../resources/values_manager.dart';
 import 'package:EVFI/presentation/store_details/user_model.dart';
 //import 'package:controller/controller.dart';
 
-import 'package:EVFI/presentation/store_details/user_model.dart';
+import '../store_details/user_model.dart';
 // import '../pages/home.dart';
 import '../login/signup_controller.dart';
-;
-import 'package:get/get.dart';
 
+import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -27,12 +26,12 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-
   TextEditingController nameController = TextEditingController();
+  String phoneNumber = "";
 
   @override
   Widget build(BuildContext context) {
-     final controller = Get.put(SignUpController())
+    final controller = Get.put(SignUpController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
@@ -80,7 +79,6 @@ class _RegisterViewState extends State<RegisterView> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.only(left: AppMargin.m12),
                     padding: const EdgeInsets.all(10),
-
                     child: Text(
                       AppStrings.registertitle2,
                       style: TextStyle(
@@ -228,11 +226,10 @@ class _RegisterViewState extends State<RegisterView> {
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
-                                   final user = UserModel(
-                          fullName: nameController.text.trim(),
-                       
-                        );
-                        SignUpController.instance.createUser(user);
+                                  final user = UserModel(
+                                      fullName: nameController.text.trim(),
+                                      phoneNo: phoneNumber);
+                                  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
@@ -262,25 +259,24 @@ class _RegisterViewState extends State<RegisterView> {
                         ),
                       ],
 
-                   
-
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     const Text('Does not have account?'),
-                  //     TextButton(
-                  //       child: const Text(
-                  //         'Sign up',
-                  //         style: TextStyle(
-                  //             fontSize: 20, color: Colors.amberAccent),
-                  //       ),
-                  //       onPressed: () {
-                  //         //signup screen
-                  //         Navigator.pushNamed(context, '/login');
-                  //       },
-                  //     )
-                  // ],
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: <Widget>[
+                      //     const Text('Does not have account?'),
+                      //     TextButton(
+                      //       child: const Text(
+                      //         'Sign up',
+                      //         style: TextStyle(
+                      //             fontSize: 20, color: Colors.amberAccent),
+                      //       ),
+                      //       onPressed: () {
+                      //         //signup screen
+                      //         Navigator.pushNamed(context, '/login');
+                      //       },
+                      //     )
+                      // ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -288,5 +284,5 @@ class _RegisterViewState extends State<RegisterView> {
         ),
       ),
     );
-
-          
+  }
+}
