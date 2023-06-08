@@ -197,7 +197,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                       PageTransition(
                                           type: PageTransitionType.leftToRight,
                                           ctx: context,
-                                          child: RegisterView()));
+                                          child: RegisterView(phoneNumber: '',)));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
