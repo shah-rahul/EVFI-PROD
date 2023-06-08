@@ -212,12 +212,15 @@ class _RegisterViewState extends State<RegisterView> {
                                   ),
                                   // side: BorderSide(color: Colors.white)),
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 15),
-                                  textStyle:
-                                      const TextStyle(fontSize: AppSize.s18),
+
+                                  textStyle: const TextStyle(
+                                    fontSize: AppSize.s18,
+                                  ),
                                 ),
-                                child: const Text(AppStrings.registercancel),
+                                child: const Text(
+                                  AppStrings.registercancel,
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
 
                               // print(nameController.text);

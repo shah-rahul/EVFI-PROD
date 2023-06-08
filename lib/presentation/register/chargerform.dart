@@ -224,12 +224,13 @@ class _ChargerFormState extends State<ChargerForm> {
                                   ),
                                   // side: BorderSide(color: Colors.white)),
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 15),
-                                  textStyle:
-                                      const TextStyle(fontSize: AppSize.s18),
+
+                                  textStyle: const TextStyle(
+                                    fontSize: AppSize.s18,
+                                  ),
                                 ),
-                                child: const Text("Back"),
+                                child: const Text("Back",
+                                    textAlign: TextAlign.center),
                               ),
                             ),
                             Container(
@@ -256,12 +257,12 @@ class _ChargerFormState extends State<ChargerForm> {
                                   ),
                                   // side: BorderSide(color: Colors.white)),
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 15),
+
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text(AppStrings.skip),
+                                child: const Text(AppStrings.skip,
+                                    textAlign: TextAlign.center),
                               ),
 
                               // print(nameController.text);
@@ -290,12 +291,11 @@ class _ChargerFormState extends State<ChargerForm> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 15),
                                   textStyle:
                                       const TextStyle(fontSize: AppSize.s18),
                                 ),
-                                child: const Text("Save"),
+                                child: const Text("Save",
+                                    textAlign: TextAlign.center),
                               ),
 
                               // print(nameController.text);
