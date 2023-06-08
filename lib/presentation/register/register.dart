@@ -34,7 +34,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController nameController = TextEditingController();
- // String phoneNumber = "";
+  // String phoneNumber = "";
   bool loading = false;
   //Reference for firebase realtime database name as user
   final databaseRef = FirebaseDatabase.instance.ref('user');
@@ -101,7 +101,18 @@ class _RegisterViewState extends State<RegisterView> {
                     margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                      color: ColorManager.darkGrey.withOpacity(0.4),
+                      color: ColorManager.darkGreyOpacity40,
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 3,
+                          color: ColorManager.darkGrey,
+                          offset: Offset(-1, -1),
+                        ),
+                        BoxShadow(
+                          blurRadius: 6,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
                     ),
                     padding: EdgeInsets.all(AppPadding.p20),
                     child: Column(

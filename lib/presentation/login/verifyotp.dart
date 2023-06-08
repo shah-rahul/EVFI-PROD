@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:otp_text_field/otp_text_field.dart';
 import 'package:otp_text_field/style.dart';
+import '../resources/color_manager.dart';
 
 class verify_otp extends StatefulWidget {
   const verify_otp({Key? key}) : super(key: key);
@@ -19,9 +20,7 @@ class _verify_otpState extends State<verify_otp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('SignUp'),
-      ),
+      backgroundColor: ColorManager.appBlack,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
