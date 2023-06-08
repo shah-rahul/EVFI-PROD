@@ -66,17 +66,28 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                   //  Handle successful authentication
 
                   var sharedPref = await SharedPreferences.getInstance();
-                  sharedPref.setBool(SplashViewState.KEYLOGIN,true);
-                  
+                  sharedPref.setBool(SplashViewState.KEYLOGIN, true);
+
                   // prefs.setString('uid', userCredential.user!.uid);
 
                   //If Successfully Logged in(Creds are correct)
 
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => OnBoardingView()),
-                    // MaterialPageRoute(builder: (context) => RegisterView()),
-                  );
+                  // Navigator.pushReplacement(
+                  //   context,
+
+                  // //  MaterialPageRoute(builder: (context) => OnBoardingView()),
+                  //    MaterialPageRoute(builder: (context) => RegisterView()),
+
+                  // );
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterView(
+                          
+                          phoneNumber: widget.phoneNumber,
+                        ),
+                      ),
+                    );
                 } on FirebaseAuthException catch (e) {
                   //  Handle authentication failure
                   if (e.code == 'invalid-verification-code') {

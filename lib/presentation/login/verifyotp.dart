@@ -50,7 +50,7 @@ class _verify_otpState extends State<verify_otp> {
             ElevatedButton(
               onPressed: () {
                 //  mobile number verification logic here
-                Navigator.pushNamed(context, Routes.onBoardingRoute);
+                Navigator.pushNamed(context, Routes.registerRoute);
               },
               child: Text('Verify OTP'),
             ),
