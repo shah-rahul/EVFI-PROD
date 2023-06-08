@@ -6,6 +6,7 @@ class ColorManager {
   static Color lightGrey =
       HexColor.fromHex("#F0F0F0"); //app grey for unselected navbar icons
   static Color darkGrey = HexColor.fromHex("#525252");
+  static Color darkGreyOpacity40 = HexColor.fromHex("#99525252");
   static Color grey = HexColor.fromHex("#737477");
   static Color primaryOpacity70 = HexColor.fromHex("#B3ED9728");
 
