@@ -392,22 +392,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.0"
-  latlng:
-    dependency: "direct main"
-    description:
-      name: latlng
-      sha256: "7184897f8c807eec96b0ec931293d46c052f92bfee9a9b2b4648b66fed5f34cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.1"
-  latlong2:
-    dependency: "direct main"
-    description:
-      name: latlong2
-      sha256: "08ef7282ba9f76e8495e49e2dc4d653015ac929dce5f92b375a415d30b407ea0"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.8.2"
   lints:
     dependency: transitive
     description:

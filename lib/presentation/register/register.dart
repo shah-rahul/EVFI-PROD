@@ -1,9 +1,6 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:flutter/material.dart';
 
-// import '../pages/home.dart';
-import '../resources/color_manager.dart';
-
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
 
@@ -84,7 +81,7 @@ class _RegisterViewState extends State<RegisterView> {
                       },
                     )),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,                  
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text('Does not have account?'),
                     TextButton(

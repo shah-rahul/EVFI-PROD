@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:EVFI/presentation/resources/assets_manager.dart';
 
+import '../../../resources/assets_manager.dart';
 import './toFrom.dart';
 
 class SearchPage extends StatelessWidget {

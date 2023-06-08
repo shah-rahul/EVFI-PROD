@@ -7,14 +7,17 @@ import '../../resources/color_manager.dart';
 import '../../resources/routes_manager.dart';
 
 class Home extends StatefulWidget {
-  List<LatLng> routeSet = [];
-  Home({required this.routeSet});
+  List<LatLng> routeSet;
+  Home({
+    Key? key,
+    required this.routeSet
+    }): super(key: key);
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Home> createState() => HomeState();
 }
 
-class _HomeState extends State<Home> {
+class HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
 
@@ -30,11 +33,10 @@ class _HomeState extends State<Home> {
 
   void updatePolyline(List<LatLng> polylineCoordinates) {
     PolylineId polylineId = const PolylineId('polyline_1');
-    print('In updatePolyline');
     Polyline polyline = Polyline(
       polylineId: polylineId,
       points: polylineCoordinates,
-      color: Colors.deepPurpleAccent,
+      color: Colors.black,
       width: 7,
     );
 
@@ -86,7 +88,7 @@ class _HomeState extends State<Home> {
                   _controller.complete(controller);
                 },
                 polylines: polylines,
-                zoomControlsEnabled: false,
+                zoomControlsEnabled: true,
                 compassEnabled: false,
                 // mapToolbarEnabled: false,
               ),
