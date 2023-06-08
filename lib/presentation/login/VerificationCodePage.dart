@@ -72,13 +72,22 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
 
                   //If Successfully Logged in(Creds are correct)
 
-                  Navigator.pushReplacement(
-                    context,
+                  // Navigator.pushReplacement(
+                  //   context,
 
-                  //  MaterialPageRoute(builder: (context) => OnBoardingView()),
-                     MaterialPageRoute(builder: (context) => RegisterView()),
+                  // //  MaterialPageRoute(builder: (context) => OnBoardingView()),
+                  //    MaterialPageRoute(builder: (context) => RegisterView()),
 
-                  );
+                  // );
+                   Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RegisterView(
+                          
+                          phoneNumber: widget.phoneNumber,
+                        ),
+                      ),
+                    );
                 } on FirebaseAuthException catch (e) {
                   //  Handle authentication failure
                   if (e.code == 'invalid-verification-code') {
