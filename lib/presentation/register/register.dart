@@ -20,9 +20,13 @@ import '../login/signup_controller.dart';
 import 'package:get/get.dart';
 
 class RegisterView extends StatefulWidget {
-  const RegisterView({
-    Key? key,
-  }) : super(key: key);
+  // const RegisterView({
+  //   Key? key,
+  // }) : super(key: key);
+  final String phoneNumber;
+  RegisterView({
+    required this.phoneNumber,
+  });
 
   @override
   _RegisterViewState createState() => _RegisterViewState();
@@ -30,7 +34,7 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   TextEditingController nameController = TextEditingController();
-  String phoneNumber = "";
+ // String phoneNumber = "";
   bool loading = false;
   //Reference for firebase realtime database name as user
   final databaseRef = FirebaseDatabase.instance.ref('user');
@@ -246,7 +250,7 @@ class _RegisterViewState extends State<RegisterView> {
 // Create a new user object
                                   var newUser = {
                                     'name': nameController.text.toString(),
-                                    'phone': phoneNumber,
+                                    'phone': widget.phoneNumber,
                                   };
 // Add the new user under the unique key
                                   databaseRef
