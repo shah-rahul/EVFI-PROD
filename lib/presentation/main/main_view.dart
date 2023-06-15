@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 import '../resources/color_manager.dart';
 
-import '../pages/homePage/home.dart';
-import '../pages/account.dart';
-import '../pages/chargeStation.dart';
-import '../pages/bookings.dart';
+import '../pages/screens/homePage/home.dart';
+import '../pages/screens/account.dart';
+import '../pages/screens/chargeStation.dart';
+import '../pages/screens/bookings.dart';
 
 class MainView extends StatefulWidget {
   @override
@@ -17,7 +17,7 @@ class _MainViewState extends State<MainView> {
   int _currentScreen = 0;
 
   final List<Widget> screens = [
-    Home(routeSet: const [],),
+    const Home(),
     const ChargeStation(),
     const Bookings(),
     const Account(),

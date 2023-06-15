@@ -9,7 +9,6 @@ import '../register/register.dart';
 import '../resources/strings_manager.dart';
 import '../splash/splash.dart';
 import '../store_details/store_details.dart';
-import '../pages/homePage/search/search_page.dart';
 
 class Routes {
   static const String splashRoute = "/";
@@ -20,7 +19,6 @@ class Routes {
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
   static const String verifyOtpRoute = "/verify_otp";
-  static const String searchBarRoute = "/search_page";
 }
 
 class RouteGenerator {
@@ -42,8 +40,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       case Routes.verifyOtpRoute:
         return MaterialPageRoute(builder: (_) => const verify_otp());
-      case Routes.searchBarRoute:
-        return MaterialPageRoute(builder: (_) => const SearchPage());
       default:
         return unDefinedRoute();
     }

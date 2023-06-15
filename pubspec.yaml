@@ -78,10 +78,10 @@ flutter:
      - assets/images/splash_logo.png
      - assets/images/logo.jpg
      - assets/images/navbar_icons/
-     - assets/images/map_icons/
      - assets/images/lightning_icon.png
      - assets/images/onboarding/
      - assets/images/RegisterScreen/
+     - assets/images/map/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
