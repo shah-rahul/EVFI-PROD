@@ -9,6 +9,7 @@ import '../register/register.dart';
 import '../resources/strings_manager.dart';
 import '../splash/splash.dart';
 import '../store_details/store_details.dart';
+import '../pages/screens/mycharging/MyChargingScreen.dart';
 
 class Routes {
   static const String splashRoute = "/";
@@ -19,6 +20,7 @@ class Routes {
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
   static const String verifyOtpRoute = "/verify_otp";
+  static const String myChargingRoute = "/myCharging";
 }
 
 class RouteGenerator {
@@ -31,7 +33,10 @@ class RouteGenerator {
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => const OnBoardingView());
       case Routes.registerRoute:
-        return MaterialPageRoute(builder: (_) =>  RegisterView(phoneNumber: '',));
+        return MaterialPageRoute(
+            builder: (_) => RegisterView(
+                  phoneNumber: '',
+                ));
       case Routes.forgotPasswordRoute:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
       case Routes.mainRoute:
@@ -40,6 +45,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       case Routes.verifyOtpRoute:
         return MaterialPageRoute(builder: (_) => const verify_otp());
+      case Routes.myChargingRoute:
+        return MaterialPageRoute(builder: (_) => MyChargingScreen());
       default:
         return unDefinedRoute();
     }

@@ -5,7 +5,7 @@ import '../resources/color_manager.dart';
 
 import '../pages/screens/homePage/home.dart';
 import '../pages/screens/account.dart';
-import '../pages/screens/chargeStation.dart';
+import '../pages/screens/mycharging/MyChargingScreen.dart';
 import '../pages/screens/bookings.dart';
 
 class MainView extends StatefulWidget {
@@ -18,8 +18,8 @@ class _MainViewState extends State<MainView> {
 
   final List<Widget> screens = [
     const Home(),
-    const ChargeStation(),
     const Bookings(),
+    MyChargingScreen(),
     const Account(),
   ];
 

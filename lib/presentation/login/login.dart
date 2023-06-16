@@ -44,7 +44,7 @@ class LoginViewState extends State<LoginView> {
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -82,15 +82,24 @@ class LoginViewState extends State<LoginView> {
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(20)),
                 color: ColorManager.darkGreyOpacity40,
+                // gradient: LinearGradient(
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                //   colors: [
+                //     ColorManager.gradTopLeft,
+                //     ColorManager.gradBottomRight
+                //   ],
+                // ),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 3,
-                    color: ColorManager.darkGrey,
-                    offset: const Offset(-1, -1),
+                    blurRadius: 2,
+                    color: ColorManager.shadowBottomRight,
+                    offset: Offset(-4, -4),
                   ),
-                  const BoxShadow(
-                    blurRadius: 6,
-                    offset: Offset(2, 2),
+                  BoxShadow(
+                    blurRadius: 2,
+                    color: ColorManager.shadowTopLeft,
+                    offset: Offset(4, 4),
                   ),
                 ],
               ),

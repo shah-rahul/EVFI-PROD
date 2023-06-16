@@ -6,14 +6,25 @@ class ColorManager {
   static Color lightGrey =
       HexColor.fromHex("#F0F0F0"); //app grey for unselected navbar icons
   static Color darkGrey = HexColor.fromHex("#525252");
-  static Color darkGreyOpacity40 = HexColor.fromHex("#99525252");
+  static Color darkGreyOpacity40 = HexColor.fromHex("#313131");
   static Color grey = HexColor.fromHex("#737477");
   static Color primaryOpacity70 = HexColor.fromHex("#B3ED9728");
+
+  //gradients
+  static Color gradTopLeft = HexColor.fromHex("#343434");
+  static Color gradBottomRight = HexColor.fromHex("#2c2c2c");
+
+  //drop shadow
+  static Color shadowTopLeft = HexColor.fromHex("#2a2a2a");
+  static Color CardshadowBottomRight = HexColor.fromHex("#d1d1d1");
+  static Color shadowBottomRight = HexColor.fromHex("#383838");
 
   // new colors
   static Color darkPrimary = HexColor.fromHex("#d17d11");
   static Color grey1 = HexColor.fromHex("#707070");
   static Color grey2 = HexColor.fromHex("#797979");
+  static Color grey3 = HexColor.fromHex("#C5C5C5");
+
   static Color error = HexColor.fromHex("#e61f34"); // red color
 }
 
