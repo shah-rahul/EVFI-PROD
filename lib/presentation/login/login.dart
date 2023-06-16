@@ -87,15 +87,24 @@ class LoginViewState extends State<LoginView> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: ColorManager.darkGreyOpacity40,
+                // gradient: LinearGradient(
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                //   colors: [
+                //     ColorManager.gradTopLeft,
+                //     ColorManager.gradBottomRight
+                //   ],
+                // ),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 3,
-                    color: ColorManager.darkGrey,
-                    offset: Offset(-1, -1),
+                    blurRadius: 2,
+                    color: ColorManager.shadowBottomRight,
+                    offset: Offset(-4, -4),
                   ),
                   BoxShadow(
-                    blurRadius: 6,
-                    offset: Offset(2, 2),
+                    blurRadius: 2,
+                    color: ColorManager.shadowTopLeft,
+                    offset: Offset(4, 4),
                   ),
                 ],
               ),
