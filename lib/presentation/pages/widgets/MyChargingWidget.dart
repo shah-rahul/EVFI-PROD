@@ -10,13 +10,13 @@ class MyChargingWidget extends StatelessWidget {
   MyChargingWidget(this.myCharging);
 
   Widget statusButton() {
-    String status;
+    Status status;
     if (myCharging.status == 0)
-      status = 'Waiting';
+      status = Status.waiting;
     else if (myCharging.status == 1)
-      status = 'Accepted';
+      status = Status.accepted;
     else
-      status = 'Rejected';
+      status = Status.rejected;
     final buttonColor, textColor;
     if (myCharging.status == 0) {
       buttonColor = Colors.white;
@@ -26,12 +26,16 @@ class MyChargingWidget extends StatelessWidget {
       textColor = Colors.white;
     }
     return SizedBox(
-      width: 90,
+      width: 80,
       height: 20,
       child: ElevatedButton(
           onPressed: () {},
           child: Text(
-            status,
+            status == Status.waiting
+                ? "Waiting"
+                : status == Status.accepted
+                    ? "Accepted"
+                    : "Rejected",
             style: TextStyle(color: textColor),
           ),
           style: ElevatedButton.styleFrom(

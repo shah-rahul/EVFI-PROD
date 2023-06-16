@@ -87,7 +87,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return Column(
       children: [
         Container(
-          height: height * 0.07,
+          height: height * 0.1,
           child: Row(
             children: [
               GestureDetector(
@@ -141,7 +141,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           height: 5,
         ),
         Container(
-          height: height * 0.86,
+          height: height * 0.75,
           padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
@@ -172,7 +172,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return Column(
       children: [
         Container(
-          height: height * 0.07,
+          height: height * 0.1,
           child: Row(
             children: [
               GestureDetector(
@@ -227,7 +227,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           height: 5,
         ),
         Container(
-          height: height * 0.85,
+          height: height * 0.75,
           padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
