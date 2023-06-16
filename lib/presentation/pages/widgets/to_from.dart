@@ -235,7 +235,7 @@ class _ToFromState extends State<ToFrom> {
                         routpoints.add(LatLng(
                             double.parse(lat1[1]), double.parse(long1[0])));
                       }
-                      print(routpoints);
+                      //print(routpoints);
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
                           builder: (context) => ResultMap(
