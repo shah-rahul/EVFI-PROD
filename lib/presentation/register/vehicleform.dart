@@ -1,4 +1,3 @@
-import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/register.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ class _VehicleFormState extends State<VehicleForm> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
+              margin: const EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
               height: AppSize.s100 + 80,
               child: Image.asset(ImageAssets.vehicleForm),
             ),
@@ -47,7 +46,7 @@ class _VehicleFormState extends State<VehicleForm> {
             //         fontSize: 30),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: AppSize.s60,
             ),
             Container(
@@ -56,8 +55,8 @@ class _VehicleFormState extends State<VehicleForm> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: AppMargin.m12),
+                    child: const Text(
                       AppStrings.vehicleformTitle,
                       style: TextStyle(
                         fontSize: 24,
@@ -77,25 +76,25 @@ class _VehicleFormState extends State<VehicleForm> {
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       color: ColorManager.darkGreyOpacity40,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3,
                           color: ColorManager.darkGrey,
-                          offset: Offset(-1, -1),
+                          offset: const Offset(-1, -1),
                         ),
-                        BoxShadow(
+                        const BoxShadow(
                           blurRadius: 6,
                           offset: Offset(2, 2),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(AppPadding.p20),
+                    padding: const EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
                         // child: CircleAvatar(
@@ -122,7 +121,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                   ),
                                 ),
                                 labelText: 'Vehicle Manufacturer',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
                         Container(
@@ -139,7 +138,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                   ),
                                 ),
                                 labelText: 'Vehicle Registration Number',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
                         // Container(
@@ -179,7 +178,7 @@ class _VehicleFormState extends State<VehicleForm> {
                         //         labelStyle: TextStyle(fontSize: AppSize.s14)),
                         //   ),
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -198,7 +197,7 @@ class _VehicleFormState extends State<VehicleForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               child: ElevatedButton(
@@ -231,7 +230,7 @@ class _VehicleFormState extends State<VehicleForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
 
@@ -242,7 +241,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: const ChargerForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -267,7 +266,7 @@ class _VehicleFormState extends State<VehicleForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.3,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
@@ -278,7 +277,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: const ChargerForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

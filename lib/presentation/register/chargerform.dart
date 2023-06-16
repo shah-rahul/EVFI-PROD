@@ -29,7 +29,7 @@ class _ChargerFormState extends State<ChargerForm> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
+              margin: const EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
               height: AppSize.s100 + AppSize.s100,
               child: Image.asset(ImageAssets.chargerform),
             ),
@@ -45,7 +45,7 @@ class _ChargerFormState extends State<ChargerForm> {
             //         fontSize: 30),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: AppSize.s40,
             ),
             Container(
@@ -54,8 +54,8 @@ class _ChargerFormState extends State<ChargerForm> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: AppMargin.m12),
+                    child: const Text(
                       AppStrings.chargerformtitle,
                       style: TextStyle(
                         fontSize: 24,
@@ -75,25 +75,25 @@ class _ChargerFormState extends State<ChargerForm> {
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       color: ColorManager.darkGreyOpacity40,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3,
                           color: ColorManager.darkGrey,
-                          offset: Offset(-1, -1),
+                          offset: const Offset(-1, -1),
                         ),
-                        BoxShadow(
+                        const BoxShadow(
                           blurRadius: 6,
                           offset: Offset(2, 2),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(AppPadding.p20),
+                    padding: const EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
                         // child: CircleAvatar(
@@ -132,7 +132,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                 ),
                               ),
                               labelText: 'Charger Type',
-                              labelStyle: TextStyle(
+                              labelStyle: const TextStyle(
                                 fontSize: AppSize.s14,
                               ),
                             ),
@@ -155,7 +155,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                   ),
                                 ),
                                 labelText: 'Charger Speed',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
                         // Container(
@@ -195,7 +195,7 @@ class _ChargerFormState extends State<ChargerForm> {
                         //         labelStyle: TextStyle(fontSize: AppSize.s14)),
                         //   ),
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -214,7 +214,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               child: ElevatedButton(
@@ -224,8 +224,8 @@ class _ChargerFormState extends State<ChargerForm> {
                                       PageTransition(
                                           type: PageTransitionType.leftToRight,
                                           ctx: context,
-                                          child: VehicleForm()));
-                                  ;
+                                          child: const VehicleForm()));
+                                  
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -247,7 +247,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
 
@@ -282,7 +282,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.3,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),

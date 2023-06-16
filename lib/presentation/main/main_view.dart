@@ -9,6 +9,7 @@ import '../pages/screens/chargeStation.dart';
 import '../pages/screens/bookings.dart';
 
 class MainView extends StatefulWidget {
+  
   @override
   _MainViewState createState() => _MainViewState();
 }
