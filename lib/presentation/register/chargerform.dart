@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -9,15 +10,19 @@ import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChargerForm extends StatefulWidget {
-  const ChargerForm({Key? key}) : super(key: key);
-
+  // const ChargerForm({Key? key}) : super(key: key);
+  final String username;
+  final String phoneNumber;
+  final String vehicleManufacturer;
+  final String VehicleRegistrationNumber;
+  ChargerForm({required this.username,required this.phoneNumber,required this.vehicleManufacturer,required this.VehicleRegistrationNumber});
   @override
   _ChargerFormState createState() => _ChargerFormState();
 }
 
 class _ChargerFormState extends State<ChargerForm> {
   TextEditingController chargerspeedController = TextEditingController();
-
+  final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     FocusNode myfocus = FocusNode();
@@ -111,6 +116,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               horizontal: AppPadding.p8,
                               vertical: AppPadding.p8),
                           child: DropDownTextField(
+                            //controller: chargetypeController,
                             dropDownItemCount: 3,
                             clearOption: false,
                             dropDownList: const [
@@ -224,7 +230,10 @@ class _ChargerFormState extends State<ChargerForm> {
                                       PageTransition(
                                           type: PageTransitionType.leftToRight,
                                           ctx: context,
-                                          child: VehicleForm()));
+                                          child: VehicleForm(
+                                             username: widget.username,
+                                          phoneNumber: widget.phoneNumber,
+                                          )));
                                   ;
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -253,6 +262,44 @@ class _ChargerFormState extends State<ChargerForm> {
 
                               child: ElevatedButton(
                                 onPressed: () {
+                                   var userKey =
+                                      databaseRef.child('user').push().key;
+
+                                    //Create a new user object
+                                  var newUser = {
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  };
+                                  //Add the new user under the unique key
+                                  databaseRef
+                                      .child('users/$userKey')
+                                      .set(newUser)
+                                      .then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                   // print('User added successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    //print('Error adding user: $error');
+                                  });
+                                  databaseRef.set({
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  }).then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                    print('Data saved successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    print('Error saving data: $error');
+                                  });
+                                //  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
@@ -288,6 +335,43 @@ class _ChargerFormState extends State<ChargerForm> {
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  var userKey =
+                                      databaseRef.child('user').push().key;
+
+                                    //Create a new user object
+                                  var newUser = {
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  };
+                                  //Add the new user under the unique key
+                                  databaseRef
+                                      .child('users/$userKey')
+                                      .set(newUser)
+                                      .then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                   // print('User added successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    //print('Error adding user: $error');
+                                  });
+                                  databaseRef.set({
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  }).then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                    print('Data saved successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    print('Error saving data: $error');
+                                  });
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
