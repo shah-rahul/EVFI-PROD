@@ -1,7 +1,4 @@
-import 'package:EVFI/presentation/main/main_view.dart';
-
 import 'package:EVFI/presentation/resources/strings_manager.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import './vehicleform.dart';
 import 'package:page_transition/page_transition.dart';
@@ -9,12 +6,6 @@ import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/values_manager.dart';
-import '../login/login.dart';
-import 'package:EVFI/presentation/store_details/user_model.dart';
-//import 'package:controller/controller.dart';
-
-import '../store_details/user_model.dart';
-// import '../pages/home.dart';
 import '../login/signup_controller.dart';
 
 import 'package:get/get.dart';
@@ -50,7 +41,7 @@ class _RegisterViewState extends State<RegisterView> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100),
+              margin: const EdgeInsets.only(top: AppSize.s100),
               height: AppSize.s100 + 80,
               child: Image.asset(ImageAssets.logo),
             ),
@@ -66,7 +57,7 @@ class _RegisterViewState extends State<RegisterView> {
             //         fontSize: 30),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: AppSize.s40,
             ),
             Container(
@@ -75,8 +66,8 @@ class _RegisterViewState extends State<RegisterView> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: AppMargin.m12),
+                    child: const Text(
                       AppStrings.registertitle,
                       style: TextStyle(
                         fontSize: 24,
@@ -86,7 +77,7 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
+                    margin: const EdgeInsets.only(left: AppMargin.m12),
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       AppStrings.registertitle2,
@@ -96,25 +87,25 @@ class _RegisterViewState extends State<RegisterView> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
                       color: ColorManager.darkGreyOpacity40,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3,
                           color: ColorManager.darkGrey,
-                          offset: Offset(-1, -1),
+                          offset: const Offset(-1, -1),
                         ),
-                        BoxShadow(
+                        const BoxShadow(
                           blurRadius: 6,
                           offset: Offset(2, 2),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(AppPadding.p20),
+                    padding: const EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
                         GestureDetector(
@@ -151,7 +142,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   ),
                                 ),
                                 labelText: 'User Name',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
                         // Container(
@@ -191,7 +182,7 @@ class _RegisterViewState extends State<RegisterView> {
                         //         labelStyle: TextStyle(fontSize: AppSize.s14)),
                         //   ),
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -209,7 +200,7 @@ class _RegisterViewState extends State<RegisterView> {
                             Container(
                               height: AppSize.s60 - 5,
                               width: width * 0.3,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               padding: const EdgeInsets.only(
@@ -244,7 +235,7 @@ class _RegisterViewState extends State<RegisterView> {
                             Container(
                               height: AppSize.s60 - 5,
                               width: width * 0.43,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                   top: AppMargin.m20, left: AppMargin.m20),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
