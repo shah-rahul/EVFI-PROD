@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/register.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import '../resources/color_manager.dart';
@@ -11,8 +12,10 @@ import 'package:page_transition/page_transition.dart';
 import '../resources/values_manager.dart';
 
 class VehicleForm extends StatefulWidget {
-  const VehicleForm({Key? key}) : super(key: key);
-
+  // const VehicleForm({Key? key}) : super(key: key);
+  final String username;
+  final String phoneNumber;
+  VehicleForm({required this.username, required this.phoneNumber});
   @override
   _VehicleFormState createState() => _VehicleFormState();
 }
@@ -20,7 +23,7 @@ class VehicleForm extends StatefulWidget {
 class _VehicleFormState extends State<VehicleForm> {
   TextEditingController vehicleManufacturerController = TextEditingController();
   TextEditingController vehicleregistrationController = TextEditingController();
-
+  final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -237,12 +240,39 @@ class _VehicleFormState extends State<VehicleForm> {
 
                               child: ElevatedButton(
                                 onPressed: () {
+                                  // var userKey =
+                                  //     databaseRef.child('user').push().key;
+                                  // var newUser = {
+                                  //   'vehicle_manufacturer':
+                                  //       vehicleManufacturerController.text
+                                  //           .toString(),
+                                  //   'vehicle registration number':
+                                  //       vehicleregistrationController.text
+                                  //           .toString(),
+                                  // };
+                                  // databaseRef
+                                  //     .child('users/$userKey')
+                                  //     .set(newUser)
+                                  //     .then((value) {
+                                  //   // Code to execute after the data is successfully saved.
+                                  //   print('User added successfully!');
+                                  // }).catchError((error) {
+                                  //   // Code to handle any errors that occurred during the data saving process.
+                                  //   print('Error adding user: $error');
+                                  // });
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: ChargerForm(
+                                          username: widget.username,
+                                          phoneNumber: widget.phoneNumber,
+                                          vehicleManufacturer: vehicleManufacturerController.text
+                                             .toString(),
+                                          VehicleRegistrationNumber:vehicleregistrationController.text
+                                             .toString() ,
+                                        )),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -278,7 +308,12 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: ChargerForm( username: widget.username,
+                                          phoneNumber: widget.phoneNumber,
+                                          vehicleManufacturer: vehicleManufacturerController.text
+                                             .toString(),
+                                          VehicleRegistrationNumber:vehicleregistrationController.text
+                                             .toString() ,)),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
