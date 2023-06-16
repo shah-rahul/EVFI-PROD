@@ -26,12 +26,12 @@ class _AccountState extends State<Account> {
           // ),
 
           child: ElevatedButton(
-            child: Text("LogOut"),
+            child: const Text("LogOut"),
             onPressed: () async {
               await signOut();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => LoginView()),
+                MaterialPageRoute(builder: (context) => const LoginView()),
               );
             },
           ),

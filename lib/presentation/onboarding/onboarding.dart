@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:EVFI/presentation/resources/font_manager.dart';
-
 import '../../domain/model.dart';
 import './onboarding_viewmodel.dart';
-import '../resources/assets_manager.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
@@ -18,8 +16,8 @@ class OnBoardingView extends StatefulWidget {
 }
 
 class _OnBoardingViewState extends State<OnBoardingView> {
-  PageController _pageController = PageController(initialPage: 0);
-  OnBoardingViewModel _viewModel = OnBoardingViewModel();
+  final PageController _pageController = PageController(initialPage: 0);
+  final OnBoardingViewModel _viewModel = OnBoardingViewModel();
 
   _bind() {
     _viewModel.start();
@@ -88,7 +86,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     return OnBoardingPage(sliderViewObject.sliderObject);
                   }),
             ),
-            SizedBox(
+            const SizedBox(
               height: AppSize.s20,
             ),
             Expanded(
@@ -176,9 +174,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 }
 
 class OnBoardingPage extends StatelessWidget {
-  SliderObject _sliderObject;
+  final SliderObject _sliderObject;
 
-  OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
+  const OnBoardingPage(this._sliderObject, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +185,7 @@ class OnBoardingPage extends StatelessWidget {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: AppMargin.m20),
+            padding: const EdgeInsets.symmetric(vertical: AppMargin.m20),
             child: Image.asset(
               _sliderObject.image,
               width: MediaQuery.of(context).size.width - 150,
@@ -195,13 +193,13 @@ class OnBoardingPage extends StatelessWidget {
               // height: SizeConfig.blockV! * 35,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Text(
             _sliderObject.title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: FontConstants.fontFamily,
               fontWeight: FontWeight.w600,
               fontSize: AppSize.s20,
@@ -210,7 +208,7 @@ class OnBoardingPage extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             _sliderObject.subTitle,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: "Mulish",
               fontWeight: FontWeight.w300,
               fontSize: 14,
