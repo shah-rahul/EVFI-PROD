@@ -74,7 +74,9 @@ class MyChargingWidget extends StatelessWidget {
           Row(
             children: [
               Icon(Icons.access_time),
-              Text(dateTime),
+              Padding(
+                  padding: EdgeInsets.all(AppPadding.p12 - 8),
+                  child: Text(dateTime)),
             ],
           ),
           SizedBox(
