@@ -37,7 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
   // String phoneNumber = "";
   bool loading = false;
   //Reference for firebase realtime database name as user
-  final databaseRef = FirebaseDatabase.instance.ref('user');
+  //final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
@@ -258,33 +258,33 @@ class _RegisterViewState extends State<RegisterView> {
                                   //   this.phoneNumber;
                                   // }
 
-                                  var userKey =
-                                      databaseRef.child('user').push().key;
+                                  // var userKey =
+                                  //     databaseRef.child('user').push().key;
 
 // Create a new user object
-                                  var newUser = {
-                                    'name': nameController.text.toString(),
-                                    'phone': widget.phoneNumber,
-                                  };
+                                  // var newUser = {
+                                  //   'name': nameController.text.toString(),
+                                  //   'phone': widget.phoneNumber,
+                                  // };
 // Add the new user under the unique key
-                                  databaseRef
-                                      .child('users/$userKey')
-                                      .set(newUser)
-                                      .then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                    print('User added successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    print('Error adding user: $error');
-                                  });
+                                  // databaseRef
+                                  //     .child('users/$userKey')
+                                  //     .set(newUser)
+                                  //     .then((value) {
+                                     // Code to execute after the data is successfully saved.
+                                  //   print('User added successfully!');
+                                  // }).catchError((error) {
+                                     // Code to handle any errors that occurred during the data saving process.
+                                  //   print('Error adding user: $error');
+                                  // });
                                   // databaseRef.set({
                                   //   'name': nameController.text.toString(),
                                   //   'phone': phoneNumber,
                                   // }).then((value) {
-                                  //   // Code to execute after the data is successfully saved.
+                                     // Code to execute after the data is successfully saved.
                                   //   print('Data saved successfully!');
                                   // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
+                                     // Code to handle any errors that occurred during the data saving process.
                                   //   print('Error saving data: $error');
                                   // });
                                   // SignUpController.instance.createUser(user);
@@ -292,7 +292,10 @@ class _RegisterViewState extends State<RegisterView> {
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: VehicleForm()),
+                                        child: VehicleForm(
+                                          username: nameController.text.toString(),
+                                          phoneNumber: widget.phoneNumber,
+                                        )),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
