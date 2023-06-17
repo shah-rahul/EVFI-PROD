@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -333,7 +334,13 @@ class _ChargerFormState extends State<ChargerForm> {
                               ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  final dbref = FirebaseDatabase.instance.ref('Users');
+                          await dbref.child("RegisteredNumbers").push().set({
+                            "phoneNo":
+                                FirebaseAuth.instance.currentUser!.phoneNumber,
+                          });
+                         
                                   var userKey =
                                       databaseRef.child('User').push().key;
 
