@@ -44,7 +44,7 @@ class LoginViewState extends State<LoginView> {
             Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
@@ -94,12 +94,12 @@ class LoginViewState extends State<LoginView> {
                   BoxShadow(
                     blurRadius: 2,
                     color: ColorManager.shadowBottomRight,
-                    offset: Offset(-4, -4),
+                    offset: const Offset(-4, -4),
                   ),
                   BoxShadow(
                     blurRadius: 2,
                     color: ColorManager.shadowTopLeft,
-                    offset: Offset(4, 4),
+                    offset: const Offset(4, 4),
                   ),
                 ],
               ),

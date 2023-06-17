@@ -293,10 +293,10 @@ class _ChargerFormState extends State<ChargerForm> {
                                     'charger speed ':chargerspeedController.text.toString(),
                                   }).then((value) {
                                     // Code to execute after the data is successfully saved.
-                                    print('Data saved successfully!');
+                                    //print('Data saved successfully!');
                                   }).catchError((error) {
                                     // Code to handle any errors that occurred during the data saving process.
-                                    print('Error saving data: $error');
+                                    //print('Error saving data: $error');
                                   });
                                 //  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
@@ -366,10 +366,10 @@ class _ChargerFormState extends State<ChargerForm> {
                                     'charger speed ':chargerspeedController.text.toString(),
                                   }).then((value) {
                                     // Code to execute after the data is successfully saved.
-                                    print('Data saved successfully!');
+                                    //print('Data saved successfully!');
                                   }).catchError((error) {
                                     // Code to handle any errors that occurred during the data saving process.
-                                    print('Error saving data: $error');
+                                    //print('Error saving data: $error');
                                   });
                                   Navigator.pushReplacement(
                                     context,

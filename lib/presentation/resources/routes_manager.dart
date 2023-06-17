@@ -46,7 +46,7 @@ class RouteGenerator {
       case Routes.verifyOtpRoute:
         return MaterialPageRoute(builder: (_) => const verify_otp());
       case Routes.myChargingRoute:
-        return MaterialPageRoute(builder: (_) => MyChargingScreen());
+        return MaterialPageRoute(builder: (_) => const MyChargingScreen());
       default:
         return unDefinedRoute();
     }
