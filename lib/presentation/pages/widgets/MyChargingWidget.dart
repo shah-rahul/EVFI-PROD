@@ -11,13 +11,14 @@ class MyChargingWidget extends StatelessWidget {
 
   Widget statusButton() {
     Status status;
-    if (myCharging.status == 0)
+    if (myCharging.status == 0) {
       status = Status.waiting;
-    else if (myCharging.status == 1)
+    } else if (myCharging.status == 1) {
       status = Status.accepted;
-    else
+    } else {
       status = Status.rejected;
-    final buttonColor, textColor;
+    }
+    final Color buttonColor, textColor;
     if (myCharging.status == 0) {
       buttonColor = Colors.white;
       textColor = Colors.black;
@@ -25,6 +26,7 @@ class MyChargingWidget extends StatelessWidget {
       buttonColor = ColorManager.grey3;
       textColor = Colors.white;
     }
+    
     return SizedBox(
       width: 80,
       height: 20,
@@ -54,41 +56,41 @@ class MyChargingWidget extends StatelessWidget {
       elevation: 4,
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.all(AppMargin.m12 - 4),
+        padding: const EdgeInsets.all(AppMargin.m12 - 4),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 myCharging.StationName,
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: AppSize.s20, fontWeight: FontWeight.w600),
               ),
               statusButton(),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(myCharging.StationAddress,
-              style: TextStyle(fontSize: AppSize.s12)),
-          SizedBox(
+              style: const TextStyle(fontSize: AppSize.s12)),
+          const SizedBox(
             height: 5,
           ),
           Row(
             children: [
-              Icon(Icons.access_time),
+              const Icon(Icons.access_time),
               Padding(
-                  padding: EdgeInsets.all(AppPadding.p12 - 8),
+                  padding: const EdgeInsets.all(AppPadding.p12 - 8),
                   child: Text(dateTime)),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           RatingBarIndicator(
             rating: myCharging.ratings,
-            itemBuilder: (context, index) => Icon(
+            itemBuilder: (context, index) => const Icon(
               Icons.star,
               color: Colors.amber,
             ),
@@ -96,7 +98,7 @@ class MyChargingWidget extends StatelessWidget {
             itemSize: 20.0,
             direction: Axis.horizontal,
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
         ]),

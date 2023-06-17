@@ -23,7 +23,7 @@ class userRepository extends GetxController {
           snackPosition: SnackPosition.BOTTOM,
           backgroundColor: Colors.redAccent.withOpacity(0.1),
           colorText: Colors.red);
-      print(error.toString());
+      //print(error.toString());
     });
   }
 }
