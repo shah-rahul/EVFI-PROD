@@ -22,7 +22,7 @@ class ChargerForm extends StatefulWidget {
 
 class _ChargerFormState extends State<ChargerForm> {
   TextEditingController chargerspeedController = TextEditingController();
-  final databaseRef = FirebaseDatabase.instance.ref('user');
+  final databaseRef = FirebaseDatabase.instance.ref('Users');
   @override
   Widget build(BuildContext context) {
     //FocusNode myfocus = FocusNode();
@@ -261,43 +261,43 @@ class _ChargerFormState extends State<ChargerForm> {
 
                               child: ElevatedButton(
                                 onPressed: () {
-                                   var userKey =
-                                      databaseRef.child('user').push().key;
+                                  //  var userKey =
+                                  //     databaseRef.child('Users').push().key;
 
-                                    //Create a new user object
-                                  var newUser = {
-                                    'name': widget.username,
-                                    'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':widget.vehicleManufacturer,
-                                    'vehicle registration number':widget.VehicleRegistrationNumber,
-                                    'charger type':"Type A",
-                                    'charger speed ':chargerspeedController.text.toString(),
-                                  };
-                                  //Add the new user under the unique key
-                                  databaseRef
-                                      .child('users/$userKey')
-                                      .set(newUser)
-                                      .then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                   // print('User added successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    //print('Error adding user: $error');
-                                  });
-                                  databaseRef.set({
-                                    'name': widget.username,
-                                    'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':widget.vehicleManufacturer,
-                                    'vehicle registration number':widget.VehicleRegistrationNumber,
-                                    'charger type':"Type A",
-                                    'charger speed ':chargerspeedController.text.toString(),
-                                  }).then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                    //print('Data saved successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    //print('Error saving data: $error');
-                                  });
+                                  //   //Create a new user object
+                                  // var newUser = {
+                                  //   'name': widget.username,
+                                  //   'phone': widget.phoneNumber,
+                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
+                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
+                                  //   'charger type':"Type A",
+                                  //   'charger speed ':chargerspeedController.text.toString(),
+                                  // };
+                                  // //Add the new user under the unique key
+                                  // databaseRef
+                                  //     .child('Users/$userKey')
+                                  //     .set(newUser)
+                                  //     .then((value) {
+                                  //   // Code to execute after the data is successfully saved.
+                                  //  // print('User added successfully!');
+                                  // }).catchError((error) {
+                                  //   // Code to handle any errors that occurred during the data saving process.
+                                  //   //print('Error adding user: $error');
+                                  // });
+                                  // databaseRef.set({
+                                  //   'name': widget.username,
+                                  //   'phone': widget.phoneNumber,
+                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
+                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
+                                  //   'charger type':"Type A",
+                                  //   'charger speed ':chargerspeedController.text.toString(),
+                                  // }).then((value) {
+                                  //   // Code to execute after the data is successfully saved.
+                                  //   //print('Data saved successfully!');
+                                  // }).catchError((error) {
+                                  //   // Code to handle any errors that occurred during the data saving process.
+                                  //   //print('Error saving data: $error');
+                                  // });
                                 //  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
@@ -335,7 +335,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   var userKey =
-                                      databaseRef.child('user').push().key;
+                                      databaseRef.child('User').push().key;
 
                                     //Create a new user object
                                   var newUser = {
@@ -347,17 +347,17 @@ class _ChargerFormState extends State<ChargerForm> {
                                     'charger speed ':chargerspeedController.text.toString(),
                                   };
                                   //Add the new user under the unique key
-                                  databaseRef
-                                      .child('users/$userKey')
-                                      .set(newUser)
-                                      .then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                   // print('User added successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    //print('Error adding user: $error');
-                                  });
-                                  databaseRef.set({
+                                  // databaseRef
+                                  //     .child('Users/$userKey')
+                                  //     .set(newUser)
+                                  //     .then((value) {
+                                  //   // Code to execute after the data is successfully saved.
+                                  //  // print('User added successfully!');
+                                  // }).catchError((error) {
+                                  //   // Code to handle any errors that occurred during the data saving process.
+                                  //   //print('Error adding user: $error');
+                                  // });
+                                  databaseRef.child('Users/$userKey').set({
                                     'name': widget.username,
                                     'phone': widget.phoneNumber,
                                     'vehicle manufacturer':widget.vehicleManufacturer,
