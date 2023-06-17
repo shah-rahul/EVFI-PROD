@@ -1,15 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:otp_text_field/otp_text_field.dart';
-import 'package:otp_text_field/style.dart';
-import '../register/register.dart';
 import '../resources/font_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 import '../resources/color_manager.dart';
 import 'package:page_transition/page_transition.dart';
-import '../onboarding/onboarding.dart';
-
 import 'VerificationCodePage.dart';
 
 class LoginView extends StatefulWidget {
@@ -21,7 +16,7 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> {
   final phoneController = TextEditingController();
-  final _otpController = TextEditingController();
+  //final _otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -83,29 +78,38 @@ class LoginViewState extends State<LoginView> {
             //     ],
             //   ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
+              margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(20)),
+                borderRadius: const BorderRadius.all(Radius.circular(20)),
                 color: ColorManager.darkGreyOpacity40,
+                // gradient: LinearGradient(
+                //   begin: Alignment.topLeft,
+                //   end: Alignment.bottomRight,
+                //   colors: [
+                //     ColorManager.gradTopLeft,
+                //     ColorManager.gradBottomRight
+                //   ],
+                // ),
                 boxShadow: [
                   BoxShadow(
-                    blurRadius: 3,
-                    color: ColorManager.darkGrey,
-                    offset: Offset(-1, -1),
+                    blurRadius: 2,
+                    color: ColorManager.shadowBottomRight,
+                    offset: Offset(-4, -4),
                   ),
                   BoxShadow(
-                    blurRadius: 6,
-                    offset: Offset(2, 2),
+                    blurRadius: 2,
+                    color: ColorManager.shadowTopLeft,
+                    offset: Offset(4, 4),
                   ),
                 ],
               ),
-              padding: EdgeInsets.all(AppPadding.p20),
+              padding: const EdgeInsets.all(AppPadding.p20),
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(
+                    padding: const EdgeInsets.only(
                         bottom: AppPadding.p30, top: AppPadding.p8),
-                    child: Text(
+                    child: const Text(
                       'LOGIN',
                       style: TextStyle(
                         fontFamily: FontConstants.fontFamily,
@@ -117,7 +121,7 @@ class LoginViewState extends State<LoginView> {
                     ),
                   ),
                   TextFormField(
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     controller: phoneController,
                     onChanged: (value) {
                       setState(() {
@@ -142,7 +146,7 @@ class LoginViewState extends State<LoginView> {
                     ),
                     keyboardType: TextInputType.phone,
                   ),
-                  SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),
                   ElevatedButton(
                     onPressed: () async {
                       //  mobile number verification logic here
@@ -176,7 +180,7 @@ class LoginViewState extends State<LoginView> {
                       );
                       // Navigator.pushNamed(context, '/verify_otp');
                     },
-                    child: Text('Get OTP'),
+                    child: const Text('Get OTP'),
                   ),
                 ],
               ),

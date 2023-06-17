@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../resources/assets_manager.dart';
+import '../pages/screens/mycharging/MyChargingScreen.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 
@@ -16,7 +17,7 @@ class SplashView extends StatefulWidget {
 
 class SplashViewState extends State<SplashView> {
   Timer? _timer;
-  static const String KEYLOGIN = "login";
+  static const String keyLogin = "login";
   @override
   void initState() {
     super.initState();
@@ -46,7 +47,7 @@ class SplashViewState extends State<SplashView> {
 
   void whereToGo() async {
     var sharedPref = await SharedPreferences.getInstance();
-    var isLoggedIn = sharedPref.getBool(KEYLOGIN);
+    var isLoggedIn = sharedPref.getBool(keyLogin);
     //var isLoggedIn=
     Timer(
       const Duration(seconds: 2),

@@ -10,7 +10,7 @@ class userRepository extends GetxController {
 
   createUser(UserModel user) async {
    await _db
-        .collection("Users")
+        .collection("users")
         .add(user.toJson())
         .whenComplete(
           () => Get.snackbar("Success", "your acccount has been created.",

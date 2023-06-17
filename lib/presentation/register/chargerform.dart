@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
@@ -9,18 +10,22 @@ import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChargerForm extends StatefulWidget {
-  const ChargerForm({Key? key}) : super(key: key);
-
+  // const ChargerForm({Key? key}) : super(key: key);
+  final String username;
+  final String phoneNumber;
+  final String vehicleManufacturer;
+  final String VehicleRegistrationNumber;
+  const ChargerForm({required this.username,required this.phoneNumber,required this.vehicleManufacturer,required this.VehicleRegistrationNumber});
   @override
   _ChargerFormState createState() => _ChargerFormState();
 }
 
 class _ChargerFormState extends State<ChargerForm> {
   TextEditingController chargerspeedController = TextEditingController();
-
+  final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
-    FocusNode myfocus = FocusNode();
+    //FocusNode myfocus = FocusNode();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -29,7 +34,7 @@ class _ChargerFormState extends State<ChargerForm> {
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
+              margin: const EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
               height: AppSize.s100 + AppSize.s100,
               child: Image.asset(ImageAssets.chargerform),
             ),
@@ -45,7 +50,7 @@ class _ChargerFormState extends State<ChargerForm> {
             //         fontSize: 30),
             //   ),
             // ),
-            SizedBox(
+            const SizedBox(
               height: AppSize.s40,
             ),
             Container(
@@ -54,8 +59,8 @@ class _ChargerFormState extends State<ChargerForm> {
                 children: <Widget>[
                   Container(
                     alignment: Alignment.center,
-                    margin: EdgeInsets.only(left: AppMargin.m12),
-                    child: Text(
+                    margin: const EdgeInsets.only(left: AppMargin.m12),
+                    child: const Text(
                       AppStrings.chargerformtitle,
                       style: TextStyle(
                         fontSize: 24,
@@ -75,25 +80,25 @@ class _ChargerFormState extends State<ChargerForm> {
                   //     ),
                   //   ),
                   // ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      borderRadius:const  BorderRadius.all(Radius.circular(20)),
                       color: ColorManager.darkGreyOpacity40,
                       boxShadow: [
                         BoxShadow(
                           blurRadius: 3,
                           color: ColorManager.darkGrey,
-                          offset: Offset(-1, -1),
+                          offset: const Offset(-1, -1),
                         ),
-                        BoxShadow(
+                        const BoxShadow(
                           blurRadius: 6,
                           offset: Offset(2, 2),
                         ),
                       ],
                     ),
-                    padding: EdgeInsets.all(AppPadding.p20),
+                    padding: const EdgeInsets.all(AppPadding.p20),
                     child: Column(
                       children: [
                         // child: CircleAvatar(
@@ -111,6 +116,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               horizontal: AppPadding.p8,
                               vertical: AppPadding.p8),
                           child: DropDownTextField(
+                            //controller: chargetypeController,
                             dropDownItemCount: 3,
                             clearOption: false,
                             dropDownList: const [
@@ -132,7 +138,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                 ),
                               ),
                               labelText: 'Charger Type',
-                              labelStyle: TextStyle(
+                              labelStyle: const TextStyle(
                                 fontSize: AppSize.s14,
                               ),
                             ),
@@ -155,7 +161,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                   ),
                                 ),
                                 labelText: 'Charger Speed',
-                                labelStyle: TextStyle(fontSize: AppSize.s14)),
+                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
                           ),
                         ),
                         // Container(
@@ -195,7 +201,7 @@ class _ChargerFormState extends State<ChargerForm> {
                         //         labelStyle: TextStyle(fontSize: AppSize.s14)),
                         //   ),
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
 
@@ -214,7 +220,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               child: ElevatedButton(
@@ -224,8 +230,10 @@ class _ChargerFormState extends State<ChargerForm> {
                                       PageTransition(
                                           type: PageTransitionType.leftToRight,
                                           ctx: context,
-                                          child: VehicleForm()));
-                                  ;
+                                          child: VehicleForm(
+                                             username: widget.username,
+                                          phoneNumber: widget.phoneNumber,
+                                          )));
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor:
@@ -247,12 +255,50 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.23,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
 
                               child: ElevatedButton(
                                 onPressed: () {
+                                   var userKey =
+                                      databaseRef.child('user').push().key;
+
+                                    //Create a new user object
+                                  var newUser = {
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  };
+                                  //Add the new user under the unique key
+                                  databaseRef
+                                      .child('users/$userKey')
+                                      .set(newUser)
+                                      .then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                   // print('User added successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    //print('Error adding user: $error');
+                                  });
+                                  databaseRef.set({
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  }).then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                    print('Data saved successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    print('Error saving data: $error');
+                                  });
+                                //  SignUpController.instance.createUser(user);
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(
@@ -282,12 +328,49 @@ class _ChargerFormState extends State<ChargerForm> {
                             Container(
                               height: AppSize.s60 - 10,
                               width: width * 0.3,
-                              margin: EdgeInsets.only(
+                              margin: const EdgeInsets.only(
                                 top: AppMargin.m20,
                               ),
                               // padding: const EdgeInsets.only(right: AppPadding.p20),
                               child: ElevatedButton(
                                 onPressed: () {
+                                  var userKey =
+                                      databaseRef.child('user').push().key;
+
+                                    //Create a new user object
+                                  var newUser = {
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  };
+                                  //Add the new user under the unique key
+                                  databaseRef
+                                      .child('users/$userKey')
+                                      .set(newUser)
+                                      .then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                   // print('User added successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    //print('Error adding user: $error');
+                                  });
+                                  databaseRef.set({
+                                    'name': widget.username,
+                                    'phone': widget.phoneNumber,
+                                    'vehicle manufacturer':widget.vehicleManufacturer,
+                                    'vehicle registration number':widget.VehicleRegistrationNumber,
+                                    'charger type':"Type A",
+                                    'charger speed ':chargerspeedController.text.toString(),
+                                  }).then((value) {
+                                    // Code to execute after the data is successfully saved.
+                                    print('Data saved successfully!');
+                                  }).catchError((error) {
+                                    // Code to handle any errors that occurred during the data saving process.
+                                    print('Error saving data: $error');
+                                  });
                                   Navigator.pushReplacement(
                                     context,
                                     PageTransition(

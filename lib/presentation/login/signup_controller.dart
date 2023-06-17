@@ -1,9 +1,6 @@
 import 'package:EVFI/presentation/store_details/userRepository.dart';
-import 'package:EVFI/presentation/store_details/userRepository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-
 import '../main/main_view.dart';
 import '../store_details/user_model.dart';
 
