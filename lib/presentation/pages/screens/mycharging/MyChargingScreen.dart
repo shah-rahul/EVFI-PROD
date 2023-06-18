@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import './models/MyCharging.dart';
 import 'dart:async';
+import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 
@@ -70,9 +71,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'My Charging',
+          AppStrings.MyChargingTitle,
           textAlign: TextAlign.start,
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
       ),
@@ -98,7 +99,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        'Current',
+                        AppStrings.ChargingScreenCurrentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20, fontWeight: FontWeight.w500),
@@ -127,7 +128,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 },
                 child: Container(
                     width: width * 0.5,
-                    child: Text('Recent',
+                    child: Text(AppStrings.ChargingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20,
@@ -185,7 +186,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 },
                 child: Container(
                   width: width * 0.5,
-                  child: Text('Current',
+                  child: Text(AppStrings.ChargingScreenCurrentTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: AppSize.s20,
@@ -201,7 +202,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Recent',
+                          AppStrings.ChargingScreenRecentTab,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: AppSize.s20,

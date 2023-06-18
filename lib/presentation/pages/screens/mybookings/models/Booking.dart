@@ -1,22 +1,23 @@
 import 'package:intl/intl.dart';
 
 enum Status {
-  waiting,
   accepted,
-  rejected,
+  declined,
 }
 
 class Booking {
+  String CustomerName;
   String StationName;
-  String StationAddress;
+  String mobileNumber;
   DateTime datetime;
-  double amount;
+  int amount;
   int status;
   double ratings;
 
   Booking(
-      {required this.StationName,
-      required this.StationAddress,
+      {required this.CustomerName,
+      required this.StationName,
+      required this.mobileNumber,
       required this.datetime,
       required this.amount,
       required this.status,
