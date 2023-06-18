@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class OSMdata {
   final String displayname;
   final double latitude;
@@ -23,14 +25,9 @@ class OSMdata {
   int get hashCode => Object.hash(displayname, latitude, longitude);
 }
 
-class LatLong {
-  final double latitude;
-  final double longitude;
-  LatLong(this.latitude, this.longitude);
-}
 
 class PickedData {
-  final LatLong latLong;
+  final LatLng latLong;
   final String address;
   final Map<String, dynamic> addressData;
 

@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import '/presentation/resources/color_manager.dart';
 import '../../models/data_type.dart';
-import './result_map.dart';
+import './route_page.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -21,14 +21,13 @@ class _SearchPageState extends State<SearchPage> {
   final controller2 = TextEditingController();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
-  LatLong start = LatLong(-51.42, 95.47);  //random ocean coordinates
-  LatLong end = LatLong(-51.42, 95.47);
+  LatLng start = const LatLng(-51.42, 95.47); //random ocean coordinates
+  LatLng end = const LatLng(-51.42, 95.47);
 
-get _checkIfDifferent {
-    if(start.latitude == end.latitude && start.longitude == end.longitude){
+  get _checkIfDifferent {
+    if (start.latitude == end.latitude && start.longitude == end.longitude) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -58,11 +57,11 @@ get _checkIfDifferent {
                 controller.text = _options[index].displayname;
                 (val)
                     ? {
-                        start = LatLong(
+                        start = LatLng(
                             _options[index].latitude, _options[index].longitude)
                       }
                     : {
-                        end = LatLong(
+                        end = LatLng(
                             _options[index].latitude, _options[index].longitude)
                       };
               });
@@ -71,10 +70,7 @@ get _checkIfDifferent {
                 if (_checkIfDifferent) {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => ResultMap(
-                        startL: start, 
-                        endL: end
-                      ),
+                      builder: (context) => RouteMap(startL: start, endL: end),
                     ),
                   );
                 }
@@ -82,7 +78,7 @@ get _checkIfDifferent {
             },
           ),
           const Divider(
-            thickness: 1.50,
+            thickness: 1.250,
           ),
         ],
       ),
@@ -104,7 +100,10 @@ get _checkIfDifferent {
             color: color,
           ),
           suffixIcon: controller.text.isEmpty
-              ? Container(width: 0)
+              ? IconButton(
+                  onPressed: () => controller.clear(),
+                  icon: const Icon(Icons.mic),
+                )
               : IconButton(
                   onPressed: () => controller.clear(),
                   icon: const Icon(
@@ -148,7 +147,7 @@ get _checkIfDifferent {
     String tempController = c1.text;
     c1.text = c2.text;
     c2.text = tempController;
-    LatLong temp = start;
+    LatLng temp = start;
     start = end;
     end = temp;
     setState(() {});
@@ -182,7 +181,7 @@ get _checkIfDifferent {
                   width: double.infinity,
                   child: Column(children: [
                     _buildTextFormField(controller1, 'Start location',
-                        Icons.location_on_outlined, Colors.blue),
+                        Icons.location_on_outlined, ColorManager.primary),
                     IconButton(
                       onPressed: () => _swap(controller1, controller2),
                       icon: const Icon(

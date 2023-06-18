@@ -7,4 +7,8 @@ class ImageAssets {
   static const String registerDp = "assets/images/RegisterScreen/profileDp.jpg";
   static const String chargerform = "assets/images/RegisterScreen/charger.jpg";
   static const String vehicleForm = "assets/images/RegisterScreen/vehicle.jpg";
+  static const String mapSourceMarker =
+      "assets/images/map/source_map_marker.png";
+  static const String mapDestinationMarker =
+      "assets/images/map/destination_map_marker.png";
 }
