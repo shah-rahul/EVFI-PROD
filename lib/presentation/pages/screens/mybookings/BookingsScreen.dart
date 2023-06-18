@@ -70,7 +70,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My Charging',
+          'My Stations',
           textAlign: TextAlign.start,
           style: TextStyle(color: Colors.black),
         ),
@@ -98,7 +98,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Current',
+                        'Pending',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20, fontWeight: FontWeight.w500),
@@ -185,7 +185,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 },
                 child: Container(
                   width: width * 0.5,
-                  child: Text('Current',
+                  child: Text('Pending',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: AppSize.s20,
