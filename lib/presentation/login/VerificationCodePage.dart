@@ -1,5 +1,7 @@
+import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/splash/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../resources/color_manager.dart';
@@ -153,7 +155,21 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                           //    MaterialPageRoute(builder: (context) => RegisterView()),
 
                           // );
-                          Navigator.push(
+                          
+                          Future<bool> check=checkNumberIsRegistered(number: widget.phoneNumber);
+                          if(await check ){
+                            Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              child: MainView(
+                                
+                              ),
+                            ),
+                          );
+                          }
+                          else{
+                            Navigator.push(
                             context,
                             PageTransition(
                               type: PageTransitionType.rightToLeft,
@@ -162,6 +178,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               ),
                             ),
                           );
+                          }
+                          
                         } on FirebaseAuthException catch (e) {
                           //  Handle authentication failure
                           if (e.code == 'invalid-verification-code') {
@@ -216,4 +234,34 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       ),
     );
   }
+  
+   Future<bool> checkNumberIsRegistered(
+                              {required String number}) async {
+                                final dbref = FirebaseDatabase.instance.ref('Users');
+                            bool isNumberRegistered = false;
+                            try {
+                              await dbref
+                                  .child("RegisteredNumbers")
+                                  .once()
+                                  .then((data) {
+                                for (var i in data.snapshot.children) {
+                                  String data =
+                                      i.child("phoneNo").value.toString();
+
+                                  if (number == data) {
+                                    isNumberRegistered = true;
+                                    
+                                    return isNumberRegistered;
+                                  } else {
+
+                                    isNumberRegistered = false;
+                                    
+                                  }
+                                }
+                              });
+                              return isNumberRegistered;
+                            } catch (e) {
+                              return false;
+                            }
+                          }
 }

@@ -19,7 +19,7 @@ class _MainViewState extends State<MainView> {
   final List<Widget> screens = [
     const Home(),
     const Bookings(),
-    MyChargingScreen(),
+    const MyChargingScreen(),
     const Account(),
   ];
 

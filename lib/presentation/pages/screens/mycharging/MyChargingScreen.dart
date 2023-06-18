@@ -69,7 +69,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'My Charging',
           textAlign: TextAlign.start,
           style: TextStyle(color: Colors.black),
@@ -97,14 +97,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Current',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20, fontWeight: FontWeight.w500),
                       ),
                       Padding(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: AppPadding.p12 - 2,
                             vertical: AppMargin.m12 - 8),
                         child: Container(
@@ -119,7 +119,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Timer(Duration(milliseconds: 100), () {
+                  Timer(const Duration(milliseconds: 100), () {
                     setState(() {
                       _currentSelected = false;
                     });
@@ -137,12 +137,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Container(
           height: height * 0.75,
-          padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
               height: height * 0.85,
@@ -151,7 +151,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   return Column(
                     children: [
                       MyChargingWidget(ChargingList[ind]),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       )
                     ],
@@ -177,7 +177,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Timer(Duration(milliseconds: 100), () {
+                  Timer(const Duration(milliseconds: 100), () {
                     setState(() {
                       _currentSelected = true;
                     });
@@ -200,7 +200,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           'Recent',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -208,7 +208,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p12 - 2,
                               vertical: AppMargin.m12 - 8),
                           child: Container(
@@ -223,12 +223,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 5,
         ),
         Container(
           height: height * 0.75,
-          padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
               height: height * 0.82,
@@ -237,7 +237,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   return Column(
                     children: [
                       MyChargingWidget(ChargingList[ind]),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       )
                     ],
