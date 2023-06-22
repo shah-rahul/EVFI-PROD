@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../screens/mycharging/models/MyCharging.dart';
 import 'package:intl/intl.dart';
 import '../../resources/color_manager.dart';
+import '../../resources/strings_manager.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class MyChargingWidget extends StatelessWidget {
@@ -26,18 +27,18 @@ class MyChargingWidget extends StatelessWidget {
       buttonColor = ColorManager.grey3;
       textColor = Colors.white;
     }
-    
+
     return SizedBox(
-      width: 80,
+      width: 84,
       height: 20,
       child: ElevatedButton(
           onPressed: () {},
           child: Text(
             status == Status.waiting
-                ? "Waiting"
+                ? AppStrings.WaitingStatus
                 : status == Status.accepted
-                    ? "Accepted"
-                    : "Rejected",
+                    ? AppStrings.AcceptedStatus
+                    : AppStrings.DeclinedStatus,
             style: TextStyle(color: textColor),
           ),
           style: ElevatedButton.styleFrom(

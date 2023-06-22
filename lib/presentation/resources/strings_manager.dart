@@ -17,4 +17,18 @@ class AppStrings {
   static const vehicleformTitle = "Vehicle Info";
 
   static const chargerformtitle = "Charger Info";
+
+  static const MyChargingTitle = "My Chargings";
+  static const BookingTitle = "Bookings";
+  static const ChargingScreenRecentTab = "Recent";
+  static const ChargingScreenCurrentTab = "Current";
+  static const BookingScreenPendingTab = "Pending";
+  static const BookingScreenRecentTab = "Recent";
+
+  static const WaitingStatus = "Waiting";
+  static const AcceptedStatus = "Accepted";
+  static const DeclinedStatus = "Declined";
+
+  static const AcceptButton = "Accept";
+  static const DeclineButton = "Decline";
 }

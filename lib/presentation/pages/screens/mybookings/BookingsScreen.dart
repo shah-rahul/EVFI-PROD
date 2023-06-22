@@ -1,88 +1,88 @@
 import 'package:flutter/material.dart';
-import './models/MyCharging.dart';
+import './models/Booking.dart';
 import 'dart:async';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 
-import '../../widgets/MyChargingWidget.dart';
+import '../../widgets/BookingWidget.dart';
 
-List<MyCharging> ChargingList = [
-  MyCharging(
+List<Booking> BookingList = [
+  Booking(
+      CustomerName: "Arshdeep Singh",
+      mobileNumber: "+918989898989",
       StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
       datetime: DateTime.now(),
       amount: 120,
       status: 0,
       ratings: 2.0),
-  MyCharging(
+  Booking(
+      CustomerName: "Rahul Shah",
+      mobileNumber: "+918989898989",
       StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
+      datetime: DateTime.now(),
+      amount: 80,
+      status: 1,
+      ratings: 4.0),
+  Booking(
+      CustomerName: "Priyanshu Maikhuri",
+      StationName: "Aomg Charging Station Hub",
+      mobileNumber: "+918989898989",
+      datetime: DateTime.now(),
+      amount: 100,
+      status: 0,
+      ratings: 4.0),
+  Booking(
+      CustomerName: "Rajkumar ",
+      StationName: "Aomg Charging Station Hub",
+      mobileNumber: "+918989898989",
       datetime: DateTime.now(),
       amount: 120,
       status: 0,
       ratings: 4.0),
-  MyCharging(
+  Booking(
+      CustomerName: "Arshdeep Singh",
       StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
+      mobileNumber: "+918989898989",
       datetime: DateTime.now(),
       amount: 120,
       status: 1,
       ratings: 4.0),
-  MyCharging(
+  Booking(
+      CustomerName: "Arshdeep Singh",
       StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
+      mobileNumber: "+918989898989",
       datetime: DateTime.now(),
       amount: 120,
       status: 1,
       ratings: 4.0)
 ];
 
-class MyChargingScreen extends StatefulWidget {
-  const MyChargingScreen({Key? key}) : super(key: key);
+class BookingsScreen extends StatefulWidget {
+  const BookingsScreen({Key? key}) : super(key: key);
   @override
-  State<MyChargingScreen> createState() => _MyChargingScreenState();
+  State<BookingsScreen> createState() => _BookingsScreenState();
 }
 
-class _MyChargingScreenState extends State<MyChargingScreen> {
+class _BookingsScreenState extends State<BookingsScreen> {
   bool _currentSelected = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          AppStrings.MyChargingTitle,
+        title: Text(
+          AppStrings.BookingTitle,
           textAlign: TextAlign.start,
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.white,
       ),
       body: Container(
-          child: _currentSelected ? currentScreen(context) : RecentScreen()),
+          child: _currentSelected ? PendingScreen(context) : RecentScreen()),
     );
   }
 
-  Widget currentScreen(BuildContext context) {
+  Widget PendingScreen(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Column(
@@ -98,14 +98,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        AppStrings.ChargingScreenCurrentTab,
+                      Text(
+                        AppStrings.BookingScreenPendingTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20, fontWeight: FontWeight.w500),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(
+                        padding: EdgeInsets.symmetric(
                             horizontal: AppPadding.p12 - 2,
                             vertical: AppMargin.m12 - 8),
                         child: Container(
@@ -120,7 +120,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Timer(const Duration(milliseconds: 100), () {
+                  Timer(Duration(milliseconds: 100), () {
                     setState(() {
                       _currentSelected = false;
                     });
@@ -128,7 +128,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 },
                 child: Container(
                     width: width * 0.5,
-                    child: Text(AppStrings.ChargingScreenRecentTab,
+                    child: Text(AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: AppSize.s20,
@@ -138,12 +138,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
         Container(
           height: height * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+          padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
               height: height * 0.85,
@@ -151,14 +151,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 itemBuilder: (context, ind) {
                   return Column(
                     children: [
-                      MyChargingWidget(ChargingList[ind]),
-                      const SizedBox(
+                      BookingWidget(BookingList[ind], _currentSelected),
+                      SizedBox(
                         height: 5,
                       )
                     ],
                   );
                 },
-                itemCount: ChargingList.length,
+                itemCount: BookingList.length,
               ),
             ),
           ),
@@ -178,7 +178,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Timer(const Duration(milliseconds: 100), () {
+                  Timer(Duration(milliseconds: 100), () {
                     setState(() {
                       _currentSelected = true;
                     });
@@ -186,7 +186,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 },
                 child: Container(
                   width: width * 0.5,
-                  child: Text(AppStrings.ChargingScreenCurrentTab,
+                  child: Text(AppStrings.BookingScreenPendingTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: AppSize.s20,
@@ -201,15 +201,15 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          AppStrings.ChargingScreenRecentTab,
+                        Text(
+                          AppStrings.BookingScreenRecentTab,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: AppSize.s20,
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
+                          padding: EdgeInsets.symmetric(
                               horizontal: AppPadding.p12 - 2,
                               vertical: AppMargin.m12 - 8),
                           child: Container(
@@ -224,12 +224,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        const SizedBox(
+        SizedBox(
           height: 5,
         ),
         Container(
           height: height * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+          padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
           child: SingleChildScrollView(
             child: Container(
               height: height * 0.82,
@@ -237,14 +237,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 itemBuilder: (context, ind) {
                   return Column(
                     children: [
-                      MyChargingWidget(ChargingList[ind]),
-                      const SizedBox(
+                      BookingWidget(BookingList[ind], _currentSelected),
+                      SizedBox(
                         height: 5,
                       )
                     ],
                   );
                 },
-                itemCount: ChargingList.length,
+                itemCount: BookingList.length,
               ),
             ),
           ),

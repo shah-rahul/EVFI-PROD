@@ -45,7 +45,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
               Container(
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(10),
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
