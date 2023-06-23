@@ -1,10 +1,14 @@
+import 'dart:io';
 import 'package:EVFI/presentation/login/login.dart';
+import 'package:EVFI/presentation/pages/screens/mycharging/models/user_profile.dart';
+import 'package:EVFI/presentation/pages/screens/profilesection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String username = "Mr. EVFI";
 String email = "evfi.tech@gmail.com";
+File? clickedImage;
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -15,6 +19,21 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+
+  void editProfile() async {
+    final newDetails =
+        await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
+      builder: (context) => EditProfileScreen(name: username, email: email),
+    ));
+    if (newDetails == null) {
+      return;
+    }
+    setState(() {
+      username = newDetails.name;
+      email = newDetails.email;
+      clickedImage = newDetails.image;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +55,16 @@ class _AccountState extends State<Account> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //1st column
-            Container(
-              child: profileSection(context),
+            //1st column......
+            GestureDetector(
+              onTap: editProfile,
+              child: Container(
+                child: profileSection(context),
+              ),
             ),
-            //2nd column
+            //2nd column.......
             const SizedBox(height: 20),
-            //3rd column
+            //3rd column.......
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +115,26 @@ class _AccountState extends State<Account> {
   }
 }
 
+//////PROFILE SECTION
+
 Widget profileSection(BuildContext context) {
+  Widget content = const CircleAvatar(
+    radius: 30,
+    backgroundColor: Colors.yellow,
+    child: Icon(
+      Icons.camera_alt_rounded,
+      color: Colors.black,
+      size: 40,
+    ),
+  );
+
+  if (clickedImage != null) {
+    content = CircleAvatar(
+      radius: 30,
+      backgroundImage: FileImage(clickedImage!),
+    );
+  }
+
   return Container(
     padding: const EdgeInsetsDirectional.all(10),
     decoration: BoxDecoration(
@@ -104,16 +145,11 @@ Widget profileSection(BuildContext context) {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.yellow,
-          child: Icon(
-            Icons.camera_alt_rounded,
-            color: Colors.black,
-            size: 40,
-          ),
-        ),
+        //1st row.....
+        content,
+        //2nd row....
         const SizedBox(width: 70),
+        //3rd row....
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
