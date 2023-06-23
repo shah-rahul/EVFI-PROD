@@ -42,6 +42,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             'Edit Profile',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
+          iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: const Color.fromARGB(255, 222, 184, 46),
         ),
         body: Padding(

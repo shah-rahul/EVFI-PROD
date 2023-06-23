@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:EVFI/presentation/login/login.dart';
+import 'package:EVFI/presentation/pages/screens/mycharging/payments.dart';
 import 'package:EVFI/presentation/pages/screens/mycharging/models/user_profile.dart';
 import 'package:EVFI/presentation/pages/screens/profilesection.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,10 @@ class _AccountState extends State<Account> {
       email = newDetails.email;
       clickedImage = newDetails.image;
     });
+  }
+
+  void clickPayment(){
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen(),));
   }
 
   @override
@@ -72,7 +77,7 @@ class _AccountState extends State<Account> {
                 //3members in this row
                 serviceSection(context, Icons.charging_station, 'My Chargers'),
                 const SizedBox(width: 25),
-                serviceSection(context, Icons.credit_card, 'Payments'),
+                GestureDetector(onTap: clickPayment, child: serviceSection(context, Icons.credit_card, 'Payments')),
                 const SizedBox(width: 25),
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
