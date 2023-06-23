@@ -8,6 +8,9 @@ import 'package:http/http.dart' as http;
 import '/presentation/resources/color_manager.dart';
 import '../../models/data_type.dart';
 import './route_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -66,6 +69,32 @@ class _SearchPageState extends State<SearchPage> {
                       };
               });
               _options.clear();
+               
+              Future<void> storeStartAndEndLocations(
+                  LatLng startL, LatLng endL) async {
+                try {
+                  final databaseReference =
+                      FirebaseDatabase.instance.reference();
+                  final routeMapReference = databaseReference.child('RouteMap');
+
+                  await routeMapReference.update({
+                    'startLocation': {
+                      'latitude': startL.latitude,
+                      'longitude': startL.longitude,
+                    },
+                    'endLocation': {
+                      'latitude': endL.latitude,
+                      'longitude': endL.longitude,
+                    },
+                  });
+
+                  print('Start and end locations stored successfully!');
+                } catch (error) {
+                  print('Failed to store start and end locations: $error');
+                }
+              }
+              storeStartAndEndLocations(start, end);
+
               if (controller1.text.isNotEmpty && controller2.text.isNotEmpty) {
                 if (_checkIfDifferent) {
                   Navigator.of(context).pushReplacement(
