@@ -6,15 +6,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 String username = "Mr. EVFI";
 String email = "evfi.tech@gmail.com";
 
-
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
 
   @override
   State<Account> createState() => _AccountState();
 }
-
-
 
 class _AccountState extends State<Account> {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -23,8 +20,10 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Section',style: TextStyle(
-          color: Colors.black, fontWeight: FontWeight.bold),),
+        title: const Text(
+          'Account Section',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
@@ -49,17 +48,17 @@ class _AccountState extends State<Account> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 //3members in this row
-                serviceSection(context,Icons.charging_station,'My Chargers'),
+                serviceSection(context, Icons.charging_station, 'My Chargers'),
                 const SizedBox(width: 25),
-                serviceSection(context,Icons.credit_card,'Payments'),
+                serviceSection(context, Icons.credit_card, 'Payments'),
                 const SizedBox(width: 25),
-                serviceSection(context,Icons.drive_eta,'Bookings'),
+                serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
             ),
             //4th column
             const SizedBox(height: 20),
             //5th column
-            settingSection(context,Icons.settings,'Settings'),
+            settingSection(context, Icons.settings, 'Settings'),
             //6th column
             const SizedBox(height: 20),
             //7th column
@@ -69,12 +68,12 @@ class _AccountState extends State<Account> {
             //9th column
             GestureDetector(
               onTap: () async {
-            await signOut();
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginView()),
-            );
-          },
+                await signOut();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginView()),
+                );
+              },
               child: settingSection(context, Icons.logout, 'Logout'),
             ),
             //10th column
@@ -93,9 +92,6 @@ class _AccountState extends State<Account> {
     //     context, MaterialPageRoute(builder: (context) => RegisterView()));
   }
 }
-
-
-
 
 Widget profileSection(BuildContext context) {
   return Container(
@@ -123,13 +119,19 @@ Widget profileSection(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(username , style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),),
-            Text(email, style: const TextStyle(
-              fontWeight: FontWeight.w300,
-              fontStyle: FontStyle.italic,
-            ),),
+            Text(
+              username,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              email,
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
             const SizedBox(height: 5),
             Container(
               padding: const EdgeInsets.all(0.5),
@@ -138,7 +140,8 @@ Widget profileSection(BuildContext context) {
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(width: 1.5, color: Colors.black),
               ),
-              child: const Text('edit profile',style: TextStyle(color: Colors.white)),
+              child: const Text('edit profile',
+                  style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -146,9 +149,6 @@ Widget profileSection(BuildContext context) {
     ),
   );
 }
-
-
-
 
 Widget serviceSection(BuildContext context, IconData icon, String str) {
   return Container(
@@ -166,11 +166,7 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
   );
 }
 
-
-
-
-
-Widget settingSection(BuildContext context,IconData icon, String str){
+Widget settingSection(BuildContext context, IconData icon, String str) {
   return Container(
     padding: const EdgeInsetsDirectional.all(10),
     decoration: BoxDecoration(
@@ -179,7 +175,7 @@ Widget settingSection(BuildContext context,IconData icon, String str){
     ),
     child: Row(
       children: [
-        Icon(icon), 
+        Icon(icon),
         const SizedBox(width: 10),
         Text(str, style: const TextStyle(fontWeight: FontWeight.w700)),
       ],
