@@ -45,6 +45,7 @@ dependencies:
   geolocator: ^9.0.2
   geocoding: ^2.1.0
   http: ^0.13.5
+  image_picker: ^0.8.9
 
 
 flutter_icons:
