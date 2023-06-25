@@ -3,6 +3,7 @@ import 'package:EVFI/presentation/login/login.dart';
 import 'package:EVFI/presentation/pages/screens/mycharging/payments.dart';
 import 'package:EVFI/presentation/pages/screens/mycharging/models/user_profile.dart';
 import 'package:EVFI/presentation/pages/screens/profilesection.dart';
+import 'package:EVFI/presentation/pages/screens/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,8 +37,10 @@ class _AccountState extends State<Account> {
     });
   }
 
-  void clickPayment(){
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const PaymentScreen(),));
+  void clickPayment() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => const PaymentScreen(),
+    ));
   }
 
   @override
@@ -77,7 +80,10 @@ class _AccountState extends State<Account> {
                 //3members in this row
                 serviceSection(context, Icons.charging_station, 'My Chargers'),
                 const SizedBox(width: 25),
-                GestureDetector(onTap: clickPayment, child: serviceSection(context, Icons.credit_card, 'Payments')),
+                GestureDetector(
+                    onTap: clickPayment,
+                    child:
+                        serviceSection(context, Icons.credit_card, 'Payments')),
                 const SizedBox(width: 25),
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
@@ -85,7 +91,14 @@ class _AccountState extends State<Account> {
             //4th column
             const SizedBox(height: 20),
             //5th column
-            settingSection(context, Icons.settings, 'Settings'),
+            GestureDetector(
+              child: settingSection(context, Icons.settings, 'Settings'),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SettingsScreen(),
+                ));
+              },
+            ),
             //6th column
             const SizedBox(height: 20),
             //7th column
@@ -191,6 +204,8 @@ Widget profileSection(BuildContext context) {
   );
 }
 
+//SERVICES SECTION
+
 Widget serviceSection(BuildContext context, IconData icon, String str) {
   return Container(
     padding: const EdgeInsetsDirectional.all(10),
@@ -206,6 +221,8 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
     ),
   );
 }
+
+//SETTINGS SECTION
 
 Widget settingSection(BuildContext context, IconData icon, String str) {
   return Container(
