@@ -114,6 +114,7 @@ class _SearchPageState extends State<SearchPage> {
             borderSide: BorderSide(color: ColorManager.primary, width: 3.0),
           ),
         ),
+        textInputAction: TextInputAction.go,
         onChanged: (String value) {
           if (_debounce?.isActive ?? false) {
             _debounce?.cancel();
@@ -188,6 +189,7 @@ class _SearchPageState extends State<SearchPage> {
                         Icons.swap_vert,
                         size: 33,
                       ),
+                      splashColor: ColorManager.primary,
                       color: ColorManager.appBlack,
                     ),
                     _buildTextFormField(controller2, 'Destination location',

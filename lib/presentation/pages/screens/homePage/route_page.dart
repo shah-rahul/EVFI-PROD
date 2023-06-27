@@ -60,9 +60,18 @@ class _RouteMapState extends State<RouteMap> {
               color: ColorManager.appBlack,
               size: 33,
             ),
+            highlightColor: ColorManager.primary,
+            splashColor: Colors.white,
             onPressed: () => Navigator.of(context).pop(),
           )),
     );
+  }
+
+  //to implement dispose
+  @override
+  void dispose() {
+    _googleMapController.dispose();
+    super.dispose();
   }
 
   @override
@@ -103,10 +112,10 @@ class _RouteMapState extends State<RouteMap> {
     var v4 = widget.endL.longitude;
 
     BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 1.5),// size: Size(25, 25)),
+        const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
         ImageAssets.mapSourceMarker);
     BitmapDescriptor destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 1.5),// size: Size(3, 4)),
+        const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(3, 4)),
         ImageAssets.mapDestinationMarker);
 
     try {
