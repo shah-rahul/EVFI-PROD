@@ -1,4 +1,4 @@
-import 'package:EVFI/presentation/pages/screens/mycharging/success_payment.dart';
+import 'package:EVFI/presentation/pages/4thpage/success_payment.dart';
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatefulWidget {
