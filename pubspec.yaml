@@ -87,6 +87,7 @@ flutter:
      - assets/images/onboarding/
      - assets/images/RegisterScreen/
      - assets/images/map/
+     - assets/images/login/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -30,58 +30,38 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: ColorManager.appBlack,
-      body: Center(
-        child: SingleChildScrollView(
+    final double heightScreen = MediaQuery.of(context).size.height;
+    return Container(
+      decoration: new BoxDecoration(
+          image: new DecorationImage(
+        image: new AssetImage(ImageAssets.loginBackground),
+        fit: BoxFit.cover,
+      )),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                margin: EdgeInsets.only(top: height * 0.16),
-                height: height * 0.2,
-                child: Image.asset(ImageAssets.logo),
-              ),
-              Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Ev',
-                      style: TextStyle(
-                        fontSize: AppSize.s28,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'FI',
-                      style: TextStyle(
-                        fontFamily: FontConstants.fontFamily,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppSize.s28,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: height * 0.06),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                height: heightScreen * 0.36,
+                margin: EdgeInsets.only(
+                    top: heightScreen * 0.55,
+                    left: AppMargin.m14,
+                    right: AppMargin.m14),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  color: ColorManager.darkGreyOpacity40,
+                  color: Colors.white.withOpacity(0.90),
                   boxShadow: [
                     BoxShadow(
-                      blurRadius: 3,
-                      color: ColorManager.darkGrey,
-                      offset: const Offset(-1, -1),
+                      blurRadius: 2,
+                      color: ColorManager.shadowBottomRight.withOpacity(0.3),
+                      offset: const Offset(4, 4),
                     ),
-                    const BoxShadow(
-                      blurRadius: 6,
-                      offset: Offset(2, 2),
+                    BoxShadow(
+                      blurRadius: 2,
+                      color: ColorManager.shadowTopLeft.withOpacity(0.4),
+                      offset: const Offset(2, 2),
                     ),
                   ],
                 ),
@@ -91,13 +71,13 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     Container(
                       padding: const EdgeInsets.only(
                           bottom: AppPadding.p30, top: AppPadding.p8),
-                      child: const Text(
+                      child: Text(
                         'Verify OTP',
                         style: TextStyle(
                           fontFamily: FontConstants.fontFamily,
                           fontWeight: FontWeight.w300,
                           fontSize: AppSize.s28,
-                          color: Colors.white,
+                          color: ColorManager.darkGrey,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -108,7 +88,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       child: Text(
                         'Enter the verification code sent to ${widget.phoneNumber}',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white),
+                        style: TextStyle(color: ColorManager.darkGrey),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -117,7 +97,12 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       child: TextFormField(
                         style: const TextStyle(color: Colors.black),
                         controller: _codeController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: AppSize.s4 - 3,
+                                color: ColorManager.darkGrey),
+                          ),
                           hintText: 'Verification code',
                         ),
                         keyboardType: TextInputType.number,
@@ -125,7 +110,14 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      child: const Text('Verify Code'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shadowColor: Colors.white,
+                          elevation: 6),
+                      child: Text(
+                        'Verify Code',
+                        style: TextStyle(color: ColorManager.darkGrey),
+                      ),
                       onPressed: () async {
                         //  Verify code
                         final String code = _codeController.text.trim();
@@ -155,31 +147,28 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                           //    MaterialPageRoute(builder: (context) => RegisterView()),
 
                           // );
-                          
-                          Future<bool> check=checkNumberIsRegistered(number: widget.phoneNumber);
-                          if(await check ){
+
+                          Future<bool> check = checkNumberIsRegistered(
+                              number: widget.phoneNumber);
+                          if (await check) {
                             Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: MainView(
-                                
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: MainView(),
                               ),
-                            ),
-                          );
-                          }
-                          else{
+                            );
+                          } else {
                             Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: RegisterView(
-                                phoneNumber: widget.phoneNumber,
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                child: RegisterView(
+                                  phoneNumber: widget.phoneNumber,
+                                ),
                               ),
-                            ),
-                          );
+                            );
                           }
-                          
                         } on FirebaseAuthException catch (e) {
                           //  Handle authentication failure
                           if (e.code == 'invalid-verification-code') {
@@ -234,34 +223,27 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       ),
     );
   }
-  
-   Future<bool> checkNumberIsRegistered(
-                              {required String number}) async {
-                                final dbref = FirebaseDatabase.instance.ref('Users');
-                            bool isNumberRegistered = false;
-                            try {
-                              await dbref
-                                  .child("RegisteredNumbers")
-                                  .once()
-                                  .then((data) {
-                                for (var i in data.snapshot.children) {
-                                  String data =
-                                      i.child("phoneNo").value.toString();
 
-                                  if (number == data) {
-                                    isNumberRegistered = true;
-                                    
-                                    return isNumberRegistered;
-                                  } else {
+  Future<bool> checkNumberIsRegistered({required String number}) async {
+    final dbref = FirebaseDatabase.instance.ref('Users');
+    bool isNumberRegistered = false;
+    try {
+      await dbref.child("RegisteredNumbers").once().then((data) {
+        for (var i in data.snapshot.children) {
+          String data = i.child("phoneNo").value.toString();
 
-                                    isNumberRegistered = false;
-                                    
-                                  }
-                                }
-                              });
-                              return isNumberRegistered;
-                            } catch (e) {
-                              return false;
-                            }
-                          }
+          if (number == data) {
+            isNumberRegistered = true;
+
+            return isNumberRegistered;
+          } else {
+            isNumberRegistered = false;
+          }
+        }
+      });
+      return isNumberRegistered;
+    } catch (e) {
+      return false;
+    }
+  }
 }

@@ -7,7 +7,7 @@ class AppStrings {
   static const onboardingSubTitle1 = "";
   static const onboardingSubTitle2 = "";
   static const onboardingSubTitle3 = "";
-  static const skip = "SKIP";
+  static const skip = "Skip";
 
   static const registerSignup = "Sign Up";
   static const registercancel = "Cancel";
