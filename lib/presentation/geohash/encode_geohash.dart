@@ -18,6 +18,8 @@ print(geohash);
 
 
 
+import 'package:get/get.dart';
+
 String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
   final int BITS_PER_CHAR = 5;
   final String BASE32 = '0123456789bcdefghjkmnpqrstuvwxyz';
@@ -69,3 +71,38 @@ String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
 
   return geohash.toString();
 }
+
+
+String convertToDegrees(double value, String positiveDirection, String negativeDirection) {
+  String direction = value >= 0 ? positiveDirection : negativeDirection;
+  double degrees = value.abs().toPrecision(7);
+  // int degreesInt = degrees.toInt();
+  // double minutes = (degrees - degreesInt) * 60;
+  // int minutesInt = minutes.toInt();
+  // double seconds = (minutes - minutesInt) * 60;
+
+  return '$degrees° $direction';
+}
+
+// String convertToDegrees(double value, String positiveDirection, String negativeDirection) {
+//   String direction = value >= 0 ? positiveDirection : negativeDirection;
+//   double degrees = value.abs();
+//   int degreesInt = degrees.toInt();
+//   double minutes = (degrees - degreesInt) * 60;
+//   int minutesInt = minutes.toInt();
+//   double seconds = (minutes - minutesInt) * 60;
+
+//   return '$degreesInt° $minutesInt\' ${seconds.toStringAsFixed(2)}" $direction';
+// }
+
+//   how to use:-
+
+//   double latitude = 37.7749;
+//   double longitude = -122.4194;
+  
+//   String convertedLatitude = convertToDegrees(latitude, 'N', 'S');
+//   String convertedLongitude = convertToDegrees(longitude, 'E', 'W');
+
+//   print(convertedLatitude); // Output: 37° 46' 29.64" N
+//   print(convertedLongitude); // Output: 122° 25' 9.84" W
+// }
