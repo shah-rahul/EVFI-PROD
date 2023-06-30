@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:EVFI/presentation/geohash/encode_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -24,8 +25,8 @@ class _SearchPageState extends State<SearchPage> {
   final controller2 = TextEditingController();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
-  LatLng start = const LatLng(-51.42, 95.47); //random ocean coordinates
-  LatLng end = const LatLng(-51.42, 95.47);
+  late LatLng start;  // = const LatLng(-51.42, 95.47); //random ocean coordinates
+  late LatLng end;  // = const LatLng(-51.42, 95.47);
 
   get _checkIfDifferent {
     if (start.latitude == end.latitude && start.longitude == end.longitude) {
@@ -69,30 +70,80 @@ class _SearchPageState extends State<SearchPage> {
                       };
               });
               _options.clear();
-               
+
               Future<void> storeStartAndEndLocations(
                   LatLng startL, LatLng endL) async {
                 try {
                   final databaseReference =
                       FirebaseDatabase.instance.reference();
-                  final routeMapReference = databaseReference.child('RouteMap');
+
+                  final routeMapReference = databaseReference
+                      .child('RouteMap')
+                      .push();
 
                   await routeMapReference.update({
-                    'startLocation': {
-                      'latitude': startL.latitude,
-                      'longitude': startL.longitude,
-                    },
-                    'endLocation': {
-                      'latitude': endL.latitude,
-                      'longitude': endL.longitude,
-                    },
+                      'geohash':
+                          encodeGeohash(startL.latitude, startL.longitude),
+                      'geopoint':
+                          '${startL.latitude}, ${startL.longitude}',
                   });
+
+                  final routeMapReference2 = databaseReference
+                      .child('RouteMap')
+                      .push();
+
+                  await routeMapReference2.update({
+                      'geohash':
+                          encodeGeohash(endL.latitude, endL.longitude),
+                      'geopoint':
+                          '${endL.latitude}, ${endL.longitude}',
+                  });
+
+                  // 'position': {
+                  //     'geohash':
+                  //         encodeGeohash(startL.latitude, startL.longitude),
+                  //     'geopoint':
+                  //         '${startL.latitude}, ${startL.longitude}',
+                  //     'geohash2':
+                  //         encodeGeohash(endL.latitude, endL.longitude),
+                  //     'geopoint2':
+                  //         '${endL.latitude}, ${endL.longitude}',
+                  //   },
+
+                  // final databaseReference2 =
+                  //     FirebaseDatabase.instance.reference();
+                  // final routeMapReference2 = databaseReference2
+                  //     .child('RouteMap')
+                  //     .child('endLocation')
+                  //     .push();
+                  // await routeMapReference2.update({
+                  //   'position': {
+                  //     'geohash': encodeGeohash(endL.latitude, endL.longitude),
+                  //     'geopoint':
+                  //         '[${convertToDegrees(endL.latitude, 'N', 'S')},${convertToDegrees(endL.longitude, 'E', 'W')}]',
+                  //   }
+                  // });
+
+                  // await routeMapReference.update({
+                  //   'startLocation': {
+                  //     'geohash':
+                  //         encodeGeohash(startL.latitude, startL.longitude),
+                  //     'geopoint':
+                  //         '[${convertToDegrees(startL.latitude, 'N', 'S')},${convertToDegrees(startL.longitude, 'E', 'W')}]',
+                  //   },
+                  //   'endLocation': {
+                  //     'geohash': encodeGeohash(endL.latitude, endL.longitude),
+                  //     'geopoint':
+                  //         '[${convertToDegrees(endL.latitude, 'N', 'S')},${convertToDegrees(endL.longitude, 'E', 'W')}]',
+                  //   },
+                  // });
 
                   print('Start and end locations stored successfully!');
                 } catch (error) {
                   print('Failed to store start and end locations: $error');
                 }
               }
+
               storeStartAndEndLocations(start, end);
 
               if (controller1.text.isNotEmpty && controller2.text.isNotEmpty) {

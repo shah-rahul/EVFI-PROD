@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:EVFI/presentation/login/login.dart';
-import 'package:EVFI/presentation/pages/screens/mycharging/payments.dart';
-import 'package:EVFI/presentation/pages/screens/mycharging/models/user_profile.dart';
-import 'package:EVFI/presentation/pages/screens/profilesection.dart';
-import 'package:EVFI/presentation/pages/screens/settings.dart';
+import 'package:EVFI/presentation/pages/4thpage/payments.dart';
+import 'package:EVFI/presentation/pages/4thpage/user_profile.dart';
+import 'package:EVFI/presentation/pages/4thpage/profilesection.dart';
+import 'package:EVFI/presentation/pages/4thpage/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
