@@ -11,13 +11,13 @@ class ColorManager {
   static Color primaryOpacity70 = HexColor.fromHex("#B3ED9728");
 
   //gradients
-  static Color gradTopLeft = HexColor.fromHex("#343434");
-  static Color gradBottomRight = HexColor.fromHex("#2c2c2c");
+  static Color gradTopLeft = HexColor.fromHex("#f0f0f0");
+  static Color gradBottomRight = HexColor.fromHex("#cacaca");
 
   //drop shadow
-  static Color shadowTopLeft = HexColor.fromHex("#2a2a2a");
+  static Color shadowTopLeft = HexColor.fromHex("#ffffff");
   static Color CardshadowBottomRight = HexColor.fromHex("#d1d1d1");
-  static Color shadowBottomRight = HexColor.fromHex("#383838");
+  static Color shadowBottomRight = HexColor.fromHex("#d9d9d9");
 
   // new colors
   static Color darkPrimary = HexColor.fromHex("#d17d11");

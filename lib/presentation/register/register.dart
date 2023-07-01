@@ -35,210 +35,196 @@ class _RegisterViewState extends State<RegisterView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      backgroundColor: ColorManager.appBlack,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: AppSize.s100),
-              height: AppSize.s100 + 80,
-              child: Image.asset(ImageAssets.logo),
-            ),
-            // Container(
-            //   alignment: Alignment.center,
-            //   margin: EdgeInsets.only(top: AppSize.s12),
-            //   padding: const EdgeInsets.all(10),
-            //   child: Text(
-            //     'Join EVFI',
-            //     style: TextStyle(
-            //         color: ColorManager.primary,
-            //         fontWeight: FontWeight.w500,
-            //         fontSize: 30),
-            //   ),
-            // ),
-            const SizedBox(
-              height: AppSize.s40,
-            ),
-            Container(
-              height: height * 0.7,
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: AppMargin.m12),
-                    child: const Text(
-                      AppStrings.registertitle,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
+    return Container(
+      decoration: new BoxDecoration(
+          image: new DecorationImage(
+        image: new AssetImage(ImageAssets.loginBackground),
+        fit: BoxFit.cover,
+      )),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Container(
+              //   alignment: Alignment.center,
+              //   margin: EdgeInsets.only(top: AppSize.s12),
+              //   padding: const EdgeInsets.all(10),
+              //   child: Text(
+              //     'Join EVFI',
+              //     style: TextStyle(
+              //         color: ColorManager.primary,
+              //         fontWeight: FontWeight.w500,
+              //         fontSize: 30),
+              //   ),
+              // ),
+
+              Container(
+                height: height * 0.46,
+                margin: EdgeInsets.only(
+                    top: height * 0.48,
+                    left: AppMargin.m14,
+                    right: AppMargin.m14),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    color: Colors.white.withOpacity(0.90),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 2,
+                        color: ColorManager.shadowBottomRight.withOpacity(0.3),
+                        offset: const Offset(4, 4),
                       ),
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: AppMargin.m12),
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      AppStrings.registertitle2,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: ColorManager.primary,
+                      BoxShadow(
+                        blurRadius: 2,
+                        color: ColorManager.shadowTopLeft.withOpacity(0.4),
+                        offset: const Offset(2, 2),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      color: ColorManager.darkGreyOpacity40,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 3,
+                    ]),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: height * 0.02),
+                      alignment: Alignment.center,
+                      // margin: const EdgeInsets.only(left: AppMargin.m12),
+                      child: Text(
+                        AppStrings.registertitle,
+                        style: TextStyle(
+                          fontSize: 24,
                           color: ColorManager.darkGrey,
-                          offset: const Offset(-1, -1),
                         ),
-                        const BoxShadow(
-                          blurRadius: 6,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
+                      ),
                     ),
-                    padding: const EdgeInsets.all(AppPadding.p20),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          child: Container(
-                            child: Image.asset(ImageAssets.registerDp,
-                                width: MediaQuery.of(context).size.width -
-                                    AppSize.s200),
+                    Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(10),
+                      child: Text(
+                        AppStrings.registertitle2,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: ColorManager.darkGrey,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin:
+                          const EdgeInsets.symmetric(horizontal: AppMargin.m20),
+                      padding: const EdgeInsets.all(AppPadding.p20),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            child: Container(
+                              child: Image.asset(ImageAssets.registerDp,
+                                  height: height * 0.12,
+                                  width: MediaQuery.of(context).size.width -
+                                      AppSize.s200),
+                            ),
+
+                            // child: CircleAvatar(
+                            //   backgroundColor: ColorManager.primary,
+                            //   radius: 42,
+                            //   child: CircleAvatar(
+                            //     radius: 50,
+                            //     backgroundImage:
+                            //         AssetImage(ImageAssets.registerDp),
+                            //   ),
+                            // ),
+                            onTap: () {
+                              //upload prfile dp
+                            },
                           ),
 
-                          // child: CircleAvatar(
-                          //   backgroundColor: ColorManager.primary,
-                          //   radius: 42,
-                          //   child: CircleAvatar(
-                          //     radius: 50,
-                          //     backgroundImage:
-                          //         AssetImage(ImageAssets.registerDp),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppPadding.p8,
+                                vertical: AppPadding.p8),
+                            child: TextField(
+                              style: TextStyle(color: ColorManager.darkGrey),
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: ColorManager.darkGrey,
+                                    ),
+                                  ),
+                                  labelText: 'User Name',
+                                  labelStyle:
+                                      const TextStyle(fontSize: AppSize.s14)),
+                            ),
+                          ),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: AppPadding.p8,
+                          //       vertical: AppPadding.p8),
+                          //   child: TextField(
+
+                          //     controller: passwordController,
+                          //     decoration: InputDecoration(
+                          //         enabledBorder: UnderlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //             width: 1,
+                          //             color: ColorManager.darkGrey,
+                          //           ),
+                          //         ),
+                          //         labelText: 'Password',
+                          //         labelStyle: TextStyle(fontSize: AppSize.s14)),
                           //   ),
                           // ),
-                          onTap: () {
-                            //upload prfile dp
-                          },
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p8,
-                              vertical: AppPadding.p8),
-                          child: TextField(
-                            controller: nameController,
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: ColorManager.darkGrey,
-                                  ),
-                                ),
-                                labelText: 'User Name',
-                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: AppPadding.p8,
+                          //       vertical: AppPadding.p8),
+                          //   child: TextField(
+                          //     obscureText: true,
+                          //     style: TextStyle(color: ColorManager.darkGrey),
+                          //     controller: verifypasswordController,
+                          //     decoration: InputDecoration(
+                          //         enabledBorder: UnderlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //             width: 1,
+                          //             color: ColorManager.darkGrey,
+                          //           ),
+                          //         ),
+                          //         labelText: 'Verify Password',
+                          //         labelStyle: TextStyle(fontSize: AppSize.s14)),
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: AppPadding.p8,
-                        //       vertical: AppPadding.p8),
-                        //   child: TextField(
 
-                        //     controller: passwordController,
-                        //     decoration: InputDecoration(
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             width: 1,
-                        //             color: ColorManager.darkGrey,
-                        //           ),
-                        //         ),
-                        //         labelText: 'Password',
-                        //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: AppPadding.p8,
-                        //       vertical: AppPadding.p8),
-                        //   child: TextField(
-                        //     obscureText: true,
-                        //     style: TextStyle(color: ColorManager.darkGrey),
-                        //     controller: verifypasswordController,
-                        //     decoration: InputDecoration(
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             width: 1,
-                        //             color: ColorManager.darkGrey,
-                        //           ),
-                        //         ),
-                        //         labelText: 'Verify Password',
-                        //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                        //   ),
-                        // ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-
-                        // TextButton(
-                        //   onPressed: () {
-                        //     //forgot password screen
-                        //   },
-                        //   child: const Text(
-                        //     'Forgot Password',
-                        //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
-                        //   ),
-                        // ),
-                        Row(
-                          children: [
-                            Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.3,
-                              margin: const EdgeInsets.only(
-                                top: AppMargin.m20,
-                              ),
-                              padding: const EdgeInsets.only(
-                                  left: AppPadding.p8, right: AppPadding.p8),
-                              child: ElevatedButton(
+                          // TextButton(
+                          //   onPressed: () {
+                          //     //forgot password screen
+                          //   },
+                          //   child: const Text(
+                          //     'Forgot Password',
+                          //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
+                          //   ),
+                          // ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacementNamed(
+                                  Navigator.pushNamed(
                                       context, Routes.loginRoute);
                                 },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.darkGrey.withOpacity(0.4),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  // side: BorderSide(color: Colors.white)),
-                                  elevation: 0,
-
-                                  textStyle: const TextStyle(
-                                    fontSize: AppSize.s18,
-                                  ),
-                                ),
-                                child: const Text(
+                                child: Text(
                                   AppStrings.registercancel,
                                   textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: ColorManager.darkGrey,
+                                      fontSize: AppSize.s16),
                                 ),
                               ),
 
                               // print(nameController.text);
                               // print(passwordController.text);
-                            ),
-                            Container(
-                              height: AppSize.s60 - 5,
-                              width: width * 0.43,
-                              margin: const EdgeInsets.only(
-                                  top: AppMargin.m20, left: AppMargin.m20),
-                              // padding: const EdgeInsets.only(right: AppPadding.p20),
-                              child: ElevatedButton(
+                              SizedBox(
+                                width: AppSize.s12,
+                              ),
+                              ElevatedButton(
                                 onPressed: () {
                                   // final user = UserModel(
                                   //     fullName: nameController.text.trim(),
@@ -252,87 +238,85 @@ class _RegisterViewState extends State<RegisterView> {
                                   // var userKey =
                                   //     databaseRef.child('user').push().key;
 
-// Create a new user object
+                                  // Create a new user object
                                   // var newUser = {
                                   //   'name': nameController.text.toString(),
                                   //   'phone': widget.phoneNumber,
                                   // };
-// Add the new user under the unique key
+                                  // Add the new user under the unique key
                                   // databaseRef
                                   //     .child('users/$userKey')
                                   //     .set(newUser)
                                   //     .then((value) {
-                                     // Code to execute after the data is successfully saved.
+                                  // Code to execute after the data is successfully saved.
                                   //   print('User added successfully!');
                                   // }).catchError((error) {
-                                     // Code to handle any errors that occurred during the data saving process.
+                                  // Code to handle any errors that occurred during the data saving process.
                                   //   print('Error adding user: $error');
                                   // });
                                   // databaseRef.set({
                                   //   'name': nameController.text.toString(),
                                   //   'phone': phoneNumber,
                                   // }).then((value) {
-                                     // Code to execute after the data is successfully saved.
+                                  // Code to execute after the data is successfully saved.
                                   //   print('Data saved successfully!');
                                   // }).catchError((error) {
-                                     // Code to handle any errors that occurred during the data saving process.
+                                  // Code to handle any errors that occurred during the data saving process.
                                   //   print('Error saving data: $error');
                                   // });
                                   // SignUpController.instance.createUser(user);
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         child: VehicleForm(
-                                          username: nameController.text.toString(),
+                                          username:
+                                              nameController.text.toString(),
                                           phoneNumber: widget.phoneNumber,
                                         )),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.primary.withOpacity(0.9),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  elevation: 0,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25, vertical: 15),
-                                  textStyle:
-                                      const TextStyle(fontSize: AppSize.s18),
+                                    backgroundColor: Colors.white,
+                                    shadowColor: Colors.white,
+                                    elevation: 6),
+                                child: Text(
+                                  AppStrings.registerSignup,
+                                  style: TextStyle(
+                                      color: ColorManager.appBlack,
+                                      fontSize: AppSize.s16),
                                 ),
-                                child: const Text(AppStrings.registerSignup),
                               ),
 
                               // print(nameController.text);
                               // print(passwordController.text);
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
 
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: <Widget>[
-                      //     const Text('Does not have account?'),
-                      //     TextButton(
-                      //       child: const Text(
-                      //         'Sign up',
-                      //         style: TextStyle(
-                      //             fontSize: 20, color: Colors.amberAccent),
-                      //       ),
-                      //       onPressed: () {
-                      //         //signup screen
-                      //         Navigator.pushNamed(context, '/login');
-                      //       },
-                      //     )
-                      // ],
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: <Widget>[
+                        //     const Text('Does not have account?'),
+                        //     TextButton(
+                        //       child: const Text(
+                        //         'Sign up',
+                        //         style: TextStyle(
+                        //             fontSize: 20, color: Colors.amberAccent),
+                        //       ),
+                        //       onPressed: () {
+                        //         //signup screen
+                        //         Navigator.pushNamed(context, '/login');
+                        //       },
+                        //     )
+                        // ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
