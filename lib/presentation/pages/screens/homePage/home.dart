@@ -2,13 +2,25 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:location/location.dart';
+import './route_page.dart';
+import '../../../resources/assets_manager.dart';
+import 'package:firebase_database/firebase_database.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(Home());
+}
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -47,23 +59,89 @@ class HomeState extends State<Home> {
     }
   }
 
-  void _updateCameraPosition() {
+  void _setIntialMarkers(double radius) {
+    final GeoPoint intialPostion =
+        GeoPoint(_currentPosition.latitude, _currentPosition.longitude);
+
+// Center of the geo query.
+    late final GeoFirePoint center = GeoFirePoint(intialPostion);
+
+// Detection range from the center point.
+    double radiusInKm = radius;
+
+// Field name of Cloud Firestore documents where the geohash is saved.
+    String field = 'geo';
+// Reference to locations collection.
+    final CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('Markers');
+
+// Function to get GeoPoint instance from Cloud Firestore document data.
+    GeoPoint geopointFrom(Map<String, dynamic> data) =>
+        (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+// Streamed document snapshots of geo query under given conditions.
+    late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
+        GeoCollectionReference<Map<String, dynamic>>(collectionReference)
+            .subscribeWithin(
+      center: center,
+      radiusInKm: radiusInKm,
+      field: field,
+      geopointFrom: geopointFrom,
+    );
+
+    stream.listen((event) {
+      int c = 2;
+      for (var ds in event) {
+        final data = ds.data();
+
+        if (data == null) {
+          continue;
+        }
+
+        final geoPoint =
+            (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+
+        _markers.add(Marker(
+            markerId: MarkerId(c.toString()),
+            position: LatLng(geoPoint.latitude, geoPoint.longitude)));
+        c = c + 1;
+        setState(() {});
+      }
+    });
+  }
+
+  void _updateCameraPosition() async {
     if (_currentPosition != null) {
+      _setIntialMarkers(1.2);
+
       final cameraPosition = CameraPosition(
         target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
         zoom: 14.0,
       );
+      BitmapDescriptor currentLocationMarker =
+          await BitmapDescriptor.fromAssetImage(
+              const ImageConfiguration(
+                  devicePixelRatio: 1.5), // size: Size(25, 25)),
+              ImageAssets.mapSourceMarker);
       setState(() {
         _kGooglePlex = cameraPosition;
+
         _markers.add(Marker(
             markerId: MarkerId('Home'),
             position: LatLng(_currentPosition.latitude ?? 0.0,
-                _currentPosition.longitude ?? 0.0)));
+                _currentPosition.longitude ?? 0.0),
+            icon: currentLocationMarker));
+
         _mapController
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
       });
     }
   }
+
+  Future<DataSnapshot> getData() async {
+    await Firebase.initializeApp();
+    return await FirebaseDatabase.instance.ref().child('Markers').get();
+  }
+
   // Location currentLocation = Location();
 
   // Future<Position> _getUserCurrentLocation() async {
@@ -96,25 +174,6 @@ class HomeState extends State<Home> {
   //     }
   //   }
 
-  // }
-
-  // void getLocation() async {
-  //   var location = await currentLocation.getLocation();
-  //   final GoogleMapController Controller2 = await _controller.future;
-  //   currentLocation.onLocationChanged.listen((LocationData loc) {
-  //     Controller2.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-  //       target: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0),
-  //       zoom: 12.0,
-  //     )));
-  //     print(loc.latitude);
-  //     print(loc.longitude);
-  //     setState(() {
-  //       _markers.add(Marker(
-  //           markerId: MarkerId('Home'),
-  //           position: LatLng(loc.latitude ?? 0.0, loc.longitude ?? 0.0)));
-  //     });
-  //   });
-  // }
   // @override
   // void initState() {
   //   _getUserCurrentLocation();
@@ -125,44 +184,48 @@ class HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: ColorManager.lightGrey,
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              const GFLoader(type: GFLoaderType.circle),
-              GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController controller) {
-                  // _getUserCurrentLocation().then((value) {
-                  //   CameraPosition currentPosition = CameraPosition(
-                  //       target: LatLng(value.latitude, value.longitude),
-                  //       zoom: 14);
-                  //   setState(() {
-                  //     _markers.add(Marker(
-                  //         markerId: MarkerId("home"),
-                  //         position: LatLng(value.latitude, value.longitude)));
-                  //   });
+        body: FutureBuilder(
+            future: getData(),
+            builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Stack(
+                  children: [
+                    const GFLoader(type: GFLoaderType.circle),
+                    GoogleMap(
+                      mapType: MapType.normal,
+                      initialCameraPosition: _kGooglePlex,
+                      onMapCreated: (GoogleMapController controller) {
+                        // _getUserCurrentLocation().then((value) {
+                        //   CameraPosition currentPosition = CameraPosition(
+                        //       target: LatLng(value.latitude, value.longitude),
+                        //       zoom: 14);
+                        //   setState(() {
+                        //     _markers.add(Marker(
+                        //         markerId: MarkerId("home"),
+                        //         position: LatLng(value.latitude, value.longitude)));
+                        //   });
 
-                  //   controller.animateCamera(
-                  //       CameraUpdate.newCameraPosition(currentPosition));
-                  // });
-                  _mapController = controller;
-                  _updateCameraPosition();
-                  _controller.complete(controller);
-                },
-                markers: Set<Marker>.of(_markers),
-                zoomControlsEnabled: false,
-                compassEnabled: false,
-                zoomGesturesEnabled: false,
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).size.height * 0.07),
-                child: const SearchWidget(),
-              ),
-            ],
-          ),
-        ));
+                        //   controller.animateCamera(
+                        //       CameraUpdate.newCameraPosition(currentPosition));
+                        // });
+                        _mapController = controller;
+                        _updateCameraPosition();
+                        _controller.complete(controller);
+                      },
+                      markers: Set<Marker>.of(_markers),
+                      zoomControlsEnabled: false,
+                      compassEnabled: false,
+                      zoomGesturesEnabled: false,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.07),
+                      child: const SearchWidget(),
+                    ),
+                  ],
+                ),
+              );
+            }));
   }
 }
