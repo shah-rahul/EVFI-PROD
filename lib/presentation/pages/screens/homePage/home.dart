@@ -1,5 +1,9 @@
 import 'dart:async';
-
+import 'dart:async';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import './route_page.dart';
@@ -40,7 +44,15 @@ class HomeState extends State<Home> {
   );
   final List<Marker> _markers = <Marker>[];
   late GoogleMapController _mapController;
-  late Position _currentPosition;
+  Position _currentPosition = Position(
+      longitude: 28.6001740,
+      latitude: 77.2105709,
+      timestamp: DateTime.now(),
+      accuracy: 0,
+      altitude: 0,
+      heading: 0,
+      speed: 0,
+      speedAccuracy: 0);
 
   @override
   void initState() {
@@ -49,14 +61,19 @@ class HomeState extends State<Home> {
   }
 
   void _getCurrentLocation() async {
+    bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    await Geolocator.checkPermission();
+    await Geolocator.requestPermission();
     try {
-      _currentPosition = await Geolocator.getCurrentPosition();
+      _currentPosition = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
       if (_mapController != null) {
         _updateCameraPosition();
       }
     } catch (e) {
       print('Error getting current location: $e');
     }
+    // Ask permission from device
   }
 
   void setIntialMarkers(double radius, LatLng position) {
@@ -110,7 +127,20 @@ class HomeState extends State<Home> {
     });
   }
 
+  Future<Uint8List> getBytesFromAsset(String path) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: pixelRatio.round() * 80);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   void _updateCameraPosition() async {
+    final Uint8List markerIcon =
+        await getBytesFromAsset(ImageAssets.mapSourceMarker);
     if (_currentPosition != null) {
       setIntialMarkers(
           1.2, LatLng(_currentPosition.latitude, _currentPosition.longitude));
@@ -131,7 +161,7 @@ class HomeState extends State<Home> {
             markerId: MarkerId('Home'),
             position: LatLng(_currentPosition.latitude ?? 0.0,
                 _currentPosition.longitude ?? 0.0),
-            icon: currentLocationMarker));
+            icon: BitmapDescriptor.fromBytes(markerIcon)));
 
         _mapController
             .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
