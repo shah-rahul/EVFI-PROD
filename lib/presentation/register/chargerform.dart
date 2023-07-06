@@ -1,6 +1,7 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -295,78 +296,51 @@ class _ChargerFormState extends State<ChargerForm> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  final dbref =
-                                      FirebaseDatabase.instance.ref('Users');
-                                  await dbref
-                                      .child("RegisteredNumbers")
-                                      .push()
-                                      .set({
-                                    "phoneNo": FirebaseAuth
+                                  // Get a reference to the Firestore collection
+                                  final firestore = FirebaseFirestore.instance;
+                                  final collectionRef =
+                                      firestore.collection('Users');
+
+                                  // Create a new document with an automatically generated ID
+                                  final newUserDoc = collectionRef.doc();
+
+                                  // Set the data for the new document
+                                  await newUserDoc.set({
+                                    'phoneNo': FirebaseAuth
                                         .instance.currentUser!.phoneNumber,
-                                  });
-
-                                  var userKey =
-                                      databaseRef.child('User').push().key;
-
-                                  //Create a new user object
-                                  var newUser = {
                                     'name': widget.username,
-                                    'phone': widget.phoneNumber,
+                                  //  'phone': widget.phoneNumber,
                                     'vehicle manufacturer':
                                         widget.vehicleManufacturer,
                                     'vehicle registration number':
                                         widget.VehicleRegistrationNumber,
-                                    'charger type': "Type A",
-                                    'charger speed ':
+                                    'charger type': 'Type A',
+                                    'charger speed':
                                         chargerspeedController.text.toString(),
-                                  };
-                                  //Add the new user under the unique key
-                                  // databaseRef
-                                  //     .child('Users/$userKey')
-                                  //     .set(newUser)
-                                  //     .then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //  // print('User added successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error adding user: $error');
-                                  // });
-                                  databaseRef.child('Users/$userKey').set({
-                                    'name': widget.username,
-                                    'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':
-                                        widget.vehicleManufacturer,
-                                    'vehicle registration number':
-                                        widget.VehicleRegistrationNumber,
-                                    'charger type': "Type A",
-                                    'charger speed ':
-                                        chargerspeedController.text.toString(),
-                                  }).then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                    //print('Data saved successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    //print('Error saving data: $error');
                                   });
+
                                   int count = 0;
                                   Navigator.of(context)
                                       .popUntil((_) => count++ > 3);
                                   Navigator.push(
                                     context,
                                     PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: MainView()),
+                                      type: PageTransitionType.rightToLeft,
+                                      child: MainView(),
+                                    ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
-                                    shadowColor: Colors.white,
-                                    elevation: 6),
+                                  backgroundColor: Colors.white,
+                                  shadowColor: Colors.white,
+                                  elevation: 6,
+                                ),
                                 child: Text(
-                                  "Save",
+                                  'Save',
                                   style: TextStyle(
-                                      color: ColorManager.appBlack,
-                                      fontSize: AppSize.s16),
+                                    color: ColorManager.appBlack,
+                                    fontSize: AppSize.s16,
+                                  ),
                                 ),
                               ),
 
