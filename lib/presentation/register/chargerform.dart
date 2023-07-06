@@ -7,21 +7,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import '../Data_storage/api.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChargerForm extends StatefulWidget {
-  // const ChargerForm({Key? key}) : super(key: key);
-  final String username;
-  final String phoneNumber;
-  final String vehicleManufacturer;
-  final String VehicleRegistrationNumber;
-  const ChargerForm(
-      {required this.username,
-      required this.phoneNumber,
-      required this.vehicleManufacturer,
-      required this.VehicleRegistrationNumber});
+   const ChargerForm({Key? key}) : super(key: key);
+  
+ 
   @override
   _ChargerFormState createState() => _ChargerFormState();
 }
@@ -152,6 +146,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                   fontSize: AppSize.s14,
                                 ),
                               ),
+                               
                               onChanged: (val) {
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
@@ -177,6 +172,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                       const TextStyle(fontSize: AppSize.s14)),
                             ),
                           ),
+                          
                           // Container(
                           //   padding: const EdgeInsets.symmetric(
                           //       horizontal: AppPadding.p8,
@@ -232,44 +228,8 @@ class _ChargerFormState extends State<ChargerForm> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  //  var userKey =
-                                  //     databaseRef.child('Users').push().key;
-
-                                  //   //Create a new user object
-                                  // var newUser = {
-                                  //   'name': widget.username,
-                                  //   'phone': widget.phoneNumber,
-                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
-                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
-                                  //   'charger type':"Type A",
-                                  //   'charger speed ':chargerspeedController.text.toString(),
-                                  // };
-                                  // //Add the new user under the unique key
-                                  // databaseRef
-                                  //     .child('Users/$userKey')
-                                  //     .set(newUser)
-                                  //     .then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //  // print('User added successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error adding user: $error');
-                                  // });
-                                  // databaseRef.set({
-                                  //   'name': widget.username,
-                                  //   'phone': widget.phoneNumber,
-                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
-                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
-                                  //   'charger type':"Type A",
-                                  //   'charger speed ':chargerspeedController.text.toString(),
-                                  // }).then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //   //print('Data saved successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error saving data: $error');
-                                  // });
-                                  //  SignUpController.instance.createUser(user);
+                                  
+                                  
                                   int count = 0;
                                   Navigator.of(context)
                                       .popUntil((_) => count++ > 3);
@@ -294,30 +254,17 @@ class _ChargerFormState extends State<ChargerForm> {
                               SizedBox(
                                 width: AppSize.s12,
                               ),
+                              
                               ElevatedButton(
                                 onPressed: () async {
-                                  // Get a reference to the Firestore collection
-                                  final firestore = FirebaseFirestore.instance;
-                                  final collectionRef =
-                                      firestore.collection('Users');
-
-                                  // Create a new document with an automatically generated ID
-                                  final newUserDoc = collectionRef.doc();
-
-                                  // Set the data for the new document
-                                  await newUserDoc.set({
-                                    'phoneNo': FirebaseAuth
-                                        .instance.currentUser!.phoneNumber,
-                                    'name': widget.username,
-                                  //  'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':
-                                        widget.vehicleManufacturer,
-                                    'vehicle registration number':
-                                        widget.VehicleRegistrationNumber,
-                                    'charger type': 'Type A',
-                                    'charger speed':
-                                        chargerspeedController.text.toString(),
-                                  });
+                                  Api.storeChargerSpeed(
+                                    chargingSpeed: chargerspeedController.text.toString(),
+                                  );
+                                  Api.storeChargerType(
+                                    chargingType: 'Type A',
+                                  );
+                                  
+                                 
 
                                   int count = 0;
                                   Navigator.of(context)
@@ -344,32 +291,18 @@ class _ChargerFormState extends State<ChargerForm> {
                                 ),
                               ),
 
-                              // print(nameController.text);
-                              // print(passwordController.text);
+                              
                             ],
                           ),
                         ],
                       ),
                     ),
 
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: <Widget>[
-                    //     const Text('Does not have account?'),
-                    //     TextButton(
-                    //       child: const Text(
-                    //         'Sign up',
-                    //         style: TextStyle(
-                    //             fontSize: 20, color: Colors.amberAccent),
-                    //       ),
-                    //       onPressed: () {
-                    //         //signup screen
-                    //         Navigator.pushNamed(context, '/login');
-                    //       },
-                    //     )
-                    // ],
+                   
                   ],
+                 
                 ),
+                
               ),
             ],
           ),

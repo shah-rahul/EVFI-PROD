@@ -9,6 +9,7 @@ import '../resources/values_manager.dart';
 import '../login/signup_controller.dart';
 
 import 'package:get/get.dart';
+import '../Data_storage/api.dart';
 
 class RegisterView extends StatefulWidget {
   // const RegisterView({
@@ -265,14 +266,19 @@ class _RegisterViewState extends State<RegisterView> {
                                   //   print('Error saving data: $error');
                                   // });
                                   // SignUpController.instance.createUser(user);
+                                  Api.storeUserName(
+                                    name: nameController.text.toString(),
+                                  );
+                                  Api.storeUserPhone(
+                                    phoneNumber: widget.phoneNumber,
+                                  );
+
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         child: VehicleForm(
-                                          username:
-                                              nameController.text.toString(),
-                                          phoneNumber: widget.phoneNumber,
+                                          
                                         )),
                                   );
                                 },
