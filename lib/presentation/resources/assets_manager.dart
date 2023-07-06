@@ -12,4 +12,6 @@ class ImageAssets {
       "assets/images/map/source_map_marker.png";
   static const String mapDestinationMarker =
       "assets/images/map/destination_map_marker.png";
+  static const String currentLocationMarker =
+      "assets/images/map/current_location_markers.png";
 }
