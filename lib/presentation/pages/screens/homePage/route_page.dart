@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:async';
-
+import './home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +24,16 @@ import '../../../resources/color_manager.dart';
 
 class RouteMap extends StatefulWidget {
   final LatLng startL, endL;
-  const RouteMap({Key? key, required this.startL, required this.endL})
-      : super(key: key);
+
+  RouteMap({Key? myKey, required this.startL, required this.endL})
+      : super(key: myKey);
 
   @override
   State<RouteMap> createState() => _RouteMapState();
 }
 
 class _RouteMapState extends State<RouteMap> {
+  GlobalKey<HomeState> myKey = GlobalKey();
   late GoogleMapController _googleMapController;
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
@@ -165,10 +167,67 @@ class _RouteMapState extends State<RouteMap> {
 
         _googleMapController = controller;
         setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
+        _showRouteMarkers(routpoints);
       });
     } on Exception catch (e) {
       print(e);
     }
+  }
+
+  void setRouteMarker(double radius, LatLng position) {
+    final GeoPoint intialPostion =
+        GeoPoint(position.latitude, position.longitude);
+
+// Center of the geo query.
+    late final GeoFirePoint center = GeoFirePoint(intialPostion);
+
+// Detection range from the center point.
+    double radiusInKm = radius;
+
+// Field name of Cloud Firestore documents where the geohash is saved.
+    String field = 'geo';
+
+    final CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('Markers');
+
+    GeoPoint geopointFrom(Map<String, dynamic> data) =>
+        (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+
+    late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
+        GeoCollectionReference<Map<String, dynamic>>(collectionReference)
+            .subscribeWithin(
+      center: center,
+      radiusInKm: radiusInKm,
+      field: field,
+      geopointFrom: geopointFrom,
+    );
+
+    stream.listen((event) {
+      for (var ds in event) {
+        final data = ds.data();
+
+        if (data == null) {
+          continue;
+        }
+
+        final geoPoint =
+            (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+        final geohash =
+            (data['geo'] as Map<String, dynamic>)['geohash'] as String;
+
+        print(geoPoint.latitude);
+        _markers.add(Marker(
+            markerId: MarkerId(geohash),
+            position: LatLng(geoPoint.latitude, geoPoint.longitude)));
+      }
+      setState(() {});
+    });
+  }
+
+  void _showRouteMarkers(List<LatLng> polylineCoordinates) {
+    polylineCoordinates.forEach((pos) {
+      setRouteMarker(1.2, pos);
+    });
   }
 
   void _setMapFitToScreen(Set<Polyline> p) {

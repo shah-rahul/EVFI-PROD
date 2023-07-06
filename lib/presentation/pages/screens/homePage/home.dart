@@ -59,9 +59,9 @@ class HomeState extends State<Home> {
     }
   }
 
-  void _setIntialMarkers(double radius) {
+  void setIntialMarkers(double radius, LatLng position) {
     final GeoPoint intialPostion =
-        GeoPoint(_currentPosition.latitude, _currentPosition.longitude);
+        GeoPoint(position.latitude, position.longitude);
 
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
@@ -89,7 +89,6 @@ class HomeState extends State<Home> {
     );
 
     stream.listen((event) {
-      int c = 2;
       for (var ds in event) {
         final data = ds.data();
 
@@ -99,11 +98,13 @@ class HomeState extends State<Home> {
 
         final geoPoint =
             (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+        final geohash =
+            (data['geo'] as Map<String, dynamic>)['geohash'] as String;
 
         _markers.add(Marker(
-            markerId: MarkerId(c.toString()),
+            markerId: MarkerId(geohash),
             position: LatLng(geoPoint.latitude, geoPoint.longitude)));
-        c = c + 1;
+
         setState(() {});
       }
     });
@@ -111,7 +112,8 @@ class HomeState extends State<Home> {
 
   void _updateCameraPosition() async {
     if (_currentPosition != null) {
-      _setIntialMarkers(1.2);
+      setIntialMarkers(
+          1.2, LatLng(_currentPosition.latitude, _currentPosition.longitude));
 
       final cameraPosition = CameraPosition(
         target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
