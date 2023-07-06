@@ -309,7 +309,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                     'phoneNo': FirebaseAuth
                                         .instance.currentUser!.phoneNumber,
                                     'name': widget.username,
-                                    'phone': widget.phoneNumber,
+                                  //  'phone': widget.phoneNumber,
                                     'vehicle manufacturer':
                                         widget.vehicleManufacturer,
                                     'vehicle registration number':
