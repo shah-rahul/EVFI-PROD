@@ -126,6 +126,7 @@ class HomeState extends State<Home> {
       }
     });
   }
+  
 
   Future<Uint8List> getBytesFromAsset(String path) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;

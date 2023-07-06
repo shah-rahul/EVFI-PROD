@@ -1,6 +1,10 @@
 import 'dart:convert';
-
+import 'dart:async';
+import 'dart:async';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
@@ -121,18 +125,26 @@ class _RouteMapState extends State<RouteMap> {
     );
   }
 
+  Future<Uint8List> getBytesFromAsset(String path) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: pixelRatio.round() * 80);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
     var v2 = widget.startL.longitude;
     var v3 = widget.endL.latitude;
     var v4 = widget.endL.longitude;
-
-    BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
-        ImageAssets.mapSourceMarker);
-    BitmapDescriptor destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(3, 4)),
-        ImageAssets.mapDestinationMarker);
+    final Uint8List sourceIcon =
+        await getBytesFromAsset(ImageAssets.mapSourceMarker);
+    final Uint8List destinationIcon =
+        await getBytesFromAsset(ImageAssets.mapDestinationMarker);
 
     try {
       var url = Uri.parse(
@@ -144,12 +156,12 @@ class _RouteMapState extends State<RouteMap> {
         addMarker(
           'Source',
           widget.startL,
-          mapIcon: sourceIcon,
+          mapIcon: BitmapDescriptor.fromBytes(sourceIcon),
         );
         addMarker(
           'Destination',
           widget.endL,
-          mapIcon: destinationIcon,
+          mapIcon: BitmapDescriptor.fromBytes(destinationIcon),
         );
 
         routpoints = [];
@@ -267,214 +279,3 @@ class _RouteMapState extends State<RouteMap> {
     });
   }
 }
-
-// Detection range from the center point.
-
-
-//   final _geoQueryCondition = BehaviorSubject<_GeoQueryCondition>.seeded(
-//     _GeoQueryCondition(
-//       radiusInKm: _initialRadiusInKm,
-//       cameraPosition: _initialCameraPosition,
-//     ),
-//   );
-
-//   /// [Stream] of geo query result.
-//   late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> _stream =
-//       _geoQueryCondition.switchMap(
-//     (geoQueryCondition) =>
-//         GeoCollectionReference(_collectionReference).subscribeWithin(
-//       center: GeoFirePoint(
-//         GeoPoint(
-//           _cameraPosition.target.latitude,
-//           _cameraPosition.target.longitude,
-//         ),
-//       ),
-//       radiusInKm: geoQueryCondition.radiusInKm,
-//       field: 'geo',
-//       geopointFrom: (data) =>
-//           (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint,
-//       strictMode: true,
-//     ),
-//   );
-
-//   /// Updates [_markers] by fetched geo [DocumentSnapshot]s.
-//   void _updateMarkersByDocumentSnapshots(
-//     List<DocumentSnapshot<Map<String, dynamic>>> documentSnapshots,
-//   ) {
-//     final markers = <Marker>{};
-//     for (final ds in documentSnapshots) {
-//       final id = ds.id;
-//       final data = ds.data();
-//       if (data == null) {
-//         continue;
-//       }
-//       final name = data['name'] as String;
-//       final geoPoint =
-//           (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-//       markers.add(_createMarker(id: id, name: name, geoPoint: geoPoint));
-//     }
-//     debugPrint('📍 markers count: ${markers.length}');
-//     print(markers);
-//   }
-// }
-
-// /// Creates a [Marker] by fetched geo location.
-// Marker _createMarker({
-//   required String id,
-//   required String name,
-//   required GeoPoint geoPoint,
-// }) =>
-//     Marker(
-//         markerId: MarkerId('(${geoPoint.latitude}, ${geoPoint.longitude})'),
-//         position: LatLng(geoPoint.latitude, geoPoint.longitude),
-//         infoWindow: InfoWindow(title: name),
-//         onTap: () {});
-
-// /// Current detecting radius in kilometers.
-// double _radiusInKm = 5;
-
-// /// Current camera position on Google Maps.
-// CameraPosition get _cameraPosition =>
-//     CameraPosition(target: LatLng(29.450206, 76.961648));
-
-// /// Initial geo query detection radius in km.
-// const double _initialRadiusInKm = 2;
-
-// final _collectionReference = FirebaseFirestore.instance.collection('locations');
-
-/// Geo query geoQueryCondition.
-
-//   final geo = Geofire();
-// final CollectionReference markersCollection = FirebaseFirestore.instance.collection('markers');
-
-//   void _queryMarkersNearPolyline() {
-//   GeoFirePoint center = geo.point(latitude: _polylinePoints[0].latitude, longitude: _polylinePoints[0].longitude);
-
-//   double radius = _calculateSearchRadius(); // Adjust this based on your desired search radius
-
-//   Stream<List<DocumentSnapshot>> stream = geo
-//       .collection(collectionRef: markersCollection)
-//       .within(center: center, radius: radius, field: 'location');
-
-//   stream.listen((List<DocumentSnapshot> documentList) {
-//     setState(() {
-//       _markers.clear();
-//       for (DocumentSnapshot document in documentList) {
-//         double markerLat = document.data()['latitude'];
-//         double markerLng = document.data()['longitude'];
-
-//         LatLng markerLatLng = LatLng(markerLat, markerLng);
-
-//         if (isMarkerNearPolyline(markerLatLng)) {
-//           _markers.add(
-//             Marker(
-//               markerId: MarkerId(document.id),
-//               position: markerLatLng,
-//               infoWindow: InfoWindow(title: document.data()['title']),
-//             ),
-//           );
-//         }
-//       }
-//     });
-//   });
-// }
-
-//   List<Map<String,dynamic>> getMarkersNearPolyline() {
-//     LatLng start = widget.startL;
-//     LatLng end = widget.endL;
-//      List<Map<String, dynamic>> markersCollection = [{"geohash":,"point":{"28.557420, 75.636319"}},
-//     {"geohash":,"point":{"29.450206, 76.961648"}},
-//     {"geohash":,"point":{"29.007680, 77.083429"}},
-//     {"geohash":,"point":{"29.309791, 76.971259"}},
-//     {"geohash":,"point":{"29.481869, 76.949713"}},
-//     {"geohash":,"point":{"29.552411, 76.982979"}},
-//     {"geohash":,"point":{"29.751854, 77.687406"}},
-//     {"geohash":,"point":{"29.953732, 77.026364"}},
-//     {"geohash":,"point":{"29.912647, 76.128156"}}
-
-//     ];
-//     const double tolerance = 1000; // Adjust this value as needed (in meters)
-
-//     // Convert the polyline route into line segments
-//     List<LatLng> polylineSegments = routpoints;
-
-//     // Create a set to store the nearby markers (to avoid duplicates)
-//     Set<Map<String,dynamic>> nearbyMarkers = {};
-
-//     // Iterate through each line segment
-//     for (LatLng segmentStart in polylineSegments) {
-//       LatLng segmentEnd =
-//           polylineSegments[polylineSegments.indexOf(segmentStart) + 1];
-
-//       // Calculate the geohashes for the start and end points of the line segment
-//       String startGeohash =
-//           calculateGeohash(segmentStart.latitude, segmentStart.longitude);
-//       String endGeohash =
-//           calculateGeohash(segmentEnd.latitude, segmentEnd.longitude);
-
-//       // Filter markers that are within the geohash range and close to the line segment
-//       List<Map<String,dynamic>> segmentMarkers = markersCollection.where((marker) {
-//         String markerGeohash = marker['geohash'];
-//         return (markerGeohash.compareTo(startGeohash) >= 0 &&
-//                 markerGeohash.compareTo(endGeohash) <= 0) &&
-//             isMarkerNearPolyline(marker['point'], segmentStart, segmentEnd, tolerance);
-//       }).toList();
-
-//       nearbyMarkers.addAll(segmentMarkers);
-//     }
-
-//     return nearbyMarkers.toList();
-//   }
-
-//   bool isMarkerNearPolyline(
-//       Marker marker, LatLng segmentStart, LatLng segmentEnd, double tolerance) {
-//     double distance =
-//         distanceToPolyline(marker.position, segmentStart, segmentEnd);
-//     return distance <= tolerance;
-//   }
-
-//   double distanceToPolyline(LatLng point, LatLng lineStart, LatLng lineEnd) {
-//   num segmentLengthSq = pow(lineEnd.latitude - lineStart.latitude, 2) +
-//       pow(lineEnd.longitude - lineStart.longitude, 2);
-//   double dotProduct = ((point.latitude - lineStart.latitude) * (lineEnd.latitude - lineStart.latitude)) +
-//       ((point.longitude - lineStart.longitude) * (lineEnd.longitude - lineStart.longitude));
-//   double t = max(0, min(1, dotProduct / segmentLengthSq));
-//   double closestPointLatitude = lineStart.latitude + t * (lineEnd.latitude - lineStart.latitude);
-//   double closestPointLongitude = lineStart.longitude + t * (lineEnd.longitude - lineStart.longitude);
-//   num distanceSq = pow(point.latitude - closestPointLatitude, 2) +
-//       pow(point.longitude - closestPointLongitude, 2);
-//   return sqrt(distanceSq);
-// }
-
-// List<LatLng> getPolylineSegments(LatLng start, LatLng end) {
-  // Convert the polyline route into line segments
-  // You can implement your logic to divide the route into segments
-  // For simplicity, this example assumes a single line segment between start and end points
-//   return [start, end];
-// }
-
-// String calculateGeohash(double latitude, double longitude) {
-//   // Implement your geohash calculation logic here
-//   // You can use libraries like 'geohash' or 'geohash2' to calculate the geohash
-//   // Example using the 'geohash' package:
-//   GeoHasher geoHasher = GeoHasher();
-//   return geoHasher.encode(latitude,longitude,precision: 5);
-//   return encodeGeohash(latitude, longitude);
-// }
-// Your list of markers
-
-
-  // void _queryMarkersNearPolyline() {
-  //   List<Map<String, dynamic>> markersCollection = [{"geohash":,"point":{"28.557420, 75.636319"}},
-  //   {"geohash":,"point":{"29.450206, 76.961648"}},
-  //   {"geohash":,"point":{"29.007680, 77.083429"}},
-  //   {"geohash":,"point":{"29.309791, 76.971259"}},
-  //   {"geohash":,"point":{"29.481869, 76.949713"}},
-  //   {"geohash":,"point":{"29.552411, 76.982979"}},
-  //   {"geohash":,"point":{"29.751854, 77.687406"}},
-  //   {"geohash":,"point":{"29.953732, 77.026364"}},
-  //   {"geohash":,"point":{"29.912647, 76.128156"}}
-
-      
-  //   ];
- 
