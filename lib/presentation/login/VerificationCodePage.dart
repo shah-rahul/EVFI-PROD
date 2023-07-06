@@ -1,5 +1,6 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/splash/splash.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -225,22 +226,28 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
   }
 
   Future<bool> checkNumberIsRegistered({required String number}) async {
-    final dbref = FirebaseDatabase.instance.ref('Users');
+    final firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore.collection('Users');
     bool isNumberRegistered = false;
+
     try {
-      await dbref.child("RegisteredNumbers").once().then((data) {
-        for (var i in data.snapshot.children) {
-          String data = i.child("phoneNo").value.toString();
+      final querySnapshot = await collectionRef.doc('RegisteredNumbers').get();
 
-          if (number == data) {
-            isNumberRegistered = true;
+      if (querySnapshot.exists) {
+        final registeredNumbers = querySnapshot.data();
 
-            return isNumberRegistered;
-          } else {
-            isNumberRegistered = false;
+        if (registeredNumbers != null &&
+            registeredNumbers.containsKey('phoneNo')) {
+          final phoneNumbers = registeredNumbers['phoneNo'];
+
+          if (phoneNumbers is List) {
+            if (phoneNumbers.contains(number)) {
+              isNumberRegistered = true;
+            }
           }
         }
-      });
+      }
+
       return isNumberRegistered;
     } catch (e) {
       return false;
