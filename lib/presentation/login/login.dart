@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../Data_storage/UserData.dart';
+import '../Data_storage/UserDataProvider.dart';
 import '../resources/font_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -16,11 +19,23 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> {
   final phoneController = TextEditingController();
-  //final _otpController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+
+    void registerUser(String name, String phoneNumber) {
+      UserData userData = UserData(
+        name: name,
+        phoneNumber: phoneNumber,
+        vehicleManufacturer: "",
+        vehicleNumber: "",
+        chargingType: "",
+        chargingSpeed: "",
+      );
+      userDataProvider.setUserData(userData);
+    }
+
     phoneController.selection = TextSelection.fromPosition(
       TextPosition(
         offset: phoneController.text.length,
@@ -38,48 +53,6 @@ class LoginViewState extends State<LoginView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              // Container(
-              //   margin: EdgeInsets.only(top: height * 0.16),
-              //   height: height * 0.2,
-              //   child: Image.asset(ImageAssets.logo),
-              // ),
-
-              // Container(
-              //     alignment: Alignment.center,
-              //     padding: const EdgeInsets.all(10),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         Text(
-              //           'Ev',
-              //           style: TextStyle(
-              //             fontSize: AppSize.s28,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //         Text(
-              //           'FI',
-              //           style: TextStyle(
-              //             fontFamily: FontConstants.fontFamily,
-              //             fontWeight: FontWeight.bold,
-              //             fontSize: AppSize.s28,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //       ],
-              //     )),
-              // SizedBox(height: heightScreen * 0.14),
-              // Container(
-              //   width: 500,
-              //   decoration: BoxDecoration(
-              //     boxShadow: [
-              //       BoxShadow(
-              //         offset: Offset(5.0, 5.0),
-              //         spreadRadius: 5,
-              //         blurRadius: 2.0,
-              //       ),
-              //     ],
-              //   ),
               Container(
                 height: heightScreen * 0.32,
                 margin: EdgeInsets.only(
@@ -88,16 +61,7 @@ class LoginViewState extends State<LoginView> {
                     right: AppMargin.m14),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  //  gradient: LinearGradient(
-                  //   begin: Alignment.topLeft,
-                  //   end: Alignment.bottomRight,
-                  //   colors: [
-                  //     ColorManager.gradTopLeft,
-                  //     ColorManager.gradBottomRight
-                  //   ],
-                  // ),
                   color: Colors.white.withOpacity(0.90),
-
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 2,
@@ -136,6 +100,8 @@ class LoginViewState extends State<LoginView> {
                         setState(() {
                           phoneController.text = value;
                         });
+                        // Store the entered phone number in the provider
+                        registerUser('', value);
                       },
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -195,7 +161,6 @@ class LoginViewState extends State<LoginView> {
                             //  Handle code auto retrieval timeout
                           },
                         );
-                        // Navigator.pushNamed(context, '/verify_otp');
                       },
                       child: Text(
                         'Get OTP',
@@ -207,19 +172,6 @@ class LoginViewState extends State<LoginView> {
                   ],
                 ),
               ),
-              // SizedBox(height: 16.0),
-              // OTPTextField(
-              //   // controller: _otpController,
-              //   length: 6,
-              //   width: MediaQuery.of(context).size.width,
-              //   fieldWidth: 20,
-              //   style: TextStyle(fontSize: 17),
-              //   textFieldAlignment: MainAxisAlignment.spaceAround,
-              //   fieldStyle: FieldStyle.underline,
-              //   onCompleted: (pin) {
-              //     //   OTP verification logic here
-              //   },
-              // ),
             ],
           ),
         ),
