@@ -3,22 +3,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class UserDataProvider extends ChangeNotifier {
-//   UserData? userData;
-
-//   void setUserData(UserData data) {
-//     userData = data;
-//     notifyListeners();
-//   }
-// }
- late UserData _userData;
+  late UserData _userData;
   CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('Users');
 
   UserData get userData => _userData;
-void setUserData(UserData data) {
+  void setUserData(UserData data) {
     _userData = data;
     notifyListeners();
   }
+
   Future<void> saveUserData() async {
     try {
       // Store user data in Firestore
@@ -37,6 +31,4 @@ void setUserData(UserData data) {
       print('Error saving user data: $e');
     }
   }
-
-  
 }

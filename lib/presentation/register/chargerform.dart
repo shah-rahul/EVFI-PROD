@@ -48,19 +48,6 @@ class _ChargerFormState extends State<ChargerForm> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              // Container(
-              //   alignment: Alignment.center,
-              //   margin: EdgeInsets.only(top: AppSize.s12),
-              //   padding: const EdgeInsets.all(10),
-              //   child: Text(
-              //     'Join EVFI',
-              //     style: TextStyle(
-              //         color: ColorManager.primary,
-              //         fontWeight: FontWeight.w500,
-              //         fontSize: 30),
-              //   ),
-              // ),
-
               Container(
                 height: height * 0.38,
                 margin: EdgeInsets.only(
@@ -95,39 +82,16 @@ class _ChargerFormState extends State<ChargerForm> {
                         ),
                       ),
                     ),
-                    // Container(
-                    //   alignment: Alignment.center,
-                    //   margin: EdgeInsets.only(left: AppMargin.m12),
-                    //   padding: const EdgeInsets.all(10),
-                    //   child: Text(
-                    //     'Create your Account',
-                    //     style: TextStyle(
-                    //       fontSize: 14,
-                    //       color: ColorManager.primary,
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(height: 20),
                     Container(
                       padding: const EdgeInsets.all(AppPadding.p20),
                       child: Column(
                         children: [
-                          // child: CircleAvatar(
-                          //   backgroundColor: ColorManager.primary,
-                          //   radius: 42,
-                          //   child: CircleAvatar(
-                          //     radius: 50,
-                          //     backgroundImage:
-                          //         AssetImage(ImageAssets.registerDp),
-                          //   ),
-                          // ),
-
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: DropDownTextField(
-
                               //controller: chargetypeController,
                               dropDownItemCount: 3,
                               clearOption: false,
@@ -139,9 +103,9 @@ class _ChargerFormState extends State<ChargerForm> {
                                 DropDownValueModel(
                                     name: 'Type C', value: "Type C"),
                               ],
-            //                  onChanged: (value) {
-            //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
-            // },
+                              //                  onChanged: (value) {
+                              //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
+                              // },
                               listTextStyle:
                                   TextStyle(color: ColorManager.darkGrey),
                               dropdownColor: Colors.white,
@@ -192,57 +156,9 @@ class _ChargerFormState extends State<ChargerForm> {
                                       const TextStyle(fontSize: AppSize.s14)),
                             ),
                           ),
-
-                          // Container(
-                          //   padding: const EdgeInsets.symmetric(
-                          //       horizontal: AppPadding.p8,
-                          //       vertical: AppPadding.p8),
-                          //   child: TextField(
-
-                          //     controller: passwordController,
-                          //     decoration: InputDecoration(
-                          //         enabledBorder: UnderlineInputBorder(
-                          //           borderSide: BorderSide(
-                          //             width: 1,
-                          //             color: ColorManager.darkGrey,
-                          //           ),
-                          //         ),
-                          //         labelText: 'Password',
-                          //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                          //   ),
-                          // ),
-                          // Container(
-                          //   padding: const EdgeInsets.symmetric(
-                          //       horizontal: AppPadding.p8,
-                          //       vertical: AppPadding.p8),
-                          //   child: TextField(
-                          //     obscureText: true,
-                          //     style: TextStyle(color: ColorManager.darkGrey),
-                          //     controller: verifypasswordController,
-                          //     decoration: InputDecoration(
-                          //         enabledBorder: UnderlineInputBorder(
-                          //           borderSide: BorderSide(
-                          //             width: 1,
-                          //             color: ColorManager.darkGrey,
-                          //           ),
-                          //         ),
-                          //         labelText: 'Verify Password',
-                          //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                          //   ),
-                          // ),
                           const SizedBox(
                             height: 20,
                           ),
-
-                          // TextButton(
-                          //   onPressed: () {
-                          //     //forgot password screen
-                          //   },
-                          //   child: const Text(
-                          //     'Forgot Password',
-                          //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
-                          //   ),
-                          // ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
@@ -266,13 +182,9 @@ class _ChargerFormState extends State<ChargerForm> {
                                       fontSize: AppSize.s16),
                                 ),
                               ),
-
-                              // print(nameController.text);
-                              // print(passwordController.text);
                               SizedBox(
                                 width: AppSize.s12,
                               ),
-
                               ElevatedButton(
                                 onPressed: () async {
                                   await userDataProvider.saveUserData();
