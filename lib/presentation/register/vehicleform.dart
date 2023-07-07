@@ -220,29 +220,7 @@ class _VehicleFormState extends State<VehicleForm> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  // var userKey =
-                                  //     databaseRef.child('user').push().key;
-                                  // var newUser = {
-                                  //   'vehicle_manufacturer':
-                                  //       vehicleManufacturerController.text
-                                  //           .toString(),
-                                  //   'vehicle registration number':
-                                  //       vehicleregistrationController.text
-                                  //           .toString(),
-                                  // };
-                                  // databaseRef
-                                  //     .child('users/$userKey')
-                                  //     .set(newUser)
-                                  //     .then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //   print('User added successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   print('Error adding user: $error');
-                                  // });
-    
-
-
+                    
                                   //  Storing vehicle information using provider
                                   String vehicleManufacturer = vehicleManufacturerController.text
                                             .toString();

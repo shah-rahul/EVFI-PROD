@@ -15,7 +15,10 @@ class UserDataProvider extends ChangeNotifier {
       FirebaseFirestore.instance.collection('Users');
 
   UserData get userData => _userData;
-
+void setUserData(UserData data) {
+    _userData = data;
+    notifyListeners();
+  }
   Future<void> saveUserData() async {
     try {
       // Store user data in Firestore
@@ -35,8 +38,5 @@ class UserDataProvider extends ChangeNotifier {
     }
   }
 
-  void setUserData(UserData data) {
-    _userData = data;
-    notifyListeners();
-  }
+  
 }

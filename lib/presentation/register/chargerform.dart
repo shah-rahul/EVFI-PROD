@@ -127,6 +127,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: DropDownTextField(
+
                               //controller: chargetypeController,
                               dropDownItemCount: 3,
                               clearOption: false,
@@ -138,6 +139,9 @@ class _ChargerFormState extends State<ChargerForm> {
                                 DropDownValueModel(
                                     name: 'Type C', value: "Type C"),
                               ],
+            //                  onChanged: (value) {
+            //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
+            // },
                               listTextStyle:
                                   TextStyle(color: ColorManager.darkGrey),
                               dropdownColor: Colors.white,
@@ -157,7 +161,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               ),
 
                               onChanged: (val) {
-                                updateChargingData(val,
+                                updateChargingData(val.toString(),
                                     userDataProvider.userData.chargingSpeed);
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());

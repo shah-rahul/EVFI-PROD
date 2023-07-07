@@ -160,9 +160,9 @@ class _RegisterViewState extends State<RegisterView> {
 
                                 registerUser(value,
                                     userDataProvider.userData.phoneNumber);
-                                // Store the entered phone number in the provider
-                                registerUser(userDataProvider.userData.name,
-                                    widget.phoneNumber);
+                                // // Store the entered phone number in the provider
+                                // registerUser(userDataProvider.userData.name,
+                                //     widget.phoneNumber);
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               //controller: nameController,

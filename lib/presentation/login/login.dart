@@ -149,11 +149,12 @@ class LoginViewState extends State<LoginView> {
                       style: TextStyle(color: ColorManager.darkGrey),
                       controller: phoneController,
                       onChanged: (value) {
-                        // Store the entered phone number in the provider
-              registerUser(userDataProvider.userData.name, value);
+              
                         setState(() {
                           phoneController.text = value;
                         });
+                                  // Store the entered phone number in the provider
+              registerUser('', value);
                       },
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
