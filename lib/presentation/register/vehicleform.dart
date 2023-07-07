@@ -3,6 +3,7 @@ import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
+import '../Data_storage/api.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import './chargerform.dart';
@@ -11,10 +12,8 @@ import 'package:page_transition/page_transition.dart';
 import '../resources/values_manager.dart';
 
 class VehicleForm extends StatefulWidget {
-  // const VehicleForm({Key? key}) : super(key: key);
-  final String username;
-  final String phoneNumber;
-  const VehicleForm({required this.username, required this.phoneNumber});
+  const VehicleForm({Key? key}) : super(key: key);
+
   @override
   _VehicleFormState createState() => _VehicleFormState();
 }
@@ -225,20 +224,22 @@ class _VehicleFormState extends State<VehicleForm> {
                                   //   // Code to handle any errors that occurred during the data saving process.
                                   //   print('Error adding user: $error');
                                   // });
+                                  Api.storeVehicleManufacturer(
+                                    vehicleManufacturer: vehicleManufacturerController.text
+                                                  .toString(),
+                                  );
+
+                                  Api.storeVehicleNumber(
+                                    vehicleNumber: vehicleregistrationController.text
+                                                  .toString(),
+                                  );
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
                                         child: ChargerForm(
-                                          username: widget.username,
-                                          phoneNumber: widget.phoneNumber,
-                                          vehicleManufacturer:
-                                              vehicleManufacturerController.text
-                                                  .toString(),
-                                          VehicleRegistrationNumber:
-                                              vehicleregistrationController.text
-                                                  .toString(),
+                                          
                                         )),
                                   );
                                 },
@@ -265,14 +266,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
                                         child: ChargerForm(
-                                          username: widget.username,
-                                          phoneNumber: widget.phoneNumber,
-                                          vehicleManufacturer:
-                                              vehicleManufacturerController.text
-                                                  .toString(),
-                                          VehicleRegistrationNumber:
-                                              vehicleregistrationController.text
-                                                  .toString(),
+                                          
                                         )),
                                   );
                                 },
