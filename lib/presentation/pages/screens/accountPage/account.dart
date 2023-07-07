@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:EVFI/presentation/login/login.dart';
-import 'package:EVFI/presentation/pages/4thpage/payments.dart';
-import 'package:EVFI/presentation/pages/4thpage/user_profile.dart';
-import 'package:EVFI/presentation/pages/4thpage/profilesection.dart';
-import 'package:EVFI/presentation/pages/4thpage/settings.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/user_profile.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/profilesection.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'new_station.dart';
 
 String username = "Mr. EVFI";
 String email = "evfi.tech@gmail.com";
@@ -117,10 +119,29 @@ class _AccountState extends State<Account> {
               child: settingSection(context, Icons.logout, 'Logout'),
             ),
             //10th column
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+                onTap: _addStation,
+                child: settingSection(context, Icons.location_on_outlined, 'Add Station')),
             const SizedBox(height: 100),
           ],
         ),
       ),
+    );
+  }
+
+  void _addStation() {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.amberAccent[80],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        builder: (_) => GestureDetector(
+              onTap: null,
+              behavior: HitTestBehavior.opaque,
+              child: const NewStation(),
+            ),
     );
   }
 

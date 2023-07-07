@@ -1,5 +1,5 @@
-import 'package:EVFI/presentation/pages/4thpage/user_profile.dart';
-import 'package:EVFI/presentation/pages/4thpage/image_input.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/user_profile.dart';
+import 'package:EVFI/presentation/pages/screens/accountPage/image_input.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 

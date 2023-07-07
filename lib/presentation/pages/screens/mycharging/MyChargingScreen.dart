@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './models/MyCharging.dart';
+import '../../models/MyCharging.dart';
 import 'dart:async';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';

@@ -1,5 +1,5 @@
+import 'dart:math';
 import 'dart:convert';
-import 'dart:async';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -8,23 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'dart:math';
-import 'dart:async';
-import './home.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-
 import 'package:rxdart/rxdart.dart';
-import '../../../geohash/encode_geohash.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../models/encode_geohash.dart';
 import 'package:dart_geohash/dart_geohash.dart';
-import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
+import './home.dart';
 
 class RouteMap extends StatefulWidget {
   final LatLng startL, endL;

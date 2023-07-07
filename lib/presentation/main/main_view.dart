@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import '../resources/color_manager.dart';
 
 import '../pages/screens/homePage/home.dart';
-import '../pages/4thpage/account.dart';
+import '../pages/screens/accountPage/account.dart';
 import '../pages/screens/mybookings/BookingsScreen.dart';
 import '../pages/screens/mycharging/MyChargingScreen.dart';
-import '../pages/screens/bookings.dart';
 
 class MainView extends StatefulWidget {
   @override
