@@ -15,9 +15,8 @@ import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChargerForm extends StatefulWidget {
-   const ChargerForm({Key? key}) : super(key: key);
-  
- 
+  const ChargerForm({Key? key}) : super(key: key);
+
   @override
   _ChargerFormState createState() => _ChargerFormState();
 }
@@ -31,6 +30,13 @@ class _ChargerFormState extends State<ChargerForm> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
+    void updateChargingData(String type, String speed) {
+      UserData userData = userDataProvider.userData;
+      userData.chargingType = type;
+      userData.chargingSpeed = speed;
+      userDataProvider.setUserData(userData);
+    }
+
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -149,8 +155,10 @@ class _ChargerFormState extends State<ChargerForm> {
                                   fontSize: AppSize.s14,
                                 ),
                               ),
-                               
+
                               onChanged: (val) {
+                                updateChargingData(val,
+                                    userDataProvider.userData.chargingSpeed);
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                               },
@@ -161,8 +169,13 @@ class _ChargerFormState extends State<ChargerForm> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: TextField(
+                              onChanged: (value) {
+                                updateChargingData(
+                                    userDataProvider.userData.chargingSpeed,
+                                    value);
+                              },
                               style: TextStyle(color: ColorManager.darkGrey),
-                              controller: chargerspeedController,
+                              //controller: chargerspeedController,
                               decoration: InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -175,7 +188,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                       const TextStyle(fontSize: AppSize.s14)),
                             ),
                           ),
-                          
+
                           // Container(
                           //   padding: const EdgeInsets.symmetric(
                           //       horizontal: AppPadding.p8,
@@ -231,8 +244,6 @@ class _ChargerFormState extends State<ChargerForm> {
                             children: [
                               TextButton(
                                 onPressed: () {
-                                  
-                                  
                                   int count = 0;
                                   Navigator.of(context)
                                       .popUntil((_) => count++ > 3);
@@ -257,20 +268,22 @@ class _ChargerFormState extends State<ChargerForm> {
                               SizedBox(
                                 width: AppSize.s12,
                               ),
-                              
+
                               ElevatedButton(
                                 onPressed: () async {
-                                 
-                                  
+                                  await userDataProvider.saveUserData();
+
                                   // Example: Storing charging information
-    String chargingType ='Type A' ;
-    String chargingSpeed = chargerspeedController.text.toString();
-    UserData? userData = userDataProvider.userData;
-    if (userData != null) {
-      userData.chargingType = chargingType;
-      userData.chargingSpeed = chargingSpeed;
-      userDataProvider.setUserData(userData);
-    }
+                                  String chargingType = 'Type A';
+                                  String chargingSpeed =
+                                      chargerspeedController.text.toString();
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  if (userData != null) {
+                                    userData.chargingType = chargingType;
+                                    userData.chargingSpeed = chargingSpeed;
+                                    userDataProvider.setUserData(userData);
+                                  }
 
                                   int count = 0;
                                   Navigator.of(context)
@@ -296,19 +309,13 @@ class _ChargerFormState extends State<ChargerForm> {
                                   ),
                                 ),
                               ),
-
-                              
                             ],
                           ),
                         ],
                       ),
                     ),
-
-                   
                   ],
-                 
                 ),
-                
               ),
             ],
           ),

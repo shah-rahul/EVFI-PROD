@@ -29,6 +29,13 @@ class _VehicleFormState extends State<VehicleForm> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
+    
+    void updateVehicleData(String manufacturer, String number) {
+      UserData userData = userDataProvider.userData;
+      userData.vehicleManufacturer = manufacturer;
+      userData.vehicleNumber = number;
+      userDataProvider.setUserData(userData);
+    }
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -119,8 +126,11 @@ class _VehicleFormState extends State<VehicleForm> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: TextField(
+                              onChanged: (value) {
+              updateVehicleData(value, userDataProvider.userData.vehicleNumber);
+            },
                               style: TextStyle(color: ColorManager.darkGrey),
-                              controller: vehicleManufacturerController,
+                             // controller: vehicleManufacturerController,
                               decoration: InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -138,8 +148,11 @@ class _VehicleFormState extends State<VehicleForm> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: TextField(
+                               onChanged: (value) {
+              updateVehicleData(userDataProvider.userData.vehicleManufacturer, value);
+            },
                               style: TextStyle(color: ColorManager.darkGrey),
-                              controller: vehicleregistrationController,
+                             // controller: vehicleregistrationController,
                               decoration: InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -268,7 +281,8 @@ class _VehicleFormState extends State<VehicleForm> {
                                 width: AppSize.s12,
                               ),
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async{
+                                  await userDataProvider.saveUserData();
                                   Navigator.push(
                                     context,
                                     PageTransition(

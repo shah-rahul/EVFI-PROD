@@ -38,6 +38,20 @@ class _RegisterViewState extends State<RegisterView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
+    // Example: Storing user's name and phone number using provider
+
+    void registerUser(String name, String phoneNumber) {
+      UserData userData = UserData(
+        name: name,
+        phoneNumber: phoneNumber,
+        vehicleManufacturer: "",
+        vehicleNumber: "",
+        chargingType: "",
+        chargingSpeed: "",
+      );
+      userDataProvider.setUserData(userData);
+    }
+
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -141,8 +155,17 @@ class _RegisterViewState extends State<RegisterView> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: TextField(
+                              onChanged: (value) {
+                                // Store the entered name in the provider
+
+                                registerUser(value,
+                                    userDataProvider.userData.phoneNumber);
+                                // Store the entered phone number in the provider
+                                registerUser(userDataProvider.userData.name,
+                                    widget.phoneNumber);
+                              },
                               style: TextStyle(color: ColorManager.darkGrey),
-                              controller: nameController,
+                              //controller: nameController,
                               decoration: InputDecoration(
                                   enabledBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(
@@ -209,7 +232,8 @@ class _RegisterViewState extends State<RegisterView> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: ()async {
+                                  await userDataProvider.saveUserData();
                                   Navigator.pushNamed(
                                       context, Routes.loginRoute);
                                 },
@@ -268,21 +292,6 @@ class _RegisterViewState extends State<RegisterView> {
                                   //   print('Error saving data: $error');
                                   // });
                                   // SignUpController.instance.createUser(user);
-                              
-
-
-                                       
-                                  // Example: Storing user's name and phone number using provider
-
-                                  UserData userData = UserData(
-                                    name: nameController.text.toString(),
-                                    phoneNumber: widget.phoneNumber,
-                                    vehicleManufacturer: "",
-                                    vehicleNumber: "",
-                                    chargingType: "",
-                                    chargingSpeed: "",
-                                  );
-                                  userDataProvider.setUserData(userData);
 
                                   Navigator.push(
                                     context,
