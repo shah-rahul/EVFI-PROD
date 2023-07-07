@@ -137,22 +137,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               await SharedPreferences.getInstance();
                           sharedPref.setBool(SplashViewState.keyLogin, true);
 
-                          // prefs.setString('uid', userCredential.user!.uid);
-
-                          //If Successfully Logged in(Creds are correct)
-
-                          // Navigator.pushReplacement(
-                          //   context,
-
-                          // //  MaterialPageRoute(builder: (context) => OnBoardingView()),
-                          //    MaterialPageRoute(builder: (context) => RegisterView()),
-
-                          // );
-                            //  storePhoneNumber(widget.phoneNumber);
-
                           Future<bool> check = checkNumberIsRegistered(
                               number: widget.phoneNumber);
-                                  
+
                           if (await check) {
                             Navigator.push(
                               context,
@@ -228,74 +215,40 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
     );
   }
 
-//  Future<bool> checkNumberIsRegistered({required String number}) async {
-//   final firestore = FirebaseFirestore.instance;
-//   final collectionRef = firestore.collection('Users');
-//   bool isNumberRegistered = false;
-
-//   try {
-//     final querySnapshot = await collectionRef.get();
-
-//     if (querySnapshot.docs.isNotEmpty) {
-//       final userDoc = querySnapshot.docs.first;
-//       final userData = userDoc.data();
-
-//       if (userData != null && userData.containsKey('phoneNo')) {
-//         final phoneNo = userData['phoneNo'].toString();
-
-//         if (phoneNo == number) {
-//           isNumberRegistered = true;
-//         }
-//       }
-//     }
-
-//     return isNumberRegistered;
-//   } catch (e) {
-//     return false;
-//   }
-// }
-
-
 //function to store registered number in collection in firestore
-void storePhoneNumber(String phoneNumber) {
-  FirebaseFirestore.instance
-      .collection('Registered number')
-      .add({'phoneNo': phoneNumber})
-      .then((value) {
-   // print('Phone number stored successfully!');
-  }).catchError((error) {
-   // print('Error storing phone number: $error');
-  });
-}
-
-Future<bool> checkNumberIsRegistered({required String number}) async {
-  final firestore = FirebaseFirestore.instance;
-  final collectionRef = firestore.collection('Registered number');
-  bool isNumberRegistered = false;
-     // storePhoneNumber(number);
-
-  try {
-    final querySnapshot = await collectionRef.get();
-
-    for (var doc in querySnapshot.docs) {
-      final phoneNumber = doc.data()['phoneNo'].toString();
-
-      if (number == phoneNumber) {
-        isNumberRegistered = true;
-        break;
-      }
-      else{
-       // storePhoneNumber(number);
-      }
-    }
-
-    return isNumberRegistered;
-  } catch (e) {
-  
- 
-    return false;
+  void storePhoneNumber(String phoneNumber) {
+    FirebaseFirestore.instance
+        .collection('Registered number')
+        .add({'phoneNo': phoneNumber}).then((value) {
+      // print('Phone number stored successfully!');
+    }).catchError((error) {
+      // print('Error storing phone number: $error');
+    });
   }
-}
 
+  Future<bool> checkNumberIsRegistered({required String number}) async {
+    final firestore = FirebaseFirestore.instance;
+    final collectionRef = firestore.collection('Registered number');
+    bool isNumberRegistered = false;
+    // storePhoneNumber(number);
 
+    try {
+      final querySnapshot = await collectionRef.get();
+
+      for (var doc in querySnapshot.docs) {
+        final phoneNumber = doc.data()['phoneNo'].toString();
+
+        if (number == phoneNumber) {
+          isNumberRegistered = true;
+          break;
+        } else {
+          // storePhoneNumber(number);
+        }
+      }
+
+      return isNumberRegistered;
+    } catch (e) {
+      return false;
+    }
+  }
 }
