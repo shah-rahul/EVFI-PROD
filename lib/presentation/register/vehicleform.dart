@@ -2,8 +2,10 @@ import 'package:EVFI/presentation/register/register.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../Data_storage/api.dart';
+import '../Data_storage/UserData.dart';
+import '../Data_storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import './chargerform.dart';
@@ -26,6 +28,7 @@ class _VehicleFormState extends State<VehicleForm> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final userDataProvider = Provider.of<UserDataProvider>(context);
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -224,23 +227,29 @@ class _VehicleFormState extends State<VehicleForm> {
                                   //   // Code to handle any errors that occurred during the data saving process.
                                   //   print('Error adding user: $error');
                                   // });
-                                  Api.storeVehicleManufacturer(
-                                    vehicleManufacturer: vehicleManufacturerController.text
-                                                  .toString(),
-                                  );
+    
 
-                                  Api.storeVehicleNumber(
-                                    vehicleNumber: vehicleregistrationController.text
-                                                  .toString(),
-                                  );
+
+                                  //  Storing vehicle information using provider
+                                  String vehicleManufacturer = vehicleManufacturerController.text
+                                            .toString();
+                                  String vehicleNumber = vehicleregistrationController
+                                        .text
+                                        .toString();
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  if (userData != null) {
+                                    userData.vehicleManufacturer =
+                                        vehicleManufacturer;
+                                    userData.vehicleNumber = vehicleNumber;
+                                    userDataProvider.setUserData(userData);
+                                  }
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm(
-                                          
-                                        )),
+                                        child: ChargerForm()),
                                   );
                                 },
                                 child: Text(
@@ -265,9 +274,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm(
-                                          
-                                        )),
+                                        child: ChargerForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

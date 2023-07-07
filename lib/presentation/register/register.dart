@@ -1,5 +1,7 @@
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../Data_storage/UserDataProvider.dart';
 import './vehicleform.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/color_manager.dart';
@@ -9,7 +11,7 @@ import '../resources/values_manager.dart';
 import '../login/signup_controller.dart';
 
 import 'package:get/get.dart';
-import '../Data_storage/api.dart';
+import '../Data_storage/UserData.dart';
 
 class RegisterView extends StatefulWidget {
   // const RegisterView({
@@ -35,7 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
     final controller = Get.put(SignUpController());
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
+    final userDataProvider = Provider.of<UserDataProvider>(context);
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -266,20 +268,27 @@ class _RegisterViewState extends State<RegisterView> {
                                   //   print('Error saving data: $error');
                                   // });
                                   // SignUpController.instance.createUser(user);
-                                  Api.storeUserName(
+                              
+
+
+                                       
+                                  // Example: Storing user's name and phone number using provider
+
+                                  UserData userData = UserData(
                                     name: nameController.text.toString(),
-                                  );
-                                  Api.storeUserPhone(
                                     phoneNumber: widget.phoneNumber,
+                                    vehicleManufacturer: "",
+                                    vehicleNumber: "",
+                                    chargingType: "",
+                                    chargingSpeed: "",
                                   );
+                                  userDataProvider.setUserData(userData);
 
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: VehicleForm(
-                                          
-                                        )),
+                                        child: VehicleForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

@@ -7,7 +7,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import '../Data_storage/api.dart';
+import 'package:provider/provider.dart';
+import '../Data_storage/UserData.dart';
+import '../Data_storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -28,6 +30,7 @@ class _ChargerFormState extends State<ChargerForm> {
     //FocusNode myfocus = FocusNode();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final userDataProvider = Provider.of<UserDataProvider>(context);
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -257,14 +260,17 @@ class _ChargerFormState extends State<ChargerForm> {
                               
                               ElevatedButton(
                                 onPressed: () async {
-                                  Api.storeChargerSpeed(
-                                    chargingSpeed: chargerspeedController.text.toString(),
-                                  );
-                                  Api.storeChargerType(
-                                    chargingType: 'Type A',
-                                  );
-                                  
                                  
+                                  
+                                  // Example: Storing charging information
+    String chargingType ='Type A' ;
+    String chargingSpeed = chargerspeedController.text.toString();
+    UserData? userData = userDataProvider.userData;
+    if (userData != null) {
+      userData.chargingType = chargingType;
+      userData.chargingSpeed = chargingSpeed;
+      userDataProvider.setUserData(userData);
+    }
 
                                   int count = 0;
                                   Navigator.of(context)
