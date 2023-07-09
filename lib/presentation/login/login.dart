@@ -54,9 +54,9 @@ class LoginViewState extends State<LoginView> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                height: heightScreen * 0.32,
+                height: heightScreen * 0.40,
                 margin: EdgeInsets.only(
-                    top: heightScreen * 0.55,
+                    top: heightScreen * 0.50,
                     left: AppMargin.m14,
                     right: AppMargin.m14),
                 decoration: BoxDecoration(

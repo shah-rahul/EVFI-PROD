@@ -45,9 +45,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: heightScreen * 0.36,
+                height: heightScreen * 0.50,
                 margin: EdgeInsets.only(
-                    top: heightScreen * 0.55,
+                    top: heightScreen * 0.48,
                     left: AppMargin.m14,
                     right: AppMargin.m14),
                 decoration: BoxDecoration(

@@ -30,13 +30,12 @@ class _NewStationState extends State<NewStation> {
     String geohash = encodeGeohash(latitude!, longitude!, precision: 9);
     GeoPoint coordinate = GeoPoint(latitude!, longitude!);
     var marker = <String, dynamic>{
-      'geo': <String, dynamic>{
-        'geohash': geohash, 'geopoint': coordinate
-      }
+      'geo': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate}
     };
     await FirebaseFirestore.instance
         .collection('Markers')
-        .add(marker).then((_) => Navigator.of(context).pop());
+        .add(marker)
+        .then((_) => Navigator.of(context).pop());
   }
 
   @override
@@ -50,7 +49,7 @@ class _NewStationState extends State<NewStation> {
       child: Form(
         key: _form,
         child: Container(
-          height: MediaQuery.sizeOf(context).height * 0.3,
+          height: MediaQuery.of(context).size.height * 0.3,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
