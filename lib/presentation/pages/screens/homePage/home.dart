@@ -132,7 +132,7 @@ class HomeState extends State<Home> {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: pixelRatio.round() * 80);
+        targetWidth: pixelRatio.round() * 60);
     ui.FrameInfo fi = await codec.getNextFrame();
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
         .buffer
@@ -141,7 +141,7 @@ class HomeState extends State<Home> {
 
   void _updateCameraPosition() async {
     final Uint8List markerIcon =
-        await getBytesFromAsset(ImageAssets.mapSourceMarker);
+        await getBytesFromAsset(ImageAssets.blackIcon);
     if (_currentPosition != null) {
       setIntialMarkers(
           1.2, LatLng(_currentPosition.latitude, _currentPosition.longitude));
@@ -154,7 +154,7 @@ class HomeState extends State<Home> {
           await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(
                   devicePixelRatio: 1.5), // size: Size(25, 25)),
-              ImageAssets.mapSourceMarker);
+              ImageAssets.blackIcon);
       setState(() {
         _kGooglePlex = cameraPosition;
 
