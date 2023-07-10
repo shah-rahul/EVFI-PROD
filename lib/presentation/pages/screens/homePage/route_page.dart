@@ -118,68 +118,73 @@ class _RouteMapState extends State<RouteMap> {
     );
   }
 
-  Future<Uint8List> getBytesFromAsset(String path) async {
-    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: pixelRatio.round() * 80);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
+  // Future<Uint8List> getBytesFromAsset(String path) async {
+  //   double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+  //   ByteData data = await rootBundle.load(path);
+  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+  //       targetWidth: pixelRatio.round() * 80);
+  //   ui.FrameInfo fi = await codec.getNextFrame();
+  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+  //       .buffer
+  //       .asUint8List();
+  // }
 
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
     var v2 = widget.startL.longitude;
     var v3 = widget.endL.latitude;
     var v4 = widget.endL.longitude;
-    final Uint8List sourceIcon =
-        await getBytesFromAsset(ImageAssets.mapSourceMarker);
-    final Uint8List destinationIcon =
-        await getBytesFromAsset(ImageAssets.mapDestinationMarker);
-
+    // final Uint8List sourceIcon =
+    //     await getBytesFromAsset(ImageAssets.mapSourceMarker);
+    // final Uint8List destinationIcon =
+    //     await getBytesFromAsset(ImageAssets.mapDestinationMarker);
+    final BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration.empty, ImageAssets.mapSourceMarker);
+    final BitmapDescriptor destinationIcon =
+        await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, ImageAssets.mapDestinationMarker);
     try {
       var url = Uri.parse(
           'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
       var response = await http.get(url);
 
-      setState(() {
-        _isLoading = true;
-        addMarker(
-          'Source',
-          widget.startL,
-          mapIcon: BitmapDescriptor.fromBytes(sourceIcon),
-        );
-        addMarker(
-          'Destination',
-          widget.endL,
-          mapIcon: BitmapDescriptor.fromBytes(destinationIcon),
-        );
+      _isLoading = true;
+      addMarker('Source', widget.startL, mapIcon: sourceIcon);
+      addMarker(
+        'Destination',
+        widget.endL,
+        mapIcon: destinationIcon,
+      );
 
-        routpoints = [];
-        _isLoading = true;
-        var ruter =
-            jsonDecode(response.body)['routes'][0]['geometry']['coordinates'];
-        for (int i = 0; i < ruter.length; i++) {
-          var reep = ruter[i].toString();
-          reep = reep.replaceAll("[", "");
-          reep = reep.replaceAll("]", "");
-          var lat1 = reep.split(',');
-          var long1 = reep.split(",");
-          routpoints.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
-        }
+      routpoints = [];
+      _isLoading = true;
+      var ruter =
+          jsonDecode(response.body)['routes'][0]['geometry']['coordinates'];
+      for (int i = 0; i < ruter.length; i++) {
+        var reep = ruter[i].toString();
+        reep = reep.replaceAll("[", "");
+        reep = reep.replaceAll("]", "");
+        var lat1 = reep.split(',');
+        var long1 = reep.split(",");
+        routpoints.add(LatLng(double.parse(lat1[1]), double.parse(long1[0])));
+      }
 
-        _googleMapController = controller;
-        setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
-        _showRouteMarkers(routpoints);
-      });
+      _googleMapController = controller;
+
+      _showRouteMarkers(routpoints);
+
+      setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
     } on Exception catch (e) {
       print(e);
     }
   }
 
-  void setRouteMarker(double radius, LatLng position) {
+  final CollectionReference<Map<String, dynamic>> collectionReference =
+      FirebaseFirestore.instance.collection('Markers');
+
+  GeoPoint geopointFrom(Map<String, dynamic> data) =>
+      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+  Future<void> setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
 
@@ -192,12 +197,6 @@ class _RouteMapState extends State<RouteMap> {
 // Field name of Cloud Firestore documents where the geohash is saved.
     String field = 'geo';
 
-    final CollectionReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection('Markers');
-
-    GeoPoint geopointFrom(Map<String, dynamic> data) =>
-        (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
         GeoCollectionReference<Map<String, dynamic>>(collectionReference)
             .subscribeWithin(
@@ -207,7 +206,7 @@ class _RouteMapState extends State<RouteMap> {
       geopointFrom: geopointFrom,
     );
 
-    stream.listen((event) {
+    await for (var event in stream) {
       for (var ds in event) {
         final data = ds.data();
 
@@ -225,14 +224,16 @@ class _RouteMapState extends State<RouteMap> {
             markerId: MarkerId(geohash),
             position: LatLng(geoPoint.latitude, geoPoint.longitude)));
       }
-      setState(() {});
-    });
+    }
+    ;
   }
 
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {
-    polylineCoordinates.forEach((pos) {
-      setRouteMarker(1.2, pos);
-    });
+    print(polylineCoordinates.length);
+    for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
+      setRouteMarker(4, polylineCoordinates[pos]);
+    }
+    setState(() {});
   }
 
   void _setMapFitToScreen(Set<Polyline> p) {
@@ -268,7 +269,6 @@ class _RouteMapState extends State<RouteMap> {
 
     setState(() {
       polylines.add(polyline);
-      _isLoading = false;
     });
   }
 }
