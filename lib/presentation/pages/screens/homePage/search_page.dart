@@ -25,8 +25,9 @@ class _SearchPageState extends State<SearchPage> {
   final controller2 = TextEditingController();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
-  late LatLng start;  // = const LatLng(-51.42, 95.47); //random ocean coordinates
-  late LatLng end;  // = const LatLng(-51.42, 95.47);
+  late LatLng
+      start; // = const LatLng(-51.42, 95.47); //random ocean coordinates
+  late LatLng end; // = const LatLng(-51.42, 95.47);
 
   get _checkIfDifferent {
     if (start.latitude == end.latitude && start.longitude == end.longitude) {
@@ -77,26 +78,20 @@ class _SearchPageState extends State<SearchPage> {
                   final databaseReference =
                       FirebaseDatabase.instance.reference();
 
-                  final routeMapReference = databaseReference
-                      .child('RouteMap')
-                      .push();
+                  final routeMapReference =
+                      databaseReference.child('RouteMap').push();
 
                   await routeMapReference.update({
-                      'geohash':
-                          encodeGeohash(startL.latitude, startL.longitude),
-                      'geopoint':
-                          '${startL.latitude}, ${startL.longitude}',
+                    'geohash': encodeGeohash(startL.latitude, startL.longitude),
+                    'geopoint': '${startL.latitude}, ${startL.longitude}',
                   });
 
-                  final routeMapReference2 = databaseReference
-                      .child('RouteMap')
-                      .push();
+                  final routeMapReference2 =
+                      databaseReference.child('RouteMap').push();
 
                   await routeMapReference2.update({
-                      'geohash':
-                          encodeGeohash(endL.latitude, endL.longitude),
-                      'geopoint':
-                          '${endL.latitude}, ${endL.longitude}',
+                    'geohash': encodeGeohash(endL.latitude, endL.longitude),
+                    'geopoint': '${endL.latitude}, ${endL.longitude}',
                   });
 
                   // 'position': {
@@ -199,7 +194,7 @@ class _SearchPageState extends State<SearchPage> {
           if (_debounce?.isActive ?? false) {
             _debounce?.cancel();
           }
-          setState(() {});
+
           _debounce = Timer(const Duration(milliseconds: 25), () async {
             var client = http.Client();
             try {

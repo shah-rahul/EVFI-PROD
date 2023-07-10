@@ -115,13 +115,6 @@ class _RouteMapState extends State<RouteMap> {
                 ),
                 _buildBackKey(),
               ])),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            setState(() {});
-          },
-          backgroundColor: ColorManager.darkGrey,
-          child: const Icon(Icons.navigation)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
 
@@ -191,7 +184,7 @@ class _RouteMapState extends State<RouteMap> {
 
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-  void setRouteMarker(double radius, LatLng position) {
+  Future<void> setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
 
@@ -213,7 +206,7 @@ class _RouteMapState extends State<RouteMap> {
       geopointFrom: geopointFrom,
     );
 
-    stream.listen((event) {
+    await for (var event in stream) {
       for (var ds in event) {
         final data = ds.data();
 
@@ -231,11 +224,11 @@ class _RouteMapState extends State<RouteMap> {
             markerId: MarkerId(geohash),
             position: LatLng(geoPoint.latitude, geoPoint.longitude)));
       }
-    });
+    }
+    ;
   }
 
-  void _showRouteMarkers(List<LatLng> polylineCoordinates) async {
-    print("-------------------");
+  void _showRouteMarkers(List<LatLng> polylineCoordinates) {
     print(polylineCoordinates.length);
     for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
       setRouteMarker(4, polylineCoordinates[pos]);
