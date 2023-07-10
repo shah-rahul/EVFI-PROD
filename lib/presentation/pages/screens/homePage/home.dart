@@ -36,12 +36,6 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-  late CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(28.6001740, 77.2105709),
-    zoom: 13.4746,
-    tilt: 15,
-  );
   final List<Marker> _markers = <Marker>[];
   late GoogleMapController _mapController;
   Position _currentPosition = Position(
@@ -59,6 +53,12 @@ class HomeState extends State<Home> {
     super.initState();
     _getCurrentLocation();
   }
+  
+  late CameraPosition _kGooglePlex = const CameraPosition(
+    target: LatLng(28.6001740, 77.2105709),
+    zoom: 13.4746,
+    tilt: 15,
+  );
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -250,6 +250,7 @@ class HomeState extends State<Home> {
                       zoomControlsEnabled: false,
                       compassEnabled: false,
                       zoomGesturesEnabled: false,
+                      myLocationButtonEnabled: false,
                     ),
                     Padding(
                       padding: EdgeInsets.only(

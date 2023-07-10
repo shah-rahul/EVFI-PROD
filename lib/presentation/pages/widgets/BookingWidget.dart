@@ -1,6 +1,6 @@
 import 'package:EVFI/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-import '../screens/mybookings/models/Booking.dart';
+import '../models/Booking.dart';
 import '../screens/mybookings/BookingsScreen.dart';
 import 'package:intl/intl.dart';
 import '../../resources/strings_manager.dart';
