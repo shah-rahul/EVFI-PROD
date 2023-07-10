@@ -115,6 +115,13 @@ class _RouteMapState extends State<RouteMap> {
                 ),
                 _buildBackKey(),
               ])),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            setState(() {});
+          },
+          backgroundColor: ColorManager.darkGrey,
+          child: const Icon(Icons.navigation)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
     );
   }
 
@@ -227,9 +234,11 @@ class _RouteMapState extends State<RouteMap> {
     });
   }
 
-  void _showRouteMarkers(List<LatLng> polylineCoordinates) {
-    for (var pos = 0; pos < polylineCoordinates.length; pos += 15) {
-      setRouteMarker(2, polylineCoordinates[pos]);
+  void _showRouteMarkers(List<LatLng> polylineCoordinates) async {
+    print("-------------------");
+    print(polylineCoordinates.length);
+    for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
+      setRouteMarker(4, polylineCoordinates[pos]);
     }
     setState(() {});
   }
