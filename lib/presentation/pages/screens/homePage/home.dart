@@ -165,7 +165,12 @@ class HomeState extends State<Home> {
         _kGooglePlex = cameraPosition;
 
         _markers.add(Marker(
-            markerId: MarkerId('Home'),
+            markerId: const MarkerId('Home'),
+            infoWindow: InfoWindow(
+              title: "You are here!",
+              snippet:
+                  '${_currentPosition.latitude},${_currentPosition.longitude}',
+            ),
             position: LatLng(_currentPosition.latitude ?? 0.0,
                 _currentPosition.longitude ?? 0.0),
             icon: BitmapDescriptor.fromBytes(markerIcon)));
