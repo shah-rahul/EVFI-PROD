@@ -45,9 +45,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                height: heightScreen * 0.42,
+                height: heightScreen * 0.46,
                 margin: EdgeInsets.only(
-                    top: heightScreen * 0.48,
+                    top: heightScreen * 0.46,
                     left: AppMargin.m14,
                     right: AppMargin.m14),
                 decoration: BoxDecoration(
@@ -92,7 +92,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                         style: TextStyle(color: ColorManager.darkGrey),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     SizedBox(
                       width: 300,
                       child: TextFormField(
@@ -109,7 +109,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.white,

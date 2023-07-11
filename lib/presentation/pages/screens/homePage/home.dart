@@ -53,7 +53,7 @@ class HomeState extends State<Home> {
     super.initState();
     _getCurrentLocation();
   }
-  
+
   late CameraPosition _kGooglePlex = const CameraPosition(
     target: LatLng(28.6001740, 77.2105709),
     zoom: 13.4746,
@@ -76,7 +76,19 @@ class HomeState extends State<Home> {
     // Ask permission from device
   }
 
-  void setIntialMarkers(double radius, LatLng position) {
+// Reference to locations collection.
+  final CollectionReference<Map<String, dynamic>> collectionReference =
+      FirebaseFirestore.instance.collection('Markers');
+
+// Function to get GeoPoint instance from Cloud Firestore document data.
+  GeoPoint geopointFrom(Map<String, dynamic> data) =>
+      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+  void setIntialMarkers(double radius, LatLng position) async {
+    final Uint8List GreenmarkerIcon =
+        await getBytesFromAsset(ImageAssets.GreenMarker);
+    BitmapDescriptor nearbyMarker = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
+        ImageAssets.GreenMarker);
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
 
@@ -88,13 +100,7 @@ class HomeState extends State<Home> {
 
 // Field name of Cloud Firestore documents where the geohash is saved.
     String field = 'geo';
-// Reference to locations collection.
-    final CollectionReference<Map<String, dynamic>> collectionReference =
-        FirebaseFirestore.instance.collection('Markers');
 
-// Function to get GeoPoint instance from Cloud Firestore document data.
-    GeoPoint geopointFrom(Map<String, dynamic> data) =>
-        (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 // Streamed document snapshots of geo query under given conditions.
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
         GeoCollectionReference<Map<String, dynamic>>(collectionReference)
@@ -120,13 +126,13 @@ class HomeState extends State<Home> {
 
         _markers.add(Marker(
             markerId: MarkerId(geohash),
-            position: LatLng(geoPoint.latitude, geoPoint.longitude)));
+            position: LatLng(geoPoint.latitude, geoPoint.longitude),
+            icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
 
         setState(() {});
       }
     });
   }
-  
 
   Future<Uint8List> getBytesFromAsset(String path) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
@@ -141,7 +147,7 @@ class HomeState extends State<Home> {
 
   void _updateCameraPosition() async {
     final Uint8List markerIcon =
-        await getBytesFromAsset(ImageAssets.blackIcon);
+        await getBytesFromAsset(ImageAssets.blackMarker);
     if (_currentPosition != null) {
       setIntialMarkers(
           1.2, LatLng(_currentPosition.latitude, _currentPosition.longitude));
@@ -154,7 +160,7 @@ class HomeState extends State<Home> {
           await BitmapDescriptor.fromAssetImage(
               const ImageConfiguration(
                   devicePixelRatio: 1.5), // size: Size(25, 25)),
-              ImageAssets.blackIcon);
+              ImageAssets.blackMarker);
       setState(() {
         _kGooglePlex = cameraPosition;
 

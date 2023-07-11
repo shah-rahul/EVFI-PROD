@@ -118,16 +118,16 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     );
   }
 
-  // Future<Uint8List> getBytesFromAsset(String path) async {
-  //   double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-  //   ByteData data = await rootBundle.load(path);
-  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-  //       targetWidth: pixelRatio.round() * 80);
-  //   ui.FrameInfo fi = await codec.getNextFrame();
-  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-  //       .buffer
-  //       .asUint8List();
-  // }
+  Future<Uint8List> getBytesFromAsset(String path) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: pixelRatio.round() * 80);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
 
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
@@ -143,6 +143,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     final BitmapDescriptor destinationIcon =
         await BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, ImageAssets.mapDestinationMarker);
+
     try {
       var url = Uri.parse(
           'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
@@ -187,7 +188,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   Future<void> setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
-
+    final Uint8List routeMarker =
+        await getBytesFromAsset(ImageAssets.GreenMarker);
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
 
@@ -223,10 +225,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         _markers.add(Marker(
             markerId: MarkerId(geohash),
             onTap: () {
-              _googleMapController.animateCamera(
-                  CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(geoPoint.latitude, geoPoint.longitude),zoom: 13)));
+              _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                      zoom: 13)));
               showModalBottomSheet(
-
                 context: context,
                 isScrollControlled: true,
                 transitionAnimationController: AnimationController(
@@ -238,7 +241,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                 },
               );
             },
-            position: LatLng(geoPoint.latitude, geoPoint.longitude)));
+            position: LatLng(geoPoint.latitude, geoPoint.longitude),
+            icon: BitmapDescriptor.fromBytes(routeMarker)));
       }
     }
     ;
