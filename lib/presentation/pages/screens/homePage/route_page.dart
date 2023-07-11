@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'package:EVFI/presentation/pages/screens/homePage/marker_popup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
@@ -14,7 +15,6 @@ import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../models/encode_geohash.dart';
 import 'package:dart_geohash/dart_geohash.dart';
-
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import './home.dart';
@@ -29,7 +29,7 @@ class RouteMap extends StatefulWidget {
   State<RouteMap> createState() => _RouteMapState();
 }
 
-class _RouteMapState extends State<RouteMap> {
+class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   GlobalKey<HomeState> myKey = GlobalKey();
   late GoogleMapController _googleMapController;
   List<LatLng> routpoints = [];
@@ -50,7 +50,7 @@ class _RouteMapState extends State<RouteMap> {
       icon: mapIcon,
       infoWindow: InfoWindow(
         title: '$title Location',
-        snippet: '${coordinates.latitude} ${coordinates.longitude}',
+        snippet: '${coordinates.latitude}, ${coordinates.longitude}',
       ),
     ));
   }
@@ -222,6 +222,22 @@ class _RouteMapState extends State<RouteMap> {
         print(geoPoint.latitude);
         _markers.add(Marker(
             markerId: MarkerId(geohash),
+            onTap: () {
+              _googleMapController.animateCamera(
+                  CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(geoPoint.latitude, geoPoint.longitude),zoom: 13)));
+              showModalBottomSheet(
+
+                context: context,
+                isScrollControlled: true,
+                transitionAnimationController: AnimationController(
+                    vsync: this, duration: const Duration(milliseconds: 400)),
+                backgroundColor: Colors.amber.withOpacity(0.0),
+                builder: (context) {
+                  return CustomMarkerPopup(
+                      geopoint: geoPoint, geohash: geohash);
+                },
+              );
+            },
             position: LatLng(geoPoint.latitude, geoPoint.longitude)));
       }
     }
