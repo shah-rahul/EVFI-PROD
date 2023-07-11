@@ -129,6 +129,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         .asUint8List();
   }
 
+  late Uint8List routeMarker;
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
     var v2 = widget.startL.longitude;
@@ -138,6 +139,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     //     await getBytesFromAsset(ImageAssets.mapSourceMarker);
     // final Uint8List destinationIcon =
     //     await getBytesFromAsset(ImageAssets.mapDestinationMarker);
+    routeMarker = await getBytesFromAsset(ImageAssets.GreenMarker);
     final BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration.empty, ImageAssets.mapSourceMarker);
     final BitmapDescriptor destinationIcon =
@@ -185,11 +187,10 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-  Future<void> setRouteMarker(double radius, LatLng position) async {
+  void setRouteMarker(double radius, LatLng position) {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
-    final Uint8List routeMarker =
-        await getBytesFromAsset(ImageAssets.GreenMarker);
+
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
 
@@ -208,7 +209,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
       geopointFrom: geopointFrom,
     );
 
-    await for (var event in stream) {
+    stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
 
@@ -244,8 +245,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
             icon: BitmapDescriptor.fromBytes(routeMarker)));
       }
-    }
-    ;
+      setState(() {});
+    });
   }
 
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {
@@ -253,7 +254,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
       setRouteMarker(4, polylineCoordinates[pos]);
     }
-    setState(() {});
   }
 
   void _setMapFitToScreen(Set<Polyline> p) {
