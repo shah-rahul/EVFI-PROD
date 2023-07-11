@@ -118,16 +118,16 @@ class _RouteMapState extends State<RouteMap> {
     );
   }
 
-  // Future<Uint8List> getBytesFromAsset(String path) async {
-  //   double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-  //   ByteData data = await rootBundle.load(path);
-  //   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-  //       targetWidth: pixelRatio.round() * 80);
-  //   ui.FrameInfo fi = await codec.getNextFrame();
-  //   return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-  //       .buffer
-  //       .asUint8List();
-  // }
+  Future<Uint8List> getBytesFromAsset(String path) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: pixelRatio.round() * 80);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
 
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
@@ -143,6 +143,7 @@ class _RouteMapState extends State<RouteMap> {
     final BitmapDescriptor destinationIcon =
         await BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, ImageAssets.mapDestinationMarker);
+
     try {
       var url = Uri.parse(
           'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
@@ -187,7 +188,8 @@ class _RouteMapState extends State<RouteMap> {
   Future<void> setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
-
+    final Uint8List routeMarker =
+        await getBytesFromAsset(ImageAssets.GreenMarker);
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
 
@@ -219,10 +221,8 @@ class _RouteMapState extends State<RouteMap> {
         final geohash =
             (data['geo'] as Map<String, dynamic>)['geohash'] as String;
 
-        print(geoPoint.latitude);
-        _markers.add(Marker(
-            markerId: MarkerId(geohash),
-            position: LatLng(geoPoint.latitude, geoPoint.longitude)));
+        addMarker(geohash, LatLng(geoPoint.latitude, geoPoint.longitude),
+            mapIcon: BitmapDescriptor.fromBytes(routeMarker));
       }
     }
     ;
