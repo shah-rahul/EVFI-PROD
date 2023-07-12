@@ -1,3 +1,4 @@
+import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -193,7 +194,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: VehicleForm()),
+                                       // child: VehicleForm()),
+                                       child: MainView()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
