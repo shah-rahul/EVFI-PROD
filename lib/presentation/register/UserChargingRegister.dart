@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserChargingRegister extends StatefulWidget {
+  const UserChargingRegister({
+    Key? key,
+  }) : super(key: key);
   @override
   _UserChargingRegisterState createState() => _UserChargingRegisterState();
 }
