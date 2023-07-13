@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:dart_geohash/dart_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:page_transition/page_transition.dart';
 //import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 //import '../../../resources/color_manager.dart';
+import '../../../register/UserChargingRegister.dart';
 import '../../../resources/values_manager.dart';
 
 enum ChargerTypes { A, B, C }
@@ -102,7 +104,16 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                   height: 30,
                   width: 95,
                   child: ElevatedButton(
-                    onPressed: changecontent,
+                    onPressed: (){
+                     Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                      
+                                        child: UserChargingRegister()),
+                                        
+                                  );
+                    },
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.amber)),
