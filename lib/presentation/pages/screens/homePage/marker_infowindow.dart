@@ -1,3 +1,4 @@
+import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
 import 'package:EVFI/presentation/resources/color_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:dart_geohash/dart_geohash.dart';
@@ -8,6 +9,8 @@ import 'package:page_transition/page_transition.dart';
 //import '../../../resources/color_manager.dart';
 import '../../../register/UserChargingRegister.dart';
 import '../../../resources/values_manager.dart';
+
+bool isRegistered = false;
 
 enum ChargerTypes { A, B, C }
 
@@ -50,7 +53,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   Widget callContent() {
     if (isBooking) {
       print('content cancel');
-      return bookingSection(context,onchanRadio);
+      return bookingSection(context, onchanRadio);
     } else {
       print('content bookslot');
       return startingSection(context);
@@ -58,16 +61,25 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 
   void changecontent() {
-    print('hellooooooo');
-    isBooking = !isBooking;
-    if (!isBooking) {
-      str = 'Book Slot';
+    if (isRegistered) {
+      Navigator.push(
+        context,
+        PageTransition(
+            type: PageTransitionType.rightToLeft,
+            child: UserChargingRegister()),
+      );
     } else {
-      str = 'Back';
+      print('hellooooooo');
+      isBooking = !isBooking;
+      if (!isBooking) {
+        str = 'Book Slot';
+      } else {
+        str = 'Back';
+      }
+      setState(() {});
+      print('hiiií');
+      print(isBooking);
     }
-    setState(() {});
-    print('hiiií');
-    print(isBooking);
   }
 
   @override
@@ -115,16 +127,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                   height: 30,
                   width: 95,
                   child: ElevatedButton(
-                    onPressed: (){
-                     Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                      
-                                        child: UserChargingRegister()),
-                                        
-                                  );
-                    },
+                    onPressed: changecontent,
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.amber)),
@@ -164,11 +167,13 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
 Widget bookingSection(BuildContext context, void Function(ChargerTypes val) onchanRadio) {
   return Card(
     shadowColor: ColorManager.CardshadowBottomRight,
-    shape: const RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.all(
-             Radius.circular(15),
-        )),
-        elevation: 4,
-        color: Colors.white,
+    shape: const RoundedRectangleBorder(
+        //side: BorderSide(color: Colors.black12),
+        borderRadius: BorderRadiusDirectional.all(
+      Radius.circular(15),
+    )),
+    elevation: 4,
+    color: Colors.white,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -177,7 +182,8 @@ Widget bookingSection(BuildContext context, void Function(ChargerTypes val) onch
           children: [
             SizedBox(width: 14),
             Text('Select your Charger Type',
-                style: TextStyle(fontSize: AppSize.s14, fontWeight: FontWeight.w500)),
+                style: TextStyle(
+                    fontSize: AppSize.s14, fontWeight: FontWeight.w500)),
           ],
         ),
         Row(
@@ -268,19 +274,30 @@ Widget bookingSection(BuildContext context, void Function(ChargerTypes val) onch
           },
         ),
         const SizedBox(height: 1),
-        Row(mainAxisAlignment: MainAxisAlignment.center,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 35,
               width: 200,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: const PaymentScreen()),
+                    );
+                },
                 style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(Color.fromARGB(255, 84, 194, 87))),
+                    backgroundColor: MaterialStatePropertyAll(
+                        Color.fromARGB(255, 84, 194, 87))),
                 child: const Text(
                   'Proceed to Pay',
                   style: TextStyle(
-                      color: Colors.black, fontSize: 12, fontWeight: FontWeight.w700),
+                      color: Colors.black,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ),
