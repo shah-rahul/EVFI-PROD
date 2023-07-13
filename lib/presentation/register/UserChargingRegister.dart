@@ -12,6 +12,7 @@ class UserChargingRegister extends StatefulWidget {
   const UserChargingRegister({
     Key? key,
   }) : super(key: key);
+
   @override
   _UserChargingRegisterState createState() => _UserChargingRegisterState();
 }
@@ -63,8 +64,9 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
           FirebaseFirestore.instance.collection('UserChargingRegister');
 
       if (_idProof != null) {
-        final Reference storageRef =
-            FirebaseStorage.instance.ref().child('id_proofs/${DateTime.now()}.jpg');
+        final Reference storageRef = FirebaseStorage.instance
+            .ref()
+            .child('id_proofs/${DateTime.now()}.jpg');
         await storageRef.putFile(_idProof!);
         final String idProofUrl = await storageRef.getDownloadURL();
 
@@ -92,14 +94,13 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
               TextButton(
                 child: Text('OK'),
                 onPressed: () {
-                 // Navigator.of(context).pop();
                   Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        // child: VehicleForm()),
-                                        child: MainView()),
-                                  );
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: MainView(),
+                    ),
+                  );
                 },
               ),
             ],
@@ -139,14 +140,26 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Charging Register'),
+        backgroundColor: Colors.black,
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.black,
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
-              decoration: InputDecoration(labelText: 'Vehicle Type'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Vehicle Type',
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
               onChanged: (value) {
                 setState(() {
                   _vehicleType = value;
@@ -155,7 +168,17 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             ),
             SizedBox(height: 16.0),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Charging Requirements'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Charging Requirements',
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
               onChanged: (value) {
                 setState(() {
                   _chargingRequirements = value;
@@ -164,7 +187,17 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             ),
             SizedBox(height: 16.0),
             TextFormField(
-              decoration: InputDecoration(labelText: 'Vehicle Number'),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Vehicle Number',
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
               onChanged: (value) {
                 setState(() {
                   _vehicleNumber = value;
@@ -175,11 +208,13 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             ElevatedButton(
               onPressed: getImage,
               child: Text('Select ID Proof Image'),
+              style: ElevatedButton.styleFrom(primary: Colors.white),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _saveUserDetails,
               child: Text('Save Details'),
+              style: ElevatedButton.styleFrom(primary: Colors.white),
             ),
           ],
         ),
@@ -187,4 +222,5 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
     );
   }
 }
+
 
