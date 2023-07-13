@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:EVFI/presentation/pages/screens/homePage/marker_popup.dart';
+import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';

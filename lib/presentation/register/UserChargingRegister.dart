@@ -207,13 +207,13 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: getImage,
-              child: Text('Select ID Proof Image'),
+              child: Text('Select ID Proof Image', style: TextStyle(color: Colors.black)),
               style: ElevatedButton.styleFrom(primary: Colors.white),
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _saveUserDetails,
-              child: Text('Save Details'),
+              child: Text('Save Details',style: TextStyle(color: Colors.black)),
               style: ElevatedButton.styleFrom(primary: Colors.white),
             ),
           ],
