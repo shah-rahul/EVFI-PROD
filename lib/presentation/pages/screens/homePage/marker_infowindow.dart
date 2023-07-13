@@ -69,7 +69,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
             child: UserChargingRegister()),
       );
     } else {
-      print('hellooooooo');
       isBooking = !isBooking;
       if (!isBooking) {
         str = 'Book Slot';
@@ -77,8 +76,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
         str = 'Back';
       }
       setState(() {});
-      print('hiiií');
-      print(isBooking);
     }
   }
 
