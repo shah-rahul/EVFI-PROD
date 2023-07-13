@@ -188,8 +188,3 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
   }
 }
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(UserChargingRegister());
-}
