@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:page_transition/page_transition.dart';
 
 class UserChargingRegister extends StatefulWidget {
   const UserChargingRegister({
@@ -90,7 +92,14 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
               TextButton(
                 child: Text('OK'),
                 onPressed: () {
-                  Navigator.of(context).pop();
+                 // Navigator.of(context).pop();
+                  Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        // child: VehicleForm()),
+                                        child: MainView()),
+                                  );
                 },
               ),
             ],

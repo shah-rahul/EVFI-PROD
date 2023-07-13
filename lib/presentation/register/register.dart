@@ -196,7 +196,8 @@ class _RegisterViewState extends State<RegisterView> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         // child: VehicleForm()),
-                                        child: UserChargingRegister()),
+                                        //child: UserChargingRegister()),
+                                        child: MainView()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
