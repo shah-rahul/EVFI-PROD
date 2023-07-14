@@ -1,22 +1,18 @@
 import 'dart:async';
-import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import './route_page.dart';
-import '../../../resources/assets_manager.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:getwidget/getwidget.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
+import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';
 
@@ -85,10 +81,10 @@ class HomeState extends State<Home> {
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
-        await getBytesFromAsset(ImageAssets.GreenMarker);
+        await getBytesFromAsset(ImageAssets.greenMarker);
     BitmapDescriptor nearbyMarker = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
-        ImageAssets.GreenMarker);
+        ImageAssets.greenMarker);
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
 
@@ -152,18 +148,16 @@ class HomeState extends State<Home> {
       setIntialMarkers(
           1.2, LatLng(_currentPosition.latitude, _currentPosition.longitude));
 
-      final cameraPosition = CameraPosition(
+      _kGooglePlex = CameraPosition(
         target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
-        zoom: 14.0,
+        zoom: 16.60,
       );
-      BitmapDescriptor currentLocationMarker =
-          await BitmapDescriptor.fromAssetImage(
-              const ImageConfiguration(
-                  devicePixelRatio: 1.5), // size: Size(25, 25)),
-              ImageAssets.blackMarker);
+      // BitmapDescriptor currentLocationMarker =
+      //     await BitmapDescriptor.fromAssetImage(
+      //         const ImageConfiguration(
+      //             devicePixelRatio: 1.5), // size: Size(25, 25)),
+      //         ImageAssets.blackMarker);
       setState(() {
-        _kGooglePlex = cameraPosition;
-
         _markers.add(Marker(
             markerId: const MarkerId('Home'),
             infoWindow: InfoWindow(
@@ -176,7 +170,7 @@ class HomeState extends State<Home> {
             icon: BitmapDescriptor.fromBytes(markerIcon)));
 
         _mapController
-            .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+            .animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
       });
     }
   }
@@ -240,19 +234,6 @@ class HomeState extends State<Home> {
                       mapType: MapType.normal,
                       initialCameraPosition: _kGooglePlex,
                       onMapCreated: (GoogleMapController controller) {
-                        // _getUserCurrentLocation().then((value) {
-                        //   CameraPosition currentPosition = CameraPosition(
-                        //       target: LatLng(value.latitude, value.longitude),
-                        //       zoom: 14);
-                        //   setState(() {
-                        //     _markers.add(Marker(
-                        //         markerId: MarkerId("home"),
-                        //         position: LatLng(value.latitude, value.longitude)));
-                        //   });
-
-                        //   controller.animateCamera(
-                        //       CameraUpdate.newCameraPosition(currentPosition));
-                        // });
                         _mapController = controller;
                         _updateCameraPosition();
                         _controller.complete(controller);
@@ -265,7 +246,7 @@ class HomeState extends State<Home> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.07),
+                          top: MediaQuery.of(context).size.height * 0.05),
                       child: const SearchWidget(),
                     ),
                   ],

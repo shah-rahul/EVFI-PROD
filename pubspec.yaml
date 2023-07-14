@@ -93,6 +93,7 @@ flutter:
      - assets/images/RegisterScreen/
      - assets/images/map/
      - assets/images/login/
+     - assets/images/booking/
      - assets/images/map/carphoto.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

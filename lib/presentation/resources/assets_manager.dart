@@ -15,5 +15,6 @@ class ImageAssets {
   static const String currentLocationMarker =
       "assets/images/map/current_location_markers.png";
   static const String blackMarker = "assets/images/map/blackMarker.png";
-  static const String GreenMarker = "assets/images/map/GreenMarker.png";
+  static const String greenMarker = "assets/images/map/GreenMarker.png";
+  static const String carCharger = "assets/images/booking/carCharging.png";
 }

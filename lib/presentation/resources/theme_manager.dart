@@ -7,6 +7,9 @@ import './values_manager.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
+      //appwide font
+      fontFamily: 'Montserrat',
+      
       // main colors of the app
       primaryColor: ColorManager.primary,
       primaryColorLight: ColorManager.primaryOpacity70,
@@ -40,9 +43,12 @@ ThemeData getApplicationTheme() {
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               textStyle: getRegularStyle(color: Colors.white),
-              primary: ColorManager.primary,
+              primary: Colors.white,
+              onPrimary: ColorManager.appBlack,
+              padding: const EdgeInsets.only(
+                              right: 15),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSize.s12)))),
+                  borderRadius: BorderRadius.circular(28)))),
 
       // Text theme
       textTheme: TextTheme(

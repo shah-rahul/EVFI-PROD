@@ -42,7 +42,7 @@ class SearchWidget extends StatelessWidget {
               width: 10,
             ),
             const Text(
-              'Search evfi',
+              '  Search EvFi...',
               style: TextStyle(
                 color: Colors.white70,
               ),

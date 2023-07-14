@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 //import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 //import '../../../resources/color_manager.dart';
-import '../../../resources/values_manager.dart';
+import '../../resources/values_manager.dart';
 
 
 class CustomMarkerPopup extends StatefulWidget {

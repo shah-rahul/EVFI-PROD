@@ -1,62 +1,17 @@
-import 'package:flutter/material.dart';
-import '../../models/MyCharging.dart';
 import 'dart:async';
+
+import 'package:EVFI/presentation/pages/screens/mycharging/list_chargers.dart';
+import 'package:flutter/material.dart';
+import 'package:EVFI/presentation/resources/assets_manager.dart';
+import 'package:EVFI/presentation/resources/font_manager.dart';
+import 'package:EVFI/presentation/resources/styles_manager.dart';
+
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 
 import '../../widgets/MyChargingWidget.dart';
-
-List<MyCharging> ChargingList = [
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 2.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 0,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0),
-  MyCharging(
-      StationName: "Aomg Charging Station Hub",
-      StationAddress:
-          "Sector 39, Karnal, NH-1, GT Karnal Road, Haryana, 132001",
-      datetime: DateTime.now(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0)
-];
+import 'chargers_data.dart';
 
 class MyChargingScreen extends StatefulWidget {
   const MyChargingScreen({Key? key}) : super(key: key);
@@ -65,21 +20,93 @@ class MyChargingScreen extends StatefulWidget {
 }
 
 class _MyChargingScreenState extends State<MyChargingScreen> {
-  bool _currentSelected = true;
+  bool _currentSelected = true, _listedChargers = false;
+
+  void _addCharger() {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (ctx) => const ListCharger()));
+    _listedChargers = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          AppStrings.MyChargingTitle,
-          textAlign: TextAlign.start,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-          child: _currentSelected ? currentScreen(context) : RecentScreen()),
-    );
+    return _listedChargers
+        ? Scaffold(
+            appBar: AppBar(
+              title: const Text(
+                AppStrings.MyChargingTitle,
+                textAlign: TextAlign.start,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: Colors.white,
+              actions: [
+                IconButton(
+                    onPressed: _addCharger,
+                    icon: const Icon(
+                      Icons.add_business_outlined,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+            body: Container(
+                child:
+                    _currentSelected ? currentScreen(context) : RecentScreen()),
+          )
+        : Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              height: MediaQuery.sizeOf(context).height,
+              width: MediaQuery.sizeOf(context).width,
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        ColorManager.grey3.withOpacity(0.68),
+                        Colors.black87
+                      ],
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      stops: const [0.3, 0.7])),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(
+                          top: MediaQuery.sizeOf(context).height * 0.24),
+                      child: Image.asset(
+                        ImageAssets.carCharger,
+                        scale: 1.35,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'List, Rent \nand Earn easily.',
+                    style: getBoldStyle(
+                        fontSize: FontSize.s35, color: ColorManager.primary),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: _addCharger,
+                      icon: Image.asset(
+                        ImageAssets.greenMarker,
+                        scale: 15,
+                      ),
+                      style: Theme.of(context).elevatedButtonTheme.style,
+                      label: const Text(
+                        'List charger',
+                        style: TextStyle(
+                            fontSize: FontSize.s14,
+                            fontWeight: FontWeight.w600),
+                      ))
+                ],
+              ),
+            ));
   }
 
   Widget currentScreen(BuildContext context) {
@@ -151,14 +178,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 itemBuilder: (context, ind) {
                   return Column(
                     children: [
-                      MyChargingWidget(ChargingList[ind]),
+                      MyChargingWidget(MyChargers[ind]),
                       const SizedBox(
                         height: 5,
                       )
                     ],
                   );
                 },
-                itemCount: ChargingList.length,
+                itemCount: MyChargers.length,
               ),
             ),
           ),
@@ -237,14 +264,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 itemBuilder: (context, ind) {
                   return Column(
                     children: [
-                      MyChargingWidget(ChargingList[ind]),
+                      MyChargingWidget(MyChargers[ind]),
                       const SizedBox(
                         height: 5,
                       )
                     ],
                   );
                 },
-                itemCount: ChargingList.length,
+                itemCount: MyChargers.length,
               ),
             ),
           ),
