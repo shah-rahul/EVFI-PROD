@@ -36,7 +36,6 @@ dependencies:
   shared_preferences: ^2.1.1 #shared preferences
   otp_text_field: ^1.1.3
   flutter_svg: ^2.0.5
- 
   geoflutterfire_plus: ^0.0.14
   cloud_firestore: ^4.8.2 #fire store cloud
   get: ^4.6.5 #Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
@@ -46,7 +45,6 @@ dependencies:
   #basic_utils: ^5.6.0 #Common util classes for Strings, Dates, X509, PKCS, Cryptographie and more.
   google_maps_flutter: ^2.2.6
   geolocator: ^9.0.2
-  
   geocoding: ^2.1.0
   dart_geohash: ^2.0.2
   http: ^0.13.5
