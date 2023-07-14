@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:EVFI/presentation/pages/widgets/marker_popup.dart';
+import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
@@ -229,7 +229,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       zoom: 13)));
               showModalBottomSheet(
                 context: context,
-                isScrollControlled: true,
+                //isScrollControlled: true,
                 transitionAnimationController: AnimationController(
                     vsync: this, duration: const Duration(milliseconds: 400)),
                 backgroundColor: Colors.amber.withOpacity(0.0),
