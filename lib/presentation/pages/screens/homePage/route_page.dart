@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:EVFI/presentation/pages/screens/homePage/marker_popup.dart';
+import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
@@ -35,7 +35,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
   final Set<Marker> _markers = {};
-  bool _isLoading = false;
 
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(28.6001740, 77.2105709),
@@ -129,7 +128,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         .asUint8List();
   }
 
-  late Uint8List routeMarker;
+  late Uint8List stationMarker;
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
     var v2 = widget.startL.longitude;
@@ -139,7 +138,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     //     await getBytesFromAsset(ImageAssets.mapSourceMarker);
     // final Uint8List destinationIcon =
     //     await getBytesFromAsset(ImageAssets.mapDestinationMarker);
-    routeMarker = await getBytesFromAsset(ImageAssets.GreenMarker);
+    stationMarker = await getBytesFromAsset(ImageAssets.greenMarker);
     final BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
         ImageConfiguration.empty, ImageAssets.mapSourceMarker);
     final BitmapDescriptor destinationIcon =
@@ -151,7 +150,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
       var response = await http.get(url);
 
-      _isLoading = true;
       addMarker('Source', widget.startL, mapIcon: sourceIcon);
       addMarker(
         'Destination',
@@ -160,7 +158,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
       );
 
       routpoints = [];
-      _isLoading = true;
       var ruter =
           jsonDecode(response.body)['routes'][0]['geometry']['coordinates'];
       for (int i = 0; i < ruter.length; i++) {
@@ -232,7 +229,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       zoom: 13)));
               showModalBottomSheet(
                 context: context,
-                isScrollControlled: true,
+                //isScrollControlled: true,
                 transitionAnimationController: AnimationController(
                     vsync: this, duration: const Duration(milliseconds: 400)),
                 backgroundColor: Colors.amber.withOpacity(0.0),
@@ -243,7 +240,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
               );
             },
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
-            icon: BitmapDescriptor.fromBytes(routeMarker)));
+            icon: BitmapDescriptor.fromBytes(stationMarker)));
       }
       setState(() {});
     });

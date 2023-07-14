@@ -30,7 +30,7 @@ class _MainViewState extends State<MainView> {
       bottomNavigationBar: DotNavigationBar(
         currentIndex: _currentScreen,
         //margin: EdgeInsets.symmetric(horizontal: 10.0),
-        marginR: const EdgeInsets.all(25),
+        marginR: const EdgeInsets.symmetric(horizontal:25, vertical: 20),
         borderRadius: 40,
         backgroundColor: ColorManager.appBlack,
         dotIndicatorColor: ColorManager.appBlack,
@@ -46,6 +46,7 @@ class _MainViewState extends State<MainView> {
                   ? ColorManager.primary
                   : ColorManager.lightGrey,
             ),
+            //home screen
           ),
           DotNavigationBarItem(
             icon: Image.asset(
@@ -81,12 +82,13 @@ class _MainViewState extends State<MainView> {
       ),
       body: IndexedStack(
         index: _currentScreen,
-        children: [
-          const Home(),
-          const BookingsScreen(),
-          const MyChargingScreen(),
-          const Account(),
-        ],
+        children: screens
+        // const [
+        //   Home(),
+        //   BookingsScreen(),
+        //   MyChargingScreen(),
+        //   Account(),
+        // ],
       ),
       // body: screens.elementAt(_currentScreen),
     );

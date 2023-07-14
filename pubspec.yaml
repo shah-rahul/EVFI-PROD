@@ -50,6 +50,7 @@ dependencies:
   http: ^0.13.5
   image_picker: ^0.8.9
   provider: ^6.0.5
+  firebase_storage: ^11.2.4
 
 
 flutter_icons:
@@ -91,6 +92,7 @@ flutter:
      - assets/images/RegisterScreen/
      - assets/images/map/
      - assets/images/login/
+     - assets/images/booking/
      - assets/images/map/carphoto.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

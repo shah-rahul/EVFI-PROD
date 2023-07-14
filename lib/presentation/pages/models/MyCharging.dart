@@ -17,6 +17,6 @@ class MyCharging {
       required this.StationAddress,
       required this.datetime,
       required this.amount,
-      required this.status,
-      required this.ratings});
+      this.status = 0,
+      this.ratings = 0});
 }
