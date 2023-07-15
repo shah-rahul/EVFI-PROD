@@ -61,7 +61,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 
   void changecontent() {
-    if (isRegistered) {
+    if (true) {
       Navigator.push(
         context,
         PageTransition(
@@ -161,7 +161,8 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 }
 
-Widget bookingSection(BuildContext context, void Function(ChargerTypes val) onchanRadio) {
+Widget bookingSection(
+    BuildContext context, void Function(ChargerTypes val) onchanRadio) {
   return Card(
     shadowColor: ColorManager.CardshadowBottomRight,
     shape: const RoundedRectangleBorder(
@@ -279,12 +280,12 @@ Widget bookingSection(BuildContext context, void Function(ChargerTypes val) onch
               width: 200,
               child: ElevatedButton(
                 onPressed: () {
-                    Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.rightToLeft,
-                          child: const PaymentScreen()),
-                    );
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                        type: PageTransitionType.rightToLeft,
+                        child: const PaymentScreen()),
+                  );
                 },
                 style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
