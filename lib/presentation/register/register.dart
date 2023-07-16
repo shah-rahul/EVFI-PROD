@@ -49,7 +49,6 @@ class _RegisterViewState extends State<RegisterView> {
         vehicleManufacturer: "",
         vehicleNumber: "",
         chargingType: "",
-        chargingSpeed: "",
       );
       userDataProvider.setUserData(userData);
     }

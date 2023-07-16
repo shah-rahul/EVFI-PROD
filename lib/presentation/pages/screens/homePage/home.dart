@@ -74,7 +74,7 @@ class HomeState extends State<Home> {
 
 // Reference to locations collection.
   final CollectionReference<Map<String, dynamic>> collectionReference =
-      FirebaseFirestore.instance.collection('Markers');
+      FirebaseFirestore.instance.collection('Chargers');
 
 // Function to get GeoPoint instance from Cloud Firestore document data.
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
