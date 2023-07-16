@@ -1,7 +1,6 @@
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/register/vehicleform.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class _ChargerFormState extends State<ChargerForm> {
     void updateChargingData(String type, String speed) {
       UserData userData = userDataProvider.userData;
       userData.chargingType = type;
-      userData.chargingSpeed = speed;
+
       userDataProvider.setUserData(userData);
     }
 
@@ -97,11 +96,11 @@ class _ChargerFormState extends State<ChargerForm> {
                               clearOption: false,
                               dropDownList: const [
                                 DropDownValueModel(
-                                    name: 'Type A', value: "Type A"),
+                                    name: 'Level 1 / Slow', value: 0),
                                 DropDownValueModel(
-                                    name: 'Type B', value: "Type B"),
+                                    name: 'Level 2 / Fast', value: 1),
                                 DropDownValueModel(
-                                    name: 'Type C', value: "Type C"),
+                                    name: 'Level 3 / DC Fast', value: 2),
                               ],
                               //                  onChanged: (value) {
                               //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
@@ -126,36 +125,36 @@ class _ChargerFormState extends State<ChargerForm> {
 
                               onChanged: (val) {
                                 updateChargingData(val.toString(),
-                                    userDataProvider.userData.chargingSpeed);
+                                    userDataProvider.userData.chargingType);
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                               },
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppPadding.p8,
-                                vertical: AppPadding.p8),
-                            child: TextField(
-                              onChanged: (value) {
-                                updateChargingData(
-                                    userDataProvider.userData.chargingSpeed,
-                                    value);
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              //controller: chargerspeedController,
-                              decoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: ColorManager.darkGrey,
-                                    ),
-                                  ),
-                                  labelText: 'Charger Speed',
-                                  labelStyle:
-                                      const TextStyle(fontSize: AppSize.s14)),
-                            ),
-                          ),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: AppPadding.p8,
+                          //       vertical: AppPadding.p8),
+                          //   child: TextField(
+                          //     onChanged: (value) {
+                          //       updateChargingData(
+                          //           userDataProvider.userData.chargingSpeed,
+                          //           value);
+                          //     },
+                          //     style: TextStyle(color: ColorManager.darkGrey),
+                          //     //controller: chargerspeedController,
+                          //     decoration: InputDecoration(
+                          //         enabledBorder: UnderlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //             width: 1,
+                          //             color: ColorManager.darkGrey,
+                          //           ),
+                          //         ),
+                          //         labelText: 'Charger Speed',
+                          //         labelStyle:
+                          //             const TextStyle(fontSize: AppSize.s14)),
+                          //   ),
+                          // ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -197,7 +196,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                       userDataProvider.userData;
                                   if (userData != null) {
                                     userData.chargingType = chargingType;
-                                    userData.chargingSpeed = chargingSpeed;
+                                    // userData.chargingSpeed = chargingSpeed;
                                     userDataProvider.setUserData(userData);
                                   }
 

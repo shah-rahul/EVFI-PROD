@@ -139,22 +139,26 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     // final Uint8List destinationIcon =
     //     await getBytesFromAsset(ImageAssets.mapDestinationMarker);
     stationMarker = await getBytesFromAsset(ImageAssets.greenMarker);
-    final BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration.empty, ImageAssets.mapSourceMarker);
-    final BitmapDescriptor destinationIcon =
-        await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, ImageAssets.mapDestinationMarker);
+    Uint8List sourceIcon = await getBytesFromAsset(ImageAssets.blackMarker);
+    Uint8List destinationIcon =
+        await getBytesFromAsset(ImageAssets.destGreenMarker);
+    // final BitmapDescriptor sourceIcon = await BitmapDescriptor.fromAssetImage(
+    //     ImageConfiguration.empty, ImageAssets.blackMarker);
+    // final BitmapDescriptor destinationIcon =
+    //     await BitmapDescriptor.fromAssetImage(
+    //         ImageConfiguration.empty, ImageAssets.destGreenMarker);
 
     try {
       var url = Uri.parse(
           'http://router.project-osrm.org/route/v1/driving/$v2,$v1;$v4,$v3?steps=true&annotations=true&geometries=geojson&overview=full');
       var response = await http.get(url);
 
-      addMarker('Source', widget.startL, mapIcon: sourceIcon);
+      addMarker('Source', widget.startL,
+          mapIcon: BitmapDescriptor.fromBytes(sourceIcon));
       addMarker(
         'Destination',
         widget.endL,
-        mapIcon: destinationIcon,
+        mapIcon: BitmapDescriptor.fromBytes(destinationIcon),
       );
 
       routpoints = [];
@@ -180,7 +184,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   final CollectionReference<Map<String, dynamic>> collectionReference =
-      FirebaseFirestore.instance.collection('Markers');
+      FirebaseFirestore.instance.collection('Chargers');
 
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
       (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;

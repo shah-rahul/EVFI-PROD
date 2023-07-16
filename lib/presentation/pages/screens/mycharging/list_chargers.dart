@@ -2,6 +2,7 @@ import 'package:EVFI/presentation/pages/models/MyCharging.dart';
 import 'package:EVFI/presentation/pages/screens/mycharging/header_ui.dart';
 import 'package:EVFI/presentation/resources/assets_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../resources/color_manager.dart';
 import 'chargers_data.dart';
@@ -21,6 +22,7 @@ class _ListChargerState extends State<ListCharger> {
   final _addressFocusNode = FocusNode();
 
   String? StationName, StationAddress;
+
   double? amount;
 
   void _submitForm() {
@@ -29,6 +31,8 @@ class _ListChargerState extends State<ListCharger> {
       StationName: StationName!,
       StationAddress: StationAddress!,
       datetime: DateTime.now(),
+      position: LatLng(2.3, 5.6),
+      type: 2,
       amount: amount!,
     ));
     Navigator.of(context).pop();
@@ -38,7 +42,9 @@ class _ListChargerState extends State<ListCharger> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const BackButton(color: Colors.white,),
+          leading: const BackButton(
+            color: Colors.white,
+          ),
           title: const Text(
             'Rent your Charger',
             // style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -174,7 +180,7 @@ class _ListChargerState extends State<ListCharger> {
                     TextFormField(
                       style: TextStyle(color: ColorManager.appBlack),
                       decoration: const InputDecoration(
-                          hintText: 'A/B/C',
+                          hintText: 'Level1/Level2/Level3',
                           enabledBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(width: 1.0, color: Colors.black),

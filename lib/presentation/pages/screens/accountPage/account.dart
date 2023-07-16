@@ -47,6 +47,8 @@ class _AccountState extends State<Account> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -77,16 +79,16 @@ class _AccountState extends State<Account> {
             //3rd column.......
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //3members in this row
                 serviceSection(context, Icons.charging_station, 'My Chargers'),
-                const SizedBox(width: 25),
+                SizedBox(width: width * 0.04),
                 GestureDetector(
                     onTap: clickPayment,
                     child:
                         serviceSection(context, Icons.credit_card, 'Payments')),
-                const SizedBox(width: 25),
+                SizedBox(width: width * 0.04),
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
             ),
@@ -102,11 +104,11 @@ class _AccountState extends State<Account> {
               },
             ),
             //6th column
-            const SizedBox(height: 20),
+            SizedBox(height: height * 0.03),
             //7th column
             settingSection(context, Icons.question_mark, 'Support'),
             //8th column
-            const SizedBox(height: 20),
+            SizedBox(height: height * 0.03),
             //9th column
             GestureDetector(
               onTap: () async {
@@ -119,12 +121,11 @@ class _AccountState extends State<Account> {
               child: settingSection(context, Icons.logout, 'Logout'),
             ),
             //10th column
-            const SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: height * 0.03),
             GestureDetector(
                 onTap: _addStation,
-                child: settingSection(context, Icons.location_on_outlined, 'Add Station')),
+                child: settingSection(
+                    context, Icons.location_on_outlined, 'Add Station')),
             const SizedBox(height: 100),
           ],
         ),
@@ -134,14 +135,14 @@ class _AccountState extends State<Account> {
 
   void _addStation() {
     showModalBottomSheet(
-        context: context,
-        backgroundColor: Colors.amberAccent[80],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        builder: (_) => GestureDetector(
-              onTap: null,
-              behavior: HitTestBehavior.opaque,
-              child: const NewStation(),
-            ),
+      context: context,
+      backgroundColor: Colors.amberAccent[80],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      builder: (_) => GestureDetector(
+        onTap: null,
+        behavior: HitTestBehavior.opaque,
+        child: const NewStation(),
+      ),
     );
   }
 
@@ -229,7 +230,8 @@ Widget profileSection(BuildContext context) {
 
 Widget serviceSection(BuildContext context, IconData icon, String str) {
   return Container(
-    padding: const EdgeInsetsDirectional.all(10),
+    height: MediaQuery.of(context).size.height * 0.1,
+    padding: const EdgeInsetsDirectional.all(6),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(13),
       border: Border.all(width: 1.5, color: Colors.black),
@@ -237,7 +239,13 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
     child: Column(
       children: [
         Icon(icon),
-        Text(str),
+        SizedBox(
+          height: 4,
+        ),
+        Text(
+          str,
+          style: TextStyle(fontSize: 12),
+        ),
       ],
     ),
   );

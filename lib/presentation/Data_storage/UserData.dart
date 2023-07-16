@@ -4,7 +4,6 @@ class UserData {
   String vehicleManufacturer;
   String vehicleNumber;
   String chargingType;
-  String chargingSpeed;
 
   UserData({
     required this.name,
@@ -12,6 +11,5 @@ class UserData {
     required this.vehicleManufacturer,
     required this.vehicleNumber,
     required this.chargingType,
-    required this.chargingSpeed,
   });
 }
