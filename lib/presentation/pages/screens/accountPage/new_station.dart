@@ -2,12 +2,11 @@
 
 import 'dart:ffi';
 
-import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../models/MyCharging.dart';
+import '../../models/my_charging.dart';
 import '../../../resources/color_manager.dart';
 import '../../models/encode_geohash.dart';
 
@@ -50,7 +49,7 @@ class _NewStationState extends State<NewStation> {
     var marker = <String, dynamic>{
       'geo': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
       'info': <String, dynamic>{
-        'name': Chargername,
+        'name': Chargername!,
         'type': type?.index.toString()
       }
     };

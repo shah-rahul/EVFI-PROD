@@ -45,8 +45,7 @@ ThemeData getApplicationTheme() {
               textStyle: getRegularStyle(color: Colors.white),
               primary: Colors.white,
               onPrimary: ColorManager.appBlack,
-              padding: const EdgeInsets.only(
-                              right: 15),
+              // padding: const EdgeInsets.all(5),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28)))),
 

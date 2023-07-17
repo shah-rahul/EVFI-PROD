@@ -1,6 +1,6 @@
 import 'package:EVFI/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-import '../models/MyCharging.dart';
+import '../models/my_charging.dart';
 import 'package:intl/intl.dart';
 import '../../resources/color_manager.dart';
 import '../../resources/strings_manager.dart';

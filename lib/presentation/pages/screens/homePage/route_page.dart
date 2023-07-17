@@ -35,11 +35,27 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
   final Set<Marker> _markers = {};
+  late Uint8List stationMarker;
+  final CollectionReference<Map<String, dynamic>> collectionReference =
+      FirebaseFirestore.instance.collection('Chargers');
+  GeoPoint geopointFrom(Map<String, dynamic> data) =>
+      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(28.6001740, 77.2105709),
     zoom: 13.437, //14.4746,
   );
+
+  Future<Uint8List> getBytesFromAsset(String path) async {
+    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: pixelRatio.round() * 80);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
 
   void addMarker(String title, LatLng coordinates,
       {required BitmapDescriptor mapIcon}) {
@@ -91,9 +107,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     return Scaffold(
       backgroundColor: ColorManager.lightGrey,
       body:
-          // Visibility(
-          //     visible: _isLoading,
-          //     replacement:
           SizedBox(
               height: MediaQuery.of(context).size.height,
               child: Stack(children: [
@@ -117,18 +130,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     );
   }
 
-  Future<Uint8List> getBytesFromAsset(String path) async {
-    double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: pixelRatio.round() * 80);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
-
-  late Uint8List stationMarker;
   void _onMapCreated(GoogleMapController controller) async {
     var v1 = widget.startL.latitude;
     var v2 = widget.startL.longitude;
@@ -183,11 +184,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     }
   }
 
-  final CollectionReference<Map<String, dynamic>> collectionReference =
-      FirebaseFirestore.instance.collection('Chargers');
-
-  GeoPoint geopointFrom(Map<String, dynamic> data) =>
-      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
   void setRouteMarker(double radius, LatLng position) {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
