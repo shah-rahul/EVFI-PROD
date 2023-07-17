@@ -31,7 +31,7 @@ class _ChargerFormState extends State<ChargerForm> {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     void updateChargingData(String type, String speed) {
       UserData userData = userDataProvider.userData;
-      userData.chargingType = type;
+     // userData.chargingType = type;
 
       userDataProvider.setUserData(userData);
     }
@@ -123,12 +123,12 @@ class _ChargerFormState extends State<ChargerForm> {
                                 ),
                               ),
 
-                              onChanged: (val) {
-                                updateChargingData(val.toString(),
-                                    userDataProvider.userData.chargingType);
-                                FocusScope.of(context)
-                                    .requestFocus(FocusNode());
-                              },
+                              // onChanged: (val) {
+                              //   updateChargingData(val.toString(),
+                              //      // userDataProvider.userData.chargingType);
+                              //   FocusScope.of(context)
+                              //       .requestFocus(FocusNode());
+                              // },
                             ),
                           ),
                           // Container(
@@ -195,7 +195,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                   UserData? userData =
                                       userDataProvider.userData;
                                   if (userData != null) {
-                                    userData.chargingType = chargingType;
+                                  //  userData.chargingType = chargingType;
                                     // userData.chargingSpeed = chargingSpeed;
                                     userDataProvider.setUserData(userData);
                                   }
