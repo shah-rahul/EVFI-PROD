@@ -31,7 +31,6 @@ class LoginViewState extends State<LoginView> {
         vehicleManufacturer: "",
         vehicleNumber: "",
         chargingType: "",
-        chargingSpeed: "",
       );
       userDataProvider.setUserData(userData);
     }

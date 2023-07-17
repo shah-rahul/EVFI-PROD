@@ -22,7 +22,6 @@ class UserDataProvider extends ChangeNotifier {
         'vehicleManufacturer': _userData.vehicleManufacturer,
         'vehicleNumber': _userData.vehicleNumber,
         'chargingType': _userData.chargingType,
-        'chargingSpeed': _userData.chargingSpeed,
       });
 
       // Log the ID of the newly created document
