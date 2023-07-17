@@ -11,7 +11,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';
@@ -123,6 +123,21 @@ class HomeState extends State<Home> {
         _markers.add(Marker(
             markerId: MarkerId(geohash),
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
+            onTap: () {
+              _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                  CameraPosition(
+                      target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                      zoom: 13)));
+              showModalBottomSheet(
+                context: context,
+                //isScrollControlled: true,
+                backgroundColor: Colors.amber.withOpacity(0.0),
+                builder: (context) {
+                  return CustomMarkerPopup(
+                      geopoint: geoPoint, geohash: geohash);
+                },
+              );
+            },
             icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
 
         setState(() {});
