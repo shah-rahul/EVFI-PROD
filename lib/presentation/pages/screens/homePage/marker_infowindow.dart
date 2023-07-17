@@ -5,8 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 //import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 //import '../../../resources/color_manager.dart';
+import '../../../Data_storage/UserData.dart';
+import '../../../Data_storage/UserDataProvider.dart';
 import '../../../register/UserChargingRegister.dart';
 import '../../../resources/values_manager.dart';
 
@@ -61,7 +64,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 
   void changecontent() {
-    if (true) {
+    if (isRegistered) {
       Navigator.push(
         context,
         PageTransition(
@@ -81,6 +84,12 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+
+    UserData userData = userDataProvider.userData;
+
+    userDataProvider.setUserData(userData);
+
     //final width = MediaQuery.of(context).size.width;
     return SingleChildScrollView(
       child: Container(
@@ -124,7 +133,20 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                   height: 30,
                   width: 95,
                   child: ElevatedButton(
-                    onPressed: changecontent,
+                    // onPressed: changecontent,
+                    onPressed: () async {
+                      try {
+                        isRegistered = await checkNumberIsRegistered(
+                            number: userDataProvider.userData.phoneNumber);
+                        changecontent();
+                        // print(result);  // Use the boolean result here
+                      } catch (e) {
+                        //print('An error occurred: $e');
+                      }
+                      // isRegistered = checkNumberIsRegistered(
+                      //         number: userDataProvider.userData.phoneNumber)
+                      //     as bool;
+                    },
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Colors.amber)),
@@ -355,4 +377,31 @@ Widget startingSection(BuildContext context) {
       ),
     ],
   );
+}
+
+Future<bool> checkNumberIsRegistered({required String number}) async {
+  final firestore = FirebaseFirestore.instance;
+  final collectionRef = firestore.collection('Registered number');
+  bool isNumberRegistered = false;
+  // storePhoneNumber(number);
+
+  try {
+    final querySnapshot = await collectionRef.get();
+
+    for (var doc in querySnapshot.docs) {
+      final phoneNumber = doc.data()['phoneNo'].toString();
+
+      if (number == phoneNumber) {
+        isNumberRegistered = true;
+        break;
+      } else {
+        return false;
+        // storePhoneNumber(number);
+      }
+    }
+
+    return isNumberRegistered;
+  } catch (e) {
+    return false;
+  }
 }

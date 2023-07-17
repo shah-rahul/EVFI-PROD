@@ -46,9 +46,9 @@ class _RegisterViewState extends State<RegisterView> {
       UserData userData = UserData(
         name: name,
         phoneNumber: phoneNumber,
-        vehicleManufacturer: "",
-        vehicleNumber: "",
-        chargingType: "",
+        vehicleManufacturer: "  ",
+        vehicleNumber: "  ",
+        chargingRequirements: "  ",
       );
       userDataProvider.setUserData(userData);
     }

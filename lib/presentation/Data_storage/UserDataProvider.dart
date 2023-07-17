@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 class UserDataProvider extends ChangeNotifier {
   late UserData _userData;
   CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('Users');
+      FirebaseFirestore.instance.collection('UserChargingRegister');
 
   UserData get userData => _userData;
   void setUserData(UserData data) {
@@ -21,7 +21,7 @@ class UserDataProvider extends ChangeNotifier {
         'phoneNumber': _userData.phoneNumber,
         'vehicleManufacturer': _userData.vehicleManufacturer,
         'vehicleNumber': _userData.vehicleNumber,
-        'chargingType': _userData.chargingType,
+        'chargingRequirements': _userData.chargingRequirements,
       });
 
       // Log the ID of the newly created document
