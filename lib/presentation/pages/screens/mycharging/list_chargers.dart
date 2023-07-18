@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 
 import '../../../resources/color_manager.dart';
@@ -27,6 +30,8 @@ class _ListChargerState extends State<ListCharger> {
   final _latFocusNode = FocusNode();
   final _longFocusNode = FocusNode();
   final _amenitiesFocusNode = FocusNode();
+  final ImagePicker imagePicker = ImagePicker();
+  final List<XFile>? _imageList = [];
 
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
@@ -44,18 +49,84 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {
       _isLoading = true;
     });
-    LatLng coordinates = LatLng(latitude!, longitude!);
     await charger.addCharger(
         StationAddress: StationAddress!,
         StationName: StationName!,
         amount: amount!,
-        position: coordinates);
-
+        position: LatLng(latitude!, longitude!));
     setState(() {
       _isLoading = false;
     });
-    Navigator.of(context).pop(PageTransition(
-        type: PageTransitionType.fade, child: const MyChargingScreen()));
+    Navigator.pop(
+        context,
+        PageTransition(
+            type: PageTransitionType.fade, child: const MyChargingScreen()));
+  }
+
+  Widget _makeTitle({required String title}) {
+    return Text(title, style: const TextStyle(fontWeight: FontWeight.bold));
+  }
+
+  _askCoordinates() {
+    return Row(
+      children: [
+        Expanded(
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Enter a valid Latitude.';
+              }
+              return null;
+            },
+            style: TextStyle(color: ColorManager.darkGrey),
+            decoration: const InputDecoration(
+                labelText: 'Station Latitude',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )),
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
+            focusNode: _latFocusNode,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_longFocusNode),
+            onSaved: (newValue) {
+              setState(() {
+                latitude = double.parse(newValue!);
+              });
+            },
+          ),
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Expanded(
+          child: TextFormField(
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Enter a valid Longitude.';
+              }
+              return null;
+            },
+            style: TextStyle(color: ColorManager.darkGrey),
+            decoration: const InputDecoration(
+                labelText: 'Station Longitude',
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )),
+            keyboardType: TextInputType.number,
+            textInputAction: TextInputAction.next,
+            focusNode: _longFocusNode,
+            onFieldSubmitted: (_) =>
+                FocusScope.of(context).requestFocus(_aadharFocusNode),
+            onSaved: (newValue) {
+              setState(() {
+                longitude = double.parse(newValue!);
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _makeChargerOptions() {
@@ -118,6 +189,43 @@ class _ListChargerState extends State<ListCharger> {
     );
   }
 
+  Future _takeChargerImages(ImageSource source) async {
+    final List<XFile> selectedImage = await imagePicker.pickMultiImage();
+    if (selectedImage.isNotEmpty) {
+      _imageList!.addAll(selectedImage);
+    }
+    setState(() {});
+  }
+
+  Future<void> _showPhotoOptions() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Pick station images using'),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    await _takeChargerImages(ImageSource.camera)
+                        .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.camera_alt_outlined,
+                      color: ColorManager.primary),
+                  label: const Text('Camera'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    await _takeChargerImages(ImageSource.gallery)
+                        .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.image_outlined, color: ColorManager.primary),
+                  label: const Text('Gallery'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+              ],
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,7 +250,7 @@ class _ListChargerState extends State<ListCharger> {
                     Container(
                       height: 220,
                       width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 15),
+                      margin: const EdgeInsets.only(bottom: 10),
                       child:
                           const HeaderUI(220, true, ImageAssets.oldBlackMarker),
                     ),
@@ -151,8 +259,7 @@ class _ListChargerState extends State<ListCharger> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Station Name',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Station Name'),
                             TextFormField(
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -179,8 +286,7 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(
                               height: 15,
                             ),
-                            const Text('Address',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Address'),
                             TextFormField(
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -210,76 +316,11 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(
                               height: 15,
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Enter a valid Latitude.';
-                                      }
-                                      return null;
-                                    },
-                                    style:
-                                        TextStyle(color: ColorManager.darkGrey),
-                                    decoration: const InputDecoration(
-                                        labelText: 'Station Latitude',
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                        )),
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.next,
-                                    focusNode: _latFocusNode,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context)
-                                            .requestFocus(_longFocusNode),
-                                    onSaved: (newValue) {
-                                      setState(() {
-                                        latitude = double.parse(newValue!);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Enter a valid Longitude.';
-                                      }
-                                      return null;
-                                    },
-                                    style:
-                                        TextStyle(color: ColorManager.darkGrey),
-                                    decoration: const InputDecoration(
-                                        labelText: 'Station Longitude',
-                                        enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                        )),
-                                    keyboardType: TextInputType.number,
-                                    textInputAction: TextInputAction.next,
-                                    focusNode: _longFocusNode,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context)
-                                            .requestFocus(_aadharFocusNode),
-                                    onSaved: (newValue) {
-                                      setState(() {
-                                        longitude = double.parse(newValue!);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
+                            _askCoordinates(),
                             const SizedBox(
                               height: 15,
                             ),
-                            const Text('Aadhar No.',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Aadhar No.'),
                             TextFormField(
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -306,8 +347,7 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(
                               height: 15,
                             ),
-                            const Text('Host Names',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Host Names'),
                             TextFormField(
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -335,14 +375,12 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(
                               height: 15,
                             ),
-                            const Text('Charger Type',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Charger Type'),
                             _makeChargerOptions(),
                             const SizedBox(
                               height: 15,
                             ),
-                            const Text('Price',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Price'),
                             TextFormField(
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
@@ -368,31 +406,85 @@ class _ListChargerState extends State<ListCharger> {
                               },
                             ),
                             const SizedBox(height: 15),
-                            const Text('Amenities Available',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            _makeTitle(title: 'Amenities'),
                             TextFormField(
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              )),
-                              focusNode: _amenitiesFocusNode,
-                              maxLines: 3,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.newline,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please provide a list of available services';
                                 }
                                 return null;
                               },
+                              style: TextStyle(color: ColorManager.darkGrey),
+                              decoration: const InputDecoration(
+                                  hintText: 'Cafeteria/Toilets/Rest Room',
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  )),
+                              focusNode: _amenitiesFocusNode,
+                              maxLines: 3,
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.newline,
                               onSaved: (newValue) {
                                 setState(() {
                                   amenities = newValue!;
                                 });
                               },
                             ),
+                            const SizedBox(width: 15),
+                            Container(
+                              margin: const EdgeInsets.only(top: 20),
+                              child: _imageList!.isNotEmpty
+                                  ? Column(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: IconButton(
+                                            icon: Icon(Icons.add_a_photo,
+                                                color: ColorManager.appBlack),
+                                            onPressed: _showPhotoOptions,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                            height: 150,
+                                            width: double.infinity,
+                                            child: GridView.builder(
+                                              gridDelegate:
+                                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                                      crossAxisCount: 2,
+                                                      mainAxisSpacing: 15,
+                                                      crossAxisSpacing: 10,
+                                                      childAspectRatio: 3 / 2),
+                                              itemCount: _imageList!.length,
+                                              itemBuilder: (context, index) =>
+                                                  Image.file(
+                                                File(_imageList![index].path),
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )),
+                                      ],
+                                    )
+                                  : Align(
+                                      alignment: Alignment.center,
+                                      child: ElevatedButton(
+                                          onPressed: _showPhotoOptions,
+                                          style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.black87,
+                                              shadowColor:
+                                                  ColorManager.appBlack,
+                                              elevation: 6,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          25))),
+                                          child: const Text(
+                                            'Charger Images',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.white),
+                                          )),
+                                    ),
+                            )
                           ]),
                     ),
                     const SizedBox(
