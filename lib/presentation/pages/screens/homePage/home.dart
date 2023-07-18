@@ -130,7 +130,7 @@ class HomeState extends State<Home> {
                       zoom: 13)));
               showModalBottomSheet(
                 context: context,
-                //isScrollControlled: true,
+                isScrollControlled: true,
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
                   return CustomMarkerPopup(

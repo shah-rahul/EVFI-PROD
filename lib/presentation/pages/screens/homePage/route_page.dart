@@ -229,7 +229,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       zoom: 13)));
               showModalBottomSheet(
                 context: context,
-                //isScrollControlled: true,
+                isScrollControlled: true,
                 transitionAnimationController: AnimationController(
                     vsync: this, duration: const Duration(milliseconds: 400)),
                 backgroundColor: Colors.amber.withOpacity(0.0),

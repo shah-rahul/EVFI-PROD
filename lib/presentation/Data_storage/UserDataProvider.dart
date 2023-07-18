@@ -3,7 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class UserDataProvider extends ChangeNotifier {
-  late UserData _userData;
+  //late UserData _userData;
+  UserData _userData = UserData(
+    name: '',
+    phoneNumber: '',
+    vehicleManufacturer: '',
+    vehicleNumber: '',
+    chargingRequirements: '',
+  );
   CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('UserChargingRegister');
 
