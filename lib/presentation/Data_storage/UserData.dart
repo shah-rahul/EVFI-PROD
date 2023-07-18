@@ -3,13 +3,13 @@ class UserData {
   String phoneNumber;
   String vehicleManufacturer;
   String vehicleNumber;
-  String chargingType;
+  String chargingRequirements;
 
   UserData({
     required this.name,
     required this.phoneNumber,
     required this.vehicleManufacturer,
     required this.vehicleNumber,
-    required this.chargingType,
+    required this.chargingRequirements,
   });
 }

@@ -30,7 +30,7 @@ class LoginViewState extends State<LoginView> {
         phoneNumber: phoneNumber,
         vehicleManufacturer: "",
         vehicleNumber: "",
-        chargingType: "",
+        chargingRequirements: "",
       );
       userDataProvider.setUserData(userData);
     }

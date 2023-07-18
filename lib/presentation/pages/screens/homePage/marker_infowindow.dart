@@ -1,21 +1,24 @@
 import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
 import 'package:EVFI/presentation/resources/color_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:dart_geohash/dart_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
-//import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-//import '../../../resources/color_manager.dart';
+import 'package:provider/provider.dart';
+import '../../../Data_storage/UserData.dart';
+import '../../../Data_storage/UserDataProvider.dart';
 import '../../../register/UserChargingRegister.dart';
 import '../../../resources/values_manager.dart';
 
-bool isRegistered = false;
+bool? isRegistered;
 
+/*RadioButtons*/
 enum ChargerTypes { A, B, C }
-
 ChargerTypes? selectedType = ChargerTypes.A;
+/*RadioButtons*/
 
+/*Dropdown*/
+String selectedTime = '10:00-11:00';
 List<String> timings = [
   '10:00-11:00',
   '11:00-12:00',
@@ -23,9 +26,9 @@ List<String> timings = [
   '01:00-02:00',
   '02:00-03:00',
   '03:00-04:00',
-  '04:00-05:00'
+  '04:00-05:00',
 ];
-String selectedTime = '10:00-11:00';
+/*Dropdown*/
 
 class CustomMarkerPopup extends StatefulWidget {
   final GeoPoint geopoint;
@@ -40,6 +43,7 @@ class CustomMarkerPopup extends StatefulWidget {
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();
 }
 
+/*
 class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   bool isBooking = false;
   String str = 'Book Slot';
@@ -61,101 +65,224 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 
   void changecontent() {
-    if (true) {
+    if (isRegistered!) {
       Navigator.push(
         context,
         PageTransition(
-            type: PageTransitionType.rightToLeft,
-            child: UserChargingRegister()),
+          type: PageTransitionType.rightToLeft,
+          child: UserChargingRegister(),
+        ),
       );
     } else {
-      isBooking = !isBooking;
-      if (!isBooking) {
-        str = 'Book Slot';
-      } else {
-        str = 'Back';
-      }
-      setState(() {});
+      setState(() {
+        isBooking = !isBooking;
+        if (!isBooking) {
+          str = 'Book Slot';
+        } else {
+          str = 'Back';
+        }
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    //final width = MediaQuery.of(context).size.width;
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    UserData userData = userDataProvider.userData;
+    userDataProvider.setUserData(userData);
+
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 8),
         padding: const EdgeInsets.all(3),
         decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadiusDirectional.only(
-              topStart: Radius.circular(15),
-              topEnd: Radius.circular(15),
-            )
-            //borderRadius: BorderRadius.circular(15),
-            ),
+          color: Colors.white,
+          borderRadius: BorderRadiusDirectional.only(
+            topStart: Radius.circular(15),
+            topEnd: Radius.circular(15),
+          ),
+        ),
         height: 300,
-        child:
-            //Card(
-            //shadowColor: ColorManager.CardshadowBottomRight,
-            // shape: RoundedRectangleBorder(borderRadius: BorderRadiusDirectional.only(
-            //   topStart: Radius.circular(15),
-            //   topEnd: Radius.circular(15),
-            // )),
-            // elevation: 4,
-            // color: Colors.yellow.withOpacity(0.6),
-            // child:
-            Padding(
+        child: Padding(
           padding: const EdgeInsets.all(AppMargin.m12 - 1),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            //1st column
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                //const Icon(Icons.electric_bolt_sharp, size: 20),
-                //const SizedBox(width: 3),
-                Text(
-                  widget.stationName,
-                  style: const TextStyle(
-                      fontSize: AppSize.s20, fontWeight: FontWeight.w600),
-                ),
-                Container(
-                  height: 30,
-                  width: 95,
-                  child: ElevatedButton(
-                    onPressed: changecontent,
-                    style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(Colors.amber)),
-                    child: Text(
-                      str,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.stationName,
+                    style: const TextStyle(
+                      fontSize: AppSize.s20,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-              ],
-            ),
-            //2nd column
-            const SizedBox(
-              height: 10,
-            ),
-            //3rd column
-            Text(widget.address, style: const TextStyle(fontSize: AppSize.s12)),
-            //4th column
-            const SizedBox(
-              height: 8,
-            ),
-            //5th column.........................................................
-            //startingSection(context),
-            callContent(),
-            //6th column.........................................................
-          ]),
+                  Container(
+                    height: 30,
+                    width: 95,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          isRegistered = await checkNumberIsRegistered(
+                            number: userDataProvider.userData.phoneNumber,
+                          );
+                          Future.delayed(Duration.zero, () {
+                            changecontent();
+                          });
+                        } catch (e) {
+                          // Handle the error
+                        }
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.amber),
+                      ),
+                      child: Text(
+                        str,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                widget.address,
+                style: const TextStyle(fontSize: AppSize.s12),
+              ),
+              const SizedBox(height: 8),
+              callContent(),
+            ],
+          ),
         ),
-        //),
+      ),
+    );
+  }
+}
+*/
+
+class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
+  bool isBooking = false;
+  String str = 'Book Slot';
+
+  void onchanRadio(ChargerTypes val) {
+    setState(() {
+      selectedType = val;
+    });
+  }
+
+  Widget callContent() {
+    if (isBooking) {
+      return bookingSection(context, onchanRadio);
+    } else {
+      return startingSection(context);
+    }
+  }
+
+  void changecontent(bool isRegistered) {
+    if (isRegistered) {
+      Navigator.push(
+        context,
+        PageTransition(
+          type: PageTransitionType.rightToLeft,
+          child: const UserChargingRegister(),
+        ),
+      );
+    } else {
+      setState(() {
+        isBooking = !isBooking;
+        if (!isBooking) {
+          str = 'Book Slot';
+        } else {
+          str = 'Back';
+        }
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    UserData userData = userDataProvider.userData;
+    userDataProvider.setUserData(userData);
+
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.all(3),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: const BorderRadiusDirectional.only(
+            topStart: Radius.circular(15),
+            topEnd: Radius.circular(15),
+          ),
+        ),
+        height: 300,
+        child: Padding(
+          padding: const EdgeInsets.all(AppMargin.m12 - 1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.stationName,
+                    style: const TextStyle(
+                      fontSize: AppSize.s20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Container(
+                    height: 30,
+                    width: 95,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        changecontent(isRegistered!);
+                      },
+                      style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.amber),
+                      ),
+                      child: Text(
+                        str,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Text(
+                widget.address,
+                style: const TextStyle(fontSize: AppSize.s12),
+              ),
+              const SizedBox(height: 8),
+              FutureBuilder<bool>(
+                future: checkNumberIsRegistered(
+                  number: userDataProvider.userData.phoneNumber,
+                ),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(height: 150, alignment: Alignment.center , child: Center(child: CircularProgressIndicator()));
+                  } else if (snapshot.hasError) {
+                    return const Text('Error occurred');
+                  } else {
+                    isRegistered = snapshot.data;
+                    return callContent();
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -166,7 +293,6 @@ Widget bookingSection(
   return Card(
     shadowColor: ColorManager.CardshadowBottomRight,
     shape: const RoundedRectangleBorder(
-        //side: BorderSide(color: Colors.black12),
         borderRadius: BorderRadiusDirectional.all(
       Radius.circular(15),
     )),
@@ -355,4 +481,31 @@ Widget startingSection(BuildContext context) {
       ),
     ],
   );
+}
+
+Future<bool> checkNumberIsRegistered({required String number}) async {
+  final firestore = FirebaseFirestore.instance;
+  final collectionRef = firestore.collection('Registered number');
+  bool isNumberRegistered = false;
+  // storePhoneNumber(number);
+
+  try {
+    final querySnapshot = await collectionRef.get();
+
+    for (var doc in querySnapshot.docs) {
+      final phoneNumber = doc.data()['phoneNo'].toString();
+
+      if (number == phoneNumber) {
+        isNumberRegistered = true;
+        break;
+      } else {
+        return false;
+        // storePhoneNumber(number);
+      }
+    }
+
+    return isNumberRegistered;
+  } catch (e) {
+    return false;
+  }
 }
