@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
@@ -10,11 +9,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:rxdart/rxdart.dart';
-import '../../models/encode_geohash.dart';
-import 'package:dart_geohash/dart_geohash.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import './home.dart';
@@ -106,27 +101,26 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorManager.lightGrey,
-      body:
-          SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: Stack(children: [
-                const GFLoader(
-                  type: GFLoaderType.circle,
-                ),
-                GoogleMap(
-                  mapType: MapType.normal,
-                  markers: _markers,
-                  cameraTargetBounds: CameraTargetBounds.unbounded,
-                  initialCameraPosition: _initialCameraPosition,
-                  polylines: polylines,
-                  onMapCreated: _onMapCreated,
-                  zoomControlsEnabled: true,
-                  compassEnabled: false,
-                  myLocationButtonEnabled: false,
-                  rotateGesturesEnabled: false,
-                ),
-                _buildBackKey(),
-              ])),
+      body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Stack(children: [
+            const GFLoader(
+              type: GFLoaderType.circle,
+            ),
+            GoogleMap(
+              mapType: MapType.normal,
+              markers: _markers,
+              cameraTargetBounds: CameraTargetBounds.unbounded,
+              initialCameraPosition: _initialCameraPosition,
+              polylines: polylines,
+              onMapCreated: _onMapCreated,
+              zoomControlsEnabled: true,
+              compassEnabled: false,
+              myLocationButtonEnabled: false,
+              rotateGesturesEnabled: false,
+            ),
+            _buildBackKey(),
+          ])),
     );
   }
 

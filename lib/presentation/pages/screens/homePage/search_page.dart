@@ -8,9 +8,7 @@ import 'package:http/http.dart' as http;
 import '/presentation/resources/color_manager.dart';
 import '../../models/data_type.dart';
 import './route_page.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../models/encode_geohash.dart';
 
 class SearchPage extends StatefulWidget {
@@ -25,9 +23,8 @@ class _SearchPageState extends State<SearchPage> {
   final controller2 = TextEditingController();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
-  late LatLng
-      start; // = const LatLng(-51.42, 95.47); //random ocean coordinates
-  late LatLng end; // = const LatLng(-51.42, 95.47);
+  late LatLng start = const LatLng(-51.42, 95.47); //random ocean coordinates
+  late LatLng end = const LatLng(-51.42, 95.47);
 
   get _checkIfDifferent {
     if (start.latitude == end.latitude && start.longitude == end.longitude) {

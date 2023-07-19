@@ -190,9 +190,17 @@ class _ListChargerState extends State<ListCharger> {
   }
 
   Future _takeChargerImages(ImageSource source) async {
-    final List<XFile> selectedImage = await imagePicker.pickMultiImage();
-    if (selectedImage.isNotEmpty) {
-      _imageList!.addAll(selectedImage);
+    if (source == ImageSource.gallery) {
+      final List<XFile> selectedImage = await imagePicker.pickMultiImage();
+      if (selectedImage.isNotEmpty) {
+        _imageList!.addAll(selectedImage);
+      }
+    } else {
+      final XFile? sekectedImage =
+          await imagePicker.pickImage(source: ImageSource.camera);
+      if (sekectedImage != null) {
+        _imageList!.add(sekectedImage);
+      }
     }
     setState(() {});
   }
@@ -433,28 +441,42 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             const SizedBox(width: 15),
                             Container(
-                              margin: const EdgeInsets.only(top: 20),
+                              margin: const EdgeInsets.only(top: 15),
                               child: _imageList!.isNotEmpty
                                   ? Column(
                                       children: [
                                         Align(
                                           alignment: Alignment.centerRight,
-                                          child: IconButton(
-                                            icon: Icon(Icons.add_a_photo,
-                                                color: ColorManager.appBlack),
-                                            onPressed: _showPhotoOptions,
+                                          child: Row(
+                                            children: [
+                                              _makeTitle(
+                                                  title: 'Charger Images'),
+                                              const Spacer(),
+                                              IconButton(
+                                                icon: Icon(Icons.add_a_photo_outlined,
+                                                    color:
+                                                        ColorManager.darkPrimary),
+                                                onPressed: _showPhotoOptions,
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(
+                                        Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(10)),
+                                                border: Border.all()),
+                                            padding: const EdgeInsets.all(4),
                                             height: 150,
                                             width: double.infinity,
                                             child: GridView.builder(
                                               gridDelegate:
                                                   const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 2,
-                                                      mainAxisSpacing: 15,
+                                                      crossAxisCount: 3,
+                                                      mainAxisSpacing: 10,
                                                       crossAxisSpacing: 10,
-                                                      childAspectRatio: 3 / 2),
+                                                      childAspectRatio: 1),
                                               itemCount: _imageList!.length,
                                               itemBuilder: (context, index) =>
                                                   Image.file(

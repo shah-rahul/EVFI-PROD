@@ -134,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     color: Color.fromARGB(255, 73, 71, 71),
                   ),
                 ),
-                Text('13.0'),
+                Text('1.0'),
               ],
             ),
           ],

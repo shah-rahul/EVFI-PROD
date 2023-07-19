@@ -103,7 +103,7 @@ class HeaderUI extends StatelessWidget {
                 child: Stack(
                   children: [
                     Container(
-                      margin: const EdgeInsets.only(top: 5.0, left: 0.3, right: 0.3, bottom: 0.5),
+                      margin: const EdgeInsets.only(top: 5.0, left: 0.3, right: 0.3, bottom: 0.39),
                       decoration: const BoxDecoration(color: Color.fromARGB(255, 104, 210, 107)),),
                     Positioned(
                         top: 0,
