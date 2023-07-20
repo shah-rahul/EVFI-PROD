@@ -241,34 +241,32 @@ class _NewStationState extends State<NewStation> {
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
                   focusNode: _longitudeFocusNode,
-                  onFieldSubmitted: (_) {
-                    _addInFirestore();
-                  },
+                  // onFieldSubmitted: (_) {
+                  //   _addInFirestore();
+                  // },
                   onSaved: (newValue) {
                     setState(() {
                       longitude = double.parse(newValue!);
                     });
                   },
                 ),
-                // Container(
-                //   margin: const EdgeInsets.all(10),
-                //   child: ElevatedButton(
-                //     style: ElevatedButton.styleFrom(
-                //         side: const BorderSide(width: 1, color: Colors.black),
-                //         backgroundColor: ColorManager.primary),
-                //     onPressed: () {
-                //       _addInFirestore;
-                //     },
-                //     child: Text(
-                //       'Add',
-                //       style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         fontSize: 16,
-                //         color: ColorManager.appBlack,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        side: const BorderSide(width: 1, color: Colors.black),
+                        backgroundColor: ColorManager.primary),
+                    onPressed: _addInFirestore,
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: ColorManager.appBlack,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
