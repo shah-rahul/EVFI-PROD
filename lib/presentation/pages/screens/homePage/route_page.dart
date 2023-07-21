@@ -34,7 +34,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   final CollectionReference<Map<String, dynamic>> collectionReference =
       FirebaseFirestore.instance.collection('Chargers');
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
-      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+      (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(28.6001740, 77.2105709),
@@ -189,7 +189,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     double radiusInKm = radius;
 
 // Field name of Cloud Firestore documents where the geohash is saved.
-    String field = 'geo';
+    String field = 'g';
 
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
         GeoCollectionReference<Map<String, dynamic>>(collectionReference)
@@ -209,9 +209,9 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         }
 
         final geoPoint =
-            (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+            (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
-            (data['geo'] as Map<String, dynamic>)['geohash'] as String;
+            (data['g'] as Map<String, dynamic>)['geohash'] as String;
 
         print(geoPoint.latitude);
         _markers.add(Marker(

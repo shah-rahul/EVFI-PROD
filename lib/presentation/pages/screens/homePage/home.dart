@@ -78,7 +78,7 @@ class HomeState extends State<Home> {
 
 // Function to get GeoPoint instance from Cloud Firestore document data.
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
-      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+      (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
@@ -95,7 +95,7 @@ class HomeState extends State<Home> {
     double radiusInKm = radius;
 
 // Field name of Cloud Firestore documents where the geohash is saved.
-    String field = 'geo';
+    String field = 'g';
 
 // Streamed document snapshots of geo query under given conditions.
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
@@ -116,9 +116,9 @@ class HomeState extends State<Home> {
         }
 
         final geoPoint =
-            (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+            (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
-            (data['geo'] as Map<String, dynamic>)['geohash'] as String;
+            (data['g'] as Map<String, dynamic>)['geohash'] as String;
 
         _markers.add(Marker(
             markerId: MarkerId(geohash),
