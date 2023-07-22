@@ -47,7 +47,7 @@ class _NewStationState extends State<NewStation> {
     String geohash = encodeGeohash(latitude!, longitude!, precision: 9);
     GeoPoint coordinate = GeoPoint(latitude!, longitude!);
     var marker = <String, dynamic>{
-      'geo': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
       'info': <String, dynamic>{
         'name': Chargername!,
         'type': type?.index.toString()
@@ -217,7 +217,7 @@ class _NewStationState extends State<NewStation> {
                   style: TextStyle(color: ColorManager.appBlack),
                   decoration: const InputDecoration(labelText: 'Latitude'),
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
+                
                   onFieldSubmitted: (_) =>
                       FocusScope.of(context).requestFocus(_longitudeFocusNode),
                   onSaved: (newValue) {
@@ -239,36 +239,34 @@ class _NewStationState extends State<NewStation> {
                   style: TextStyle(color: ColorManager.appBlack),
                   decoration: const InputDecoration(labelText: 'Longitude'),
                   textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.number,
+            
                   focusNode: _longitudeFocusNode,
-                  onFieldSubmitted: (_) {
-                    _addInFirestore();
-                  },
+                  // onFieldSubmitted: (_) {
+                  //   _addInFirestore();
+                  // },
                   onSaved: (newValue) {
                     setState(() {
                       longitude = double.parse(newValue!);
                     });
                   },
                 ),
-                // Container(
-                //   margin: const EdgeInsets.all(10),
-                //   child: ElevatedButton(
-                //     style: ElevatedButton.styleFrom(
-                //         side: const BorderSide(width: 1, color: Colors.black),
-                //         backgroundColor: ColorManager.primary),
-                //     onPressed: () {
-                //       _addInFirestore;
-                //     },
-                //     child: Text(
-                //       'Add',
-                //       style: TextStyle(
-                //         fontWeight: FontWeight.bold,
-                //         fontSize: 16,
-                //         color: ColorManager.appBlack,
-                //       ),
-                //     ),
-                //   ),
-                // ),
+                Container(
+                  margin: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        side: const BorderSide(width: 1, color: Colors.black),
+                        backgroundColor: ColorManager.primary),
+                    onPressed: _addInFirestore,
+                    child: Text(
+                      'Add',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: ColorManager.appBlack,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

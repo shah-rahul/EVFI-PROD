@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:EVFI/presentation/resources/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,21 +23,23 @@ class ListCharger extends StatefulWidget {
 
 class _ListChargerState extends State<ListCharger> {
   Chargers charger = Chargers();
+  // final Completer<GoogleMapController> _mapController =
+  //     Completer<GoogleMapController>();
+  late GoogleMapController _controller;
 
   final _saveForm = GlobalKey<FormState>();
   final _priceFocusNode = FocusNode();
   final _aadharFocusNode = FocusNode();
   final _hostsFocusNode = FocusNode();
   final _addressFocusNode = FocusNode();
-  final _latFocusNode = FocusNode();
-  final _longFocusNode = FocusNode();
   final _amenitiesFocusNode = FocusNode();
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
 
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
-  double? amount, latitude, longitude;
+  double? amount, latitude = 0.0, longitude = 0.0;
+  bool _isPinning = false;
 
   var _isLoading = false;
   typeCharger? _type;
@@ -67,66 +71,108 @@ class _ListChargerState extends State<ListCharger> {
     return Text(title, style: const TextStyle(fontWeight: FontWeight.bold));
   }
 
-  _askCoordinates() {
-    return Row(
-      children: [
-        Expanded(
-          child: TextFormField(
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Enter a valid Latitude.';
-              }
-              return null;
-            },
-            style: TextStyle(color: ColorManager.darkGrey),
-            decoration: const InputDecoration(
-                labelText: 'Station Latitude',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                )),
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            focusNode: _latFocusNode,
-            onFieldSubmitted: (_) =>
-                FocusScope.of(context).requestFocus(_longFocusNode),
-            onSaved: (newValue) {
-              setState(() {
-                latitude = double.parse(newValue!);
-              });
-            },
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: TextFormField(
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Enter a valid Longitude.';
-              }
-              return null;
-            },
-            style: TextStyle(color: ColorManager.darkGrey),
-            decoration: const InputDecoration(
-                labelText: 'Station Longitude',
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                )),
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-            focusNode: _longFocusNode,
-            onFieldSubmitted: (_) =>
-                FocusScope.of(context).requestFocus(_aadharFocusNode),
-            onSaved: (newValue) {
-              setState(() {
-                longitude = double.parse(newValue!);
-              });
-            },
-          ),
-        ),
-      ],
-    );
+  // _askCoordinates() {
+  //   return Row(
+  //     children: [
+  //       Expanded(
+  //         child: TextFormField(
+  //           style: TextStyle(color: ColorManager.darkGrey),
+  //           decoration: const InputDecoration(
+  //               enabled: false,
+  //               labelText: 'Station Latitude',
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.all(Radius.circular(10)),
+  //               )),
+  //           keyboardType: TextInputType.none,
+  //         ),
+  //       ),
+  //       const SizedBox(
+  //         width: 10,
+  //       ),
+  //       Expanded(
+  //         child: TextFormField(
+  //           style: TextStyle(color: ColorManager.darkGrey),
+  //           decoration: const InputDecoration(
+  //               enabled: false,
+  //               labelText: 'Station Longitude',
+  //               enabledBorder: OutlineInputBorder(
+  //                 borderRadius: BorderRadius.all(Radius.circular(10)),
+  //               )),
+  //           keyboardType: TextInputType.none,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  late Marker _station = const Marker(markerId: MarkerId('Station'));
+  _pinMarkerOnMap(LatLng position) async {
+    BitmapDescriptor chargerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration.empty, ImageAssets.mapSourceMarker);
+    setState(() {
+      _station = Marker(
+        markerId: const MarkerId('Station'),
+        position: position,
+        infoWindow: InfoWindow(
+            title: 'Station/Charger location',
+            snippet: '${position.latitude}, ${position.longitude}'),
+        icon: Platform.isIOS ? BitmapDescriptor.defaultMarker : chargerIcon,
+      );
+      _controller.animateCamera(CameraUpdate.newCameraPosition(
+          CameraPosition(target: position, zoom: 18)));
+    });
+  }
+
+  _showMap() {
+    return Container(
+        height: 250,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(width: 3.5, color: ColorManager.appBlack),
+            boxShadow: [
+              BoxShadow(
+                  color: ColorManager.CardshadowBottomRight,
+                  blurRadius: 8,
+                  offset: const Offset(0, 2))
+            ]),
+        child: GoogleMap(
+          onMapCreated: (argController) {
+            _controller = argController;
+          },
+          initialCameraPosition: const CameraPosition(
+              target: LatLng(29.946658, 76.817938), zoom: 16.3),
+          mapType: MapType.normal,
+          mapToolbarEnabled: false,
+          compassEnabled: false,
+          onTap: (coordinates) {
+            _pinMarkerOnMap(coordinates);
+          },
+          markers: {_station},
+        ));
+  }
+
+  Widget _takeChargerLocation() {
+    return _isPinning
+        ? _showMap()
+        : Card(
+            elevation: 2,
+            child: ListTile(
+              tileColor: ColorManager.primary.withOpacity(0.17),
+              textColor: Colors.black,
+              selectedColor: Colors.green,
+              title: const Text('Select Charger location',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              leading: CircleAvatar(
+                backgroundColor: ColorManager.grey3,
+                child: const Icon(Icons.bolt, color: Colors.green),
+              ),
+              onTap: () {
+                setState(() {
+                  _isPinning = true;
+                });
+              },
+            ),
+          );
   }
 
   Widget _makeChargerOptions() {
@@ -255,12 +301,15 @@ class _ListChargerState extends State<ListCharger> {
                 key: _saveForm,
                 child: ListView(
                   children: <Widget>[
-                    Container(
-                      height: 220,
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child:
-                          const HeaderUI(220, true, ImageAssets.oldBlackMarker),
+                    Flexible(
+                      fit: FlexFit.tight,
+                      child: Container(
+                        height: 220,
+                        width: double.infinity,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        child: const HeaderUI(
+                            220, true, ImageAssets.oldBlackMarker),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -311,10 +360,8 @@ class _ListChargerState extends State<ListCharger> {
                                   )),
                               maxLines: 3,
                               keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               focusNode: _addressFocusNode,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_latFocusNode),
                               onSaved: (newValue) {
                                 setState(() {
                                   StationAddress = newValue!;
@@ -324,10 +371,14 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(
                               height: 15,
                             ),
-                            _askCoordinates(),
+                            _takeChargerLocation(),
                             const SizedBox(
                               height: 15,
                             ),
+                            // _askCoordinates(),
+                            // const SizedBox(
+                            //   height: 15,
+                            // ),
                             _makeTitle(title: 'Aadhar No.'),
                             TextFormField(
                               validator: (value) {
@@ -453,9 +504,10 @@ class _ListChargerState extends State<ListCharger> {
                                                   title: 'Charger Images'),
                                               const Spacer(),
                                               IconButton(
-                                                icon: Icon(Icons.add_a_photo_outlined,
-                                                    color:
-                                                        ColorManager.darkPrimary),
+                                                icon: Icon(
+                                                    Icons.add_a_photo_outlined,
+                                                    color: ColorManager
+                                                        .darkPrimary),
                                                 onPressed: _showPhotoOptions,
                                               ),
                                             ],
