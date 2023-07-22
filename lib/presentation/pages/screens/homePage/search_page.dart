@@ -15,10 +15,10 @@ class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchPage> createState() => SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class SearchPageState extends State<SearchPage> {
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
   Timer? _debounce;
@@ -34,7 +34,7 @@ class _SearchPageState extends State<SearchPage> {
     }
   }
 
-  Widget _buildListView(TextEditingController controller, bool val) {
+  Widget buildListView(TextEditingController controller, bool val) {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -158,8 +158,12 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Widget _buildTextFormField(TextEditingController controller, String hint,
-      IconData icon, Color color) {
+  Widget buildTextFormField(
+    TextEditingController controller,
+    String hint,
+    IconData icon,
+    Color color,
+  ) {
     return TextFormField(
         controller: controller,
         style: TextStyle(color: ColorManager.appBlack),
@@ -253,8 +257,12 @@ class _SearchPageState extends State<SearchPage> {
                       bottom: 30, top: 10, left: 25, right: 25),
                   width: double.infinity,
                   child: Column(children: [
-                    _buildTextFormField(controller1, 'Start location',
-                        Icons.location_on_outlined, ColorManager.primary),
+                    buildTextFormField(
+                      controller1,
+                      'Start location',
+                      Icons.location_on_outlined,
+                      ColorManager.primary,
+                    ),
                     IconButton(
                       onPressed: () => _swap(controller1, controller2),
                       icon: const Icon(
@@ -264,16 +272,20 @@ class _SearchPageState extends State<SearchPage> {
                       splashColor: ColorManager.primary,
                       color: ColorManager.appBlack,
                     ),
-                    _buildTextFormField(controller2, 'Destination location',
-                        Icons.location_on_outlined, Colors.red),
+                    buildTextFormField(
+                      controller2,
+                      'Destination location',
+                      Icons.location_on_outlined,
+                      Colors.red,
+                    ),
                   ])),
             ),
             Expanded(
               child: StatefulBuilder(builder: ((context, setState) {
                 if (controller1.selection.isValid) {
-                  return _buildListView(controller1, true);
+                  return buildListView(controller1, true);
                 } else {
-                  return _buildListView(controller2, false);
+                  return buildListView(controller2, false);
                 }
               })),
             ),

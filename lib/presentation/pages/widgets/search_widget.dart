@@ -1,56 +1,234 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:EVFI/presentation/resources/values_manager.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../resources/routes_manager.dart';
+import '../screens/homePage/home.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import '../../resources/color_manager.dart';
+import '../models/auto_search.dart';
 import '../screens/homePage/search_page.dart';
 
-class SearchWidget extends StatelessWidget {
-  const SearchWidget();
+class SearchWidget extends StatefulWidget {
+  final Function(Position) onLocationSelected;
+
+  const SearchWidget(this.onLocationSelected);
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(40),
-      onTap: () {
-        // Navigator.pushNamed(
-        //     context, Routes.searchBarRoute);
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const SearchPage()));
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.072,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.symmetric(
-          horizontal: 25,
-        ),
-        decoration: BoxDecoration(
-          color: ColorManager.appBlack,
-          border: Border.all(
-            color: Colors.grey,
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              Icons.bolt_outlined,
-              color: ColorManager.primary,
-              size: 30,
+  State<SearchWidget> createState() => _SearchWidgetState();
+}
+
+class _SearchWidgetState extends State<SearchWidget> {
+  FocusNode _textfieldFocus = FocusNode();
+  List<OSMdata> _options = <OSMdata>[];
+
+  Widget buildTextFormField(
+    TextEditingController controller,
+    IconData icon,
+    Color color,
+    FocusNode textFieldFocusNode,
+  ) {
+    final width = MediaQuery.of(context).size.width;
+    final hint = "search chargers";
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+      child: TextFormField(
+          controller: controller,
+          focusNode: textFieldFocusNode,
+          style: TextStyle(color: ColorManager.appBlack),
+          keyboardType: TextInputType.streetAddress,
+          decoration: InputDecoration(
+            filled: true, //<-- SEE HERE
+            fillColor: Colors.white,
+            contentPadding: const EdgeInsets.all(10),
+            prefixIcon: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
+                  child: Icon(
+                    icon,
+                    color: color,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s12),
+                  child: Text(
+                    hint,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 10,
-            ),
-            const Text(
-              '  Search EvFi...',
-              style: TextStyle(
-                color: Colors.white70,
+            suffixIcon: controller.text.isEmpty
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () {},
+                        icon:
+                            Icon(Icons.search, color: ColorManager.darkPrimary),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.searchPageRoute);
+                        },
+                        icon: Icon(Icons.directions_outlined,
+                            color: ColorManager.darkPrimary),
+                      ),
+                    ],
+                  )
+                : IconButton(
+                    onPressed: () {
+                      controller.clear();
+                      setState(() {
+                        suggestions = false;
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.close,
+                    ),
+                  ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: ColorManager.primary,
+                width: 2.0,
               ),
+              borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
             ),
-            const Spacer(),
-            Icon(Icons.search_rounded, color: ColorManager.primary, size: 25)
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide.none,
+                borderRadius: BorderRadius.all(
+                    Radius.circular(AppSize.s20 + AppSize.s16))),
+          ),
+          textInputAction: TextInputAction.done,
+          onChanged: (String value) async {
+            var client = http.Client();
+            try {
+              String url =
+                  'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1&accept-language=en';
+              var response = await client.post(Uri.parse(url));
+              var decodedResponse =
+                  jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+              _options = decodedResponse
+                  .map((e) => OSMdata(
+                      displayname: e['display_name'],
+                      latitude: double.parse(e['lat']),
+                      longitude: double.parse(e['lon'])))
+                  .toList();
+              if (controller.text.isNotEmpty) {
+                print("------------------");
+                setState(() {
+                  suggestions = true;
+                });
+              } else if (controller.text.isEmpty) {
+                setState(() {
+                  suggestions = false;
+                });
+              }
+            } on Exception catch (e) {
+              print(e);
+            } finally {
+              client.close();
+            }
+          }),
+    );
+  }
+
+  Widget buildListView(TextEditingController controller, bool val,
+      FocusNode textFieldFocusNode) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: width * 0.04),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(AppSize.s12))),
+      height: height * 0.30,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemBuilder: (context, index) => Column(
+          children: [
+            ListTile(
+                leading: CircleAvatar(
+                    backgroundColor: ColorManager.appBlack.withOpacity(0.16),
+                    child: const Icon(
+                      Icons.location_on,
+                      color: Colors.black,
+                    )),
+                title: Text(_options[index].displayname,
+                    style: TextStyle(color: ColorManager.appBlack)),
+                trailing: const Icon(Icons.north_west, color: Colors.grey),
+                onTap: () {
+                  print(_options[index].displayname);
+                  print(
+                    LatLng(_options[index].latitude, _options[index].longitude),
+                  );
+                  setState(() {
+                    controller.text = _options[index].displayname;
+                  });
+                  Position placePos = Position(
+                      latitude: _options[index].latitude,
+                      longitude: _options[index].longitude,
+                      timestamp: DateTime.now(),
+                      accuracy: 0,
+                      altitude: 0,
+                      speed: 0,
+                      heading: 0,
+                      speedAccuracy: 0,
+                      floor: 0);
+                  widget.onLocationSelected(placePos);
+                  _options.clear();
+
+                  textFieldFocusNode.unfocus();
+                  setState(() {
+                    suggestions = false;
+                  });
+                }),
+            const Divider(
+              thickness: 1.250,
+            ),
           ],
         ),
+        itemCount: _options.length > 4 ? 4 : _options.length,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _textfieldFocus.dispose();
+
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  bool suggestions = false;
+  final textFieldcontroller = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    final suggestionController = SuggestionsBoxController();
+
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    return Container(
+      height: height * 0.36,
+      width: width * 1.0,
+      padding: EdgeInsets.symmetric(horizontal: width * 0.01),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          buildTextFormField(
+            textFieldcontroller,
+            (Icons.bolt),
+            Colors.amber,
+            _textfieldFocus,
+          ),
+          if (suggestions)
+            buildListView(textFieldcontroller, true, _textfieldFocus)
+        ],
       ),
     );
   }
