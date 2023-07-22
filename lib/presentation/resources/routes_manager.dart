@@ -2,7 +2,7 @@ import 'package:EVFI/presentation/register/UserChargingRegister.dart';
 import 'package:flutter/material.dart';
 
 import '../forgot_password/forgot_password.dart';
-import '../login/verifyotp.dart';
+// import '../login/verifyotp.dart';
 import '../login/login.dart';
 import '../main/main_view.dart';
 import '../onboarding/onboarding.dart';
@@ -47,8 +47,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
-      case Routes.verifyOtpRoute:
-        return MaterialPageRoute(builder: (_) => const verify_otp());
+      // case Routes.verifyOtpRoute:
+      //   return MaterialPageRoute(builder: (_) => const verify_otp());
       case Routes.myChargingRoute:
         return MaterialPageRoute(builder: (_) => const MyChargingScreen());
       case Routes.UserChargingRegister:

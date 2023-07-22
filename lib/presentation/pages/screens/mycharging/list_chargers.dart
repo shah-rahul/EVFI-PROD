@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
+import '../../../Data_storage/UserData.dart';
+import '../../../Data_storage/UserDataProvider.dart';
 import '../../../resources/color_manager.dart';
 import '../../models/my_charging.dart';
 import 'chargers_data.dart';
@@ -282,6 +285,56 @@ class _ListChargerState extends State<ListCharger> {
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    void StoreStationName(String stationName) {
+      UserData userData = userDataProvider.userData;
+      userData.stationName = stationName;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAddress(String aadress) {
+      UserData userData = userDataProvider.userData;
+      userData.address = aadress;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAadhar(String aadhar) {
+      UserData userData = userDataProvider.userData;
+      userData.aadharNumber = aadhar;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreHostname(String hostname) {
+      UserData userData = userDataProvider.userData;
+      userData.hostName = hostname;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreChargerType(String chargerType) {
+      UserData userData = userDataProvider.userData;
+      userData.chargerType = chargerType;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StorePrice(String price) {
+      UserData userData = userDataProvider.userData;
+      userData.price = price;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAmenities(String amenities) {
+      UserData userData = userDataProvider.userData;
+      userData.amenities = amenities;
+
+      userDataProvider.setUserData(userData);
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: const BackButton(
@@ -339,6 +392,9 @@ class _ListChargerState extends State<ListCharger> {
                                   StationName = newValue!;
                                 });
                               },
+                              onChanged: (value) {
+                                StoreStationName(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -366,6 +422,9 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   StationAddress = newValue!;
                                 });
+                              },
+                              onChanged: (value) {
+                                StoreAddress(value);
                               },
                             ),
                             const SizedBox(
@@ -430,6 +489,9 @@ class _ListChargerState extends State<ListCharger> {
                                   hostNames = newValue!;
                                 });
                               },
+                              onChanged: (value) {
+                                StoreAadhar(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -463,6 +525,9 @@ class _ListChargerState extends State<ListCharger> {
                                   amount = double.parse(newValue!);
                                 });
                               },
+                              onChanged: (value) {
+                                StoreChargerType(value);
+                              },
                             ),
                             const SizedBox(height: 15),
                             _makeTitle(title: 'Amenities'),
@@ -488,6 +553,9 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   amenities = newValue!;
                                 });
+                              },
+                              onChanged: (value) {
+                                StoreAmenities(value);
                               },
                             ),
                             const SizedBox(width: 15),

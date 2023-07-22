@@ -4,7 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Data_storage/UserData.dart';
+import '../Data_storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -28,10 +32,19 @@ class VerificationCodePage extends StatefulWidget {
 
 class _VerificationCodePageState extends State<VerificationCodePage> {
   final TextEditingController _codeController = TextEditingController();
-
-  @override
+  final databaseRef = FirebaseDatabase.instance.ref('UserChargingRegister');
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
+
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+
+    void StorePhoneNumber(String phoneNumber) {
+      UserData userData = userDataProvider.userData;
+      userData.phoneNumber = phoneNumber;
+
+      userDataProvider.setUserData(userData);
+    }
+
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -121,6 +134,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       ),
                       onPressed: () async {
                         //  Verify code
+                        // StorePhoneNumber(widget.phoneNumber);
+
                         final String code = _codeController.text.trim();
                         PhoneAuthCredential credential =
                             PhoneAuthProvider.credential(
@@ -132,7 +147,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               .instance
                               .signInWithCredential(credential);
                           //  Handle successful authentication
-
+                          // await userDataProvider.saveUserData();
+                          // UserData? userData = userDataProvider.userData;
+                          // userDataProvider.setUserData(userData);
                           var sharedPref =
                               await SharedPreferences.getInstance();
                           sharedPref.setBool(SplashViewState.keyLogin, true);
@@ -149,7 +166,10 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               ),
                             );
                           } else {
-                            storePhoneNumber(widget.phoneNumber);
+                            StorePhoneNumber(widget.phoneNumber);
+                            await userDataProvider.saveUserData();
+                            UserData? userData = userDataProvider.userData;
+                            userDataProvider.setUserData(userData);
                             Navigator.push(
                               context,
                               PageTransition(
@@ -215,20 +235,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
     );
   }
 
-//function to store registered number in collection in firestore
-  void storePhoneNumber(String phoneNumber) {
-    FirebaseFirestore.instance
-        .collection('Registered number')
-        .add({'phoneNo': phoneNumber}).then((value) {
-      // print('Phone number stored successfully!');
-    }).catchError((error) {
-      // print('Error storing phone number: $error');
-    });
-  }
-
   Future<bool> checkNumberIsRegistered({required String number}) async {
     final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('Registered number');
+    final collectionRef = firestore.collection('UserChargingRegister');
     bool isNumberRegistered = false;
     // storePhoneNumber(number);
 
@@ -236,7 +245,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       final querySnapshot = await collectionRef.get();
 
       for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['phoneNo'].toString();
+        final phoneNumber = doc.data()['Phone Number'].toString();
 
         if (number == phoneNumber) {
           isNumberRegistered = true;
