@@ -1,10 +1,8 @@
 import 'package:EVFI/presentation/main/main_view.dart';
-import 'package:EVFI/presentation/register/UserChargingRegister.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Data_storage/UserDataProvider.dart';
-import './vehicleform.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
@@ -40,19 +38,15 @@ class _RegisterViewState extends State<RegisterView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
-    // Example: Storing user's name and phone number using provider
+    // Example: Storing user's name  using provider
 
-    void registerUser(String name, String phoneNumber) {
-      UserData userData = UserData(
-        name: name,
-        phoneNumber: phoneNumber,
-        vehicleManufacturer: "  ",
-        vehicleNumber: "  ",
-        chargingRequirements: "  ",
-      );
+
+    void StoreName(String name) {
+      UserData userData = userDataProvider.userData;
+      userData.name = name;
+        
       userDataProvider.setUserData(userData);
     }
-
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -142,15 +136,16 @@ class _RegisterViewState extends State<RegisterView> {
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
                             child: TextField(
-                              onChanged: (value) {
+                              onChanged: (value) async {
                                 // Store the entered name in the provider
 
-                                registerUser(value,
-                                    userDataProvider.userData.phoneNumber);
+                              //  StoreName(value);
+                                    
                                 // // Store the entered phone number in the provider
                                 // registerUser(userDataProvider.userData.name,
                                 //     widget.phoneNumber);
                               },
+                              
                               style: TextStyle(color: ColorManager.darkGrey),
                               //controller: nameController,
                               decoration: InputDecoration(
@@ -173,7 +168,8 @@ class _RegisterViewState extends State<RegisterView> {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  await userDataProvider.saveUserData();
+                                  
+                                
                                   Navigator.pushNamed(
                                       context, Routes.loginRoute);
                                 },
@@ -189,7 +185,10 @@ class _RegisterViewState extends State<RegisterView> {
                                 width: AppSize.s12,
                               ),
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                     await userDataProvider.saveUserData();
+                            // UserData? userData = userDataProvider.userData;
+                            // userDataProvider.setUserData(userData);
                                   Navigator.push(
                                     context,
                                     PageTransition(

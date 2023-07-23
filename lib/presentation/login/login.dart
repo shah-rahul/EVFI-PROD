@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Data_storage/UserData.dart';
@@ -19,21 +20,14 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> {
   final phoneController = TextEditingController();
+ 
+  @override
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
-    void registerUser(String name, String phoneNumber) {
-      UserData userData = UserData(
-        name: name,
-        phoneNumber: phoneNumber,
-        vehicleManufacturer: "",
-        vehicleNumber: "",
-        chargingRequirements: "",
-      );
-      userDataProvider.setUserData(userData);
-    }
+  
 
     phoneController.selection = TextSelection.fromPosition(
       TextPosition(
@@ -94,13 +88,13 @@ class LoginViewState extends State<LoginView> {
                     ),
                     TextFormField(
                       style: TextStyle(color: ColorManager.darkGrey),
-                      controller: phoneController,
+                      //controller: phoneController,
                       onChanged: (value) {
+                        // Store the entered phone number in the provider
+                       // StorePhoneNumber(value);
                         setState(() {
                           phoneController.text = value;
                         });
-                        // Store the entered phone number in the provider
-                        registerUser('', value);
                       },
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -123,6 +117,9 @@ class LoginViewState extends State<LoginView> {
                         border: InputBorder.none,
                       ),
                       keyboardType: TextInputType.phone,
+                      //  onChanged: (Value) {
+                      //     StorePhoneNumber(Value);
+                      //   },
                     ),
                     SizedBox(height: heightScreen * 0.05),
                     ElevatedButton(
@@ -131,6 +128,7 @@ class LoginViewState extends State<LoginView> {
                           shadowColor: Colors.white,
                           elevation: 6),
                       onPressed: () async {
+                        
                         //  mobile number verification logic here
                         final String phoneNumber = phoneController.text.trim();
                         //  getPhoneNumber(phoneNumber);
