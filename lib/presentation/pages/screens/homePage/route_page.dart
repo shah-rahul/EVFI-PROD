@@ -29,7 +29,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   late GoogleMapController _googleMapController;
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
   late Uint8List stationMarker;
   final CollectionReference<Map<String, dynamic>> collectionReference =
       FirebaseFirestore.instance.collection('Chargers');
@@ -199,7 +199,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
       field: field,
       geopointFrom: geopointFrom,
     );
-
+    Set<Marker> _newMarkers = {};
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
@@ -214,7 +214,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
 
         print(geoPoint.latitude);
-        _markers.add(Marker(
+        _newMarkers.add(Marker(
             markerId: MarkerId(geohash),
             onTap: () {
               _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -236,8 +236,14 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
             icon: BitmapDescriptor.fromBytes(stationMarker)));
       }
-      setState(() {});
+      setState(() {
+        updateMarkers(_newMarkers);
+      });
     });
+  }
+
+  void updateMarkers(Set<Marker> newMarkers) {
+    _markers = {..._markers, ...newMarkers};
   }
 
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {

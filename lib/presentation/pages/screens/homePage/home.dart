@@ -64,7 +64,7 @@ class HomeState extends State<Home> {
       _currentPosition = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       if (_mapController != null) {
-        _updateCameraPosition();
+        updateCameraPosition(_currentPosition);
       }
     } catch (e) {
       print('Error getting current location: $e');
@@ -156,7 +156,27 @@ class HomeState extends State<Home> {
         .asUint8List();
   }
 
-  void _updateCameraPosition() async {
+  void updatePlaceCamera(Position currentPosition) {
+    _markers.clear();
+    if (_mapController != null) {
+      setIntialMarkers(
+          4, LatLng(currentPosition.latitude, currentPosition.longitude));
+      setState(() {
+        _mapController.animateCamera(CameraUpdate.newCameraPosition(
+            CameraPosition(
+                target:
+                    LatLng(currentPosition.latitude, currentPosition.longitude),
+                zoom: 10)));
+      });
+    }
+
+    // _kGooglePlex = CameraPosition(
+    //   target: LatLng(currentPosition.latitude,currentPosition.longitude),
+    //   zoom: 16.60,
+    // );
+  }
+
+  void updateCameraPosition(Position _currentPosition) async {
     final Uint8List markerIcon =
         await getBytesFromAsset(ImageAssets.blackMarker);
     if (_currentPosition != null) {
@@ -167,32 +187,36 @@ class HomeState extends State<Home> {
         target: LatLng(_currentPosition.latitude, _currentPosition.longitude),
         zoom: 16.60,
       );
+      updateMarkers(markerIcon);
       // BitmapDescriptor currentLocationMarker =
       //     await BitmapDescriptor.fromAssetImage(
       //         const ImageConfiguration(
       //             devicePixelRatio: 1.5), // size: Size(25, 25)),
       //         ImageAssets.blackMarker);
-      setState(() {
-        _markers.add(Marker(
-            markerId: const MarkerId('Home'),
-            infoWindow: InfoWindow(
-              title: "You are here!",
-              snippet:
-                  '${_currentPosition.latitude},${_currentPosition.longitude}',
-            ),
-            position: LatLng(_currentPosition.latitude ?? 0.0,
-                _currentPosition.longitude ?? 0.0),
-            icon: BitmapDescriptor.fromBytes(markerIcon)));
-
-        _mapController
-            .animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
-      });
     }
+  }
+
+  void updateMarkers(Uint8List markerIcon) {
+    setState(() {
+      _markers.add(Marker(
+          markerId: const MarkerId('Home'),
+          infoWindow: InfoWindow(
+            title: "You are here!",
+            snippet:
+                '${_currentPosition.latitude},${_currentPosition.longitude}',
+          ),
+          position: LatLng(_currentPosition.latitude ?? 0.0,
+              _currentPosition.longitude ?? 0.0),
+          icon: BitmapDescriptor.fromBytes(markerIcon)));
+
+      _mapController
+          .animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
+    });
   }
 
   Future<DataSnapshot> getData() async {
     await Firebase.initializeApp();
-    return await FirebaseDatabase.instance.ref().child('Markers').get();
+    return await FirebaseDatabase.instance.ref().child('Chargers').get();
   }
 
   // Location currentLocation = Location();
@@ -250,7 +274,7 @@ class HomeState extends State<Home> {
                       initialCameraPosition: _kGooglePlex,
                       onMapCreated: (GoogleMapController controller) {
                         _mapController = controller;
-                        _updateCameraPosition();
+                        updateCameraPosition(_currentPosition);
                         _controller.complete(controller);
                       },
                       markers: Set<Marker>.of(_markers),
@@ -262,7 +286,7 @@ class HomeState extends State<Home> {
                     Padding(
                       padding: EdgeInsets.only(
                           top: MediaQuery.of(context).size.height * 0.065),
-                      child: const SearchWidget(),
+                      child: SearchWidget(updatePlaceCamera),
                     ),
                   ],
                 ),
