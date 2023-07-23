@@ -138,9 +138,13 @@ class _RegisterViewState extends State<RegisterView> {
                             child: TextField(
                               onChanged: (value) async {
                                 // Store the entered name in the provider
-
-                              //  StoreName(value);
-                                    
+                                   setState(() {
+                          nameController.text = value;
+                        });
+                               
+                            //          await userDataProvider.saveUserData();
+                            // UserData? userData = userDataProvider.userData;
+                            // userDataProvider.setUserData(userData);
                                 // // Store the entered phone number in the provider
                                 // registerUser(userDataProvider.userData.name,
                                 //     widget.phoneNumber);
@@ -159,6 +163,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   labelStyle:
                                       const TextStyle(fontSize: AppSize.s14)),
                             ),
+                             
                           ),
                           const SizedBox(
                             height: 20,
@@ -184,11 +189,14 @@ class _RegisterViewState extends State<RegisterView> {
                               SizedBox(
                                 width: AppSize.s12,
                               ),
+                              
                               ElevatedButton(
+                                
                                 onPressed: () async {
+                                  StoreName(nameController.text);
                                      await userDataProvider.saveUserData();
-                            // UserData? userData = userDataProvider.userData;
-                            // userDataProvider.setUserData(userData);
+                            UserData? userData = userDataProvider.userData;
+                            userDataProvider.setUserData(userData);
                                   Navigator.push(
                                     context,
                                     PageTransition(
