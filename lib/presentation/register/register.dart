@@ -40,13 +40,13 @@ class _RegisterViewState extends State<RegisterView> {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     // Example: Storing user's name  using provider
 
-
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;
       userData.name = name;
-        
+      userData.level1 = true;
       userDataProvider.setUserData(userData);
     }
+
     return Container(
       decoration: new BoxDecoration(
           image: new DecorationImage(
@@ -138,18 +138,18 @@ class _RegisterViewState extends State<RegisterView> {
                             child: TextField(
                               onChanged: (value) async {
                                 // Store the entered name in the provider
-                                   setState(() {
-                          nameController.text = value;
-                        });
-                               
-                            //          await userDataProvider.saveUserData();
-                            // UserData? userData = userDataProvider.userData;
-                            // userDataProvider.setUserData(userData);
+                                setState(() {
+                                  nameController.text = value;
+                                });
+
+                                //          await userDataProvider.saveUserData();
+                                // UserData? userData = userDataProvider.userData;
+                                // userDataProvider.setUserData(userData);
                                 // // Store the entered phone number in the provider
                                 // registerUser(userDataProvider.userData.name,
                                 //     widget.phoneNumber);
                               },
-                              
+
                               style: TextStyle(color: ColorManager.darkGrey),
                               //controller: nameController,
                               decoration: InputDecoration(
@@ -163,7 +163,6 @@ class _RegisterViewState extends State<RegisterView> {
                                   labelStyle:
                                       const TextStyle(fontSize: AppSize.s14)),
                             ),
-                             
                           ),
                           const SizedBox(
                             height: 20,
@@ -173,8 +172,6 @@ class _RegisterViewState extends State<RegisterView> {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  
-                                
                                   Navigator.pushNamed(
                                       context, Routes.loginRoute);
                                 },
@@ -189,14 +186,13 @@ class _RegisterViewState extends State<RegisterView> {
                               SizedBox(
                                 width: AppSize.s12,
                               ),
-                              
                               ElevatedButton(
-                                
                                 onPressed: () async {
                                   StoreName(nameController.text);
-                                     await userDataProvider.saveUserData();
-                            UserData? userData = userDataProvider.userData;
-                            userDataProvider.setUserData(userData);
+                                  await userDataProvider.saveUserData();
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  userDataProvider.setUserData(userData);
                                   Navigator.push(
                                     context,
                                     PageTransition(

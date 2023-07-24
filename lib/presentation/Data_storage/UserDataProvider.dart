@@ -54,9 +54,9 @@ class UserDataProvider extends ChangeNotifier {
       });
       
       // Log the ID of the newly created document
-      print('User document ID: ${documentRef.id}');
+    //  print('User document ID: ${documentRef.id}');
     } catch (e) {
-      print('Error saving user data: $e');
+     // print('Error saving user data: $e');
     }
   }
 }
