@@ -324,7 +324,7 @@ class _ListChargerState extends State<ListCharger> {
     void StorePrice(String price) {
       UserData userData = userDataProvider.userData;
       userData.price = price;
-
+      userData.level3 = true;
       userDataProvider.setUserData(userData);
     }
 
@@ -461,6 +461,9 @@ class _ListChargerState extends State<ListCharger> {
                               onSaved: (newValue) {
                                 aadharNumber = newValue!;
                               },
+                              onChanged: (value) {
+                                StoreAadhar(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -490,7 +493,7 @@ class _ListChargerState extends State<ListCharger> {
                                 });
                               },
                               onChanged: (value) {
-                                StoreAadhar(value);
+                                StoreHostname(value);
                               },
                             ),
                             const SizedBox(
@@ -498,6 +501,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Charger Type'),
                             _makeChargerOptions(),
+
                             const SizedBox(
                               height: 15,
                             ),
@@ -526,7 +530,7 @@ class _ListChargerState extends State<ListCharger> {
                                 });
                               },
                               onChanged: (value) {
-                                StoreChargerType(value);
+                                StorePrice(value);
                               },
                             ),
                             const SizedBox(height: 15),
@@ -638,7 +642,14 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: _submitForm,
+                                // onPressed:
+                                onPressed: () async {
+                                  _submitForm;
+                                  await userDataProvider.saveUserData();
+                                  // UserData? userData =
+                                  //  userDataProvider.userData;
+                                  //userDataProvider.setUserData(userData);
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         ColorManager.primary.withOpacity(0.7),

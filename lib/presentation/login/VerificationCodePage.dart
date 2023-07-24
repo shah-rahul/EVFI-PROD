@@ -118,6 +118,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                                 color: ColorManager.darkGrey),
                           ),
                           hintText: 'Verification code',
+                          
                         ),
                         keyboardType: TextInputType.number,
                       ),
@@ -167,9 +168,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                             );
                           } else {
                             StorePhoneNumber(widget.phoneNumber);
-                            await userDataProvider.saveUserData();
-                            UserData? userData = userDataProvider.userData;
-                            userDataProvider.setUserData(userData);
+                            // await userDataProvider.saveUserData();
+                            // UserData? userData = userDataProvider.userData;
+                            // userDataProvider.setUserData(userData);
                             Navigator.push(
                               context,
                               PageTransition(

@@ -1,9 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../Data_storage/UserData.dart';
-import '../Data_storage/UserDataProvider.dart';
 import '../resources/font_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -25,7 +21,6 @@ class LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
-    final userDataProvider = Provider.of<UserDataProvider>(context);
 
   
 
@@ -102,7 +97,7 @@ class LoginViewState extends State<LoginView> {
                                 width: AppSize.s4 - 3,
                                 color: ColorManager.darkGrey)),
                         labelText: 'Phone Number',
-                        suffixIcon: phoneController.text.length > 11
+                        suffixIcon: phoneController.text.length > 12
                             ? Container(
                                 height: 20,
                                 width: 20,

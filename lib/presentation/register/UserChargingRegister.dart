@@ -20,7 +20,6 @@ class UserChargingRegister extends StatefulWidget {
 }
 
 class _UserChargingRegisterState extends State<UserChargingRegister> {
-
   File? _idProof;
   final databaseRef = FirebaseDatabase.instance.ref('UserChargingRegister');
   final picker = ImagePicker();
@@ -43,6 +42,7 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
       userData.vehicleManufacturer = manufacturer;
       userData.vehicleNumber = number;
       userData.chargingRequirements = Requirements;
+      userData.level2 = true;
       userDataProvider.setUserData(userData);
     }
 
@@ -120,9 +120,9 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             ElevatedButton(
               onPressed: () async {
                 await userDataProvider.saveUserData();
-
-                UserData? userData = userDataProvider.userData;
-                userDataProvider.setUserData(userData);
+                // await userDataProvider.saveUserData();
+                // UserData? userData = userDataProvider.userData;
+                // userDataProvider.setUserData(userData);
 
                 Navigator.push(
                   context,
