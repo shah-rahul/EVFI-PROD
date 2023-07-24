@@ -44,22 +44,12 @@ class _SearchWidgetState extends State<SearchWidget> {
             filled: true, //<-- SEE HERE
             fillColor: Colors.white,
             contentPadding: const EdgeInsets.all(10),
-            prefixIcon: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
-                  child: Icon(
-                    icon,
-                    color: color,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s12),
-                  child: Text(
-                    hint,
-                  ),
-                ),
-              ],
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
+              child: Icon(
+                icon,
+                color: color,
+              ),
             ),
             suffixIcon: controller.text.isEmpty
                 ? Row(
