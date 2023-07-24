@@ -41,6 +41,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           style: TextStyle(color: ColorManager.appBlack),
           keyboardType: TextInputType.streetAddress,
           decoration: InputDecoration(
+            labelText: hint,
             filled: true, //<-- SEE HERE
             fillColor: Colors.white,
             contentPadding: const EdgeInsets.all(10),
@@ -52,22 +53,14 @@ class _SearchWidgetState extends State<SearchWidget> {
               ),
             ),
             suffixIcon: controller.text.isEmpty
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon:
-                            Icon(Icons.search, color: ColorManager.darkPrimary),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.searchPageRoute);
-                        },
-                        icon: Icon(Icons.directions_outlined,
-                            color: ColorManager.darkPrimary),
-                      ),
-                    ],
+                ? IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.searchPageRoute);
+                    },
+                    icon: Icon(
+                      Icons.directions_outlined,
+                      color: ColorManager.darkPrimary,
+                    ),
                   )
                 : IconButton(
                     onPressed: () {
@@ -85,7 +78,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                 color: ColorManager.primary,
                 width: 2.0,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s16)),
+              borderRadius:
+                  BorderRadius.all(Radius.circular(AppSize.s16 + AppSize.s20)),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
