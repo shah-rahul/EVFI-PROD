@@ -22,6 +22,7 @@ class OSMdata {
   }
 
   @override
+  // ignore: sdk_version_since
   int get hashCode => Object.hash(displayname, latitude, longitude);
 }
 

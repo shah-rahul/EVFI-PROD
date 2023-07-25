@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
+
 import 'dart:io';
 import 'package:EVFI/presentation/login/login.dart';
 import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';

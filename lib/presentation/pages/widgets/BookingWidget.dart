@@ -1,12 +1,13 @@
+// ignore_for_file: prefer_final_fields, file_names, use_key_in_widget_constructors, sort_child_properties_last, prefer_const_constructors
+
 import 'package:EVFI/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import '../models/Booking.dart';
-import '../screens/mybookings/BookingsScreen.dart';
 import 'package:intl/intl.dart';
 import '../../resources/strings_manager.dart';
 import '../../resources/color_manager.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+// ignore: must_be_immutable
 class BookingWidget extends StatelessWidget {
   Booking bookingRequest;
   bool _currentSelected;

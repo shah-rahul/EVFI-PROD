@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, prefer_final_fields, file_names, sized_box_for_whitespace, non_constant_identifier_names
+
 import 'dart:async';
 
 import 'package:EVFI/presentation/pages/screens/mycharging/list_chargers.dart';

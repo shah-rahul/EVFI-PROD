@@ -25,7 +25,9 @@ class GeoPoint {
 }
 
 GeoPoint decodeGeohash(String geohash) {
+  // ignore: non_constant_identifier_names, prefer_const_declarations
   final int BITS_PER_CHAR = 5;
+  // ignore: prefer_const_declarations, non_constant_identifier_names
   final String BASE32 = '0123456789bcdefghjkmnpqrstuvwxyz';
 
   double minLatitude = -90.0;
@@ -34,7 +36,9 @@ GeoPoint decodeGeohash(String geohash) {
   double maxLongitude = 180.0;
 
   bool isEven = true;
+  // ignore: unused_local_variable
   double latitudeError = 90.0;
+  // ignore: unused_local_variable
   double longitudeError = 180.0;
 
   for (int i = 0; i < geohash.length; i++) {

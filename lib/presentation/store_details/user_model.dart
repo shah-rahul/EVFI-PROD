@@ -1,4 +1,6 @@
 //create a User Model
+// ignore_for_file: non_constant_identifier_names
+
 class UserModel {
   final String? id;
   final String fullName;

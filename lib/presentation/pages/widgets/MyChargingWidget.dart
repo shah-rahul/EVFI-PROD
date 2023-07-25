@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, use_key_in_widget_constructors, file_names, sort_child_properties_last
+
 import 'package:EVFI/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import '../models/my_charging.dart';

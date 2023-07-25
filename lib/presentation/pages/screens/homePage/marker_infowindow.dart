@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
 import 'package:EVFI/presentation/resources/color_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -237,7 +239,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 30,
                     width: 95,
                     child: ElevatedButton(
@@ -271,7 +273,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(height: 150, alignment: Alignment.center , child: Center(child: CircularProgressIndicator()));
+                    return Container(height: 150, alignment: Alignment.center , child: const Center(child: CircularProgressIndicator()));
                   } else if (snapshot.hasError) {
                     return const Text('Error occurred');
                   } else {
@@ -401,7 +403,7 @@ Widget bookingSection(
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               height: 35,
               width: 200,
               child: ElevatedButton(

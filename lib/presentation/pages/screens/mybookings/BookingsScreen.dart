@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, file_names, prefer_const_constructors, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import '../../models/Booking.dart';
 import 'dart:async';

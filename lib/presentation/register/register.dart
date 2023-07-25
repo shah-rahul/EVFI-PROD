@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, non_constant_identifier_names, avoid_unnecessary_containers, use_build_context_synchronously
+
 import 'package:EVFI/presentation/main/main_view.dart';
 import 'package:EVFI/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
@@ -48,9 +50,9 @@ class _RegisterViewState extends State<RegisterView> {
     }
 
     return Container(
-      decoration: new BoxDecoration(
-          image: new DecorationImage(
-        image: new AssetImage(ImageAssets.loginBackground),
+      decoration:  const BoxDecoration(
+          image:  DecorationImage(
+        image:  AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(
@@ -183,7 +185,7 @@ class _RegisterViewState extends State<RegisterView> {
                                       fontSize: AppSize.s16),
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: AppSize.s12,
                               ),
                               ElevatedButton(
