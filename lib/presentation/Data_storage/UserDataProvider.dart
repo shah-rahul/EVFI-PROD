@@ -1,3 +1,9 @@
+// ignore: duplicate_ignore
+
+// ignore: file_names
+
+// ignore_for_file: file_names, duplicate_ignore
+
 import 'package:EVFI/presentation/Data_storage/UserData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -22,6 +28,7 @@ class UserDataProvider extends ChangeNotifier {
     amenities: '',
     level3: false,
   );
+  // ignore: prefer_final_fields
   CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('UserChargingRegister');
 
@@ -34,6 +41,7 @@ class UserDataProvider extends ChangeNotifier {
   Future<void> saveUserData() async {
     try {
       // Store user data in Firestore
+      // ignore: unused_local_variable
       DocumentReference documentRef = await _usersCollection.add({
         'Name': _userData.name,
         'Phone Number': _userData.phoneNumber,

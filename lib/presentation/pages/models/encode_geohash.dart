@@ -1,5 +1,7 @@
 //function to convert lat. & long. ==>> geohash string
 
+// ignore_for_file: prefer_const_declarations, non_constant_identifier_names
+
 /*
 this function takes input parameters:-
 (1)Latitude
@@ -21,12 +23,12 @@ print(geohash);
 import 'package:get/get.dart';
 
 String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
-  final int BITS_PER_CHAR = 5;
+  final int bitsPerChar = 5;
   final String BASE32 = '0123456789bcdefghjkmnpqrstuvwxyz';
-  final int MAX_PRECISION = 22;
+  final int maxPrecision = 22;
 
-  if (precision < 1 || precision > MAX_PRECISION) {
-    throw ArgumentError('Precision must be between 1 and $MAX_PRECISION');
+  if (precision < 1 || precision > maxPrecision) {
+    throw ArgumentError('Precision must be between 1 and $maxPrecision');
   }
 
   double minLatitude = -90.0;
@@ -44,7 +46,7 @@ String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
     if (isEven) {
       mid = (minLongitude + maxLongitude) / 2;
       if (longitude > mid) {
-        ch |= (1 << (BITS_PER_CHAR - bit - 1));
+        ch |= (1 << (bitsPerChar - bit - 1));
         minLongitude = mid;
       } else {
         maxLongitude = mid;
@@ -52,7 +54,7 @@ String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
     } else {
       mid = (minLatitude + maxLatitude) / 2;
       if (latitude > mid) {
-        ch |= (1 << (BITS_PER_CHAR - bit - 1));
+        ch |= (1 << (bitsPerChar - bit - 1));
         minLatitude = mid;
       } else {
         maxLatitude = mid;
@@ -60,7 +62,7 @@ String encodeGeohash(double latitude, double longitude, {int precision = 12}) {
     }
 
     isEven = !isEven;
-    if (bit < (BITS_PER_CHAR - 1)) {
+    if (bit < (bitsPerChar - 1)) {
       bit++;
     } else {
       geohash.write(BASE32[ch]);

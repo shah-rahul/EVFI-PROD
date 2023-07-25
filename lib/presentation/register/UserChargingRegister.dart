@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, unused_field, file_names, deprecated_member_use, non_constant_identifier_names, use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:EVFI/presentation/Data_storage/UserDataProvider.dart';
@@ -48,7 +50,7 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('User Charging Register'),
+        title: const Text('User Charging Register'),
         backgroundColor: Colors.black,
       ),
       body: Container(
@@ -58,8 +60,8 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
                 labelText: 'Vehicle Type',
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: OutlineInputBorder(
@@ -73,10 +75,10 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                 updateData(value, " ", " ");
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
                 labelText: 'Charging Requirements',
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: OutlineInputBorder(
@@ -91,10 +93,10 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                     userDataProvider.userData.vehicleManufacturer, " ", value);
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
                 labelText: 'Vehicle Number',
                 labelStyle: TextStyle(color: Colors.white),
                 enabledBorder: OutlineInputBorder(
@@ -109,14 +111,14 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                     userDataProvider.userData.chargingRequirements);
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: getImage,
-              child: Text('Select ID Proof Image',
-                  style: TextStyle(color: Colors.black)),
               style: ElevatedButton.styleFrom(primary: Colors.white),
+              child: const Text('Select ID Proof Image',
+                  style: TextStyle(color: Colors.black)),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () async {
                 await userDataProvider.saveUserData();
@@ -132,9 +134,9 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                       child: MainView()),
                 );
               },
-              child:
-                  Text('Save Details', style: TextStyle(color: Colors.black)),
               style: ElevatedButton.styleFrom(primary: Colors.white),
+              child:
+                  const Text('Save Details', style: TextStyle(color: Colors.black)),
             ),
           ],
         ),

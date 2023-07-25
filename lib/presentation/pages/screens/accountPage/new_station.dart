@@ -1,6 +1,7 @@
 //To add a new station in firestore
 
-import 'dart:ffi';
+
+// ignore_for_file: unused_field, non_constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _NewStationState extends State<NewStation> {
     if (!isValid) {
       return;
     }
-    print("****");
+   // print("****");
     _form.currentState!.save();
     String geohash = encodeGeohash(latitude!, longitude!, precision: 9);
     GeoPoint coordinate = GeoPoint(latitude!, longitude!);
@@ -131,8 +132,8 @@ class _NewStationState extends State<NewStation> {
                                 groupValue: type,
                                 onChanged: (typeCharger? value) {
                                   setState(() {
-                                    print("*************");
-                                    print(value);
+                                 //   print("*************");
+                               //     print(value);
                                     type = value;
                                   });
                                 },

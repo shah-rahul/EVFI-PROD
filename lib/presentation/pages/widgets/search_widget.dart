@@ -1,16 +1,15 @@
-import 'dart:async';
+// ignore_for_file: use_key_in_widget_constructors, prefer_final_fields, unused_local_variable, prefer_const_declarations, prefer_const_constructors, unused_catch_clause, unused_import
+
 import 'dart:convert';
 import 'package:EVFI/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../resources/routes_manager.dart';
-import '../screens/homePage/home.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../resources/color_manager.dart';
 import '../models/auto_search.dart';
-import '../screens/homePage/search_page.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function(Position) onLocationSelected;
@@ -44,22 +43,12 @@ class _SearchWidgetState extends State<SearchWidget> {
             filled: true, //<-- SEE HERE
             fillColor: Colors.white,
             contentPadding: const EdgeInsets.all(10),
-            prefixIcon: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
-                  child: Icon(
-                    icon,
-                    color: color,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSize.s12),
-                  child: Text(
-                    hint,
-                  ),
-                ),
-              ],
+            prefixIcon: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
+              child: Icon(
+                icon,
+                color: color,
+              ),
             ),
             suffixIcon: controller.text.isEmpty
                 ? Row(
@@ -118,7 +107,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       longitude: double.parse(e['lon'])))
                   .toList();
               if (controller.text.isNotEmpty) {
-                print("------------------");
+               // print("------------------");
                 setState(() {
                   suggestions = true;
                 });
@@ -128,7 +117,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 });
               }
             } on Exception catch (e) {
-              print(e);
+            //  print(e);
             } finally {
               client.close();
             }
@@ -161,10 +150,10 @@ class _SearchWidgetState extends State<SearchWidget> {
                     style: TextStyle(color: ColorManager.appBlack)),
                 trailing: const Icon(Icons.north_west, color: Colors.grey),
                 onTap: () {
-                  print(_options[index].displayname);
-                  print(
-                    LatLng(_options[index].latitude, _options[index].longitude),
-                  );
+                  // print(_options[index].displayname);
+                  // print(
+                  //   LatLng(_options[index].latitude, _options[index].longitude),
+                  // );
                   setState(() {
                     controller.text = _options[index].displayname;
                   });
@@ -200,7 +189,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   void dispose() {
     _textfieldFocus.dispose();
 
-    // TODO: implement dispose
+   
     super.dispose();
   }
 

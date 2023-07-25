@@ -1,7 +1,8 @@
+// ignore_for_file: unnecessary_nullable_for_final_variable_declarations, non_constant_identifier_names, use_build_context_synchronously, unused_element
+
 import 'dart:async';
 import 'dart:io';
 
-import 'package:EVFI/presentation/resources/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -189,7 +190,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+            //  print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -207,7 +208,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+           //   print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -225,7 +226,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+            //  print('Selected Charger: \t$val');
               _type = val;
             });
           },

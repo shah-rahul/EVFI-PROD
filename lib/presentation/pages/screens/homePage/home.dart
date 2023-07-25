@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -67,7 +69,7 @@ class HomeState extends State<Home> {
         updateCameraPosition(_currentPosition);
       }
     } catch (e) {
-      print('Error getting current location: $e');
+     // print('Error getting current location: $e');
     }
     // Ask permission from device
   }
@@ -205,8 +207,8 @@ class HomeState extends State<Home> {
             snippet:
                 '${_currentPosition.latitude},${_currentPosition.longitude}',
           ),
-          position: LatLng(_currentPosition.latitude ?? 0.0,
-              _currentPosition.longitude ?? 0.0),
+          position: LatLng(_currentPosition.latitude,
+              _currentPosition.longitude),
           icon: BitmapDescriptor.fromBytes(markerIcon)));
 
       _mapController

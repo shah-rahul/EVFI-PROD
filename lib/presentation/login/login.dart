@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../resources/font_manager.dart';
@@ -30,9 +32,9 @@ class LoginViewState extends State<LoginView> {
       ),
     );
     return Container(
-      decoration: new BoxDecoration(
-          image: new DecorationImage(
-        image: new AssetImage(ImageAssets.loginBackground),
+      decoration:  BoxDecoration(
+          image:  DecorationImage(
+        image:  AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(

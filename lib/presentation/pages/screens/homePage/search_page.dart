@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use, unused_catch_clause
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -51,10 +53,10 @@ class SearchPageState extends State<SearchPage> {
                 style: TextStyle(color: ColorManager.appBlack)),
             trailing: const Icon(Icons.north_west, color: Colors.grey),
             onTap: () {
-              print(_options[index].displayname);
-              print(
-                LatLng(_options[index].latitude, _options[index].longitude),
-              );
+              // print(_options[index].displayname);
+              // print(
+              //   LatLng(_options[index].latitude, _options[index].longitude),
+              // );
               setState(() {
                 controller.text = _options[index].displayname;
                 (val)
@@ -130,9 +132,9 @@ class SearchPageState extends State<SearchPage> {
                   //   },
                   // });
 
-                  print('Start and end locations stored successfully!');
+                 // print('Start and end locations stored successfully!');
                 } catch (error) {
-                  print('Failed to store start and end locations: $error');
+                 // print('Failed to store start and end locations: $error');
                 }
               }
 
@@ -212,7 +214,7 @@ class SearchPageState extends State<SearchPage> {
                   .toList();
               setState(() {});
             } on Exception catch (e) {
-              print(e);
+             // print(e);
             } finally {
               client.close();
             }

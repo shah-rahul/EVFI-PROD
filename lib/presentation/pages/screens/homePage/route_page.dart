@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_import, prefer_const_constructors_in_immutables, unused_catch_clause, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
+
 import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
@@ -174,7 +176,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
       setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
     } on Exception catch (e) {
-      print(e);
+    //  print(e);
     }
   }
 
@@ -213,7 +215,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
 
-        print(geoPoint.latitude);
+      //  print(geoPoint.latitude);
         _newMarkers.add(Marker(
             markerId: MarkerId(geohash),
             onTap: () {
@@ -247,7 +249,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {
-    print(polylineCoordinates.length);
+   // print(polylineCoordinates.length);
     for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
       setRouteMarker(4, polylineCoordinates[pos]);
     }
@@ -275,7 +277,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   setPolylines(List<LatLng> polylineCoordinates) async {
-    print(polylineCoordinates);
+  //  print(polylineCoordinates);
     PolylineId polylineId = const PolylineId('polyline to set route');
     Polyline polyline = Polyline(
       polylineId: polylineId,

@@ -1,3 +1,5 @@
+// ignore_for_file: sdk_version_since
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class OSMdata {
