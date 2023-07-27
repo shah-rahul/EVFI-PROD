@@ -17,6 +17,8 @@ class OnBoardingViewModel extends BaseViewModel
 
   int _currentIndex = 0;
 
+  OnBoardingViewModel() {}
+
   // inputs
   @override
   void dispose() {

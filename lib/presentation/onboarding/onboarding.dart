@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:EVFI/presentation/resources/font_manager.dart';
 import '../../domain/model.dart';
-import './onboarding_viewmodel.dart';
+import '../onboarding/onboarding_ViewModel.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
