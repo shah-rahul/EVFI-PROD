@@ -6,7 +6,6 @@ import '../forgot_password/forgot_password.dart';
 import '../login/login.dart';
 import '../main/main_view.dart';
 import '../onboarding/onboarding.dart';
-import '../register/UserChargingRegister.dart';
 import '../register/register.dart';
 import '../resources/strings_manager.dart';
 import '../splash/splash.dart';

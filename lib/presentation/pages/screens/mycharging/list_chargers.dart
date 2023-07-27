@@ -1,7 +1,8 @@
+// ignore_for_file: unnecessary_nullable_for_final_variable_declarations, non_constant_identifier_names, use_build_context_synchronously, unused_element
+
 import 'dart:async';
 import 'dart:io';
 
-import 'package:EVFI/presentation/resources/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -189,7 +190,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+            //  print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -207,7 +208,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+           //   print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -225,7 +226,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+            //  print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -324,7 +325,7 @@ class _ListChargerState extends State<ListCharger> {
     void StorePrice(String price) {
       UserData userData = userDataProvider.userData;
       userData.price = price;
-
+      userData.level3 = true;
       userDataProvider.setUserData(userData);
     }
 
@@ -461,6 +462,9 @@ class _ListChargerState extends State<ListCharger> {
                               onSaved: (newValue) {
                                 aadharNumber = newValue!;
                               },
+                              onChanged: (value) {
+                                StoreAadhar(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -490,7 +494,7 @@ class _ListChargerState extends State<ListCharger> {
                                 });
                               },
                               onChanged: (value) {
-                                StoreAadhar(value);
+                                StoreHostname(value);
                               },
                             ),
                             const SizedBox(
@@ -498,6 +502,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Charger Type'),
                             _makeChargerOptions(),
+
                             const SizedBox(
                               height: 15,
                             ),
@@ -526,7 +531,7 @@ class _ListChargerState extends State<ListCharger> {
                                 });
                               },
                               onChanged: (value) {
-                                StoreChargerType(value);
+                                StorePrice(value);
                               },
                             ),
                             const SizedBox(height: 15),
@@ -638,7 +643,14 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: _submitForm,
+                                // onPressed:
+                                onPressed: () async {
+                                  _submitForm;
+                                  await userDataProvider.saveUserData();
+                                  // UserData? userData =
+                                  //  userDataProvider.userData;
+                                  //userDataProvider.setUserData(userData);
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         ColorManager.primary.withOpacity(0.7),
