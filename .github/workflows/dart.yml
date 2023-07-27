@@ -38,8 +38,8 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: release-apk
-          path: build/app/outputs/apk/app-release.apk
+          name: evfi
+          path: build/app/outputs/flutter-apk/evfi.apk
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
