@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
 import 'package:EVFI/presentation/resources/color_manager.dart';
@@ -304,7 +304,8 @@ Widget bookingSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        const Row(
+         Row(
+          // ignore: prefer_const_literals_to_create_immutables
           children: [
             SizedBox(width: 14),
             Text('Select your Charger Type',

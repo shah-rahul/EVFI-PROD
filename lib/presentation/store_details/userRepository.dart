@@ -1,5 +1,5 @@
 // User Repository to perform Database Operations
-// ignore_for_file: non_constant_identifier_names, file_names, camel_case_types
+// ignore_for_file: non_constant_identifier_names, file_names, camel_case_types, body_might_complete_normally_catch_error
 
 import 'package:EVFI/presentation/store_details/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

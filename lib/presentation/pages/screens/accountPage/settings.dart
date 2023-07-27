@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
             const SizedBox(height: 30),
-            const Row(
+           Row(
               children: [
                 Icon(
                   Icons.person,
@@ -64,7 +64,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context, 'Privacy and security', Icons.arrow_forward_ios),
             //2nd section
             const SizedBox(height: 30),
-            const Row(
+           Row(
               children: [
                 Icon(
                   Icons.volume_down_outlined,
@@ -104,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             // ),
             //3rd section
             const SizedBox(height: 30),
-            const Row(
+             Row(
               children: [
                 Icon(
                   Icons.info_outline,
@@ -125,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               thickness: 2,
             ),
             const SizedBox(height: 10),
-            const Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(

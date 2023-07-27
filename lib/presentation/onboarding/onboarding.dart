@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unnecessary_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -137,8 +137,8 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ElevatedButton(
                           onPressed: () {
                             int ind = _viewModel.goNext();
-                            print("---------------");
-                            print(ind);
+                           // print("---------------");
+                          //  print(ind);
                             ind != sliderViewObject.currentIndex
                                 ? _pageController.animateToPage(ind,
                                     duration: const Duration(
