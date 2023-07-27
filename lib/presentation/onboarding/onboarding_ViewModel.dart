@@ -35,7 +35,7 @@ class OnBoardingViewModel extends BaseViewModel
     // if (nextIndex >= _list.length) {
     //   return 0; // infinite loop to go to first item inside the slider
     // }
-    return _currentIndex;
+    return _currentIndex + 1;
   }
 
   @override
