@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: release-apk
-          path: build/app/outputs/apk/release/app-release.apk
+          path: build/app/outputs/apk/app-release.apk
 
       # Uncomment this step to verify the use of 'dart format' on each commit.
       # - name: Verify formatting
