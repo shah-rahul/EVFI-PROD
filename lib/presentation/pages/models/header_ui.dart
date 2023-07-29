@@ -2,7 +2,7 @@
 
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:EVFI/presentation/resources/color_manager.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
 class HeaderUI extends StatelessWidget {

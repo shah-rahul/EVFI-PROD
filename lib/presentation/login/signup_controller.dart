@@ -1,4 +1,4 @@
-import 'package:EVFI/presentation/store_details/userRepository.dart';
+import 'package:evfi/presentation/store_details/userRepository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../main/main_view.dart';

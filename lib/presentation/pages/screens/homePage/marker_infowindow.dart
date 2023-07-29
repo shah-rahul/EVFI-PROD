@@ -1,7 +1,7 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
-import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
-import 'package:EVFI/presentation/resources/color_manager.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -304,7 +304,8 @@ Widget bookingSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        const Row(
+         Row(
+          // ignore: prefer_const_literals_to_create_immutables
           children: [
             SizedBox(width: 14),
             Text('Select your Charger Type',
@@ -372,11 +373,13 @@ Widget bookingSection(
             ),
           ],
         ),
+        Padding(padding: const EdgeInsets.all(8),
+        child:
         DropdownButtonFormField<String>(
           value: selectedTime,
           icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
           dropdownColor: Colors.amber.shade100,
-          padding: const EdgeInsets.all(8),
+          
           elevation: 4,
           decoration: const InputDecoration(
             labelStyle: TextStyle(
@@ -399,6 +402,8 @@ Widget bookingSection(
             selectedTime = value!;
           },
         ),
+        ),
+      
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

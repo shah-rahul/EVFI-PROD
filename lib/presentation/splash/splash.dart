@@ -54,7 +54,7 @@ class SplashViewState extends State<SplashView> {
         if (isLoggedIn != null) {
           if (isLoggedIn) {
             Navigator.pushReplacementNamed(
-                context, /*Routes.onBoardingRoute*/ Routes.onBoardingRoute);
+                context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
           } else {
             Navigator.pushReplacementNamed(
                 context, /*Routes.onBoardingRoute*/ Routes.loginRoute);

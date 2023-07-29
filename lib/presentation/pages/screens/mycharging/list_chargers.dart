@@ -14,9 +14,9 @@ import '../../../Data_storage/UserDataProvider.dart';
 import '../../../resources/color_manager.dart';
 import '../../models/my_charging.dart';
 import 'chargers_data.dart';
-import 'package:EVFI/presentation/pages/models/header_ui.dart';
-import 'package:EVFI/presentation/pages/screens/mycharging/MyChargingScreen.dart';
-import 'package:EVFI/presentation/resources/assets_manager.dart';
+import 'package:evfi/presentation/pages/models/header_ui.dart';
+import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
+import 'package:evfi/presentation/resources/assets_manager.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);

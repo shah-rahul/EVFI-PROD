@@ -4,7 +4,7 @@
 // ignore_for_file: file_names
 
 import '../main/main_view.dart';
-import 'package:EVFI/presentation/splash/splash.dart';
+import 'package:evfi/presentation/splash/splash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';

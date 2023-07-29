@@ -2,13 +2,13 @@
 
 import 'dart:async';
 
-import 'package:EVFI/presentation/pages/screens/mycharging/list_chargers.dart';
+import 'package:evfi/presentation/pages/screens/mycharging/list_chargers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:EVFI/presentation/resources/assets_manager.dart';
-import 'package:EVFI/presentation/resources/font_manager.dart';
-import 'package:EVFI/presentation/resources/styles_manager.dart';
+import 'package:evfi/presentation/resources/assets_manager.dart';
+import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:evfi/presentation/resources/styles_manager.dart';
 
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -76,8 +76,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             : Scaffold(
                 backgroundColor: Colors.transparent,
                 body: Container(
-                  height: MediaQuery.sizeOf(context).height,
-                  width: MediaQuery.sizeOf(context).width,
+                  // height: MediaQuery.sizeOf(context).height,
+                 height: MediaQuery.of(context).size.height,
+                  // width: MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.all(25),
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -92,7 +94,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                     children: <Widget>[
                       Container(
                           margin: EdgeInsets.only(
-                              top: MediaQuery.sizeOf(context).height * 0.24),
+                              // top: MediaQuery.sizeOf(context).height * 0.24),
+                               top:MediaQuery.of(context).size.height*0.24),
                           child: Image.asset(
                             ImageAssets.carCharger,
                             scale: 1.35,
