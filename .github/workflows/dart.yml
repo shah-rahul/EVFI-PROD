@@ -37,13 +37,13 @@ jobs:
         
 #       - name: Build APK
 #         run: flutter build apk --release
-#       - name: Build and Analyze
-#         run: dart analyze
+      - name: Build and Analyze
+        run: dart analyze
 
-      - name: Build APK
-        run: flutter build apk 
-      # - name: Build and Test with ignore flags
-      #   run: dart run build_runner build --delete-conflicting-outputs --verbose --ignore-errors
+#       - name: Build APK
+#         run: flutter build apk 
+      - name: Build and Test with ignore flags
+        run: dart run build_runner build --delete-conflicting-outputs --verbose --ignore-errors
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
