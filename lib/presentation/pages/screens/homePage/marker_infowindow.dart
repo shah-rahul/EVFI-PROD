@@ -373,11 +373,13 @@ Widget bookingSection(
             ),
           ],
         ),
+        Padding(padding: const EdgeInsets.all(8),
+        child:
         DropdownButtonFormField<String>(
           value: selectedTime,
           icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
           dropdownColor: Colors.amber.shade100,
-          padding: const EdgeInsets.all(8),
+          
           elevation: 4,
           decoration: const InputDecoration(
             labelStyle: TextStyle(
@@ -400,6 +402,8 @@ Widget bookingSection(
             selectedTime = value!;
           },
         ),
+        ),
+      
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
