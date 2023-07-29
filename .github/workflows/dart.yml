@@ -35,8 +35,13 @@ jobs:
       - name: Install dependencies
         run: dart pub get
         
-      - name: Build APK
-        run: flutter build apk --release
+#       - name: Build APK
+#         run: flutter build apk --release
+      - name: Build and Analyze
+        run: dart analyze
+
+#     - name: Build and Test with ignore flags
+#       run: dart run build_runner build --delete-conflicting-outputs --verbose --ignore-errors
       - name: Build and Test with ignore flags
         run: dart run build_runner build --delete-conflicting-outputs --verbose --ignore-errors
       - name: Upload APK
