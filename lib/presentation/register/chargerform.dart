@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unused_element, unused_local_variable, library_private_types_in_public_api, unnecessary_null_comparison
 
-import 'package:EVFI/presentation/main/main_view.dart';
-import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:evfi/presentation/main/main_view.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';

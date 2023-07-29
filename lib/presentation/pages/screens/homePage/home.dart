@@ -13,7 +13,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
+import 'package:evfi/presentation/pages/screens/homePage/marker_infowindow.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';

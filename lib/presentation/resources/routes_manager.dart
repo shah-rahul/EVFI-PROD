@@ -1,4 +1,4 @@
-import 'package:EVFI/presentation/register/UserChargingRegister.dart';
+import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:flutter/material.dart';
 
 import '../forgot_password/forgot_password.dart';

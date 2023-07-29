@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_final_fields, unused_local_variable, prefer_const_declarations, prefer_const_constructors, unused_catch_clause, unused_import
 
 import 'dart:convert';
-import 'package:EVFI/presentation/resources/values_manager.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../resources/routes_manager.dart';

@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_final_fields, file_names, use_key_in_widget_constructors, sort_child_properties_last, prefer_const_constructors
 
-import 'package:EVFI/presentation/resources/values_manager.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import '../models/Booking.dart';
 import 'package:intl/intl.dart';

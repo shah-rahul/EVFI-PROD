@@ -1,18 +1,18 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
 import 'dart:io';
-import 'package:EVFI/presentation/login/login.dart';
-import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
-import 'package:EVFI/presentation/pages/screens/accountPage/user_profile.dart';
-import 'package:EVFI/presentation/pages/screens/accountPage/profilesection.dart';
-import 'package:EVFI/presentation/pages/screens/accountPage/settings.dart';
+import 'package:evfi/presentation/login/login.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/profilesection.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'new_station.dart';
 
-String username = "Mr. EVFI";
+String username = "Mr. evfi";
 String email = "evfi.tech@gmail.com";
 File? clickedImage;
 

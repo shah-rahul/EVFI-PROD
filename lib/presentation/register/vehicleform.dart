@@ -1,6 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
 
-import 'package:EVFI/presentation/resources/strings_manager.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

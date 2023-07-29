@@ -2,8 +2,8 @@
 
 import 'dart:io';
 
-import 'package:EVFI/presentation/Data_storage/UserDataProvider.dart';
-import 'package:EVFI/presentation/main/main_view.dart';
+import 'package:evfi/presentation/Data_storage/UserDataProvider.dart';
+import 'package:evfi/presentation/main/main_view.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
