@@ -3,7 +3,7 @@
 # # separate terms of service, privacy policy, and support
 # # documentation.
 
-# name: Dart
+name: Dart
 
 # on:
 #   push:
@@ -71,7 +71,7 @@
 #         # - name: Verify formatting
 #         #   run: dart format --output=none --set-exit-if-changed .
 
-name: Minimal Android CI Workflow
+# name: Minimal Android CI Workflow
 
 on:
   push:
