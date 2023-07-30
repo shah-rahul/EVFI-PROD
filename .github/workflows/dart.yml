@@ -5,11 +5,11 @@
 
 name: Dart
 
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 # jobs:
 #   build:
@@ -73,12 +73,12 @@ name: Dart
 
 # name: Minimal Android CI Workflow
 
-on:
-  push:
-    branches:
-      - master
-    tags:
-      - 'v*'
+# on:
+#   push:
+#     branches:
+#       - master
+#     tags:
+#       - 'v*'
 
 
 jobs:
