@@ -13,146 +13,24 @@ on:
 
 jobs:
   build:
+    name: Build and Release new apk
     runs-on: ubuntu-latest
-
- 
-      
-      
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.7.7'
           channel: 'stable'
-      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter build apk --release --split-per-abi
 
-      # Note: This workflow uses the latest stable version of the Dart SDK.
-      # You can specify other versions if desired, see documentation here:
-      # https://github.com/dart-lang/setup-dart/blob/main/README.md
-      # - uses: dart-lang/setup-dart@v1
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-
-      - name: Install dependencies
-        run: dart pub get
-        
-#       - name: Build APK
-#         run: flutter build apk --release
-      - name: Build and Analyze
-        run: dart analyze
-
-#       - name: Build APK
-#         run: flutter build apk 
-#       - name: Build and Test with ignore flags
-#         run: dart run build_runner build --delete-conflicting-outputs --verbose --ignore-errors
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      - name: Push to Releases
+        uses: ncipollo/release-action@v1
         with:
-          name: apk
-          path: build/app/outputs/flutter-apk/evfi.apk
-  release:
-      name: Release APK
-#       needs: apk
-      if: startsWith(github.ref, 'refs/tags/v')
-      runs-on: ubuntu-latest
-      steps:
-        - name: Download APK from build
-          uses: actions/download-artifact@v1
-          with:
-            name: apk  
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          with:
-            tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }} 
-            
-        - name: Upload Release APK
-          id: upload_release_asset
-          uses: actions/upload-release-asset@v1.0.1
-          env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-           upload_url: ${{ steps.create_release.outputs.upload_url }}
-           asset_path: apk/app-debug.apk
-           asset_name: MensaApp.apk
-           asset_content_type: application/zip
-        # Uncomment this step to verify the use of 'dart format' on each commit.
-        # - name: Verify formatting
-        #   run: dart format --output=none --set-exit-if-changed .
-
-# name: Minimal Android CI Workflow
-
-# on:
-#   push:
-#     branches:
-#       - master
-#     tags:
-#       - 'v*'
-
-
-# jobs:
-#   test:
-#     name: Run Unit Tests
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v1
-#       - name: Setup JDK
-#         uses: actions/setup-java@v1
-#         with:
-#           java-version: 1.8
-#       - name: Run Tests
-#         run: bash ./gradlew test --stacktrace  
-#   apk:
-#     name: Generate APK
-# #     needs: test
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v1
-#       - name: Setup JDK
-#         uses: actions/setup-java@v1
-#         with:
-#           java-version: 1.8
-# #       - name: Build and Analyze
-# #         run: dart analyze
-# #       - name: Build APK
-# #         run: bash ./gradlew assembleDebug --stacktrace
-#       - name: Upload APK
-#         uses: actions/upload-artifact@v1
-# #         with:
-# #           name: apk
-# #           path: app/build/outputs/apk/debug/app-debug.apk 
-#   release:
-#     name: Release APK
-#     needs: apk
-#     if: startsWith(github.ref, 'refs/tags/v')
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Download APK from build
-#         uses: actions/download-artifact@v1
-#         with:
-#           name: apk  
-#       - name: Create Release
-#         id: create_release
-#         uses: actions/create-release@v1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-#         with:
-#           tag_name: ${{ github.ref }}
-#           release_name: Release ${{ github.ref }} 
-#       - name: Upload Release APK
-#         id: upload_release_asset
-#         uses: actions/upload-release-asset@v1.0.1
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         with:
-#           upload_url: ${{ steps.create_release.outputs.upload_url }}
-#           asset_path: apk/app-debug.apk
-#           asset_name: MensaApp.apk
-#           asset_content_type: application/zip
-
-        
-        
+          artifacts: "build/app/outputs/apk/release/*"
+          tag: v0.0.1
+          token: ${{ secrets.GITHUB_TOKEN}}
