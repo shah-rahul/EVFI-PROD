@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:time_interval_picker/time_interval_picker.dart';
 
 import '../../../resources/color_manager.dart';
 import '../../models/my_charging.dart';
@@ -23,11 +24,9 @@ class ListCharger extends StatefulWidget {
 
 class _ListChargerState extends State<ListCharger> {
   Chargers charger = Chargers();
-  // final Completer<GoogleMapController> _mapController =
-  //     Completer<GoogleMapController>();
   late GoogleMapController _controller;
 
-  final _saveForm = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final _priceFocusNode = FocusNode();
   final _aadharFocusNode = FocusNode();
   final _hostsFocusNode = FocusNode();
@@ -36,6 +35,7 @@ class _ListChargerState extends State<ListCharger> {
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
 
+  DateTime? _startAvailabilityTime, _endAvailabilityTime;
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
@@ -45,14 +45,15 @@ class _ListChargerState extends State<ListCharger> {
   typeCharger? _type;
 
   void _submitForm() async {
-    final isValid = _saveForm.currentState!.validate();
+    final isValid = _formKey.currentState!.validate();
     if (!isValid) {
-      return;
+      return; //Invalid
     }
-    _saveForm.currentState!.save();
+    _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
     });
+    //store details in database
     await charger.addCharger(
         StationAddress: StationAddress!,
         StationName: StationName!,
@@ -68,7 +69,7 @@ class _ListChargerState extends State<ListCharger> {
   }
 
   Widget _makeTitle({required String title}) {
-    return Text(title, style: const TextStyle(fontWeight: FontWeight.bold));
+    return Padding(padding: const EdgeInsets.only(bottom: 4), child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
   }
 
   // _askCoordinates() {
@@ -114,26 +115,28 @@ class _ListChargerState extends State<ListCharger> {
         markerId: const MarkerId('Station'),
         position: position,
         infoWindow: InfoWindow(
-            title: 'Station/Charger location',
+            title: 'Your Station/Charger',
             snippet: '${position.latitude}, ${position.longitude}'),
         icon: Platform.isIOS ? BitmapDescriptor.defaultMarker : chargerIcon,
       );
       _controller.animateCamera(CameraUpdate.newCameraPosition(
-          CameraPosition(target: position, zoom: 18)));
+          CameraPosition(target: position, zoom: 17)));
     });
   }
 
   _showMap() {
+    setState(() {});
     return Container(
         height: 250,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(width: 3.5, color: ColorManager.appBlack),
+            border: Border.all(), //width: 3.5, color: ColorManager.appBlack),
             boxShadow: [
               BoxShadow(
-                  color: ColorManager.CardshadowBottomRight,
-                  blurRadius: 8,
-                  offset: const Offset(0, 2))
+                  color: ColorManager.primary.withOpacity(0.17),
+                  blurRadius: 2,
+                  spreadRadius: 3,
+                  offset: const Offset(1, 3))
             ]),
         child: GoogleMap(
           onMapCreated: (argController) {
@@ -175,7 +178,7 @@ class _ListChargerState extends State<ListCharger> {
           );
   }
 
-  Widget _makeChargerOptions() {
+  Widget _chargerTypeRadioButtons() {
     return Row(
       children: <Widget>[
         Expanded(
@@ -186,7 +189,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+              debugPrint('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -204,7 +207,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+              debugPrint('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -222,7 +225,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              print('Selected Charger: \t$val');
+              debugPrint('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -235,7 +238,7 @@ class _ListChargerState extends State<ListCharger> {
     );
   }
 
-  Future _takeChargerImages(ImageSource source) async {
+  Future<void> _takeChargerImages(ImageSource source) async {
     if (source == ImageSource.gallery) {
       final List<XFile> selectedImage = await imagePicker.pickMultiImage();
       if (selectedImage.isNotEmpty) {
@@ -251,7 +254,7 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {});
   }
 
-  Future<void> _showPhotoOptions() {
+  Future<void> _showPhotoOptionsDialog() {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -280,17 +283,57 @@ class _ListChargerState extends State<ListCharger> {
             ));
   }
 
+  Widget _showChargerImages() {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: Row(
+            children: [
+              _makeTitle(title: 'Charger Images'),
+              const Spacer(),
+              IconButton(
+                icon: Icon(Icons.add_a_photo_outlined,
+                    color: ColorManager.darkPrimary),
+                onPressed: _showPhotoOptionsDialog,
+              ),
+            ],
+          ),
+        ),
+        Container(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                border: Border.all()),
+            padding: const EdgeInsets.all(4),
+            height: 150,
+            width: double.infinity,
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 1),
+              itemCount: _imageList!.length,
+              itemBuilder: (context, index) => Image.file(
+                File(_imageList![index].path),
+                fit: BoxFit.cover,
+              ),
+            )),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: const BackButton(
-            color: Colors.white,
-          ),
+          leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.clear, color: Colors.white)),
           title: const Text(
             'Rent your Charger',
           ),
-          backgroundColor: ColorManager.appBlack,
+          backgroundColor: ColorManager.appBlack.withOpacity(0.88),
         ),
         backgroundColor: Colors.grey[200],
         body: _isLoading
@@ -298,7 +341,7 @@ class _ListChargerState extends State<ListCharger> {
                 child: CircularProgressIndicator(),
               )
             : Form(
-                key: _saveForm,
+                key: _formKey,
                 child: ListView(
                   children: <Widget>[
                     Flexible(
@@ -435,18 +478,35 @@ class _ListChargerState extends State<ListCharger> {
                               height: 15,
                             ),
                             _makeTitle(title: 'Charger Type'),
-                            _makeChargerOptions(),
+                            _chargerTypeRadioButtons(),
                             const SizedBox(
                               height: 15,
                             ),
-                            _makeTitle(title: 'Price'),
+                            _makeTitle(title: 'Availability'),
+                            TimeIntervalPicker(
+                                borderColor: Colors.black,
+                                fillColor: ColorManager.primary.withOpacity(0.17),
+                                borderRadius: 10,
+                                endLimit: DateTimeExtension.todayMidnight,
+                                startLimit: DateTimeExtension.todayStart,
+                                onChanged: (start, end, isAllDay) {
+                                  _startAvailabilityTime = start!;
+                                  _endAvailabilityTime = end!;
+                                  }),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            _makeTitle(title: 'Price (₹KW/h)'),
                             TextFormField(
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
+                                  prefixText: '₹\t',
+                                  prefixStyle:
+                                      TextStyle(fontSize: FontSize.s16),
                                   enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              )),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  )),
                               focusNode: _priceFocusNode,
                               onFieldSubmitted: (_) => FocusScope.of(context)
                                   .requestFocus(_amenitiesFocusNode),
@@ -494,54 +554,11 @@ class _ListChargerState extends State<ListCharger> {
                             Container(
                               margin: const EdgeInsets.only(top: 15),
                               child: _imageList!.isNotEmpty
-                                  ? Column(
-                                      children: [
-                                        Align(
-                                          alignment: Alignment.centerRight,
-                                          child: Row(
-                                            children: [
-                                              _makeTitle(
-                                                  title: 'Charger Images'),
-                                              const Spacer(),
-                                              IconButton(
-                                                icon: Icon(
-                                                    Icons.add_a_photo_outlined,
-                                                    color: ColorManager
-                                                        .darkPrimary),
-                                                onPressed: _showPhotoOptions,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(10)),
-                                                border: Border.all()),
-                                            padding: const EdgeInsets.all(4),
-                                            height: 150,
-                                            width: double.infinity,
-                                            child: GridView.builder(
-                                              gridDelegate:
-                                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                                      crossAxisCount: 3,
-                                                      mainAxisSpacing: 10,
-                                                      crossAxisSpacing: 10,
-                                                      childAspectRatio: 1),
-                                              itemCount: _imageList!.length,
-                                              itemBuilder: (context, index) =>
-                                                  Image.file(
-                                                File(_imageList![index].path),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )),
-                                      ],
-                                    )
+                                  ? _showChargerImages()
                                   : Align(
                                       alignment: Alignment.center,
                                       child: ElevatedButton(
-                                          onPressed: _showPhotoOptions,
+                                          onPressed: _showPhotoOptionsDialog,
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.black87,
                                               shadowColor:

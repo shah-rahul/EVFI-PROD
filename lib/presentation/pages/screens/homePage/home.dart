@@ -261,7 +261,7 @@ class HomeState extends State<Home> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.065),
+                          top: MediaQuery.of(context).size.height * 0.026),
                       child: const SearchWidget(),
                     ),
                   ],
