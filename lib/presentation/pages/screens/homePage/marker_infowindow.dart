@@ -1,5 +1,7 @@
-import 'package:EVFI/presentation/pages/screens/accountPage/payments.dart';
-import 'package:EVFI/presentation/resources/color_manager.dart';
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+
+import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -237,7 +239,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  Container(
+                  SizedBox(
                     height: 30,
                     width: 95,
                     child: ElevatedButton(
@@ -271,7 +273,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(height: 150, alignment: Alignment.center , child: Center(child: CircularProgressIndicator()));
+                    return Container(height: 150, alignment: Alignment.center , child: const Center(child: CircularProgressIndicator()));
                   } else if (snapshot.hasError) {
                     return const Text('Error occurred');
                   } else {
@@ -302,7 +304,8 @@ Widget bookingSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        const Row(
+         Row(
+          // ignore: prefer_const_literals_to_create_immutables
           children: [
             SizedBox(width: 14),
             Text('Select your Charger Type',
@@ -370,11 +373,13 @@ Widget bookingSection(
             ),
           ],
         ),
+        Padding(padding: const EdgeInsets.all(8),
+        child:
         DropdownButtonFormField<String>(
           value: selectedTime,
           icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
           dropdownColor: Colors.amber.shade100,
-          padding: const EdgeInsets.all(8),
+          
           elevation: 4,
           decoration: const InputDecoration(
             labelStyle: TextStyle(
@@ -397,11 +402,13 @@ Widget bookingSection(
             selectedTime = value!;
           },
         ),
+        ),
+      
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               height: 35,
               width: 200,
               child: ElevatedButton(

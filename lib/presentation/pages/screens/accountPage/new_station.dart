@@ -1,6 +1,7 @@
 //To add a new station in firestore
 
-import 'dart:ffi';
+
+// ignore_for_file: unused_field, non_constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
@@ -42,12 +43,12 @@ class _NewStationState extends State<NewStation> {
     if (!isValid) {
       return;
     }
-    print("****");
+   // print("****");
     _form.currentState!.save();
     String geohash = encodeGeohash(latitude!, longitude!, precision: 9);
     GeoPoint coordinate = GeoPoint(latitude!, longitude!);
     var marker = <String, dynamic>{
-      'geo': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
       'info': <String, dynamic>{
         'name': Chargername!,
         'type': type?.index.toString()
@@ -131,8 +132,8 @@ class _NewStationState extends State<NewStation> {
                                 groupValue: type,
                                 onChanged: (typeCharger? value) {
                                   setState(() {
-                                    print("*************");
-                                    print(value);
+                                 //   print("*************");
+                               //     print(value);
                                     type = value;
                                   });
                                 },
@@ -217,7 +218,7 @@ class _NewStationState extends State<NewStation> {
                   style: TextStyle(color: ColorManager.appBlack),
                   decoration: const InputDecoration(labelText: 'Latitude'),
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.number,
+                
                   onFieldSubmitted: (_) =>
                       FocusScope.of(context).requestFocus(_longitudeFocusNode),
                   onSaved: (newValue) {
@@ -239,7 +240,7 @@ class _NewStationState extends State<NewStation> {
                   style: TextStyle(color: ColorManager.appBlack),
                   decoration: const InputDecoration(labelText: 'Longitude'),
                   textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.number,
+            
                   focusNode: _longitudeFocusNode,
                   // onFieldSubmitted: (_) {
                   //   _addInFirestore();

@@ -1,6 +1,8 @@
 // This widget will draw header section of all page. Wich you will get with the project source code.
 
-import 'package:EVFI/presentation/resources/color_manager.dart';
+// ignore_for_file: avoid_unnecessary_containers
+
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
 class HeaderUI extends StatelessWidget {

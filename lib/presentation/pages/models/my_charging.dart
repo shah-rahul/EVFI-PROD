@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, constant_identifier_names, non_constant_identifier_names
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 enum Status {

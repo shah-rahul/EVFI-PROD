@@ -1,8 +1,10 @@
+// ignore_for_file: unnecessary_import, prefer_const_constructors_in_immutables, unused_catch_clause, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
+
 import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-import 'package:EVFI/presentation/pages/screens/homePage/marker_infowindow.dart';
+import 'package:evfi/presentation/pages/screens/homePage/marker_infowindow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
@@ -29,12 +31,12 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   late GoogleMapController _googleMapController;
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
-  final Set<Marker> _markers = {};
+  Set<Marker> _markers = {};
   late Uint8List stationMarker;
   final CollectionReference<Map<String, dynamic>> collectionReference =
       FirebaseFirestore.instance.collection('Chargers');
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
-      (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+      (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
   static const _initialCameraPosition = CameraPosition(
     target: LatLng(28.6001740, 77.2105709),
@@ -174,7 +176,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
       setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
     } on Exception catch (e) {
-      print(e);
+    //  print(e);
     }
   }
 
@@ -189,7 +191,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     double radiusInKm = radius;
 
 // Field name of Cloud Firestore documents where the geohash is saved.
-    String field = 'geo';
+    String field = 'g';
 
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
         GeoCollectionReference<Map<String, dynamic>>(collectionReference)
@@ -199,7 +201,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
       field: field,
       geopointFrom: geopointFrom,
     );
-
+    Set<Marker> _newMarkers = {};
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
@@ -209,12 +211,12 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         }
 
         final geoPoint =
-            (data['geo'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+            (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
-            (data['geo'] as Map<String, dynamic>)['geohash'] as String;
+            (data['g'] as Map<String, dynamic>)['geohash'] as String;
 
-        print(geoPoint.latitude);
-        _markers.add(Marker(
+      //  print(geoPoint.latitude);
+        _newMarkers.add(Marker(
             markerId: MarkerId(geohash),
             onTap: () {
               _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
@@ -236,12 +238,18 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
             icon: BitmapDescriptor.fromBytes(stationMarker)));
       }
-      setState(() {});
+      setState(() {
+        updateMarkers(_newMarkers);
+      });
     });
   }
 
+  void updateMarkers(Set<Marker> newMarkers) {
+    _markers = {..._markers, ...newMarkers};
+  }
+
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {
-    print(polylineCoordinates.length);
+   // print(polylineCoordinates.length);
     for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
       setRouteMarker(4, polylineCoordinates[pos]);
     }
@@ -269,7 +277,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   setPolylines(List<LatLng> polylineCoordinates) async {
-    print(polylineCoordinates);
+  //  print(polylineCoordinates);
     PolylineId polylineId = const PolylineId('polyline to set route');
     Polyline polyline = Polyline(
       polylineId: polylineId,

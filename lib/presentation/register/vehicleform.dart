@@ -1,5 +1,6 @@
-import 'package:EVFI/presentation/register/register.dart';
-import 'package:EVFI/presentation/resources/strings_manager.dart';
+// ignore_for_file: library_private_types_in_public_api, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
+
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,9 +39,9 @@ class _VehicleFormState extends State<VehicleForm> {
     }
 
     return Container(
-      decoration: new BoxDecoration(
-          image: new DecorationImage(
-        image: new AssetImage(ImageAssets.loginBackground),
+      decoration:  const BoxDecoration(
+          image:  DecorationImage(
+        image:  AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(
@@ -163,7 +164,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: const ChargerForm()),
                                   );
                                 },
                                 child: Text(
@@ -185,7 +186,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: ChargerForm()),
+                                        child: const ChargerForm()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

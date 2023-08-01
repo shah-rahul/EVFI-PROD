@@ -1,4 +1,7 @@
-import 'package:intl/intl.dart';
+
+
+
+// ignore_for_file: file_names
 
 enum Status {
   accepted,
@@ -6,7 +9,9 @@ enum Status {
 }
 
 class Booking {
+  // ignore: non_constant_identifier_names
   String CustomerName;
+  // ignore: non_constant_identifier_names
   String StationName;
   String mobileNumber;
   DateTime datetime;
@@ -15,7 +20,9 @@ class Booking {
   double ratings;
 
   Booking(
+      // ignore: non_constant_identifier_names
       {required this.CustomerName,
+      // ignore: non_constant_identifier_names
       required this.StationName,
       required this.mobileNumber,
       required this.datetime,

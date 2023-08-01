@@ -1,10 +1,18 @@
-import 'package:EVFI/presentation/main/main_view.dart';
-import 'package:EVFI/presentation/splash/splash.dart';
+// ignore: duplicate_ignore
+// ignore: duplicate_ignore
+// ignore: file_names
+// ignore_for_file: file_names
+
+import '../main/main_view.dart';
+import 'package:evfi/presentation/splash/splash.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Data_storage/UserData.dart';
+import '../Data_storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
@@ -17,25 +25,38 @@ class VerificationCodePage extends StatefulWidget {
   final String verificationId;
   final String phoneNumber;
 
+  // ignore: use_key_in_widget_constructors
   const VerificationCodePage({
     required this.verificationId,
     required this.phoneNumber,
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _VerificationCodePageState createState() => _VerificationCodePageState();
 }
 
 class _VerificationCodePageState extends State<VerificationCodePage> {
   final TextEditingController _codeController = TextEditingController();
-
+  final databaseRef = FirebaseDatabase.instance.ref('UserChargingRegister');
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
+
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+
+    // ignore: non_constant_identifier_names
+    void StorePhoneNumber(String phoneNumber) {
+      UserData userData = userDataProvider.userData;
+      userData.phoneNumber = phoneNumber;
+
+      userDataProvider.setUserData(userData);
+    }
+
     return Container(
-      decoration: new BoxDecoration(
-          image: new DecorationImage(
-        image: new AssetImage(ImageAssets.loginBackground),
+      decoration: const BoxDecoration(
+          image:  DecorationImage(
+        image: AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(
@@ -105,6 +126,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                                 color: ColorManager.darkGrey),
                           ),
                           hintText: 'Verification code',
+                          
                         ),
                         keyboardType: TextInputType.number,
                       ),
@@ -121,6 +143,8 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       ),
                       onPressed: () async {
                         //  Verify code
+                        // StorePhoneNumber(widget.phoneNumber);
+
                         final String code = _codeController.text.trim();
                         PhoneAuthCredential credential =
                             PhoneAuthProvider.credential(
@@ -128,11 +152,14 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                           smsCode: code,
                         );
                         try {
+                          // ignore: unused_local_variable
                           UserCredential userCredential = await FirebaseAuth
                               .instance
                               .signInWithCredential(credential);
                           //  Handle successful authentication
-
+                          // await userDataProvider.saveUserData();
+                          // UserData? userData = userDataProvider.userData;
+                          // userDataProvider.setUserData(userData);
                           var sharedPref =
                               await SharedPreferences.getInstance();
                           sharedPref.setBool(SplashViewState.keyLogin, true);
@@ -141,6 +168,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               number: widget.phoneNumber);
 
                           if (await check) {
+                            // ignore: use_build_context_synchronously
                             Navigator.push(
                               context,
                               PageTransition(
@@ -149,7 +177,11 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                               ),
                             );
                           } else {
-                            storePhoneNumber(widget.phoneNumber);
+                            StorePhoneNumber(widget.phoneNumber);
+                            // await userDataProvider.saveUserData();
+                            // UserData? userData = userDataProvider.userData;
+                            // userDataProvider.setUserData(userData);
+                            // ignore: use_build_context_synchronously
                             Navigator.push(
                               context,
                               PageTransition(
@@ -215,20 +247,9 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
     );
   }
 
-//function to store registered number in collection in firestore
-  void storePhoneNumber(String phoneNumber) {
-    FirebaseFirestore.instance
-        .collection('Registered number')
-        .add({'phoneNo': phoneNumber}).then((value) {
-      // print('Phone number stored successfully!');
-    }).catchError((error) {
-      // print('Error storing phone number: $error');
-    });
-  }
-
   Future<bool> checkNumberIsRegistered({required String number}) async {
     final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('Registered number');
+    final collectionRef = firestore.collection('UserChargingRegister');
     bool isNumberRegistered = false;
     // storePhoneNumber(number);
 
@@ -236,7 +257,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       final querySnapshot = await collectionRef.get();
 
       for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['phoneNo'].toString();
+        final phoneNumber = doc.data()['Phone Number'].toString();
 
         if (number == phoneNumber) {
           isNumberRegistered = true;

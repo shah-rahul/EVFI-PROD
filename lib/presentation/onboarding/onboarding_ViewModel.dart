@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, empty_constructor_bodies
+
 import 'dart:async';
 
 import '../../domain/model.dart';
@@ -14,6 +16,8 @@ class OnBoardingViewModel extends BaseViewModel
   late final List<SliderObject> _list;
 
   int _currentIndex = 0;
+
+  OnBoardingViewModel() {}
 
   // inputs
   @override
@@ -35,7 +39,7 @@ class OnBoardingViewModel extends BaseViewModel
     // if (nextIndex >= _list.length) {
     //   return 0; // infinite loop to go to first item inside the slider
     // }
-    return _currentIndex;
+    return _currentIndex + 1;
   }
 
   @override

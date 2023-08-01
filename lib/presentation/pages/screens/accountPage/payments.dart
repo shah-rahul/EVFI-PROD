@@ -1,4 +1,6 @@
-import 'package:EVFI/presentation/pages/screens/accountPage/success_payment.dart';
+// ignore_for_file: use_key_in_widget_constructors
+
+import 'package:evfi/presentation/pages/screens/accountPage/success_payment.dart';
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatefulWidget {

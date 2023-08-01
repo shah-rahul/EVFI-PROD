@@ -1,19 +1,23 @@
+// ignore_for_file: unnecessary_nullable_for_final_variable_declarations, non_constant_identifier_names, use_build_context_synchronously, unused_element
+
 import 'dart:async';
 import 'dart:io';
 
-import 'package:EVFI/presentation/resources/font_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
 
+import '../../../Data_storage/UserData.dart';
+import '../../../Data_storage/UserDataProvider.dart';
 import '../../../resources/color_manager.dart';
 import '../../models/my_charging.dart';
 import 'chargers_data.dart';
-import 'package:EVFI/presentation/pages/models/header_ui.dart';
-import 'package:EVFI/presentation/pages/screens/mycharging/MyChargingScreen.dart';
-import 'package:EVFI/presentation/resources/assets_manager.dart';
+import 'package:evfi/presentation/pages/models/header_ui.dart';
+import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
+import 'package:evfi/presentation/resources/assets_manager.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);
@@ -189,7 +193,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              debugPrint('Selected Charger: \t$val');
+              print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -207,7 +211,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              debugPrint('Selected Charger: \t$val');
+              print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -225,7 +229,7 @@ class _ListChargerState extends State<ListCharger> {
           tileColor: ColorManager.primary.withOpacity(0.17),
           onChanged: (val) {
             setState(() {
-              debugPrint('Selected Charger: \t$val');
+              print('Selected Charger: \t$val');
               _type = val;
             });
           },
@@ -325,6 +329,56 @@ class _ListChargerState extends State<ListCharger> {
 
   @override
   Widget build(BuildContext context) {
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    void StoreStationName(String stationName) {
+      UserData userData = userDataProvider.userData;
+      userData.stationName = stationName;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAddress(String aadress) {
+      UserData userData = userDataProvider.userData;
+      userData.address = aadress;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAadhar(String aadhar) {
+      UserData userData = userDataProvider.userData;
+      userData.aadharNumber = aadhar;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreHostname(String hostname) {
+      UserData userData = userDataProvider.userData;
+      userData.hostName = hostname;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreChargerType(String chargerType) {
+      UserData userData = userDataProvider.userData;
+      userData.chargerType = chargerType;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    void StorePrice(String price) {
+      UserData userData = userDataProvider.userData;
+      userData.price = price;
+      userData.level3 = true;
+      userDataProvider.setUserData(userData);
+    }
+
+    void StoreAmenities(String amenities) {
+      UserData userData = userDataProvider.userData;
+      userData.amenities = amenities;
+
+      userDataProvider.setUserData(userData);
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -382,6 +436,9 @@ class _ListChargerState extends State<ListCharger> {
                                   StationName = newValue!;
                                 });
                               },
+                              onChanged: (value) {
+                                StoreStationName(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -409,6 +466,9 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   StationAddress = newValue!;
                                 });
+                              },
+                              onChanged: (value) {
+                                StoreAddress(value);
                               },
                             ),
                             const SizedBox(
@@ -445,6 +505,9 @@ class _ListChargerState extends State<ListCharger> {
                               onSaved: (newValue) {
                                 aadharNumber = newValue!;
                               },
+                              onChanged: (value) {
+                                StoreAadhar(value);
+                              },
                             ),
                             const SizedBox(
                               height: 15,
@@ -472,6 +535,9 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   hostNames = newValue!;
                                 });
+                              },
+                              onChanged: (value) {
+                                StoreHostname(value);
                               },
                             ),
                             const SizedBox(
@@ -523,6 +589,9 @@ class _ListChargerState extends State<ListCharger> {
                                   amount = double.parse(newValue!);
                                 });
                               },
+                              onChanged: (value) {
+                                StorePrice(value);
+                              },
                             ),
                             const SizedBox(height: 15),
                             _makeTitle(title: 'Amenities'),
@@ -548,6 +617,9 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   amenities = newValue!;
                                 });
+                              },
+                              onChanged: (value) {
+                                StoreAmenities(value);
                               },
                             ),
                             const SizedBox(width: 15),
@@ -587,7 +659,14 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: _submitForm,
+                                // onPressed:
+                                onPressed: () async {
+                                  _submitForm;
+                                  await userDataProvider.saveUserData();
+                                  // UserData? userData =
+                                  //  userDataProvider.userData;
+                                  //userDataProvider.setUserData(userData);
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         ColorManager.primary.withOpacity(0.7),
