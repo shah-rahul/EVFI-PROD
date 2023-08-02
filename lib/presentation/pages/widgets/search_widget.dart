@@ -32,7 +32,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     FocusNode textFieldFocusNode,
   ) {
     final width = MediaQuery.of(context).size.width;
-    final hint = "search chargers";
+    final hint = "Search chargers";
     return Container(
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
       child: TextFormField(
@@ -42,8 +42,9 @@ class _SearchWidgetState extends State<SearchWidget> {
           keyboardType: TextInputType.streetAddress,
           decoration: InputDecoration(
             labelText: hint,
+            labelStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
             filled: true, //<-- SEE HERE
-            fillColor: Colors.white,
+            fillColor: ColorManager.appBlack,
             contentPadding: const EdgeInsets.all(10),
             prefixIcon: Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSize.s4),
@@ -59,7 +60,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                     },
                     icon: Icon(
                       Icons.directions_outlined,
-                      color: ColorManager.darkPrimary,
+                      color: ColorManager.primary,
                     ),
                   )
                 : IconButton(
@@ -78,13 +79,11 @@ class _SearchWidgetState extends State<SearchWidget> {
                 color: ColorManager.primary,
                 width: 2.0,
               ),
-              borderRadius:
-                  BorderRadius.all(Radius.circular(AppSize.s16 + AppSize.s20)),
+              borderRadius: BorderRadius.all(Radius.circular(AppSize.s20)),
             ),
             enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide.none,
-                borderRadius: BorderRadius.all(
-                    Radius.circular(AppSize.s20 + AppSize.s16))),
+                borderRadius: BorderRadius.all(Radius.circular(AppSize.s20))),
           ),
           textInputAction: TextInputAction.done,
           onChanged: (String value) async {
@@ -93,8 +92,8 @@ class _SearchWidgetState extends State<SearchWidget> {
               String url =
                   'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1&accept-language=en';
               var response = await client.get(Uri.parse(url));
-              var decodedResponse = jsonDecode(utf8.decode(response.bodyBytes))
-                  as List<dynamic>;
+              var decodedResponse =
+                  jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
               // decodedResponse.forEach((key, value) {
               //    print(value);
               // });
