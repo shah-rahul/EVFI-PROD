@@ -19,13 +19,11 @@ class LoginView extends StatefulWidget {
 
 class LoginViewState extends State<LoginView> {
   final phoneController = TextEditingController();
- 
+
   @override
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
-
-  
 
     phoneController.selection = TextSelection.fromPosition(
       TextPosition(
@@ -33,9 +31,9 @@ class LoginViewState extends State<LoginView> {
       ),
     );
     return Container(
-      decoration:  BoxDecoration(
-          image:  DecorationImage(
-        image:  AssetImage(ImageAssets.loginBackground),
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(
@@ -89,9 +87,9 @@ class LoginViewState extends State<LoginView> {
                       //controller: phoneController,
                       onChanged: (value) {
                         // Store the entered phone number in the provider
-                       // StorePhoneNumber(value);
+                        // StorePhoneNumber(value);
                         setState(() {
-                          phoneController.text = value;
+                          phoneController.text = "+91" + value;
                         });
                       },
                       decoration: InputDecoration(
@@ -128,7 +126,6 @@ class LoginViewState extends State<LoginView> {
                           shadowColor: Colors.white,
                           elevation: 6),
                       onPressed: () async {
-                        
                         //  mobile number verification logic here
                         final String phoneNumber = phoneController.text.trim();
                         //  getPhoneNumber(phoneNumber);
