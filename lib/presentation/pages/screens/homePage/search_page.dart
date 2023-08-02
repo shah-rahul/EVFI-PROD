@@ -203,7 +203,7 @@ class SearchPageState extends State<SearchPage> {
             try {
               String url =
                   'https://nominatim.openstreetmap.org/search?q=$value&format=json&polygon_geojson=1&addressdetails=1&accept-language=en';
-              var response = await client.post(Uri.parse(url));
+              var response = await client.get(Uri.parse(url));
               var decodedResponse =
                   jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
               _options = decodedResponse
