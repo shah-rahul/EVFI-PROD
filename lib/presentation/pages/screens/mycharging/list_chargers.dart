@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +12,7 @@ import 'package:time_interval_picker/time_interval_picker.dart';
 
 import '../../../resources/color_manager.dart';
 import '../../models/my_charging.dart';
-import 'chargers_data.dart';
+import '../../models/chargers_data.dart';
 import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
@@ -69,7 +71,10 @@ class _ListChargerState extends State<ListCharger> {
   }
 
   Widget _makeTitle({required String title}) {
-    return Padding(padding: const EdgeInsets.only(bottom: 4), child: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
+    return Padding(
+        padding: const EdgeInsets.only(bottom: 4),
+        child:
+            Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
   }
 
   // _askCoordinates() {
@@ -117,7 +122,7 @@ class _ListChargerState extends State<ListCharger> {
         infoWindow: InfoWindow(
             title: 'Your Station/Charger',
             snippet: '${position.latitude}, ${position.longitude}'),
-        icon: Platform.isIOS ? BitmapDescriptor.defaultMarker : chargerIcon,
+        icon: BitmapDescriptor.defaultMarker,
       );
       _controller.animateCamera(CameraUpdate.newCameraPosition(
           CameraPosition(target: position, zoom: 17)));
@@ -129,14 +134,13 @@ class _ListChargerState extends State<ListCharger> {
     return Container(
         height: 250,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(8),
             border: Border.all(), //width: 3.5, color: ColorManager.appBlack),
             boxShadow: [
               BoxShadow(
                   color: ColorManager.primary.withOpacity(0.17),
                   blurRadius: 2,
-                  spreadRadius: 3,
-                  offset: const Offset(1, 3))
+                  offset: const Offset(2, 3))
             ]),
         child: GoogleMap(
           onMapCreated: (argController) {
@@ -147,6 +151,9 @@ class _ListChargerState extends State<ListCharger> {
           mapType: MapType.normal,
           mapToolbarEnabled: false,
           compassEnabled: false,
+          gestureRecognizers: Set()
+            ..add(Factory<EagerGestureRecognizer>(
+                () => EagerGestureRecognizer())),
           onTap: (coordinates) {
             _pinMarkerOnMap(coordinates);
           },
@@ -485,14 +492,15 @@ class _ListChargerState extends State<ListCharger> {
                             _makeTitle(title: 'Availability'),
                             TimeIntervalPicker(
                                 borderColor: Colors.black,
-                                fillColor: ColorManager.primary.withOpacity(0.17),
+                                fillColor:
+                                    ColorManager.primary.withOpacity(0.17),
                                 borderRadius: 10,
                                 endLimit: DateTimeExtension.todayMidnight,
                                 startLimit: DateTimeExtension.todayStart,
                                 onChanged: (start, end, isAllDay) {
                                   _startAvailabilityTime = start!;
                                   _endAvailabilityTime = end!;
-                                  }),
+                                }),
                             const SizedBox(
                               height: 15,
                             ),

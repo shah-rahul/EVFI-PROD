@@ -20,13 +20,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        onGenerateRoute: RouteGenerator.getRoute,
-        initialRoute: Routes.splashRoute,
-        theme: getApplicationTheme(), 
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      onGenerateRoute: RouteGenerator.getRoute,
+      initialRoute: Routes.splashRoute,
+      theme: getApplicationTheme(), 
     );
   }
 }

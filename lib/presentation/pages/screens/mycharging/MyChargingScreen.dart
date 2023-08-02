@@ -15,7 +15,7 @@ import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 
 import '../../widgets/MyChargingWidget.dart';
-import 'chargers_data.dart';
+import '../../models/chargers_data.dart';
 
 class MyChargingScreen extends StatefulWidget {
   const MyChargingScreen({Key? key}) : super(key: key);

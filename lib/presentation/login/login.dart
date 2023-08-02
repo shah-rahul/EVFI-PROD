@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:evfi/presentation/resources/styles_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../resources/font_manager.dart';
@@ -99,7 +100,9 @@ class LoginViewState extends State<LoginView> {
                                 width: AppSize.s4 - 3,
                                 color: ColorManager.darkGrey)),
                         labelText: 'Phone Number',
-                        suffixIcon: phoneController.text.length > 12
+                        // prefixText: '+91\t',
+                        prefixStyle: getBoldStyle(color: Colors.black),
+                        suffixIcon: phoneController.text.length > 9
                             ? Container(
                                 height: 20,
                                 width: 20,

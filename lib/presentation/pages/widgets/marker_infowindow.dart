@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '../../../Data_storage/UserData.dart';
-import '../../../Data_storage/UserDataProvider.dart';
-import '../../../register/UserChargingRegister.dart';
-import '../../../resources/values_manager.dart';
+import '../../Data_storage/UserData.dart';
+import '../../Data_storage/UserDataProvider.dart';
+import '../../register/UserChargingRegister.dart';
+import '../../resources/values_manager.dart';
 
 bool? isRegistered;
 
