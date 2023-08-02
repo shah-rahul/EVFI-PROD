@@ -18,11 +18,11 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   int _currentScreen = 0;
 
-  final List<Widget> screens = [
-    const Home(),
-    const BookingsScreen(),
-    const MyChargingScreen(),
-    const Account(),
+  final List<Widget> screens = const [
+    Home(),
+    BookingsScreen(),
+    MyChargingScreen(),
+    Account(),
   ];
 
   @override
@@ -68,7 +68,7 @@ class _MainViewState extends State<MainView> {
                   ? ColorManager.primary
                   : ColorManager.lightGrey,
             ),
-            //label: 'Bookings',
+            //label: 'Bookings on my charger screen',
           ),
           DotNavigationBarItem(
             icon: Image.asset(
@@ -78,7 +78,7 @@ class _MainViewState extends State<MainView> {
                   ? ColorManager.primary
                   : ColorManager.lightGrey,
             ),
-            //label: 'Account',
+            //label: 'Account/Profile section',
           ),
         ],
       ),

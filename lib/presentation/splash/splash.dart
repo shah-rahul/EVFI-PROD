@@ -47,7 +47,6 @@ class SplashViewState extends State<SplashView> {
   void whereToGo() async {
     var sharedPref = await SharedPreferences.getInstance();
     var isLoggedIn = sharedPref.getBool(keyLogin);
-    //var isLoggedIn=
     Timer(
       const Duration(seconds: 2),
       () {
