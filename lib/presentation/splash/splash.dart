@@ -32,16 +32,19 @@ class SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: ColorManager.appBlack,
-      body: const Center(
-        child: Image(
-          image: AssetImage(ImageAssets.splashlogo),
-          width: 250,
-          height: 250,
-        ),
-      ),
-    );
+        backgroundColor: ColorManager.appBlack,
+        body: Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: width * 0.3,
+            child: Image.asset(
+              ImageAssets.splashlogo,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ));
   }
 
   void whereToGo() async {

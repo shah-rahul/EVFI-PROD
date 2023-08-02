@@ -14,6 +14,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:evfi/presentation/pages/widgets/marker_infowindow.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';
@@ -37,8 +38,8 @@ class HomeState extends State<Home> {
   final List<Marker> _markers = <Marker>[];
   late GoogleMapController _mapController;
   Position _currentPosition = Position(
-      longitude: 28.6001740,
-      latitude: 77.2105709,
+      longitude: 28.679079,
+      latitude: 77.069710,
       timestamp: DateTime.now(),
       accuracy: 0,
       altitude: 0,
@@ -53,23 +54,39 @@ class HomeState extends State<Home> {
   }
 
   late CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(28.6001740, 77.2105709),
+    target: LatLng(28.679079, 77.069710),
     zoom: 13.4746,
     tilt: 15,
   );
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    await Geolocator.checkPermission();
-    await Geolocator.requestPermission();
-    try {
-      _currentPosition = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      if (_mapController != null) {
-        updateCameraPosition(_currentPosition);
+    if (!isLocationServiceEnabled)
+      return Future.error('Location services are disabled.');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLocationPermissionRequested =
+        prefs.getBool('location_permission_requested') ?? false;
+    if (!isLocationPermissionRequested) {
+      // If location permission is not requested before, request it now
+
+      await Geolocator.requestPermission();
+      await prefs.setBool('location_permission_requested', true);
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      try {
+        _currentPosition = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        if (_mapController != null) {
+          updateCameraPosition(_currentPosition);
+        }
+      } catch (e) {
+        // print('Error getting current location: $e');
       }
-    } catch (e) {
-     // print('Error getting current location: $e');
+    } else {
+      Future.error('Location services  denied.');
     }
     // Ask permission from device
   }
@@ -207,8 +224,8 @@ class HomeState extends State<Home> {
             snippet:
                 '${_currentPosition.latitude},${_currentPosition.longitude}',
           ),
-          position: LatLng(_currentPosition.latitude,
-              _currentPosition.longitude),
+          position:
+              LatLng(_currentPosition.latitude, _currentPosition.longitude),
           icon: BitmapDescriptor.fromBytes(markerIcon)));
 
       _mapController
@@ -258,7 +275,7 @@ class HomeState extends State<Home> {
   //   _getUserCurrentLocation();
   //   super.initState();
   // }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
