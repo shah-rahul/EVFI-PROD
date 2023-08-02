@@ -91,7 +91,7 @@ class LoginViewState extends State<LoginView> {
                         // Store the entered phone number in the provider
                        // StorePhoneNumber(value);
                         setState(() {
-                          phoneController.text = value;
+                          phoneController.text = "+91"+value;
                         });
                       },
                       decoration: InputDecoration(
