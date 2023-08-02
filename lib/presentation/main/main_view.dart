@@ -33,7 +33,8 @@ class _MainViewState extends State<MainView> {
         currentIndex: _currentScreen,
         //margin: EdgeInsets.symmetric(horizontal: 10.0),
         marginR: const EdgeInsets.symmetric(horizontal:25, vertical: 20),
-        borderRadius: 40,
+        borderRadius: 20,
+        paddingR: const EdgeInsets.all(5),
         backgroundColor: ColorManager.appBlack,
         dotIndicatorColor: ColorManager.appBlack,
         onTap: (value) => setState(() {

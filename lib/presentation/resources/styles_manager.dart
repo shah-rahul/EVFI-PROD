@@ -28,7 +28,7 @@ TextStyle getLightStyle(
 // bold text style
 
 TextStyle getBoldStyle(
-    {double fontSize = FontSize.s12, required Color color}) {
+    {double fontSize = FontSize.s14, required Color color}) {
   return _getTextStyle(
       fontSize, FontConstants.fontFamily, FontWeightManager.bold, color);
 }
