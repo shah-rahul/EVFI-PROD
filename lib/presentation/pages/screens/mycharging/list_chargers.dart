@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
@@ -52,32 +52,50 @@ class _ListChargerState extends State<ListCharger> {
 
   late GoogleMapController _mapController;
   late LatLng _selectedLocation;
-
+  late LatLng _position;
   DateTime? _startAvailabilityTime, _endAvailabilityTime;
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
-
+  final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
+  void _addInFirestore(double latitude, double longitude) async {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    // print("****");
+    _form.currentState!.save();
+    String geohash = encodeGeohash(latitude, longitude, precision: 9);
+    GeoPoint coordinate = GeoPoint(latitude, longitude);
+    var marker = <String, dynamic>{
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+    };
+    await FirebaseFirestore.instance
+        .collection('Chargers')
+        .add(marker)
+        .then((_) => Navigator.of(context).pop());
+  }
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return; //Invalid
     }
+
     _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     //store details in database
 
-    await charger.addCharger(
-        StationAddress: StationAddress!,
-        StationName: StationName!,
-        amount: amount!,
-        position: LatLng(latitude!, longitude!));
+    // await charger.addCharger(
+    //     StationAddress: StationAddress!,
+    //     StationName: StationName!,
+    //     amount: amount!,
+    //     position: LatLng(latitude!, longitude!));
     setState(() {
       _isLoading = false;
     });
@@ -173,22 +191,44 @@ class _ListChargerState extends State<ListCharger> {
                 () => EagerGestureRecognizer())),
           onTap: (coordinates) {
             _pinMarkerOnMap(coordinates);
+            StoreLatLng(coordinates);
           },
           markers: {_station},
         ));
   }
 
-  // void _addStation() {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: Colors.amberAccent[80],
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-  //     builder: (_) => GestureDetector(
-  //       onTap: null,
-  //       behavior: HitTestBehavior.opaque,
-  //       child: const NewStation(),
-  //     ),
-  //   );
+  void StoreLatLng(LatLng coordinates) {
+    // _onMarkerTapped(coordinates);
+
+    _position = coordinates;
+  }
+
+  Future<void> _onMarkerTapped(LatLng position) async {
+    double latitude = position.latitude;
+    double longitude = position.longitude;
+
+    String geohash = encodeGeohash(latitude, longitude, precision: 9);
+    GeoPoint coordinate = GeoPoint(latitude, longitude);
+    var marker = <String, dynamic>{
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+    };
+    await FirebaseFirestore.instance.collection('Chargers').add(marker);
+  }
+
+  // void StorePoints(LatLng position) {
+  //   double latitude = position.latitude;
+  //   double longitude = position.longitude;
+
+  //   String geohash = encodeGeohash(latitude, longitude, precision: 9);
+  //   GeoPoint coordinate = GeoPoint(latitude, longitude);
+  //   final userChargingDataProvider =
+  //       Provider.of<UserChargingDataProvider>(context);
+  //   UserChargingData userChargingData =
+  //       userChargingDataProvider.userChargingData;
+  //   userChargingData.geohash = geohash;
+  //   userChargingData.geopoint = coordinate as String;
+
+  //   userChargingDataProvider.setUserChargingData(userChargingData);
   // }
 
   Widget _takeChargerLocation() {
@@ -206,13 +246,11 @@ class _ListChargerState extends State<ListCharger> {
                 backgroundColor: ColorManager.grey3,
                 child: const Icon(Icons.bolt, color: Colors.green),
               ),
-
               onTap: () {
                 setState(() {
                   _isPinning = true;
                 });
               },
-              // onTap: _addStation,
             ),
           );
   }
@@ -290,7 +328,21 @@ class _ListChargerState extends State<ListCharger> {
         _imageList!.add(sekectedImage);
       }
     }
+
     setState(() {});
+  }
+
+  Future<String> uploadImage(XFile imageFile) async {
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('charger_images')
+        .child('$imageName.jpg');
+
+    await ref.putFile(File(imageFile.path));
+    String imageUrl = await ref.getDownloadURL();
+
+    return imageUrl;
   }
 
   Future<void> _showPhotoOptionsDialog() {
@@ -399,10 +451,10 @@ class _ListChargerState extends State<ListCharger> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreChargerType(String chargerType) {
+    void StoreChargerType() {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
-      userChargingData.chargerType = chargerType;
+      userChargingData.chargerType = _chargerTypeRadioButtons as String;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -428,6 +480,13 @@ class _ListChargerState extends State<ListCharger> {
           userChargingDataProvider.userChargingData;
       userChargingData.amenities = amenities;
 
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreImageurl(String imageUrl) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.imageurl = imageUrl;
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
@@ -672,7 +731,10 @@ class _ListChargerState extends State<ListCharger> {
                                   : Align(
                                       alignment: Alignment.center,
                                       child: ElevatedButton(
-                                          onPressed: _showPhotoOptionsDialog,
+                                          // onPressed: _showPhotoOptionsDialog,
+                                          onPressed: () {
+                                            _showPhotoOptionsDialog();
+                                          },
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.black87,
                                               shadowColor:
@@ -703,20 +765,31 @@ class _ListChargerState extends State<ListCharger> {
                             child: ElevatedButton(
                                 // onPressed: _submitForm,
                                 onPressed: () async {
+                                  _showMap;
+                                  _onMarkerTapped(_position);
+                                  // StorePoints(_position);
                                   await userChargingDataProvider
                                       .saveUserChargingData();
                                   UserChargingData? userChargingData =
                                       userChargingDataProvider.userChargingData;
                                   userChargingDataProvider
                                       .setUserChargingData(userChargingData);
+                                  // _addInFirestore(_selectedLocation.latitude,
+                                  //     _selectedLocation.longitude);
+                                  
+                                  
+                                  
+                                  // StoreLatLng;
+
+                                  Navigator.pop(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.fade,
+                                          child: const MyChargingScreen()));
                                   // print(
                                   //     'Latitude: ${_selectedLocation.latitude}');
                                   // print(
                                   //     'Longitude: ${_selectedLocation.longitude}');
-
-                                
-                                    
-                                  
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
