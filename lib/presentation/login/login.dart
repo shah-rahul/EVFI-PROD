@@ -85,14 +85,19 @@ class LoginViewState extends State<LoginView> {
                     TextFormField(
                       style: TextStyle(color: ColorManager.darkGrey),
                       //controller: phoneController,
+                     
                       onChanged: (value) {
-                        // Store the entered phone number in the provider
+                        // Store the entered phone numb7303er in the provider
                         // StorePhoneNumber(value);
                         setState(() {
                           phoneController.text = "+91" + value;
                         });
                       },
+                    
+                      
                       decoration: InputDecoration(
+                        prefixText: "+91| \t",
+                        
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 width: AppSize.s4 - 3,
