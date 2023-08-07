@@ -40,7 +40,7 @@ class _RegisterViewState extends State<RegisterView> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
-    // Example: Storing user's name  using provider
+    //  Storing user's name  using provider
 
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;

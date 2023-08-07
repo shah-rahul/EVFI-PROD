@@ -1,21 +1,34 @@
+// ignore_for_file: duplicate_import
+
 import 'dart:async';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
-
+import '../../../Data_storage/UserChargingDataProvider.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
 import '../../../resources/color_manager.dart';
+// import '../../models/decode_geohash.dart';
+import '../../models/encode_geohash.dart';
 import '../../models/my_charging.dart';
 import '../../models/chargers_data.dart';
 import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
+
+import '../accountPage/new_station.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);
@@ -37,6 +50,9 @@ class _ListChargerState extends State<ListCharger> {
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
 
+  late GoogleMapController _mapController;
+  late LatLng _selectedLocation;
+
   DateTime? _startAvailabilityTime, _endAvailabilityTime;
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
@@ -56,6 +72,7 @@ class _ListChargerState extends State<ListCharger> {
       _isLoading = true;
     });
     //store details in database
+
     await charger.addCharger(
         StationAddress: StationAddress!,
         StationName: StationName!,
@@ -161,6 +178,19 @@ class _ListChargerState extends State<ListCharger> {
         ));
   }
 
+  // void _addStation() {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     backgroundColor: Colors.amberAccent[80],
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+  //     builder: (_) => GestureDetector(
+  //       onTap: null,
+  //       behavior: HitTestBehavior.opaque,
+  //       child: const NewStation(),
+  //     ),
+  //   );
+  // }
+
   Widget _takeChargerLocation() {
     return _isPinning
         ? _showMap()
@@ -176,11 +206,13 @@ class _ListChargerState extends State<ListCharger> {
                 backgroundColor: ColorManager.grey3,
                 child: const Icon(Icons.bolt, color: Colors.green),
               ),
+
               onTap: () {
                 setState(() {
                   _isPinning = true;
                 });
               },
+              // onTap: _addStation,
             ),
           );
   }
@@ -332,6 +364,73 @@ class _ListChargerState extends State<ListCharger> {
 
   @override
   Widget build(BuildContext context) {
+    final userChargingDataProvider =
+        Provider.of<UserChargingDataProvider>(context);
+    // Storing users charging information using provider
+    void StoreStationName(String StationName) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.stationName = StationName;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreStationAddress(String StationAddress) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.address = StationAddress;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreAadharNumber(String aadharNumber) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.aadharNumber = aadharNumber;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreHostName(String hostName) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.hostName = hostName;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreChargerType(String chargerType) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.chargerType = chargerType;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreAvailability(String availability) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.availability = availability;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StorePrice(String Price) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.price = Price;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void Storeamenities(String amenities) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.amenities = amenities;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -368,10 +467,12 @@ class _ListChargerState extends State<ListCharger> {
                           children: [
                             _makeTitle(title: 'Station Name'),
                             TextFormField(
+                              onChanged: StoreStationName,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid station name.';
                                 }
+
                                 return null;
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
@@ -395,6 +496,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Address'),
                             TextFormField(
+                              onChanged: StoreStationAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid address.';
@@ -431,6 +533,7 @@ class _ListChargerState extends State<ListCharger> {
                             // ),
                             _makeTitle(title: 'Aadhar No.'),
                             TextFormField(
+                              onChanged: StoreAadharNumber,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid aadhar number.';
@@ -458,6 +561,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Host Names'),
                             TextFormField(
+                              onChanged: StoreHostName,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter valid names.';
@@ -506,6 +610,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Price (₹KW/h)'),
                             TextFormField(
+                              onChanged: StorePrice,
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   prefixText: '₹\t',
@@ -535,6 +640,7 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(height: 15),
                             _makeTitle(title: 'Amenities'),
                             TextFormField(
+                              onChanged: Storeamenities,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please provide a list of available services';
@@ -595,7 +701,23 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: _submitForm,
+                                // onPressed: _submitForm,
+                                onPressed: () async {
+                                  await userChargingDataProvider
+                                      .saveUserChargingData();
+                                  UserChargingData? userChargingData =
+                                      userChargingDataProvider.userChargingData;
+                                  userChargingDataProvider
+                                      .setUserChargingData(userChargingData);
+                                  // print(
+                                  //     'Latitude: ${_selectedLocation.latitude}');
+                                  // print(
+                                  //     'Longitude: ${_selectedLocation.longitude}');
+
+                                
+                                    
+                                  
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         ColorManager.primary.withOpacity(0.7),

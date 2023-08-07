@@ -12,21 +12,22 @@ class UserDataProvider extends ChangeNotifier {
   //late UserData _userData;
   UserData _userData = UserData(
     Uid: "",
+    
     name: '',
     phoneNumber: '',
     level1: false,
-    vehicleManufacturer: '',
-    vehicleNumber: '',
-    chargingRequirements: '',
+    // vehicleManufacturer: '',
+    // vehicleNumber: '',
+    // chargingRequirements: '',
     level2: false,
-    stationName: '',
-    address: '',
-    aadharNumber: '',
-    hostName: '',
-    chargerType: '',
-    price: '',
-    amenities: '',
-    level3: false,
+    // stationName: '',
+    // address: '',
+    // aadharNumber: '',
+    // hostName: '',
+    // chargerType: '',
+    // price: '',
+    // amenities: '',
+    isProvider: false,
   );
   // ignore: prefer_final_fields
   CollectionReference _usersCollection =
@@ -43,28 +44,31 @@ class UserDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       DocumentReference documentRef = await _usersCollection.add({
+        'Uid': "",
         'Name': _userData.name,
-        'Phone Number': _userData.phoneNumber,
+        'PhoneNumber': _userData.phoneNumber,
         'level 1': _userData.level1,
-        'Vehicle Manufacturer': _userData.vehicleManufacturer,
-        'Vehicle Number': _userData.vehicleNumber,
-        'Charging Requirements': _userData.chargingRequirements,
+        // 'Vehicle Manufacturer': _userData.vehicleManufacturer,
+        // 'Vehicle Number': _userData.vehicleNumber,
+        // 'Charging Requirements': _userData.chargingRequirements,
         'level 2': _userData.level2,
-        'Station Name':_userData.stationName,
-        'Address':_userData.address,
-        'Aadhar Number':_userData.aadharNumber,
-        'Host Name ':_userData.hostName,
-        'Charger Type':_userData.chargerType,
-        'Price':_userData.price,
-        'Amenities':_userData.amenities,
-        'Level 3':_userData.level3,
+        // 'Station Name':_userData.stationName,
+        // 'Address':_userData.address,
+        // 'Aadhar Number':_userData.aadharNumber,
+        // 'Host Name ':_userData.hostName,
+        // 'Charger Type':_userData.chargerType,
+        // 'Price':_userData.price,
+        // 'Amenities':_userData.amenities,
+        'isProvider':_userData.isProvider,
        
       });
+      
       
       // Log the ID of the newly created document
     //  print('User document ID: ${documentRef.id}');
     } catch (e) {
      // print('Error saving user data: $e');
     }
+    
   }
 }
