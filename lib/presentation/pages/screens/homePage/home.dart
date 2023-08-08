@@ -33,6 +33,7 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  FocusNode _searchFocusNode = FocusNode();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final List<Marker> _markers = <Marker>[];

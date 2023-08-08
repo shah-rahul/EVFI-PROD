@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -38,11 +39,11 @@ class _SearchWidgetState extends State<SearchWidget> {
       child: TextFormField(
           controller: controller,
           focusNode: textFieldFocusNode,
-          style: TextStyle(color: ColorManager.appBlack),
+          style: TextStyle(color: Colors.white),
           keyboardType: TextInputType.streetAddress,
           decoration: InputDecoration(
-            labelText: hint,
-            labelStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
+            hintText: hint,
+            hintStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
             filled: true, //<-- SEE HERE
             fillColor: ColorManager.appBlack,
             contentPadding: const EdgeInsets.all(10),
@@ -104,7 +105,6 @@ class _SearchWidgetState extends State<SearchWidget> {
                       longitude: double.parse(e['lon'])))
                   .toList();
               if (controller.text.isNotEmpty) {
-                print("------------------");
                 setState(() {
                   suggestions = true;
                 });
@@ -131,7 +131,9 @@ class _SearchWidgetState extends State<SearchWidget> {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s12))),
-      height: height * 0.30,
+      height: _options.length > 4
+          ? height * 0.22
+          : _options.length * height * 0.064,
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) => Column(
