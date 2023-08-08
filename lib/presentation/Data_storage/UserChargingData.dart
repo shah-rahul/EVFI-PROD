@@ -1,9 +1,9 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 class UserChargingData {
-  // String vehicleManufacturer;
-  // String vehicleNumber;
-  // String chargingRequirements;
+  String geohash;
+  String geopoint;
+  
 
   String stationName;
   String address;
@@ -15,11 +15,11 @@ class UserChargingData {
   String price;
   String amenities;
   // image of charger
+  String imageurl;
 
   UserChargingData({
-    // required this.vehicleManufacturer,
-    // required this.vehicleNumber,
-    // required this.chargingRequirements,
+    required this.geohash,
+    required this.geopoint,
 
     required this.stationName,
     required this.address,
@@ -31,6 +31,7 @@ class UserChargingData {
     required this.price,
     required this.amenities,
     //image of charger
+    required this.imageurl,
   });
 
   UserChargingData? get userChargingData => null;
