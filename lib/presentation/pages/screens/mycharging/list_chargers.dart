@@ -1,21 +1,34 @@
+// ignore_for_file: duplicate_import
+
 import 'dart:async';
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
-
+import '../../../Data_storage/UserChargingDataProvider.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
 import '../../../resources/color_manager.dart';
+// import '../../models/decode_geohash.dart';
+import '../../models/encode_geohash.dart';
 import '../../models/my_charging.dart';
 import '../../models/chargers_data.dart';
 import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
+
+import '../accountPage/new_station.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);
@@ -37,30 +50,52 @@ class _ListChargerState extends State<ListCharger> {
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
 
+  late GoogleMapController _mapController;
+  late LatLng _selectedLocation;
+  late LatLng _position;
   DateTime? _startAvailabilityTime, _endAvailabilityTime;
   String? StationName, StationAddress, aadharNumber;
   String? hostNames, amenities; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
-
+  final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
+  void _addInFirestore(double latitude, double longitude) async {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    // print("****");
+    _form.currentState!.save();
+    String geohash = encodeGeohash(latitude, longitude, precision: 9);
+    GeoPoint coordinate = GeoPoint(latitude, longitude);
+    var marker = <String, dynamic>{
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+    };
+    await FirebaseFirestore.instance
+        .collection('Chargers')
+        .add(marker)
+        .then((_) => Navigator.of(context).pop());
+  }
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) {
       return; //Invalid
     }
+
     _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
     });
     //store details in database
-    await charger.addCharger(
-        StationAddress: StationAddress!,
-        StationName: StationName!,
-        amount: amount!,
-        position: LatLng(latitude!, longitude!));
+
+    // await charger.addCharger(
+    //     StationAddress: StationAddress!,
+    //     StationName: StationName!,
+    //     amount: amount!,
+    //     position: LatLng(latitude!, longitude!));
     setState(() {
       _isLoading = false;
     });
@@ -156,10 +191,45 @@ class _ListChargerState extends State<ListCharger> {
                 () => EagerGestureRecognizer())),
           onTap: (coordinates) {
             _pinMarkerOnMap(coordinates);
+            StoreLatLng(coordinates);
           },
           markers: {_station},
         ));
   }
+
+  void StoreLatLng(LatLng coordinates) {
+    // _onMarkerTapped(coordinates);
+
+    _position = coordinates;
+  }
+
+  Future<void> _onMarkerTapped(LatLng position) async {
+    double latitude = position.latitude;
+    double longitude = position.longitude;
+
+    String geohash = encodeGeohash(latitude, longitude, precision: 9);
+    GeoPoint coordinate = GeoPoint(latitude, longitude);
+    var marker = <String, dynamic>{
+      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+    };
+    await FirebaseFirestore.instance.collection('Chargers').add(marker);
+  }
+
+  // void StorePoints(LatLng position) {
+  //   double latitude = position.latitude;
+  //   double longitude = position.longitude;
+
+  //   String geohash = encodeGeohash(latitude, longitude, precision: 9);
+  //   GeoPoint coordinate = GeoPoint(latitude, longitude);
+  //   final userChargingDataProvider =
+  //       Provider.of<UserChargingDataProvider>(context);
+  //   UserChargingData userChargingData =
+  //       userChargingDataProvider.userChargingData;
+  //   userChargingData.geohash = geohash;
+  //   userChargingData.geopoint = coordinate as String;
+
+  //   userChargingDataProvider.setUserChargingData(userChargingData);
+  // }
 
   Widget _takeChargerLocation() {
     return _isPinning
@@ -258,7 +328,21 @@ class _ListChargerState extends State<ListCharger> {
         _imageList!.add(sekectedImage);
       }
     }
+
     setState(() {});
+  }
+
+  Future<String> uploadImage(XFile imageFile) async {
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('charger_images')
+        .child('$imageName.jpg');
+
+    await ref.putFile(File(imageFile.path));
+    String imageUrl = await ref.getDownloadURL();
+
+    return imageUrl;
   }
 
   Future<void> _showPhotoOptionsDialog() {
@@ -332,6 +416,80 @@ class _ListChargerState extends State<ListCharger> {
 
   @override
   Widget build(BuildContext context) {
+    final userChargingDataProvider =
+        Provider.of<UserChargingDataProvider>(context);
+    // Storing users charging information using provider
+    void StoreStationName(String StationName) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.stationName = StationName;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreStationAddress(String StationAddress) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.address = StationAddress;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreAadharNumber(String aadharNumber) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.aadharNumber = aadharNumber;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreHostName(String hostName) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.hostName = hostName;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreChargerType() {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.chargerType = _chargerTypeRadioButtons as String;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreAvailability(String availability) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.availability = availability;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StorePrice(String Price) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.price = Price;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void Storeamenities(String amenities) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.amenities = amenities;
+
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreImageurl(String imageUrl) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.imageurl = imageUrl;
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -368,10 +526,12 @@ class _ListChargerState extends State<ListCharger> {
                           children: [
                             _makeTitle(title: 'Station Name'),
                             TextFormField(
+                              onChanged: StoreStationName,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid station name.';
                                 }
+
                                 return null;
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
@@ -395,6 +555,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Address'),
                             TextFormField(
+                              onChanged: StoreStationAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid address.';
@@ -431,6 +592,7 @@ class _ListChargerState extends State<ListCharger> {
                             // ),
                             _makeTitle(title: 'Aadhar No.'),
                             TextFormField(
+                              onChanged: StoreAadharNumber,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid aadhar number.';
@@ -458,6 +620,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Host Names'),
                             TextFormField(
+                              onChanged: StoreHostName,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter valid names.';
@@ -506,6 +669,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'Price (₹KW/h)'),
                             TextFormField(
+                              onChanged: StorePrice,
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   prefixText: '₹\t',
@@ -535,6 +699,7 @@ class _ListChargerState extends State<ListCharger> {
                             const SizedBox(height: 15),
                             _makeTitle(title: 'Amenities'),
                             TextFormField(
+                              onChanged: Storeamenities,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please provide a list of available services';
@@ -566,7 +731,10 @@ class _ListChargerState extends State<ListCharger> {
                                   : Align(
                                       alignment: Alignment.center,
                                       child: ElevatedButton(
-                                          onPressed: _showPhotoOptionsDialog,
+                                          // onPressed: _showPhotoOptionsDialog,
+                                          onPressed: () {
+                                            _showPhotoOptionsDialog();
+                                          },
                                           style: ElevatedButton.styleFrom(
                                               backgroundColor: Colors.black87,
                                               shadowColor:
@@ -595,7 +763,34 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: _submitForm,
+                                // onPressed: _submitForm,
+                                onPressed: () async {
+                                  _showMap;
+                                  _onMarkerTapped(_position);
+                                  // StorePoints(_position);
+                                  await userChargingDataProvider
+                                      .saveUserChargingData();
+                                  UserChargingData? userChargingData =
+                                      userChargingDataProvider.userChargingData;
+                                  userChargingDataProvider
+                                      .setUserChargingData(userChargingData);
+                                  // _addInFirestore(_selectedLocation.latitude,
+                                  //     _selectedLocation.longitude);
+                                  
+                                  
+                                  
+                                  // StoreLatLng;
+
+                                  Navigator.pop(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.fade,
+                                          child: const MyChargingScreen()));
+                                  // print(
+                                  //     'Latitude: ${_selectedLocation.latitude}');
+                                  // print(
+                                  //     'Longitude: ${_selectedLocation.longitude}');
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         ColorManager.primary.withOpacity(0.7),

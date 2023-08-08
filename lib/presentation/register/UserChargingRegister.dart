@@ -41,9 +41,9 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     void updateData(String manufacturer, String number, String Requirements) {
       UserData userData = userDataProvider.userData;
-      userData.vehicleManufacturer = manufacturer;
-      userData.vehicleNumber = number;
-      userData.chargingRequirements = Requirements;
+      // userData.vehicleManufacturer = manufacturer;
+      // userData.vehicleNumber = number;
+      // userData.chargingRequirements = Requirements;
       userData.level2 = true;
       userDataProvider.setUserData(userData);
     }
@@ -89,8 +89,8 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                 ),
               ),
               onChanged: (value) {
-                updateData(
-                    userDataProvider.userData.vehicleManufacturer, " ", value);
+                // updateData(
+                //     userDataProvider.userData.vehicleManufacturer, " ", value);
               },
             ),
             const SizedBox(height: 16.0),
@@ -107,8 +107,8 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                 ),
               ),
               onChanged: (value) {
-                updateData(userDataProvider.userData.vehicleManufacturer, value,
-                    userDataProvider.userData.chargingRequirements);
+                // updateData(userDataProvider.userData.vehicleManufacturer, value,
+                //     userDataProvider.userData.chargingRequirements);
               },
             ),
             const SizedBox(height: 16.0),

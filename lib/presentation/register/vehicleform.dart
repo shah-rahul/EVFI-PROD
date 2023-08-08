@@ -33,8 +33,8 @@ class _VehicleFormState extends State<VehicleForm> {
 
     void updateVehicleData(String manufacturer, String number) {
       UserData userData = userDataProvider.userData;
-      userData.vehicleManufacturer = manufacturer;
-      userData.vehicleNumber = number;
+      // userData.vehicleManufacturer = manufacturer;
+      // userData.vehicleNumber = number;
       userDataProvider.setUserData(userData);
     }
 
@@ -94,8 +94,8 @@ class _VehicleFormState extends State<VehicleForm> {
                                 vertical: AppPadding.p8),
                             child: TextField(
                               onChanged: (value) {
-                                updateVehicleData(value,
-                                    userDataProvider.userData.vehicleNumber);
+                                // updateVehicleData(value,
+                                //     userDataProvider.userData.vehicleNumber);
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               // controller: vehicleManufacturerController,
@@ -117,10 +117,10 @@ class _VehicleFormState extends State<VehicleForm> {
                                 vertical: AppPadding.p8),
                             child: TextField(
                               onChanged: (value) {
-                                updateVehicleData(
-                                    userDataProvider
-                                        .userData.vehicleManufacturer,
-                                    value);
+                                // updateVehicleData(
+                                //     userDataProvider
+                                //         .userData.vehicleManufacturer,
+                                //     value);
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               // controller: vehicleregistrationController,
@@ -154,10 +154,10 @@ class _VehicleFormState extends State<VehicleForm> {
                                   UserData? userData =
                                       userDataProvider.userData;
                                   if (userData != null) {
-                                    userData.vehicleManufacturer =
-                                        vehicleManufacturer;
-                                    userData.vehicleNumber = vehicleNumber;
-                                    userDataProvider.setUserData(userData);
+                                    // userData.vehicleManufacturer =
+                                    //     vehicleManufacturer;
+                                    // userData.vehicleNumber = vehicleNumber;
+                                    // userDataProvider.setUserData(userData);
                                   }
                                   Navigator.push(
                                     context,

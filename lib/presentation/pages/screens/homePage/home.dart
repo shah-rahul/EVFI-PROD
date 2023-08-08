@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 
@@ -284,7 +285,7 @@ class HomeState extends State<Home> {
         body: FutureBuilder(
             future: getData(),
             builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
-              return SizedBox(
+              return WillPopScope(child:SizedBox(
                 height: MediaQuery.of(context).size.height,
                 child: Stack(
                   children: [
@@ -310,7 +311,13 @@ class HomeState extends State<Home> {
                     ),
                   ],
                 ),
-              );
+              ),  onWillPop: _onBackPressed);
+              
             }));
+  } 
+
+  Future<bool> _onBackPressed() async{
+    exit(0);
+    
   }
 }
