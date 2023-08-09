@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
 import 'package:evfi/presentation/pages/screens/accountPage/success_payment.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -38,6 +39,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorManager.primary,
         title: const Text(
           'Payment',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -97,7 +99,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               width: 280,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(50),
-                color: Colors.amber,
+                color: ColorManager.primary,
               ),
               child: const Text(
                 'Pay',

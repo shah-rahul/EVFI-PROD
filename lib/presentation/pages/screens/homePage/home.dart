@@ -1,10 +1,9 @@
-// ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
+//ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -139,6 +138,12 @@ class HomeState extends State<Home> {
             (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
+        final stnName = 
+            (data['info'] as Map<String, dynamic>)['name'] as String;
+        final stnAddress =
+            (data['info'] as Map<String, dynamic>)['address'] as String;
+        final stnImgUrl =
+            (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
 
         _markers.add(Marker(
             markerId: MarkerId(geohash),
@@ -154,7 +159,11 @@ class HomeState extends State<Home> {
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
                   return CustomMarkerPopup(
-                      geopoint: geoPoint, geohash: geohash);
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash);
                 },
               );
             },

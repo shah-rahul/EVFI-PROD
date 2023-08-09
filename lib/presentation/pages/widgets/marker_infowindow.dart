@@ -16,6 +16,7 @@ bool? isRegistered;
 
 /*RadioButtons*/
 enum ChargerTypes { A, B, C }
+
 ChargerTypes? selectedType = ChargerTypes.A;
 /*RadioButtons*/
 
@@ -35,20 +36,29 @@ List<String> timings = [
 class CustomMarkerPopup extends StatefulWidget {
   final GeoPoint geopoint;
   final String geohash;
-  final String stationName = 'EVFI Charging Station';
-  final String address =
-      'Sector 39, Karnal, NH-1, GT Karnal Road,, Haryana, 132001';
+  final String stationName;
+  final String address;
+  final String imageUrl;
+  //final String stationName = 'EVFI Charging Station';
+  //final String address =
+  //'Sector 39, Karnal, NH-1, GT Karnal Road,, Haryana, 132001';
 
-  const CustomMarkerPopup({required this.geopoint, required this.geohash});
+  const CustomMarkerPopup({
+      required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.geopoint,
+      required this.geohash,
+      });
 
   @override
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();
 }
 
-/*
 class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   bool isBooking = false;
   String str = 'Book Slot';
+
 
   void onchanRadio(ChargerTypes val) {
     setState(() {
@@ -56,126 +66,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
     });
   }
 
-  Widget callContent() {
-    if (isBooking) {
-      print('content cancel');
-      return bookingSection(context, onchanRadio);
-    } else {
-      print('content bookslot');
-      return startingSection(context);
-    }
-  }
-
-  void changecontent() {
-    if (isRegistered!) {
-      Navigator.push(
-        context,
-        PageTransition(
-          type: PageTransitionType.rightToLeft,
-          child: UserChargingRegister(),
-        ),
-      );
-    } else {
-      setState(() {
-        isBooking = !isBooking;
-        if (!isBooking) {
-          str = 'Book Slot';
-        } else {
-          str = 'Back';
-        }
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final userDataProvider = Provider.of<UserDataProvider>(context);
-    UserData userData = userDataProvider.userData;
-    userDataProvider.setUserData(userData);
-
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(3),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadiusDirectional.only(
-            topStart: Radius.circular(15),
-            topEnd: Radius.circular(15),
-          ),
-        ),
-        height: 300,
-        child: Padding(
-          padding: const EdgeInsets.all(AppMargin.m12 - 1),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.stationName,
-                    style: const TextStyle(
-                      fontSize: AppSize.s20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Container(
-                    height: 30,
-                    width: 95,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          isRegistered = await checkNumberIsRegistered(
-                            number: userDataProvider.userData.phoneNumber,
-                          );
-                          Future.delayed(Duration.zero, () {
-                            changecontent();
-                          });
-                        } catch (e) {
-                          // Handle the error
-                        }
-                      },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.amber),
-                      ),
-                      child: Text(
-                        str,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Text(
-                widget.address,
-                style: const TextStyle(fontSize: AppSize.s12),
-              ),
-              const SizedBox(height: 8),
-              callContent(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
-
-class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
-  bool isBooking = false;
-  String str = 'Book Slot';
-
-  void onchanRadio(ChargerTypes val) {
-    setState(() {
-      selectedType = val;
-    });
-  }
 
   Widget callContent() {
     if (isBooking) {
@@ -184,6 +74,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
       return startingSection(context);
     }
   }
+
 
   void changecontent(bool isRegistered) {
     if (isRegistered) {
@@ -205,6 +96,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -273,7 +165,11 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(height: 150, alignment: Alignment.center , child: const Center(child: CircularProgressIndicator()));
+                    return Container(
+                        height: 150,
+                        alignment: Alignment.center,
+                        child:
+                            const Center(child: CircularProgressIndicator()));
                   } else if (snapshot.hasError) {
                     return const Text('Error occurred');
                   } else {
@@ -304,7 +200,7 @@ Widget bookingSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-         Row(
+        Row(
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             SizedBox(width: 14),
@@ -373,37 +269,35 @@ Widget bookingSection(
             ),
           ],
         ),
-        Padding(padding: const EdgeInsets.all(8),
-        child:
-        DropdownButtonFormField<String>(
-          value: selectedTime,
-          icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
-          dropdownColor: Colors.amber.shade100,
-          
-          elevation: 4,
-          decoration: const InputDecoration(
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: AppMargin.m14),
-            labelText: "Time Slot",
-            border: UnderlineInputBorder(),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: DropdownButtonFormField<String>(
+            value: selectedTime,
+            icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
+            dropdownColor: Colors.amber.shade100,
+            elevation: 4,
+            decoration: const InputDecoration(
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AppMargin.m14),
+              labelText: "Time Slot",
+              border: UnderlineInputBorder(),
+            ),
+            items: timings.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              selectedTime = value!;
+            },
           ),
-          items: timings.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                style: const TextStyle(color: Colors.black),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            selectedTime = value!;
-          },
         ),
-        ),
-      
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -481,7 +375,7 @@ Widget startingSection(BuildContext context) {
         borderRadius: BorderRadius.circular(10),
         child: Image.asset(
           'assets/images/map/carphoto.jpeg',
-          height: 160,
+          height: 155,
           width: double.infinity,
           fit: BoxFit.cover,
         ),
