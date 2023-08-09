@@ -176,7 +176,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
       setPolylines(routpoints).then((_) => _setMapFitToScreen(polylines));
     } on Exception catch (e) {
-    //  print(e);
+      //  print(e);
     }
   }
 
@@ -214,15 +214,14 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
-        final stnName = 
+        final stnName =
             (data['info'] as Map<String, dynamic>)['name'] as String;
         final stnAddress =
             (data['info'] as Map<String, dynamic>)['address'] as String;
         final stnImgUrl =
             (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
 
-
-      //  print(geoPoint.latitude);
+        //  print(geoPoint.latitude);
         _newMarkers.add(Marker(
             markerId: MarkerId(geohash),
             onTap: () {
@@ -238,7 +237,13 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
                   return CustomMarkerPopup(
-                      stationName: stnName, address: stnAddress, imageUrl: stnImgUrl, geopoint: geoPoint, geohash: geohash);
+                    stationName: stnName,
+                    address: stnAddress,
+                    imageUrl: stnImgUrl,
+                    geopoint: geoPoint,
+                    geohash: geohash,
+                    costOfFullCharge: 25,
+                  );
                 },
               );
             },
@@ -256,7 +261,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   void _showRouteMarkers(List<LatLng> polylineCoordinates) {
-   // print(polylineCoordinates.length);
+    // print(polylineCoordinates.length);
     for (var pos = 0; pos < polylineCoordinates.length; pos += 20) {
       setRouteMarker(4, polylineCoordinates[pos]);
     }
@@ -284,7 +289,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   }
 
   setPolylines(List<LatLng> polylineCoordinates) async {
-  //  print(polylineCoordinates);
+    //  print(polylineCoordinates);
     PolylineId polylineId = const PolylineId('polyline to set route');
     Polyline polyline = Polyline(
       polylineId: polylineId,

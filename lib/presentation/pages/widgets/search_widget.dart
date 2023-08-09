@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -22,7 +23,7 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  FocusNode _textfieldFocus = FocusNode();
+  FocusNode textfieldFocus = FocusNode();
   List<OSMdata> _options = <OSMdata>[];
 
   Widget buildTextFormField(
@@ -38,11 +39,11 @@ class _SearchWidgetState extends State<SearchWidget> {
       child: TextFormField(
           controller: controller,
           focusNode: textFieldFocusNode,
-          style: TextStyle(color: ColorManager.appBlack),
+          style: TextStyle(color: Colors.white),
           keyboardType: TextInputType.streetAddress,
           decoration: InputDecoration(
-            labelText: hint,
-            labelStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
+            hintText: hint,
+            hintStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
             filled: true, //<-- SEE HERE
             fillColor: ColorManager.appBlack,
             contentPadding: const EdgeInsets.all(10),
@@ -103,8 +104,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       latitude: double.parse(e['lat']),
                       longitude: double.parse(e['lon'])))
                   .toList();
-              if (controller.text.isNotEmpty) {
-                print("------------------");
+              if (controller.text.isNotEmpty && textfieldFocus.hasFocus) {
                 setState(() {
                   suggestions = true;
                 });
@@ -131,7 +131,9 @@ class _SearchWidgetState extends State<SearchWidget> {
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s12))),
-      height: height * 0.30,
+      height: _options.length > 4
+          ? height * 0.22
+          : _options.length * height * 0.064,
       child: ListView.builder(
         shrinkWrap: true,
         itemBuilder: (context, index) => Column(
@@ -166,11 +168,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                       floor: 0);
                   widget.onLocationSelected(placePos);
                   _options.clear();
-
+                  suggestions = false;
                   textFieldFocusNode.unfocus();
-                  setState(() {
-                    suggestions = false;
-                  });
+                  setState(() {});
                 }),
             const Divider(
               thickness: 1.250,
@@ -184,8 +184,6 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   void dispose() {
-    _textfieldFocus.dispose();
-
     // TODO: implement dispose
     super.dispose();
   }
@@ -195,7 +193,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final suggestionController = SuggestionsBoxController();
-
+  
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -210,10 +208,10 @@ class _SearchWidgetState extends State<SearchWidget> {
             textFieldcontroller,
             (Icons.bolt),
             Colors.amber,
-            _textfieldFocus,
+            textfieldFocus,
           ),
           if (suggestions)
-            buildListView(textFieldcontroller, true, _textfieldFocus)
+            buildListView(textFieldcontroller, true, textfieldFocus)
         ],
       ),
     );

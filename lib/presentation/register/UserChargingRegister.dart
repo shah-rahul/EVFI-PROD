@@ -112,6 +112,42 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
               },
             ),
             const SizedBox(height: 16.0),
+            TextFormField(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Vehicle Mileage(Range)',
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              onChanged: (value) {
+                // updateData(userDataProvider.userData.vehicleManufacturer, value,
+                //     userDataProvider.userData.chargingRequirements);
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              style: const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: 'Vehicle Battery Capacity',
+                labelStyle: TextStyle(color: Colors.white),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+              onChanged: (value) {
+                // updateData(userDataProvider.userData.vehicleManufacturer, value,
+                //     userDataProvider.userData.chargingRequirements);
+              },
+            ),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: getImage,
               style: ElevatedButton.styleFrom(primary: Colors.white),
@@ -135,8 +171,8 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                 );
               },
               style: ElevatedButton.styleFrom(primary: Colors.white),
-              child:
-                  const Text('Save Details', style: TextStyle(color: Colors.black)),
+              child: const Text('Save Details',
+                  style: TextStyle(color: Colors.black)),
             ),
           ],
         ),

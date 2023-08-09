@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/search_widget.dart';
+import '../../models/pricing_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,10 +34,12 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  FocusNode _searchFocusNode = FocusNode();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final List<Marker> _markers = <Marker>[];
   late GoogleMapController _mapController;
+  MyPricing mypricing = MyPricing();
   Position _currentPosition = Position(
       longitude: 28.679079,
       latitude: 77.069710,
@@ -138,7 +141,7 @@ class HomeState extends State<Home> {
             (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
-        final stnName = 
+        final stnName =
             (data['info'] as Map<String, dynamic>)['name'] as String;
         final stnAddress =
             (data['info'] as Map<String, dynamic>)['address'] as String;
@@ -158,12 +161,15 @@ class HomeState extends State<Home> {
                 isScrollControlled: true,
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
+                  String addressState = getAddressState(stnAddress);
+                  double price = mypricing.fullChargeCost(64, addressState);
                   return CustomMarkerPopup(
                       stationName: stnName,
                       address: stnAddress,
                       imageUrl: stnImgUrl,
                       geopoint: geoPoint,
-                      geohash: geohash);
+                      geohash: geohash,
+                      costOfFullCharge: price);
                 },
               );
             },
@@ -172,6 +178,17 @@ class HomeState extends State<Home> {
         setState(() {});
       }
     });
+  }
+
+  String getAddressState(String address) {
+    String addState = "";
+    for (int i = address.length - 1; i >= 0; i--) {
+      if (address[i] == ' ') {
+        return addState;
+      }
+      addState = address[i] + addState;
+    }
+    return addState;
   }
 
   Future<Uint8List> getBytesFromAsset(String path) async {
@@ -293,39 +310,39 @@ class HomeState extends State<Home> {
         body: FutureBuilder(
             future: getData(),
             builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
-              return WillPopScope(child:SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: Stack(
-                  children: [
-                    const GFLoader(type: GFLoaderType.circle),
-                    GoogleMap(
-                      mapType: MapType.normal,
-                      initialCameraPosition: _kGooglePlex,
-                      onMapCreated: (GoogleMapController controller) {
-                        _mapController = controller;
-                        updateCameraPosition(_currentPosition);
-                        _controller.complete(controller);
-                      },
-                      markers: Set<Marker>.of(_markers),
-                      zoomControlsEnabled: false,
-                      compassEnabled: false,
-                      zoomGesturesEnabled: false,
-                      myLocationButtonEnabled: false,
+              return WillPopScope(
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: Stack(
+                      children: [
+                        const GFLoader(type: GFLoaderType.circle),
+                        GoogleMap(
+                          mapType: MapType.normal,
+                          initialCameraPosition: _kGooglePlex,
+                          onMapCreated: (GoogleMapController controller) {
+                            _mapController = controller;
+                            updateCameraPosition(_currentPosition);
+                            _controller.complete(controller);
+                          },
+                          markers: Set<Marker>.of(_markers),
+                          zoomControlsEnabled: false,
+                          compassEnabled: false,
+                          zoomGesturesEnabled: false,
+                          myLocationButtonEnabled: false,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 0.065),
+                          child: SearchWidget(updatePlaceCamera),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.065),
-                      child: SearchWidget(updatePlaceCamera),
-                    ),
-                  ],
-                ),
-              ),  onWillPop: _onBackPressed);
-              
+                  ),
+                  onWillPop: _onBackPressed);
             }));
-  } 
+  }
 
-  Future<bool> _onBackPressed() async{
+  Future<bool> _onBackPressed() async {
     exit(0);
-    
   }
 }
