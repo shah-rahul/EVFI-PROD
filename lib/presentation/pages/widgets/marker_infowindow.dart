@@ -101,7 +101,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   Widget build(BuildContext context) {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     UserData userData = userDataProvider.userData;
-    userDataProvider.setUserData(userData);
+    // userDataProvider.setUserData(userData);
 
     return SingleChildScrollView(
       child: Container(
