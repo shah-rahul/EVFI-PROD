@@ -16,6 +16,7 @@ bool? isRegistered;
 
 /*RadioButtons*/
 enum ChargerTypes { A, B, C }
+
 ChargerTypes? selectedType = ChargerTypes.A;
 /*RadioButtons*/
 
@@ -273,7 +274,11 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 ),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Container(height: 150, alignment: Alignment.center , child: const Center(child: CircularProgressIndicator()));
+                    return Container(
+                        height: 150,
+                        alignment: Alignment.center,
+                        child:
+                            const Center(child: CircularProgressIndicator()));
                   } else if (snapshot.hasError) {
                     return const Text('Error occurred');
                   } else {
@@ -304,7 +309,7 @@ Widget bookingSection(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-         Row(
+        Row(
           // ignore: prefer_const_literals_to_create_immutables
           children: [
             SizedBox(width: 14),
@@ -373,37 +378,35 @@ Widget bookingSection(
             ),
           ],
         ),
-        Padding(padding: const EdgeInsets.all(8),
-        child:
-        DropdownButtonFormField<String>(
-          value: selectedTime,
-          icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
-          dropdownColor: Colors.amber.shade100,
-          
-          elevation: 4,
-          decoration: const InputDecoration(
-            labelStyle: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: AppMargin.m14),
-            labelText: "Time Slot",
-            border: UnderlineInputBorder(),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: DropdownButtonFormField<String>(
+            value: selectedTime,
+            icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
+            dropdownColor: Colors.amber.shade100,
+            elevation: 4,
+            decoration: const InputDecoration(
+              labelStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AppMargin.m14),
+              labelText: "Time Slot",
+              border: UnderlineInputBorder(),
+            ),
+            items: timings.map((String item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: const TextStyle(color: Colors.black),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              selectedTime = value!;
+            },
           ),
-          items: timings.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                style: const TextStyle(color: Colors.black),
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            selectedTime = value!;
-          },
         ),
-        ),
-      
         const SizedBox(height: 1),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
