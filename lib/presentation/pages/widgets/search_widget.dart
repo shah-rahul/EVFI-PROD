@@ -23,7 +23,7 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  FocusNode _textfieldFocus = FocusNode();
+  FocusNode textfieldFocus = FocusNode();
   List<OSMdata> _options = <OSMdata>[];
 
   Widget buildTextFormField(
@@ -104,7 +104,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       latitude: double.parse(e['lat']),
                       longitude: double.parse(e['lon'])))
                   .toList();
-              if (controller.text.isNotEmpty) {
+              if (controller.text.isNotEmpty && textfieldFocus.hasFocus) {
                 setState(() {
                   suggestions = true;
                 });
@@ -168,11 +168,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                       floor: 0);
                   widget.onLocationSelected(placePos);
                   _options.clear();
-
+                  suggestions = false;
                   textFieldFocusNode.unfocus();
-                  setState(() {
-                    suggestions = false;
-                  });
+                  setState(() {});
                 }),
             const Divider(
               thickness: 1.250,
@@ -186,8 +184,6 @@ class _SearchWidgetState extends State<SearchWidget> {
 
   @override
   void dispose() {
-    _textfieldFocus.dispose();
-
     // TODO: implement dispose
     super.dispose();
   }
@@ -197,7 +193,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final suggestionController = SuggestionsBoxController();
-
+  
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -212,10 +208,10 @@ class _SearchWidgetState extends State<SearchWidget> {
             textFieldcontroller,
             (Icons.bolt),
             Colors.amber,
-            _textfieldFocus,
+            textfieldFocus,
           ),
           if (suggestions)
-            buildListView(textFieldcontroller, true, _textfieldFocus)
+            buildListView(textFieldcontroller, true, textfieldFocus)
         ],
       ),
     );

@@ -214,13 +214,12 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
-        final stnName = 
+        final stnName =
             (data['info'] as Map<String, dynamic>)['name'] as String;
         final stnAddress =
             (data['info'] as Map<String, dynamic>)['address'] as String;
         final stnImgUrl =
             (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
-
 
         //  print(geoPoint.latitude);
         _newMarkers.add(Marker(
@@ -238,7 +237,13 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
                   return CustomMarkerPopup(
-                      stationName: stnName, address: stnAddress, imageUrl: stnImgUrl, geopoint: geoPoint, geohash: geohash);
+                    stationName: stnName,
+                    address: stnAddress,
+                    imageUrl: stnImgUrl,
+                    geopoint: geoPoint,
+                    geohash: geohash,
+                    costOfFullCharge: 25,
+                  );
                 },
               );
             },

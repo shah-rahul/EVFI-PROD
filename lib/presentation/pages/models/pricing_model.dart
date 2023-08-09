@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 enum States {
@@ -62,111 +64,129 @@ const List<double> Tarrifs = [
   8.99
 ];
 
+List<String> EVs = [
+  'Kia Soul' 'Tata Tiago',
+  'Tata Tigor',
+  'Tata Nexon',
+  'MG Comet'
+];
 
-
-List<String> EVs = ['Kia Soul' 'Tata Tiago', 'Tata Tigor', 'Tata Nexon', 'MG Comet'];
-
-void main() {
-  runApp(MyPricing());
-  // print(costPerKWH);
-}
-
-class MyPricing extends StatefulWidget {
-  // const MyPricing({super.key});
-
-  @override
-  State<MyPricing> createState() => _MyPricingState();
-}
-
-class _MyPricingState extends State<MyPricing> {
-  var batteryCapacity = TextEditingController();
-  var mileage = TextEditingController();
-  var distance = TextEditingController();
+class MyPricing {
   Map<States, double> costPerKWH = {};
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    for (int i = 0; i < Tarrifs.length; i++) {
-      costPerKWH[States.values[i]] = Tarrifs[i];
+  MyPricing() {
+    for (var i = 0; i < States.values.length; i++) {
+      print(States.values[i]);
+      States st = States.values[i];
+      costPerKWH[st] = Tarrifs[i];
     }
-    super.initState();
+    // const MyPricing({super.key});
   }
 
-  Widget _makeField(
-      String heading, String label, TextEditingController controller) {
-    return Row(
-      children: [
-        Text(
-          heading,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-        ),
-        const SizedBox(
-          width: 20,
-        ),
-        Expanded(
-          child: TextFormField(
-              controller: controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: 'in $label',
-                focusedBorder: OutlineInputBorder(),
-                suffixIcon: controller.text.isEmpty
-                    ? Container(width: 0)
-                    : IconButton(
-                        onPressed: () => controller.clear(),
-                        icon: const Icon(
-                          Icons.close,
-                        ),
-                      ),
-              )),
-        ),
-      ],
-    );
+  double xDistCost(double batteryCap, String State, double range, double dist) {
+    States myState = States.Delhi;
+    for (var i = 0; i < States.values.length; i++) {
+      if (States.values[i].toString() == State) {
+        myState = States.values[i];
+      }
+    }
+    return (batteryCap / range) * dist * (costPerKWH[myState]!);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Home EV Charging Calculator'),
-          backgroundColor: Colors.deepPurpleAccent,
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: double.infinity,
-          child: Column(children: [
-            const SizedBox(
-              height: 50,
-            ),
-            _makeField('Battery Capacity', 'kWh', batteryCapacity),
-            _makeField('Mileage/Range', 'Km', mileage),
-            _makeField('Distance', 'Km', distance),
-            const SizedBox(
-              height: 50,
-            ),
-            //Kia Soul EV has Battery Capacity: 64kWh, Mileage: 315Km
-            ElevatedButton(
-                onPressed: () {
-                  double bCap = double.parse(batteryCapacity.text);
-                  double range = double.parse(mileage.text);
-                  double dist = double.parse(distance.text);
-                  print(
-                      '-----------Using standard 3.2 kWh charger for Andhra Pradesh ');
-                  double priceForDist = 0, priceForFullCharge = 0;
-                  priceForDist =
-                      (bCap / range) * dist * costPerKWH[States.AndhraPradesh]!;
-                  priceForFullCharge = bCap * costPerKWH[States.AndhraPradesh]!;
-                  debugPrint(
-                      '**Price to travel $dist km using any EV: ${priceForDist.toStringAsFixed(2)}');
-                  debugPrint(
-                      '**Price for a full charge of $bCap kWh battery EV: ${priceForFullCharge.toStringAsFixed(2)}');
-                },
-                child: const Text('Calculate'))
-          ]),
-        ),
-      ),
-    );
+  double fullChargeCost(double batteryCap, String State) {
+    States myState = States.Delhi;
+    print(State);
+    // for (var i = 0; i < States.values.length; i++) {
+    //   print(States.values[i].toString());
+    //   if (States.values[i].toString() == State) {
+    //     myState = States.values[i];
+    //   }
+    // }
+
+    return batteryCap * (costPerKWH[myState]!);
   }
 }
+
+
+//   var batteryCapacity = TextEditingController();
+
+//   var mileage = TextEditingController();
+
+//   var distance = TextEditingController();
+
+//   Widget _makeField(
+//       String heading, String label, TextEditingController controller) {
+//     return Row(
+//       children: [
+//         Text(
+//           heading,
+//           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+//         ),
+//         const SizedBox(
+//           width: 20,
+//         ),
+//         Expanded(
+//           child: TextFormField(
+//               controller: controller,
+//               keyboardType: TextInputType.number,
+//               decoration: InputDecoration(
+//                 labelText: 'in $label',
+//                 focusedBorder: OutlineInputBorder(),
+//                 suffixIcon: controller.text.isEmpty
+//                     ? Container(width: 0)
+//                     : IconButton(
+//                         onPressed: () => controller.clear(),
+//                         icon: const Icon(
+//                           Icons.close,
+//                         ),
+//                       ),
+//               )),
+//         ),
+//       ],
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: const Text('Home EV Charging Calculator'),
+//           backgroundColor: Colors.deepPurpleAccent,
+//         ),
+//         body: SizedBox(
+//           height: MediaQuery.of(context).size.height,
+//           width: double.infinity,
+//           child: Column(children: [
+//             const SizedBox(
+//               height: 50,
+//             ),
+//             _makeField('Battery Capacity', 'kWh', batteryCapacity),
+//             _makeField('Mileage/Range', 'Km', mileage),
+//             _makeField('Distance', 'Km', distance),
+//             const SizedBox(
+//               height: 50,
+//             ),
+//             //Kia Soul EV has Battery Capacity: 64kWh, Mileage: 315Km
+//             ElevatedButton(
+//                 onPressed: () {
+//                   double bCap = double.parse(batteryCapacity.text);
+//                   double range = double.parse(mileage.text);
+//                   double dist = double.parse(distance.text);
+//                   print(
+//                       '-----------Using standard 3.2 kWh charger for Andhra Pradesh ');
+//                   double priceForDist = 0, priceForFullCharge = 0;
+//                   priceForDist =
+//                       (bCap / range) * dist * costPerKWH[States.AndhraPradesh]!;
+//                   priceForFullCharge = bCap * costPerKWH[States.AndhraPradesh]!;
+//                   debugPrint(
+//                       '**Price to travel $dist km using any EV: ${priceForDist.toStringAsFixed(2)}');
+//                   debugPrint(
+//                       '**Price for a full charge of $bCap kWh battery EV: ${priceForFullCharge.toStringAsFixed(2)}');
+//                 },
+//                 child: const Text('Calculate'))
+//           ]),
+//         ),
+//       ),
+//     );
+//   }
+// }

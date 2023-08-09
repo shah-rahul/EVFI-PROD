@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../Data_storage/UserData.dart';
 import '../../Data_storage/UserDataProvider.dart';
 import '../../register/UserChargingRegister.dart';
+import './../models/pricing_model.dart';
 import '../../resources/values_manager.dart';
 
 bool? isRegistered;
@@ -39,17 +40,19 @@ class CustomMarkerPopup extends StatefulWidget {
   final String stationName;
   final String address;
   final String imageUrl;
+  final double costOfFullCharge;
   //final String stationName = 'EVFI Charging Station';
   //final String address =
   //'Sector 39, Karnal, NH-1, GT Karnal Road,, Haryana, 132001';
 
   const CustomMarkerPopup({
-      required this.stationName,
-      required this.address,
-      required this.imageUrl,
-      required this.geopoint,
-      required this.geohash,
-      });
+    required this.stationName,
+    required this.address,
+    required this.imageUrl,
+    required this.geopoint,
+    required this.geohash,
+    required this.costOfFullCharge,
+  });
 
   @override
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();
@@ -59,22 +62,19 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   bool isBooking = false;
   String str = 'Book Slot';
 
-
   void onchanRadio(ChargerTypes val) {
     setState(() {
       selectedType = val;
     });
   }
 
-
   Widget callContent() {
     if (isBooking) {
       return bookingSection(context, onchanRadio);
     } else {
-      return startingSection(context);
+      return startingSection(context, widget.costOfFullCharge);
     }
   }
-
 
   void changecontent(bool isRegistered) {
     if (isRegistered) {
@@ -96,7 +96,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
       });
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -334,17 +333,18 @@ Widget bookingSection(
   );
 }
 
-Widget startingSection(BuildContext context) {
+Widget startingSection(BuildContext context, double cost) {
   return Column(
     children: [
-      Row(
-        children: [
-          const Icon(Icons.access_time),
-          Padding(
-              padding: const EdgeInsets.all(AppPadding.p12 - 8),
-              child: Text(DateTime.now().toString())),
-        ],
-      ),
+      Row(children: [
+        const Icon(Icons.access_time),
+        Padding(
+            padding: const EdgeInsets.all(AppPadding.p12 - 8),
+            child: Text(DateTime.now().toString())),
+        Spacer(),
+        Text("₹ " + cost.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold))
+      ]),
       const SizedBox(height: 1),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
