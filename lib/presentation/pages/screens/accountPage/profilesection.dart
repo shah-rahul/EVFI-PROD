@@ -2,6 +2,7 @@
 
 import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/image_input.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -45,7 +46,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           iconTheme: const IconThemeData(color: Colors.black),
-          backgroundColor: const Color.fromARGB(255, 222, 184, 46),
+          backgroundColor: ColorManager.primary,
         ),
         body: Padding(
           padding: const EdgeInsets.all(12),
@@ -147,10 +148,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ElevatedButton.icon(
                   onPressed: _submit,
                   icon: const Icon(Icons.add),
-                  style: const ButtonStyle(
-                    foregroundColor: MaterialStatePropertyAll(Colors.black),
+                  style: ButtonStyle(
+                    foregroundColor: const MaterialStatePropertyAll(Colors.black),
                     backgroundColor: MaterialStatePropertyAll(
-                        Color.fromARGB(255, 222, 184, 46)),
+                        ColorManager.primary),
                   ),
                   label: const Text('Submit'),
                 ),
