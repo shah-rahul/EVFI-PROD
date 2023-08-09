@@ -31,7 +31,7 @@ class _ChargerFormState extends State<ChargerForm> {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     void updateChargingData(String type, String speed) {
       UserData userData = userDataProvider.userData;
-     // userData.chargingType = type;
+      // userData.chargingType = type;
 
       userDataProvider.setUserData(userData);
     }
@@ -164,13 +164,15 @@ class _ChargerFormState extends State<ChargerForm> {
                               TextButton(
                                 onPressed: () {
                                   int count = 0;
-                                  Navigator.of(context)
-                                      .popUntil((_) => count++ > 3);
+                                  // Navigator.of(context)
+                                  //     .popUntil((_) => count++ > 3);
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        child: MainView()),
+                                        ctx: context,
+                                        child: MainView()
+                                        ),
                                   );
                                 },
                                 child: Text(
@@ -186,23 +188,19 @@ class _ChargerFormState extends State<ChargerForm> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  await userDataProvider.saveUserData();
-
+                                  // await userDataProvider.saveUserData();
+                                  
                                   // Example: Storing charging information
                                   String chargingType = 'Type A';
                                   String chargingSpeed =
                                       chargerspeedController.text.toString();
                                   UserData? userData =
                                       userDataProvider.userData;
-                                  if (userData != null) {
-                                  //  userData.chargingType = chargingType;
-                                    // userData.chargingSpeed = chargingSpeed;
-                                    userDataProvider.setUserData(userData);
-                                  }
+                                  userDataProvider.setUserData(userData);
 
                                   int count = 0;
-                                  Navigator.of(context)
-                                      .popUntil((_) => count++ > 3);
+                                  // Navigator.of(context)
+                                  //     .popUntil((_) => count++ > 3);
                                   Navigator.push(
                                     context,
                                     PageTransition(

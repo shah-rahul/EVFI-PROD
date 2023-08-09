@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../domain/model.dart';
 import '../onboarding/onboarding_ViewModel.dart';
+import '../register/vehicleform.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
@@ -119,8 +121,15 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(Routes.mainRoute);
+                            // Navigator.of(context)
+                            //     .pushReplacementNamed(Routes.mainRoute);
+                             Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                       
+                                        child: VehicleForm()),
+                                  );
                           },
                           style: TextButton.styleFrom(
                             elevation: 0,
@@ -136,16 +145,25 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            int ind = _viewModel.goNext();
-                           // print("---------------");
-                          //  print(ind);
-                            ind != sliderViewObject.currentIndex
-                                ? _pageController.animateToPage(ind,
-                                    duration: const Duration(
-                                        milliseconds: DurationConstant.d300),
-                                    curve: Curves.bounceInOut)
-                                : Navigator.of(context)
-                                    .pushNamed(Routes.mainRoute);
+                          //   int ind = _viewModel.goNext();
+                          //  // print("---------------");
+                          // //  print(ind);
+                          //   ind != sliderViewObject.currentIndex
+                          //       ? _pageController.animateToPage(ind,
+                          //           duration: const Duration(
+                          //               milliseconds: DurationConstant.d300),
+                          //           curve: Curves.bounceInOut)
+                          //       : Navigator.of(context)
+                          //           .pushNamed(Routes.mainRoute);
+                           Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: VehicleForm()),
+                                       
+                                       
+                                       
+                                  );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,

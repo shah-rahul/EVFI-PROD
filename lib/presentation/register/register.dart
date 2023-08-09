@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, non_constant_identifier_names, avoid_unnecessary_containers, use_build_context_synchronously
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/main/main_view.dart';
 import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
@@ -43,10 +44,12 @@ class _RegisterViewState extends State<RegisterView> {
     final userDataProvider = Provider.of<UserDataProvider>(context);
     //  Storing user's name  using provider
 
+      
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;
       userData.name = name;
       userData.level1 = true;
+      
       userDataProvider.setUserData(userData);
     }
 
@@ -193,9 +196,9 @@ class _RegisterViewState extends State<RegisterView> {
                                 onPressed: () async {
                                   StoreName(nameController.text);
                                   await userDataProvider.saveUserData();
-                                  UserData? userData =
-                                      userDataProvider.userData;
-                                  userDataProvider.setUserData(userData);
+                                  // UserData? userData =
+                                  //     userDataProvider.userData;
+                                  // userDataProvider.setUserData(userData);
                                   Navigator.push(
                                     context,
                                     PageTransition(
