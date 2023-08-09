@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         elevation: 1,
         foregroundColor: Colors.black,
-        backgroundColor: const Color.fromARGB(255, 222, 184, 46),
+        backgroundColor: ColorManager.primary,
       ),
       backgroundColor: Colors.white,
       body: Container(
@@ -185,6 +186,7 @@ Widget buildNotificationSetting(
       Transform.scale(
           scale: 0.7,
           child: CupertinoSwitch(
+            activeColor: ColorManager.primary,
             value: isActive,
             onChanged: (value) {},
           )),

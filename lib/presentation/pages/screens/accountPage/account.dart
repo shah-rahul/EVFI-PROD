@@ -6,6 +6,7 @@ import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/profilesection.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/settings.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -160,9 +161,9 @@ class _AccountState extends State<Account> {
 //////PROFILE SECTION
 
 Widget profileSection(BuildContext context) {
-  Widget content = const CircleAvatar(
+  Widget content = CircleAvatar(
     radius: 30,
-    backgroundColor: Colors.yellow,
+    backgroundColor: ColorManager.primary,
     child: Icon(
       Icons.camera_alt_rounded,
       color: Colors.black,

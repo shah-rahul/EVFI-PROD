@@ -31,7 +31,7 @@ class MyChargingWidget extends StatelessWidget {
     }
 
     return SizedBox(
-      width: 84,
+      width: 80,
       height: 20,
       child: ElevatedButton(
           onPressed: () {},
@@ -67,7 +67,7 @@ class MyChargingWidget extends StatelessWidget {
               Text(
                 myCharging.StationName,
                 style: const TextStyle(
-                    fontSize: AppSize.s20, fontWeight: FontWeight.w600),
+                    fontSize: AppSize.s18, fontWeight: FontWeight.bold),
               ),
               statusButton(),
             ],
