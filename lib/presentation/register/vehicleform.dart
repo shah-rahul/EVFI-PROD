@@ -24,7 +24,54 @@ class VehicleForm extends StatefulWidget {
 class _VehicleFormState extends State<VehicleForm> {
   TextEditingController vehicleManufacturerController = TextEditingController();
   TextEditingController vehicleregistrationController = TextEditingController();
+  TextEditingController vehicleBatteryCapController = TextEditingController();
+  TextEditingController vehicleMileageController = TextEditingController();
+  final FocusNode vehicleManfFocus = new FocusNode();
+  final FocusNode vehicleregisFocus = new FocusNode();
+  final FocusNode vehicleBatteryFocus = new FocusNode();
+  final FocusNode vehicleMileageFocus = new FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
+
+  TextInputType getKeyboard(FocusNode fn) {
+    if (fn == vehicleManfFocus || fn == vehicleregisFocus) {
+      return TextInputType.emailAddress;
+    }
+    return TextInputType.number;
+  }
+
+  Widget constructTextField(
+      String label,
+      Function onChanged,
+      TextEditingController controller,
+      FocusNode focusNode,
+      FocusNode nextFocus) {
+    return TextField(
+      onChanged: (value) {
+        onChanged(value);
+      },
+      keyboardType: getKeyboard(focusNode),
+      style: TextStyle(color: ColorManager.darkGrey),
+      controller: controller,
+      focusNode: focusNode,
+      onSubmitted: (value) {
+        FocusScope.of(context).requestFocus(nextFocus);
+        if (focusNode == vehicleMileageFocus) {
+          FocusScope.of(context).unfocus();
+        }
+      },
+      // controller: vehicleregistrationController,
+      decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              width: 1,
+              color: ColorManager.darkGrey,
+            ),
+          ),
+          labelText: label,
+          labelStyle: const TextStyle(fontSize: AppSize.s14)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -33,15 +80,15 @@ class _VehicleFormState extends State<VehicleForm> {
 
     void updateVehicleData(String manufacturer, String number) {
       UserData userData = userDataProvider.userData;
-      // userData.vehicleManufacturer = manufacturer;
-      // userData.vehicleNumber = number;
+      userData.vehicleManufacturer = manufacturer;
+      userData.vehicleRegistrationNumber = number;
       userDataProvider.setUserData(userData);
     }
 
     return Container(
-      decoration:  const BoxDecoration(
-          image:  DecorationImage(
-        image:  AssetImage(ImageAssets.loginBackground),
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage(ImageAssets.loginBackground),
         fit: BoxFit.cover,
       )),
       child: Scaffold(
@@ -50,7 +97,7 @@ class _VehicleFormState extends State<VehicleForm> {
           child: Column(
             children: [
               Container(
-                height: height * 0.38,
+                height: height * 0.48,
                 margin: EdgeInsets.only(
                     top: height * 0.48,
                     left: AppMargin.m14,
@@ -89,53 +136,45 @@ class _VehicleFormState extends State<VehicleForm> {
                       child: Column(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppPadding.p8,
-                                vertical: AppPadding.p8),
-                            child: TextField(
-                              onChanged: (value) {
-                                // updateVehicleData(value,
-                                //     userDataProvider.userData.vehicleNumber);
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              // controller: vehicleManufacturerController,
-                              decoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: ColorManager.darkGrey,
-                                    ),
-                                  ),
-                                  labelText: 'Vehicle Manufacturer',
-                                  labelStyle:
-                                      const TextStyle(fontSize: AppSize.s14)),
-                            ),
-                          ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: AppPadding.p8,
+                                  vertical: AppPadding.p8),
+                              child: constructTextField(
+                                  "Vehicle Manufacturer",
+                                  (val) {},
+                                  vehicleManufacturerController,
+                                  vehicleManfFocus,
+                                  vehicleregisFocus)),
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppPadding.p8,
-                                vertical: AppPadding.p8),
-                            child: TextField(
-                              onChanged: (value) {
-                                // updateVehicleData(
-                                //     userDataProvider
-                                //         .userData.vehicleManufacturer,
-                                //     value);
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              // controller: vehicleregistrationController,
-                              decoration: InputDecoration(
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                      width: 1,
-                                      color: ColorManager.darkGrey,
-                                    ),
-                                  ),
-                                  labelText: 'Vehicle Registration Number',
-                                  labelStyle:
-                                      const TextStyle(fontSize: AppSize.s14)),
-                            ),
-                          ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: AppPadding.p8,
+                                  vertical: AppPadding.p8),
+                              child: constructTextField(
+                                  "Vehicle Registration",
+                                  (val) {},
+                                  vehicleregistrationController,
+                                  vehicleregisFocus,
+                                  vehicleBatteryFocus)),
+                          Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: AppPadding.p8,
+                                  vertical: AppPadding.p8),
+                              child: constructTextField(
+                                  "Battery capacity",
+                                  (val) {},
+                                  vehicleBatteryCapController,
+                                  vehicleBatteryFocus,
+                                  vehicleMileageFocus)),
+                          Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: AppPadding.p8,
+                                  vertical: AppPadding.p8),
+                              child: constructTextField(
+                                  "Vehicle Mileage (Range)",
+                                  (val) {},
+                                  vehicleMileageController,
+                                  vehicleMileageFocus,
+                                  vehicleMileageFocus)),
                           const SizedBox(
                             height: 20,
                           ),
@@ -143,22 +182,9 @@ class _VehicleFormState extends State<VehicleForm> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {
-                                  //  Storing vehicle information using provider
-                                  String vehicleManufacturer =
-                                      vehicleManufacturerController.text
-                                          .toString();
-                                  String vehicleNumber =
-                                      vehicleregistrationController.text
-                                          .toString();
-                                  UserData? userData =
-                                      userDataProvider.userData;
-                                  if (userData != null) {
-                                    // userData.vehicleManufacturer =
-                                    //     vehicleManufacturer;
-                                    // userData.vehicleNumber = vehicleNumber;
-                                    // userDataProvider.setUserData(userData);
-                                  }
+                                onPressed: () async {
+                                  //skip button section
+
                                   Navigator.push(
                                     context,
                                     PageTransition(
@@ -180,7 +206,16 @@ class _VehicleFormState extends State<VehicleForm> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  await userDataProvider.saveUserData();
+                                  updateVehicleData(
+                                      vehicleManufacturerController.text,
+                                      vehicleregistrationController.text);
+
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  userDataProvider.setUserData(userData);
+
+                                  await userDataProvider.updateUserData();
+
                                   Navigator.push(
                                     context,
                                     PageTransition(

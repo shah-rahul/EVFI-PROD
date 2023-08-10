@@ -257,7 +257,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       final querySnapshot = await collectionRef.get();
 
       for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['Phone Number'].toString();
+        final phoneNumber = doc.data()['PhoneNumber'].toString();
 
         if (number == phoneNumber) {
           isNumberRegistered = true;
