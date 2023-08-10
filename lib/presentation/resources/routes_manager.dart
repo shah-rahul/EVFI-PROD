@@ -11,6 +11,7 @@ import '../resources/strings_manager.dart';
 import '../splash/splash.dart';
 import '../pages/screens/homePage/search_page.dart';
 import '../store_details/store_details.dart';
+import '../register/vehicleform.dart';
 import '../pages/screens/mycharging/MyChargingScreen.dart';
 
 class Routes {
@@ -25,6 +26,8 @@ class Routes {
   static const String searchPageRoute = "/searchPage";
   static const String myChargingRoute = "/myCharging";
   // ignore: constant_identifier_names
+  static const String vehicleRegisterForm = "/VehicleRegisterForm";
+
   static const String UserChargingRegister = "/UserChargingRegister";
 }
 
@@ -56,6 +59,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const UserChargingRegister());
       case Routes.searchPageRoute:
         return MaterialPageRoute(builder: (_) => const SearchPage());
+      case Routes.vehicleRegisterForm:
+        return MaterialPageRoute(builder: (_) => const VehicleForm());
       default:
         return unDefinedRoute();
     }
