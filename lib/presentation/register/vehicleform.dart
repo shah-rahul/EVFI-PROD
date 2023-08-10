@@ -80,8 +80,8 @@ class _VehicleFormState extends State<VehicleForm> {
 
     void updateVehicleData(String manufacturer, String number) {
       UserData userData = userDataProvider.userData;
-      // userData.vehicleManufacturer = manufacturer;
-      // userData.vehicleNumber = number;
+      userData.vehicleManufacturer = manufacturer;
+      userData.vehicleRegistrationNumber = number;
       userDataProvider.setUserData(userData);
     }
 
@@ -182,22 +182,9 @@ class _VehicleFormState extends State<VehicleForm> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               TextButton(
-                                onPressed: () {
-                                  //  Storing vehicle information using provider
-                                  String vehicleManufacturer =
-                                      vehicleManufacturerController.text
-                                          .toString();
-                                  String vehicleNumber =
-                                      vehicleregistrationController.text
-                                          .toString();
-                                  UserData? userData =
-                                      userDataProvider.userData;
-                                  if (userData != null) {
-                                    // userData.vehicleManufacturer =
-                                    //     vehicleManufacturer;
-                                    // userData.vehicleNumber = vehicleNumber;
-                                    // userDataProvider.setUserData(userData);
-                                  }
+                                onPressed: () async {
+                                  //skip button section
+
                                   Navigator.push(
                                     context,
                                     PageTransition(
@@ -219,7 +206,16 @@ class _VehicleFormState extends State<VehicleForm> {
                               ),
                               ElevatedButton(
                                 onPressed: () async {
-                                  await userDataProvider.saveUserData();
+                                  updateVehicleData(
+                                      vehicleManufacturerController.text,
+                                      vehicleregistrationController.text);
+
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  userDataProvider.setUserData(userData);
+
+                                  await userDataProvider.updateUserData();
+
                                   Navigator.push(
                                     context,
                                     PageTransition(
