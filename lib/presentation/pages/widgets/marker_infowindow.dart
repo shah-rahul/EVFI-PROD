@@ -386,7 +386,7 @@ Widget startingSection(BuildContext context, double cost) {
 
 Future<bool> checkNumberIsRegistered({required String number}) async {
   final firestore = FirebaseFirestore.instance;
-  final collectionRef = firestore.collection('Registered number');
+  final collectionRef = firestore.collection('UserChargingRegister');
   bool isNumberRegistered = false;
   // storePhoneNumber(number);
 
@@ -394,7 +394,7 @@ Future<bool> checkNumberIsRegistered({required String number}) async {
     final querySnapshot = await collectionRef.get();
 
     for (var doc in querySnapshot.docs) {
-      final phoneNumber = doc.data()['phoneNo'].toString();
+      final phoneNumber = doc.data()['PhoneNumber'].toString();
 
       if (number == phoneNumber) {
         isNumberRegistered = true;
