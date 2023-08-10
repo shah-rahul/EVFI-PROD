@@ -5,6 +5,7 @@
 // ignore_for_file: file_names, duplicate_ignore
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 import 'UserChargingData.dart';
@@ -15,19 +16,23 @@ class UserChargingDataProvider extends ChangeNotifier {
     // vehicleManufacturer: '',
     // vehicleNumber: '',
     // chargingRequirements: '',
-    geohash: '',
-    geopoint: '',
-    stationName: '',
-    address: '',
+    Uid: "Null",
+    geohash: 'Null',
+    geopoint: 'Null',
+    stationName: 'Null',
+    address: 'Null',
     //loaction from marker
-    aadharNumber: '',
-    hostName: '',
-    chargerType: '',
-    availability: '',
-    price: '',
-    amenities: '',
+    city: 'Null',
+    pin:'Null',
+    state:'Null',
+    aadharNumber: 'Null',
+    hostName: 'Null',
+    chargerType: 'Null',
+    availability: 'Null',
+    price: 'Null',
+    amenities: 'Null',
     //image of charger
-    imageurl: '',
+    imageurl: 'Null',
   );
   // ignore: prefer_final_fields
   CollectionReference _usersCollection =
@@ -43,7 +48,9 @@ class UserChargingDataProvider extends ChangeNotifier {
     try {
       // Store user data in Firestore
       // ignore: unused_local_variable
+       User? user = FirebaseAuth.instance.currentUser;
       DocumentReference documentRef = await _usersCollection.add({
+        'Uid':user!.uid,
         'g':{
          'geohash': _userChargingData.geohash,
          'geopoint':_userChargingData.geopoint,
@@ -51,6 +58,9 @@ class UserChargingDataProvider extends ChangeNotifier {
         'info': {
           'Station Name': _userChargingData.stationName,
           'Address': _userChargingData.address,
+          'City':_userChargingData.city,
+          'Pin':_userChargingData.pin,
+          'State':_userChargingData.state,
           //loaction from marker
           'Aadhar Number': _userChargingData.aadharNumber,
           'Host Name ': _userChargingData.hostName,

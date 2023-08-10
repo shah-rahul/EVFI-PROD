@@ -61,23 +61,31 @@ class _ListChargerState extends State<ListCharger> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
-  void _addInFirestore(double latitude, double longitude) async {
-    final isValid = _form.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    // print("****");
-    _form.currentState!.save();
-    String geohash = encodeGeohash(latitude, longitude, precision: 9);
-    GeoPoint coordinate = GeoPoint(latitude, longitude);
-    var marker = <String, dynamic>{
-      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
-    };
-    await FirebaseFirestore.instance
-        .collection('Chargers')
-        .add(marker)
-        .then((_) => Navigator.of(context).pop());
-  }
+  // void _addInFirestore(double latitude, double longitude) async {
+  //   final isValid = _form.currentState!.validate();
+  //   if (!isValid) {
+  //     return;
+  //   }
+  //   // print("****");
+  //   _form.currentState!.save();
+  //   String geohash = encodeGeohash(latitude, longitude, precision: 9);
+  //   GeoPoint coordinate = GeoPoint(latitude, longitude);
+  //   var marker = <String, dynamic>{
+  //     'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
+  //   };
+  //   await FirebaseFirestore.instance
+  //       .collection('Chargers')
+  //       .add(marker)
+  //       .then((_) => Navigator.of(context).pop());
+  //   final userChargingDataProvider =
+  //       Provider.of<UserChargingDataProvider>(context);
+  //   UserChargingData userChargingData =
+  //       userChargingDataProvider.userChargingData;
+  //   userChargingData.geohash = geohash;
+  //   userChargingData.geopoint = GeoPoint(latitude, longitude) as String;
+
+  //   userChargingDataProvider.setUserChargingData(userChargingData);
+  // }
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -213,6 +221,15 @@ class _ListChargerState extends State<ListCharger> {
       'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
     };
     await FirebaseFirestore.instance.collection('Chargers').add(marker);
+    StoreLatLng(_selectedLocation);
+    final userChargingDataProvider =
+        Provider.of<UserChargingDataProvider>(context);
+    UserChargingData userChargingData =
+        userChargingDataProvider.userChargingData;
+    userChargingData.geohash = geohash;
+    userChargingData.geopoint = GeoPoint(latitude, longitude) as String;
+
+    userChargingDataProvider.setUserChargingData(userChargingData);
   }
 
   // void StorePoints(LatLng position) {
@@ -490,6 +507,27 @@ class _ListChargerState extends State<ListCharger> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
+    void StoreCity(String city) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.city = city;
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StorePin(String pin) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.pin = pin;
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void StoreState(String state) {
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.state = state;
+      userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -585,6 +623,7 @@ class _ListChargerState extends State<ListCharger> {
                             ),
                             _makeTitle(title: 'City'),
                             TextFormField(
+                              onChanged: StoreCity,
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return 'Please enter your city.';
@@ -624,6 +663,7 @@ class _ListChargerState extends State<ListCharger> {
                               children: [
                                 Expanded(
                                   child: TextFormField(
+                                    onChanged: StorePin,
                                     validator: (value) {
                                       if (value!.isEmpty) {
                                         return 'Enter Pin.';
@@ -657,6 +697,7 @@ class _ListChargerState extends State<ListCharger> {
                                 ),
                                 Expanded(
                                     child: TextFormField(
+                                  onChanged: StoreState,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return 'Enter State';
@@ -867,17 +908,15 @@ class _ListChargerState extends State<ListCharger> {
                                 onPressed: () async {
                                   _showMap;
                                   _onMarkerTapped(_position);
-                                  // StorePoints(_position);
-                                  await userChargingDataProvider
-                                      .saveUserChargingData();
+
+                                  // StoreLatLng(_selectedLocation);
+
                                   UserChargingData? userChargingData =
                                       userChargingDataProvider.userChargingData;
                                   userChargingDataProvider
                                       .setUserChargingData(userChargingData);
-                                  // _addInFirestore(_selectedLocation.latitude,
-                                  //     _selectedLocation.longitude);
-
-                                  // StoreLatLng;
+                                  await userChargingDataProvider
+                                      .saveUserChargingData();
 
                                   Navigator.pop(
                                       context,
