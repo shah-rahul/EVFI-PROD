@@ -8,21 +8,22 @@ class UserData {
   bool level1;
   String vehicleManufacturer;
   String vehicleRegistrationNumber;
+  String batteryCapacity;
+  String range;
   String chargerInfo;
   bool level2;
 
   bool isProvider;
-  
+
   UserData({
     required this.Uid,
     required this.name,
     required this.phoneNumber,
-
     required this.level1,
-
-
     required this.vehicleManufacturer,
     required this.vehicleRegistrationNumber,
+    required this.batteryCapacity,
+    required this.range,
     required this.chargerInfo,
     required this.level2,
     // required this.stationName,

@@ -19,6 +19,8 @@ class UserDataProvider extends ChangeNotifier {
     level1: false,
     vehicleManufacturer: 'Null',
     vehicleRegistrationNumber: 'Null',
+    batteryCapacity: 'Null',
+    range: 'null',
     chargerInfo: 'Null',
     level2: false,
     // stationName: '',
@@ -53,11 +55,13 @@ class UserDataProvider extends ChangeNotifier {
           'level 1': _userData.level1,
 
           // 'level 2': _userData.level2,
-          'level 2': {
+         'level 2':{
             'Vehicle Manufacturer': _userData.vehicleManufacturer,
             'Vehicle Registration Number': _userData.vehicleRegistrationNumber,
+            'Battery Capacity':_userData.batteryCapacity,
+            'Mileage (Range)':_userData.range,
             'Charger Info': _userData.chargerInfo,
-          },
+         },
           // 'Station Name':_userData.stationName,
           // 'Address':_userData.address,
           // 'Aadhar Number':_userData.aadharNumber,
@@ -87,10 +91,16 @@ class UserDataProvider extends ChangeNotifier {
         'Name': _userData.name,
         'PhoneNumber': _userData.phoneNumber,
         'level 1': _userData.level1,
-        'level 2.Vehicle Manufacturer': _userData.vehicleManufacturer,
-        'level 2.Vehicle Registration Number':
-            _userData.vehicleRegistrationNumber,
-        'level 2.Charger Info': _userData.chargerInfo,
+        // 'level 2.Vehicle Manufacturer': _userData.vehicleManufacturer,
+        // 'level 2.Vehicle Registration Number':
+        //     _userData.vehicleRegistrationNumber,
+          
+        // 'level 2.Charger Info': _userData.chargerInfo,
+         'Vehicle Manufacturer': _userData.vehicleManufacturer,
+            'Vehicle Registration Number': _userData.vehicleRegistrationNumber,
+            'Battery Capacity':_userData.batteryCapacity,
+            'Mileage (Range)':_userData.range,
+              'Charger Info': _userData.chargerInfo,
         'isProvider': _userData.isProvider,
       });
 

@@ -78,10 +78,18 @@ class _VehicleFormState extends State<VehicleForm> {
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
-    void updateVehicleData(String manufacturer, String number) {
+    void updateVehicleData(
+      String manufacturer,
+      String number,
+      String batteryCapacity,
+      String range,
+    ) {
       UserData userData = userDataProvider.userData;
       userData.vehicleManufacturer = manufacturer;
       userData.vehicleRegistrationNumber = number;
+      userData.batteryCapacity = batteryCapacity;
+      userData.range = range;
+      userData.level2 = true;
       userDataProvider.setUserData(userData);
     }
 
@@ -208,13 +216,16 @@ class _VehicleFormState extends State<VehicleForm> {
                                 onPressed: () async {
                                   updateVehicleData(
                                       vehicleManufacturerController.text,
-                                      vehicleregistrationController.text);
+                                      vehicleregistrationController.text,
+                                      vehicleBatteryCapController.text,
+                                      vehicleMileageController.text);
 
                                   UserData? userData =
                                       userDataProvider.userData;
                                   userDataProvider.setUserData(userData);
 
-                                  await userDataProvider.updateUserData();
+                                  // await userDataProvider.updateUserData();
+                                  await userDataProvider.saveUserData();
 
                                   Navigator.push(
                                     context,
