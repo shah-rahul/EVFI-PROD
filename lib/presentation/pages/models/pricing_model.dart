@@ -75,32 +75,24 @@ class MyPricing {
   Map<States, double> costPerKWH = {};
   MyPricing() {
     for (var i = 0; i < States.values.length; i++) {
-      print(States.values[i]);
       States st = States.values[i];
       costPerKWH[st] = Tarrifs[i];
     }
-    // const MyPricing({super.key});
   }
 
-  double xDistCost(double batteryCap, String State, double range, double dist) {
+  double xDistCost(double batteryCap, String state, double range, double dist) {
     States myState = States.Delhi;
     for (var i = 0; i < States.values.length; i++) {
-      if (States.values[i].toString() == State) {
+      if (States.values[i].toString() == state) {
         myState = States.values[i];
       }
     }
     return (batteryCap / range) * dist * (costPerKWH[myState]!);
   }
 
-  double fullChargeCost(double batteryCap, String State) {
+  double fullChargeCost(double batteryCap, String state) {
     States myState = States.Delhi;
-    print(State);
-    // for (var i = 0; i < States.values.length; i++) {
-    //   print(States.values[i].toString());
-    //   if (States.values[i].toString() == State) {
-    //     myState = States.values[i];
-    //   }
-    // }
+    print(state);
 
     return batteryCap * (costPerKWH[myState]!);
   }

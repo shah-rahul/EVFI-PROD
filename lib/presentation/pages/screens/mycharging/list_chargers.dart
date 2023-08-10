@@ -2,33 +2,31 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/resources/font_manager.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
-import '../../../Data_storage/UserChargingDataProvider.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../resources/color_manager.dart';
-// import '../../models/decode_geohash.dart';
-import '../../models/encode_geohash.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
 import '../../models/my_charging.dart';
 import '../../models/chargers_data.dart';
+import '../../models/encode_geohash.dart';
+import '../../../resources/color_manager.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingData.dart';
+import '../../../Data_storage/UserChargingDataProvider.dart';
+import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/pages/models/header_ui.dart';
-import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
-
-import '../accountPage/new_station.dart';
+import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
+import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);
@@ -47,15 +45,17 @@ class _ListChargerState extends State<ListCharger> {
   final _hostsFocusNode = FocusNode();
   final _addressFocusNode = FocusNode();
   final _amenitiesFocusNode = FocusNode();
+  final _cityFocusNode = FocusNode();
+  final _pinCodeFocusNode = FocusNode();
+  final _stateFocusNode = FocusNode();
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
 
-  late GoogleMapController _mapController;
   late LatLng _selectedLocation;
   late LatLng _position;
   DateTime? _startAvailabilityTime, _endAvailabilityTime;
-  String? StationName, StationAddress, aadharNumber;
-  String? hostNames, amenities; //later define hosts as list<string>
+  String? StationName, StationAddress, aadharNumber, city, pinCode;
+  String? hostNames, amenities, state; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
   final _form = GlobalKey<FormState>();
@@ -148,8 +148,8 @@ class _ListChargerState extends State<ListCharger> {
 
   late Marker _station = const Marker(markerId: MarkerId('Station'));
   _pinMarkerOnMap(LatLng position) async {
-    BitmapDescriptor chargerIcon = await BitmapDescriptor.fromAssetImage(
-        ImageConfiguration.empty, ImageAssets.mapSourceMarker);
+    // BitmapDescriptor chargerIcon = await BitmapDescriptor.fromAssetImage(
+    //     ImageConfiguration.empty, ImageAssets.mapSourceMarker);
     setState(() {
       _station = Marker(
         markerId: const MarkerId('Station'),
@@ -531,12 +531,11 @@ class _ListChargerState extends State<ListCharger> {
                                 if (value!.isEmpty) {
                                   return 'Please enter a valid station name.';
                                 }
-
                                 return null;
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Amog Public Battery Station',
+                                  hintText: 'Amog Public Charging Station',
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
@@ -564,20 +563,121 @@ class _ListChargerState extends State<ListCharger> {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Thannesar Road, Kurukshetra',
+                                  hintText:
+                                      '255-A, Himadri Society, Hudson Lane',
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
                                   )),
-                              maxLines: 3,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.streetAddress,
+                              textInputAction: TextInputAction.next,
                               focusNode: _addressFocusNode,
+                              onFieldSubmitted: (_) => FocusScope.of(context)
+                                  .requestFocus(_cityFocusNode),
                               onSaved: (newValue) {
                                 setState(() {
                                   StationAddress = newValue!;
                                 });
                               },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            _makeTitle(title: 'City'),
+                            TextFormField(
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter your city.';
+                                }
+                                return null;
+                              },
+                              style: TextStyle(color: ColorManager.darkGrey),
+                              decoration: const InputDecoration(
+                                  hintText: 'Ambala',
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  )),
+                              focusNode: _cityFocusNode,
+                              keyboardType: TextInputType.text,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) => FocusScope.of(context)
+                                  .requestFocus(_pinCodeFocusNode),
+                              onSaved: (newValue) {
+                                city = newValue!;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              children: [
+                                _makeTitle(title: 'Pin/Postal Code'),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.19,
+                                ),
+                                _makeTitle(title: 'State/Province')
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Enter Pin.';
+                                      }
+                                      if (value.length < 6) {
+                                        return 'Enter Valid Code.';
+                                      }
+                                      return null;
+                                    },
+                                    textInputAction: TextInputAction.done,
+                                    style:
+                                        TextStyle(color: ColorManager.darkGrey),
+                                    decoration: InputDecoration(
+                                      hintText: '80085',
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
+                                    keyboardType: TextInputType.number,
+                                    focusNode: _pinCodeFocusNode,
+                                    onFieldSubmitted: (_) =>
+                                        FocusScope.of(context)
+                                            .requestFocus(_stateFocusNode),
+                                    onSaved: (newValue) {
+                                      pinCode = newValue!;
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Expanded(
+                                    child: TextFormField(
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Enter State';
+                                    }
+                                    return null;
+                                  },
+                                  style:
+                                      TextStyle(color: ColorManager.darkGrey),
+                                  decoration: const InputDecoration(
+                                      hintText: 'Uttar Pradesh',
+                                      enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)))),
+                                  textInputAction: TextInputAction.done,
+                                  keyboardType: TextInputType.text,
+                                  focusNode: _stateFocusNode,
+                                  onSaved: (newValue) {
+                                    state = newValue!;
+                                  },
+                                ))
+                              ],
                             ),
                             const SizedBox(
                               height: 15,
@@ -629,7 +729,8 @@ class _ListChargerState extends State<ListCharger> {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Persons available',
+                                  hintText:
+                                      'Priyanshu Maikhuri\nArshdeep Singh',
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
@@ -731,7 +832,6 @@ class _ListChargerState extends State<ListCharger> {
                                   : Align(
                                       alignment: Alignment.center,
                                       child: ElevatedButton(
-                                          // onPressed: _showPhotoOptionsDialog,
                                           onPressed: () {
                                             _showPhotoOptionsDialog();
                                           },
@@ -776,9 +876,7 @@ class _ListChargerState extends State<ListCharger> {
                                       .setUserChargingData(userChargingData);
                                   // _addInFirestore(_selectedLocation.latitude,
                                   //     _selectedLocation.longitude);
-                                  
-                                  
-                                  
+
                                   // StoreLatLng;
 
                                   Navigator.pop(
