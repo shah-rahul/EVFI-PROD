@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
+import '../../models/pricing_model.dart';
 
 import 'package:evfi/presentation/pages/models/decode_geohash.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +63,6 @@ class _ListChargerState extends State<ListCharger> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
-  
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -74,7 +74,6 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {
       _isLoading = true;
     });
-    
 
     setState(() {
       _isLoading = false;
@@ -91,8 +90,6 @@ class _ListChargerState extends State<ListCharger> {
         child:
             Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
   }
-
-  
 
   late Marker _station = const Marker(markerId: MarkerId('Station'));
   _pinMarkerOnMap(LatLng position) async {
@@ -146,8 +143,6 @@ class _ListChargerState extends State<ListCharger> {
           markers: {_station},
         ));
   }
-
-  
 
   Widget _takeChargerLocation() {
     return _isPinning
@@ -360,22 +355,19 @@ class _ListChargerState extends State<ListCharger> {
     }
 
     void Storeg(LatLng position) {
-    //   double latitude = position.latitude;
-    // double longitude = position.longitude;
+      //   double latitude = position.latitude;
+      // double longitude = position.longitude;
 
-    String geohash = encodeGeohash(position.latitude, position.longitude, precision: 9);
-    GeoPoint gpoint = GeoPoint(position.latitude, position.longitude);
-   
-    
-    
-    UserChargingData userChargingData =
-        userChargingDataProvider.userChargingData;
-    userChargingData.geohash = geohash;
-    userChargingData.geopoint =  gpoint as GeoPoint;
+      String geohash =
+          encodeGeohash(position.latitude, position.longitude, precision: 9);
+      GeoPoint gpoint = GeoPoint(position.latitude, position.longitude);
 
-    userChargingDataProvider.setUserChargingData(userChargingData);
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
+      userChargingData.geohash = geohash;
+      userChargingData.geopoint = gpoint as GeoPoint;
 
-     
+      userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreAadharNumber(String aadharNumber) {
@@ -476,15 +468,12 @@ class _ListChargerState extends State<ListCharger> {
                 key: _formKey,
                 child: ListView(
                   children: <Widget>[
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
-                        height: 220,
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: const HeaderUI(
-                            220, true, ImageAssets.oldBlackMarker),
-                      ),
+                    Container(
+                      height: 220,
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child:
+                          const HeaderUI(220, true, ImageAssets.oldBlackMarker),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -626,28 +615,55 @@ class _ListChargerState extends State<ListCharger> {
                                   width: 10,
                                 ),
                                 Expanded(
-                                    child: TextFormField(
-                                  onChanged: StoreState,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Enter State';
-                                    }
-                                    return null;
-                                  },
-                                  style:
-                                      TextStyle(color: ColorManager.darkGrey),
-                                  decoration: const InputDecoration(
-                                      hintText: 'Uttar Pradesh',
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)))),
-                                  textInputAction: TextInputAction.done,
-                                  keyboardType: TextInputType.text,
-                                  focusNode: _stateFocusNode,
-                                  onSaved: (newValue) {
-                                    state = newValue!;
-                                  },
-                                ))
+                                  child: DropdownButtonFormField<String>(
+                                    value: state,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Punjab',
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)))),
+                                    items: States.values
+                                        .map<DropdownMenuItem<String>>(
+                                            (States st) {
+                                      return DropdownMenuItem<String>(
+                                        value: st.toString().split('.')[1],
+                                        child:
+                                            Text(st.toString().split('.')[1]),
+                                      );
+                                    }).toList(),
+                                    onChanged: (val) {
+                                      if (val != null) StoreState(val);
+                                      setState(() {
+                                        state = val;
+                                      });
+                                    },
+                                    style:
+                                        TextStyle(color: ColorManager.darkGrey),
+                                  ),
+                                ),
+                                // Expanded(
+                                //     child: TextFormField(
+                                //   onChanged: StoreState,
+                                //   validator: (value) {
+                                //     if (value!.isEmpty) {
+                                //       return 'Enter State';
+                                //     }
+                                //     return null;
+                                //   },
+                                //   style:
+                                //       TextStyle(color: ColorManager.darkGrey),
+                                //   decoration: const InputDecoration(
+                                //       hintText: 'Uttar Pradesh',
+                                //       enabledBorder: OutlineInputBorder(
+                                //           borderRadius: BorderRadius.all(
+                                //               Radius.circular(10)))),
+                                //   textInputAction: TextInputAction.done,
+                                //   keyboardType: TextInputType.text,
+                                //   focusNode: _stateFocusNode,
+                                //   onSaved: (newValue) {
+                                //     state = newValue!;
+                                //   },
+                                // ))
                               ],
                             ),
                             const SizedBox(
