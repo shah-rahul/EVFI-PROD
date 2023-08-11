@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:evfi/presentation/pages/models/decode_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -61,31 +62,7 @@ class _ListChargerState extends State<ListCharger> {
   final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
-  // void _addInFirestore(double latitude, double longitude) async {
-  //   final isValid = _form.currentState!.validate();
-  //   if (!isValid) {
-  //     return;
-  //   }
-  //   // print("****");
-  //   _form.currentState!.save();
-  //   String geohash = encodeGeohash(latitude, longitude, precision: 9);
-  //   GeoPoint coordinate = GeoPoint(latitude, longitude);
-  //   var marker = <String, dynamic>{
-  //     'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
-  //   };
-  //   await FirebaseFirestore.instance
-  //       .collection('Chargers')
-  //       .add(marker)
-  //       .then((_) => Navigator.of(context).pop());
-  //   final userChargingDataProvider =
-  //       Provider.of<UserChargingDataProvider>(context);
-  //   UserChargingData userChargingData =
-  //       userChargingDataProvider.userChargingData;
-  //   userChargingData.geohash = geohash;
-  //   userChargingData.geopoint = GeoPoint(latitude, longitude) as String;
-
-  //   userChargingDataProvider.setUserChargingData(userChargingData);
-  // }
+  
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -97,13 +74,8 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {
       _isLoading = true;
     });
-    //store details in database
+    
 
-    // await charger.addCharger(
-    //     StationAddress: StationAddress!,
-    //     StationName: StationName!,
-    //     amount: amount!,
-    //     position: LatLng(latitude!, longitude!));
     setState(() {
       _isLoading = false;
     });
@@ -120,39 +92,7 @@ class _ListChargerState extends State<ListCharger> {
             Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
   }
 
-  // _askCoordinates() {
-  //   return Row(
-  //     children: [
-  //       Expanded(
-  //         child: TextFormField(
-  //           style: TextStyle(color: ColorManager.darkGrey),
-  //           decoration: const InputDecoration(
-  //               enabled: false,
-  //               labelText: 'Station Latitude',
-  //               enabledBorder: OutlineInputBorder(
-  //                 borderRadius: BorderRadius.all(Radius.circular(10)),
-  //               )),
-  //           keyboardType: TextInputType.none,
-  //         ),
-  //       ),
-  //       const SizedBox(
-  //         width: 10,
-  //       ),
-  //       Expanded(
-  //         child: TextFormField(
-  //           style: TextStyle(color: ColorManager.darkGrey),
-  //           decoration: const InputDecoration(
-  //               enabled: false,
-  //               labelText: 'Station Longitude',
-  //               enabledBorder: OutlineInputBorder(
-  //                 borderRadius: BorderRadius.all(Radius.circular(10)),
-  //               )),
-  //           keyboardType: TextInputType.none,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+  
 
   late Marker _station = const Marker(markerId: MarkerId('Station'));
   _pinMarkerOnMap(LatLng position) async {
@@ -199,54 +139,15 @@ class _ListChargerState extends State<ListCharger> {
                 () => EagerGestureRecognizer())),
           onTap: (coordinates) {
             _pinMarkerOnMap(coordinates);
-            StoreLatLng(coordinates);
+            setState(() {
+              _position = coordinates;
+            });
           },
           markers: {_station},
         ));
   }
 
-  void StoreLatLng(LatLng coordinates) {
-    // _onMarkerTapped(coordinates);
-
-    _position = coordinates;
-  }
-
-  Future<void> _onMarkerTapped(LatLng position) async {
-    double latitude = position.latitude;
-    double longitude = position.longitude;
-
-    String geohash = encodeGeohash(latitude, longitude, precision: 9);
-    GeoPoint coordinate = GeoPoint(latitude, longitude);
-    var marker = <String, dynamic>{
-      'g': <String, dynamic>{'geohash': geohash, 'geopoint': coordinate},
-    };
-    await FirebaseFirestore.instance.collection('Chargers').add(marker);
-    StoreLatLng(_selectedLocation);
-    final userChargingDataProvider =
-        Provider.of<UserChargingDataProvider>(context);
-    UserChargingData userChargingData =
-        userChargingDataProvider.userChargingData;
-    userChargingData.geohash = geohash;
-    userChargingData.geopoint = GeoPoint(latitude, longitude) as String;
-
-    userChargingDataProvider.setUserChargingData(userChargingData);
-  }
-
-  // void StorePoints(LatLng position) {
-  //   double latitude = position.latitude;
-  //   double longitude = position.longitude;
-
-  //   String geohash = encodeGeohash(latitude, longitude, precision: 9);
-  //   GeoPoint coordinate = GeoPoint(latitude, longitude);
-  //   final userChargingDataProvider =
-  //       Provider.of<UserChargingDataProvider>(context);
-  //   UserChargingData userChargingData =
-  //       userChargingDataProvider.userChargingData;
-  //   userChargingData.geohash = geohash;
-  //   userChargingData.geopoint = coordinate as String;
-
-  //   userChargingDataProvider.setUserChargingData(userChargingData);
-  // }
+  
 
   Widget _takeChargerLocation() {
     return _isPinning
@@ -272,6 +173,7 @@ class _ListChargerState extends State<ListCharger> {
           );
   }
 
+  late int chargerType;
   Widget _chargerTypeRadioButtons() {
     return Row(
       children: <Widget>[
@@ -280,11 +182,13 @@ class _ListChargerState extends State<ListCharger> {
           contentPadding: const EdgeInsets.all(0.0),
           value: typeCharger.Level1,
           groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.17),
+          tileColor: ColorManager.primary.withOpacity(0.1),
           onChanged: (val) {
             setState(() {
-              debugPrint('Selected Charger: \t$val');
+              // debugPrint('Selected Charger: \t$val');
               _type = val;
+              chargerType = _type!.index;
+              // print('8***********************$chargerType');
             });
           },
           title: const Text(
@@ -303,6 +207,7 @@ class _ListChargerState extends State<ListCharger> {
             setState(() {
               debugPrint('Selected Charger: \t$val');
               _type = val;
+              chargerType = _type!.index;
             });
           },
           title: const Text(
@@ -321,6 +226,7 @@ class _ListChargerState extends State<ListCharger> {
             setState(() {
               debugPrint('Selected Charger: \t$val');
               _type = val;
+              chargerType = _type!.index;
             });
           },
           title: const Text(
@@ -436,6 +342,7 @@ class _ListChargerState extends State<ListCharger> {
     final userChargingDataProvider =
         Provider.of<UserChargingDataProvider>(context);
     // Storing users charging information using provider
+
     void StoreStationName(String StationName) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
@@ -450,6 +357,25 @@ class _ListChargerState extends State<ListCharger> {
       userChargingData.address = StationAddress;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void Storeg(LatLng position) {
+    //   double latitude = position.latitude;
+    // double longitude = position.longitude;
+
+    String geohash = encodeGeohash(position.latitude, position.longitude, precision: 9);
+    GeoPoint gpoint = GeoPoint(position.latitude, position.longitude);
+   
+    
+    
+    UserChargingData userChargingData =
+        userChargingDataProvider.userChargingData;
+    userChargingData.geohash = geohash;
+    userChargingData.geopoint =  gpoint as GeoPoint;
+
+    userChargingDataProvider.setUserChargingData(userChargingData);
+
+     
     }
 
     void StoreAadharNumber(String aadharNumber) {
@@ -468,18 +394,21 @@ class _ListChargerState extends State<ListCharger> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreChargerType() {
+    void StoreChargerType(int type) {
+      String chargerType = 'Level $type';
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
-      userChargingData.chargerType = _chargerTypeRadioButtons as String;
+      userChargingData.chargerType = chargerType;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreAvailability(String availability) {
+    void StoreAvailability(DateTime start, DateTime end) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
-      userChargingData.availability = availability;
+
+      userChargingData.startavailability = start;
+      userChargingData.endavailability = end;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -585,6 +514,7 @@ class _ListChargerState extends State<ListCharger> {
                                 setState(() {
                                   StationName = newValue!;
                                 });
+                                // StoreStationName(StationName!);
                               },
                             ),
                             const SizedBox(
@@ -905,9 +835,14 @@ class _ListChargerState extends State<ListCharger> {
                           Expanded(
                             child: ElevatedButton(
                                 // onPressed: _submitForm,
-                                onPressed: () async {
-                                  _showMap;
-                                  _onMarkerTapped(_position);
+                                onPressed: () {
+                                  _submitForm;
+                                  StoreChargerType(++chargerType);
+                                  StoreAvailability(_startAvailabilityTime!,
+                                      _endAvailabilityTime!);
+                                  Storeg(_position);
+                                  // _showMap;
+                                  // _onMarkerTapped(_position);
 
                                   // StoreLatLng(_selectedLocation);
 
@@ -915,14 +850,15 @@ class _ListChargerState extends State<ListCharger> {
                                       userChargingDataProvider.userChargingData;
                                   userChargingDataProvider
                                       .setUserChargingData(userChargingData);
-                                  await userChargingDataProvider
-                                      .saveUserChargingData();
+                                  userChargingDataProvider
+                                      .saveUserChargingData()
+                                      .then((_) => Navigator.pop(
+                                          context,
+                                          PageTransition(
+                                              type: PageTransitionType.fade,
+                                              child:
+                                                  const MyChargingScreen())));
 
-                                  Navigator.pop(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.fade,
-                                          child: const MyChargingScreen()));
                                   // print(
                                   //     'Latitude: ${_selectedLocation.latitude}');
                                   // print(

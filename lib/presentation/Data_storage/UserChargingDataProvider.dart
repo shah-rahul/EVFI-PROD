@@ -4,6 +4,8 @@
 
 // ignore_for_file: file_names, duplicate_ignore
 
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -18,7 +20,9 @@ class UserChargingDataProvider extends ChangeNotifier {
     // chargingRequirements: '',
     Uid: "Null",
     geohash: 'Null',
-    geopoint: 'Null',
+    // geopoint: const GeoPoint(0.0, 0.0),
+    
+    geopoint: new GeoPoint(0.0,0.0),
     stationName: 'Null',
     address: 'Null',
     //loaction from marker
@@ -28,7 +32,8 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
-    availability: 'Null',
+    startavailability: DateTime.now(),
+    endavailability: DateTime.now(),
     price: 'Null',
     amenities: 'Null',
     //image of charger
@@ -69,6 +74,10 @@ class UserChargingDataProvider extends ChangeNotifier {
           'Price': _userChargingData.price,
           'Amenities': _userChargingData.amenities,
           'Imageurl':_userChargingData.imageurl,
+          'Availability':{
+            'Start ':_userChargingData.startavailability,
+            'End':_userChargingData.endavailability,
+          },
           //charger image
           // 'isProvider':_userChargingData.isProvider,
         }

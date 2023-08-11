@@ -1,9 +1,11 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserChargingData {
   String Uid;
   String geohash;
-  String geopoint;
+  GeoPoint geopoint;
 
   String stationName;
   String address;
@@ -16,7 +18,10 @@ class UserChargingData {
   String aadharNumber;
   String hostName;
   String chargerType;
-  String availability;
+
+  DateTime startavailability;
+  DateTime endavailability;
+
   String price;
   String amenities;
   // image of charger
@@ -35,7 +40,8 @@ class UserChargingData {
     required this.aadharNumber,
     required this.hostName,
     required this.chargerType,
-    required this.availability,
+    required this.startavailability,
+    required this.endavailability,
     required this.price,
     required this.amenities,
     //image of charger
