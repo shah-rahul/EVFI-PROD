@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import '../../models/pricing_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -547,15 +547,12 @@ class _ListChargerState extends State<ListCharger> {
                 key: _formKey,
                 child: ListView(
                   children: <Widget>[
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Container(
-                        height: 220,
-                        width: double.infinity,
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: const HeaderUI(
-                            220, true, ImageAssets.oldBlackMarker),
-                      ),
+                    Container(
+                      height: 220,
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      child:
+                          const HeaderUI(220, true, ImageAssets.oldBlackMarker),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -696,28 +693,55 @@ class _ListChargerState extends State<ListCharger> {
                                   width: 10,
                                 ),
                                 Expanded(
-                                    child: TextFormField(
-                                  onChanged: StoreState,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Enter State';
-                                    }
-                                    return null;
-                                  },
-                                  style:
-                                      TextStyle(color: ColorManager.darkGrey),
-                                  decoration: const InputDecoration(
-                                      hintText: 'Uttar Pradesh',
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)))),
-                                  textInputAction: TextInputAction.done,
-                                  keyboardType: TextInputType.text,
-                                  focusNode: _stateFocusNode,
-                                  onSaved: (newValue) {
-                                    state = newValue!;
-                                  },
-                                ))
+                                  child: DropdownButtonFormField<String>(
+                                    value: state,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Punjab',
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10)))),
+                                    items: States.values
+                                        .map<DropdownMenuItem<String>>(
+                                            (States st) {
+                                      return DropdownMenuItem<String>(
+                                        value: st.toString().split('.')[1],
+                                        child:
+                                            Text(st.toString().split('.')[1]),
+                                      );
+                                    }).toList(),
+                                    onChanged: (val) {
+                                      if (val != null) StoreState(val);
+                                      setState(() {
+                                        state = val;
+                                      });
+                                    },
+                                    style:
+                                        TextStyle(color: ColorManager.darkGrey),
+                                  ),
+                                ),
+                                // Expanded(
+                                //     child: TextFormField(
+                                //   onChanged: StoreState,
+                                //   validator: (value) {
+                                //     if (value!.isEmpty) {
+                                //       return 'Enter State';
+                                //     }
+                                //     return null;
+                                //   },
+                                //   style:
+                                //       TextStyle(color: ColorManager.darkGrey),
+                                //   decoration: const InputDecoration(
+                                //       hintText: 'Uttar Pradesh',
+                                //       enabledBorder: OutlineInputBorder(
+                                //           borderRadius: BorderRadius.all(
+                                //               Radius.circular(10)))),
+                                //   textInputAction: TextInputAction.done,
+                                //   keyboardType: TextInputType.text,
+                                //   focusNode: _stateFocusNode,
+                                //   onSaved: (newValue) {
+                                //     state = newValue!;
+                                //   },
+                                // ))
                               ],
                             ),
                             const SizedBox(

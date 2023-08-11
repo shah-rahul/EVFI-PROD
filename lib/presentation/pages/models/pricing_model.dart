@@ -92,6 +92,11 @@ class MyPricing {
 
   double fullChargeCost(double batteryCap, String state) {
     States myState = States.Delhi;
+    for (var i = 0; i < States.values.length; i++) {
+      if (States.values[i].toString().split('.')[1] == state) {
+        myState = States.values[i];
+      }
+    }
     print(state);
 
     return batteryCap * (costPerKWH[myState]!);

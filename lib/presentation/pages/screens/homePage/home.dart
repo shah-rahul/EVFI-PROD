@@ -1,6 +1,7 @@
 //ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -95,8 +96,10 @@ class HomeState extends State<Home> {
   }
 
 // Reference to locations collection.
-  final CollectionReference<Map<String, dynamic>> collectionReference =
+  final CollectionReference<Map<String, dynamic>> chargersReference =
       FirebaseFirestore.instance.collection('Chargers');
+  final CollectionReference<Map<String, dynamic>> UserChargingReference =
+      FirebaseFirestore.instance.collection('UserChargingRegister');
 
 // Function to get GeoPoint instance from Cloud Firestore document data.
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
@@ -119,9 +122,38 @@ class HomeState extends State<Home> {
 // Field name of Cloud Firestore documents where the geohash is saved.
     String field = 'g';
 
+//user data from database
+    double batteryCap = 65;
+
+    QuerySnapshot querySnapshot = await UserChargingReference.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data());
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Loop through the documents in the collection
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        final detailsMap = documentSnapshot.data() as Map<String, dynamic>;
+
+        if (detailsMap != null) {
+          print(detailsMap);
+          // print(detailsMap['pinCode']);
+          dynamic level2 = detailsMap['level2'];
+          print(level2);
+          if (level2 != null) {
+            String batteryCapacity = level2['Battery Capacity'];
+            batteryCap = double.parse(batteryCapacity);
+          }
+        } else {
+          print(
+              'Map "details" is null in the document ${documentSnapshot.id}.');
+        }
+      }
+    } else {
+      print('No documents found in the collection.');
+    }
+
 // Streamed document snapshots of geo query under given conditions.
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
-        GeoCollectionReference<Map<String, dynamic>>(collectionReference)
+        GeoCollectionReference<Map<String, dynamic>>(chargersReference)
             .subscribeWithin(
       center: center,
       radiusInKm: radiusInKm,
@@ -142,11 +174,13 @@ class HomeState extends State<Home> {
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
         final stnName =
-            (data['info'] as Map<String, dynamic>)['name'] as String;
+            (data['info'] as Map<String, dynamic>)['Station Name'] as String;
         final stnAddress =
-            (data['info'] as Map<String, dynamic>)['address'] as String;
+            (data['info'] as Map<String, dynamic>)['Address'] as String;
         final stnImgUrl =
             (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
+        final stateName =
+            (data['info'] as Map<String, dynamic>)['State'] as String;
 
         _markers.add(Marker(
             markerId: MarkerId(geohash),
@@ -161,8 +195,9 @@ class HomeState extends State<Home> {
                 isScrollControlled: true,
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
-                  String addressState = getAddressState(stnAddress);
-                  double price = mypricing.fullChargeCost(64, addressState);
+                  // String addressState = getAddressState(stnAddress);
+                  double price =
+                      mypricing.fullChargeCost(batteryCap as double, stateName);
                   return CustomMarkerPopup(
                       stationName: stnName,
                       address: stnAddress,
@@ -180,16 +215,16 @@ class HomeState extends State<Home> {
     });
   }
 
-  String getAddressState(String address) {
-    String addState = "";
-    for (int i = address.length - 1; i >= 0; i--) {
-      if (address[i] == ' ') {
-        return addState;
-      }
-      addState = address[i] + addState;
-    }
-    return addState;
-  }
+  // String getAddressState(String address) {
+  //   String addState = "";
+  //   for (int i = address.length - 1; i >= 0; i--) {
+  //     if (address[i] == ' ') {
+  //       return addState;
+  //     }
+  //     addState = address[i] + addState;
+  //   }
+  //   return addState;
+  // }
 
   Future<Uint8List> getBytesFromAsset(String path) async {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
