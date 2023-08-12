@@ -7,6 +7,7 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
@@ -127,6 +128,7 @@ class HomeState extends State<Home> {
 
     QuerySnapshot querySnapshot = await UserChargingReference.get();
     final allData = querySnapshot.docs.map((doc) => doc.data());
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
 
     if (querySnapshot.docs.isNotEmpty) {
       // Loop through the documents in the collection
@@ -134,13 +136,15 @@ class HomeState extends State<Home> {
         final detailsMap = documentSnapshot.data() as Map<String, dynamic>;
 
         if (detailsMap != null) {
-          print(detailsMap);
           // print(detailsMap['pinCode']);
-          dynamic level2 = detailsMap['level2'];
-          print(level2);
-          if (level2 != null) {
-            String batteryCapacity = level2['Battery Capacity'];
-            batteryCap = double.parse(batteryCapacity);
+          if (currentUserUID == detailsMap['Uid']) {
+            print(detailsMap);
+            dynamic level2 = detailsMap['level2'];
+            print(level2);
+            if (level2 != null) {
+              String batteryCapacity = level2['Battery Capacity'];
+              batteryCap = double.parse(batteryCapacity);
+            }
           }
         } else {
           print(
