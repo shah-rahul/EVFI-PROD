@@ -3,7 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserChargingData {
-  String Uid;
+  String uid;
   String geohash;
   GeoPoint geopoint;
 
@@ -19,16 +19,16 @@ class UserChargingData {
   String hostName;
   String chargerType;
 
-  DateTime startavailability;
-  DateTime endavailability;
+  DateTime startAvailability;
+  DateTime endAvailability;
 
   String price;
   String amenities;
   // image of charger
-  String imageurl;
+  String imageUrl;
 
   UserChargingData({
-    required this.Uid,
+    required this.uid,
     required this.geohash,
     required this.geopoint,
     required this.stationName,
@@ -40,12 +40,12 @@ class UserChargingData {
     required this.aadharNumber,
     required this.hostName,
     required this.chargerType,
-    required this.startavailability,
-    required this.endavailability,
+    required this.startAvailability,
+    required this.endAvailability,
     required this.price,
     required this.amenities,
     //image of charger
-    required this.imageurl,
+    required this.imageUrl,
   });
 
   UserChargingData? get userChargingData => null;

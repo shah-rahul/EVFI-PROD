@@ -1,7 +1,7 @@
 // ignore_for_file: file_names, non_constant_identifier_names
 
 class UserData {
-  String Uid;
+  String uid;
   String name;
   String phoneNumber;
 
@@ -16,7 +16,7 @@ class UserData {
   bool isProvider;
 
   UserData({
-    required this.Uid,
+    required this.uid,
     required this.name,
     required this.phoneNumber,
     required this.level1,
