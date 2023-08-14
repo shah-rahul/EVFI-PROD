@@ -1,4 +1,5 @@
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
+import 'package:evfi/presentation/register/chargerform.dart';
 import 'package:flutter/material.dart';
 
 import '../forgot_password/forgot_password.dart';
@@ -27,7 +28,7 @@ class Routes {
   static const String myChargingRoute = "/myCharging";
   // ignore: constant_identifier_names
   static const String vehicleRegisterForm = "/VehicleRegisterForm";
-
+  static const String chargerForm = "/chargerForm";
   static const String UserChargingRegister = "/UserChargingRegister";
 }
 
@@ -61,6 +62,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const SearchPage());
       case Routes.vehicleRegisterForm:
         return MaterialPageRoute(builder: (_) => const VehicleForm());
+      case Routes.chargerForm:
+        return MaterialPageRoute(builder: (_) => const ChargerForm());
       default:
         return unDefinedRoute();
     }

@@ -21,6 +21,8 @@ class ChargerForm extends StatefulWidget {
 }
 
 class _ChargerFormState extends State<ChargerForm> {
+  String _selectedChargerType = '1';
+
   TextEditingController chargerspeedController = TextEditingController();
   final databaseRef = FirebaseDatabase.instance.ref('Users');
   @override
@@ -35,6 +37,12 @@ class _ChargerFormState extends State<ChargerForm> {
 
       userDataProvider.setUserData(userData);
     }
+
+    final Map<String, String> dropdownItems = {
+      '1': 'Level 1',
+      '2': 'Level 2 ',
+      '3': 'Level 3',
+    };
 
     return Container(
       decoration: const BoxDecoration(
@@ -86,51 +94,74 @@ class _ChargerFormState extends State<ChargerForm> {
                       padding: const EdgeInsets.all(AppPadding.p20),
                       child: Column(
                         children: [
+                          Text('Select Charger Type'),
                           Container(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: AppPadding.p8,
                                 vertical: AppPadding.p8),
-                            child: DropDownTextField(
-                              //controller: chargetypeController,
-                              dropDownItemCount: 3,
-                              clearOption: false,
-                              dropDownList: const [
-                                DropDownValueModel(
-                                    name: 'Level 1 / Slow', value: 0),
-                                DropDownValueModel(
-                                    name: 'Level 2 / Fast', value: 1),
-                                DropDownValueModel(
-                                    name: 'Level 3 / DC Fast', value: 2),
-                              ],
-                              //                  onChanged: (value) {
-                              //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
-                              // },
-                              listTextStyle:
-                                  TextStyle(color: ColorManager.darkGrey),
-                              dropdownColor: Colors.white,
-                              textFieldDecoration: InputDecoration(
-                                hoverColor: ColorManager.primary,
-                                iconColor: ColorManager.primary,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: ColorManager.darkGrey,
+                            child: DropdownButton<String>(
+                              value: _selectedChargerType,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  print(newValue);
+                                  _selectedChargerType = newValue!;
+                                });
+                              },
+                              items: dropdownItems.keys.map((String key) {
+                                return DropdownMenuItem<String>(
+                                  value: key,
+                                  child: Text(
+                                    dropdownItems[key]!,
+                                    style:
+                                        TextStyle(color: ColorManager.darkGrey),
                                   ),
-                                ),
-                                labelText: 'Charger Type',
-                                labelStyle: const TextStyle(
-                                  fontSize: AppSize.s14,
-                                ),
-                              ),
-
-                              // onChanged: (val) {
-                              //   updateChargingData(val.toString(),
-                              //      // userDataProvider.userData.chargingType);
-                              //   FocusScope.of(context)
-                              //       .requestFocus(FocusNode());
-                              // },
+                                );
+                              }).toList(),
                             ),
                           ),
+                          //controller: chargetypeController,
+                          // dropDownItemCount: 3,
+                          // clearOption: false,
+                          // dropDownList: const [
+                          //   DropDownValueModel(
+                          //       name: 'Level 1 / Slow', value: 'level1'),
+                          //   DropDownValueModel(
+                          //       name: 'Level 2 / Fast', value: 'level2'),
+                          //   DropDownValueModel(
+                          //       name: 'Level 3 / DC Fast', value: 'level3'),
+                          // ],
+                          //                  onChanged: (value) {
+                          //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
+                          // },
+
+                          // style:
+                          //     TextStyle(color: ColorManager.darkGrey),
+                          // dropdownColor: Colors.white,
+                          // itemHeight: ,
+                          // textFieldDecoration: InputDecoration(
+                          //   hoverColor: ColorManager.primary,
+                          //   iconColor: ColorManager.primary,
+                          //   enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(
+                          //       width: 1,
+                          //       color: ColorManager.darkGrey,
+                          //     ),
+                          //   ),
+                          //   labelText: 'Charger Type',
+                          //   labelStyle: const TextStyle(
+                          //     fontSize: AppSize.s14,
+                          //   ),
+                          // ),
+                          // onChanged: (value) => ,
+
+                          // onChanged: (val) {
+                          //   updateChargingData(val.toString(),
+                          //      // userDataProvider.userData.chargingType);
+                          //   FocusScope.of(context)
+                          //       .requestFocus(FocusNode());
+                          // },
+                          //   ),
+                          // ),
                           // Container(
                           //   padding: const EdgeInsets.symmetric(
                           //       horizontal: AppPadding.p8,
@@ -171,8 +202,7 @@ class _ChargerFormState extends State<ChargerForm> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         ctx: context,
-                                        child: MainView()
-                                        ),
+                                        child: MainView()),
                                   );
                                 },
                                 child: Text(
@@ -189,7 +219,7 @@ class _ChargerFormState extends State<ChargerForm> {
                               ElevatedButton(
                                 onPressed: () async {
                                   // await userDataProvider.saveUserData();
-                                  
+
                                   // Example: Storing charging information
                                   String chargingType = 'Type A';
                                   String chargingSpeed =
