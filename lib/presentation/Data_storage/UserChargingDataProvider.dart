@@ -37,7 +37,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     price: 'Null',
     amenities: 'Null',
     //image of charger
-    imageUrl: 'Null',
+    imageUrl: [],
   );
   // ignore: prefer_final_fields
   CollectionReference _usersCollection =
