@@ -16,7 +16,9 @@ import '../screens/homePage/search_page.dart';
 class SearchWidget extends StatefulWidget {
   final Function(Position) onLocationSelected;
 
-  const SearchWidget(this.onLocationSelected);
+  const SearchWidget(
+    this.onLocationSelected,
+  );
 
   @override
   State<SearchWidget> createState() => _SearchWidgetState();
@@ -193,7 +195,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   @override
   Widget build(BuildContext context) {
     final suggestionController = SuggestionsBoxController();
-  
+
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 

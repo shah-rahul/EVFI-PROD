@@ -8,12 +8,14 @@ import 'package:evfi/presentation/pages/widgets/marker_infowindow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:getwidget/getwidget.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
+import '../../models/pricing_model.dart';
 import './home.dart';
 
 class RouteMap extends StatefulWidget {
@@ -27,14 +29,15 @@ class RouteMap extends StatefulWidget {
 }
 
 class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
-  GlobalKey<HomeState> myKey = GlobalKey();
+  HomeState myKey = HomeState();
+  MyPricing mypricing = MyPricing();
   late GoogleMapController _googleMapController;
   List<LatLng> routpoints = [];
   Set<Polyline> polylines = {};
   Set<Marker> _markers = {};
   late Uint8List stationMarker;
   final CollectionReference<Map<String, dynamic>> collectionReference =
-      FirebaseFirestore.instance.collection('Chargers');
+      FirebaseFirestore.instance.collection('chargers');
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
       (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
 
@@ -52,6 +55,15 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
         .buffer
         .asUint8List();
+  }
+
+  double batCap = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    myKey.getBatteryCap().then((value) => batCap = value);
+    super.initState();
   }
 
   void addMarker(String title, LatLng coordinates,
@@ -215,11 +227,13 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
         final stnName =
-            (data['info'] as Map<String, dynamic>)['name'] as String;
+            (data['info'] as Map<String, dynamic>)['stationName'] as String;
         final stnAddress =
             (data['info'] as Map<String, dynamic>)['address'] as String;
         final stnImgUrl =
-            (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
+            (data['info'] as Map<String, dynamic>)['imageUrl'] as String;
+        final stateName =
+            (data['info'] as Map<String, dynamic>)['state'] as String;
 
         //  print(geoPoint.latitude);
         _newMarkers.add(Marker(
@@ -236,13 +250,15 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                     vsync: this, duration: const Duration(milliseconds: 400)),
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
+                  double price =
+                      mypricing.fullChargeCost(batteryCap, stateName);
                   return CustomMarkerPopup(
                     stationName: stnName,
                     address: stnAddress,
                     imageUrl: stnImgUrl,
                     geopoint: geoPoint,
                     geohash: geohash,
-                    costOfFullCharge: 25,
+                    costOfFullCharge: price,
                   );
                 },
               );

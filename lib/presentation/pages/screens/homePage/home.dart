@@ -58,7 +58,7 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getCurrentLocation();
-    getBatteryCap();
+    getBatteryCap().then((value) => batteryCap = value);
   }
 
   late CameraPosition _kGooglePlex = const CameraPosition(
@@ -67,15 +67,16 @@ class HomeState extends State<Home> {
     tilt: 15,
   );
 
-  void getBatteryCap() async {
+  Future<Map<String, dynamic>> getUserSnapShot() async {
     QuerySnapshot querySnapshot = await UserChargingReference.get();
+    Map<String, dynamic> detailsMap = {};
     final allData = querySnapshot.docs.map((doc) => doc.data());
     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
 
     if (querySnapshot.docs.isNotEmpty) {
       // Loop through the documents in the collection
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        final detailsMap = documentSnapshot.data() as Map<String, dynamic>;
+        detailsMap = documentSnapshot.data() as Map<String, dynamic>;
 
         if (detailsMap != null) {
           print(currentUserUID);
@@ -83,23 +84,24 @@ class HomeState extends State<Home> {
 
           // print(detailsMap['pinCode']);
           if (currentUserUID == detailsMap['uid']) {
-            print(detailsMap);
-            dynamic level2 = detailsMap['level2'];
-            print(level2);
-            if (level2 != null && level2 != false) {
-              String batteryCapacity = level2['Battery Capacity'];
-              batteryCap = double.parse(batteryCapacity);
-            }
-            return;
+            return detailsMap;
           }
-        } else {
-          print(
-              'Map "details" is null in the document ${documentSnapshot.id}.');
         }
       }
-    } else {
-      print('No documents found in the collection.');
     }
+    return detailsMap;
+  }
+
+  Future<double> getBatteryCap() async {
+    Map<String, dynamic> detailsMap = await getUserSnapShot();
+
+    dynamic level2 = detailsMap['level2'];
+    print(level2);
+    if (level2 != null && level2 != false) {
+      String batteryCapacity = level2['batteryCapacity'];
+      return (double.parse(batteryCapacity));
+    }
+    return 0;
   }
 
   void _getCurrentLocation() async {
@@ -138,7 +140,7 @@ class HomeState extends State<Home> {
   final CollectionReference<Map<String, dynamic>> chargersReference =
       FirebaseFirestore.instance.collection('chargers');
   final CollectionReference<Map<String, dynamic>> UserChargingReference =
-      FirebaseFirestore.instance.collection('UserChargingRegister');
+      FirebaseFirestore.instance.collection('user');
 
 // Function to get GeoPoint instance from Cloud Firestore document data.
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
@@ -176,7 +178,7 @@ class HomeState extends State<Home> {
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
-
+        print(data);
         if (data == null) {
           continue;
         }
@@ -193,7 +195,7 @@ class HomeState extends State<Home> {
             (data['info'] as Map<String, dynamic>)['imageUrl'] as String;
         final stateName =
             (data['info'] as Map<String, dynamic>)['state'] as String;
-
+        print(geohash);
         _markers.add(Marker(
             markerId: MarkerId(geohash),
             position: LatLng(geoPoint.latitude, geoPoint.longitude),
@@ -208,6 +210,7 @@ class HomeState extends State<Home> {
                 backgroundColor: Colors.amber.withOpacity(0.0),
                 builder: (context) {
                   // String addressState = getAddressState(stnAddress);
+
                   double price =
                       mypricing.fullChargeCost(batteryCap, stateName);
                   return CustomMarkerPopup(
