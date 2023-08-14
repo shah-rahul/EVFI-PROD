@@ -21,14 +21,14 @@ class UserChargingDataProvider extends ChangeNotifier {
     uid: "Null",
     geohash: 'Null',
     // geopoint: const GeoPoint(0.0, 0.0),
-    
-    geopoint: new GeoPoint(0.0,0.0),
+
+    geopoint: new GeoPoint(0.0, 0.0),
     stationName: 'Null',
     address: 'Null',
     //loaction from marker
     city: 'Null',
-    pin:'Null',
-    state:'Null',
+    pin: 'Null',
+    state: 'Null',
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
@@ -53,19 +53,19 @@ class UserChargingDataProvider extends ChangeNotifier {
     try {
       // Store user data in Firestore
       // ignore: unused_local_variable
-       User? user = FirebaseAuth.instance.currentUser;
+      User? user = FirebaseAuth.instance.currentUser;
       DocumentReference documentRef = await _usersCollection.add({
-        'uid':user!.uid,
-        'g':{
-         'geoHash': _userChargingData.geohash,
-         'geoPoint':_userChargingData.geopoint,
+        'uid': user!.uid,
+        'g': {
+          'geohash': _userChargingData.geohash,
+          'geopoint': _userChargingData.geopoint,
         },
         'info': {
           'stationName': _userChargingData.stationName,
           'address': _userChargingData.address,
-          'city':_userChargingData.city,
-          'pin':_userChargingData.pin,
-          'state':_userChargingData.state,
+          'city': _userChargingData.city,
+          'pin': _userChargingData.pin,
+          'state': _userChargingData.state,
           //loaction from marker
           'aadharNumber': _userChargingData.aadharNumber,
           'hostName ': _userChargingData.hostName,
@@ -73,10 +73,10 @@ class UserChargingDataProvider extends ChangeNotifier {
           //availability
           'price': _userChargingData.price,
           'amenities': _userChargingData.amenities,
-          'imageUrl':_userChargingData.imageUrl,
-          'availability':{
-            'start ':_userChargingData.startAvailability,
-            'end':_userChargingData.endAvailability,
+          'imageUrl': _userChargingData.imageUrl,
+          'availability': {
+            'start ': _userChargingData.startAvailability,
+            'end': _userChargingData.endAvailability,
           },
           //charger image
           // 'isProvider':_userChargingData.isProvider,
