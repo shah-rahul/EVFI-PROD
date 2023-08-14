@@ -99,7 +99,8 @@ class MyPricing {
     }
     print(state);
 
-    return batteryCap * (costPerKWH[myState]!);
+    return double.parse(
+        (batteryCap * (costPerKWH[myState]!)).toStringAsFixed(2));
   }
 }
 
