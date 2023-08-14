@@ -196,16 +196,12 @@ class _RegisterViewState extends State<RegisterView> {
                                 onPressed: () async {
                                   StoreName(nameController.text);
                                   await userDataProvider.saveUserData();
-                                  // UserData? userData =
-                                  //     userDataProvider.userData;
-                                  // userDataProvider.setUserData(userData);
+                                 
                                   Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
-                                        // child: VehicleForm()),
-                                        //child: UserChargingRegister()),
-                                        // child: MainView()),
+                                        
                                         child: OnBoardingView()),
                                   );
                                 },

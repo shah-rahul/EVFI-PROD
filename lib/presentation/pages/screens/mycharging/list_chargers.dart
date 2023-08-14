@@ -399,8 +399,8 @@ class _ListChargerState extends State<ListCharger> {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
 
-      userChargingData.startavailability = start;
-      userChargingData.endavailability = end;
+      userChargingData.startAvailability = start;
+      userChargingData.endAvailability = end;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -424,7 +424,7 @@ class _ListChargerState extends State<ListCharger> {
     void StoreImageurl(String imageUrl) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
-      userChargingData.imageurl = imageUrl;
+      userChargingData.imageUrl = imageUrl;
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
@@ -850,22 +850,20 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                // onPressed: _submitForm,
+                               
                                 onPressed: () {
                                   _submitForm;
                                   StoreChargerType(++chargerType);
                                   StoreAvailability(_startAvailabilityTime!,
                                       _endAvailabilityTime!);
                                   Storeg(_position);
-                                  // _showMap;
-                                  // _onMarkerTapped(_position);
+                                 
 
-                                  // StoreLatLng(_selectedLocation);
+                                  // UserChargingData? userChargingData =
+                                  //     userChargingDataProvider.userChargingData;
+                                  // userChargingDataProvider
+                                  //     .setUserChargingData(userChargingData);
 
-                                  UserChargingData? userChargingData =
-                                      userChargingDataProvider.userChargingData;
-                                  userChargingDataProvider
-                                      .setUserChargingData(userChargingData);
                                   userChargingDataProvider
                                       .saveUserChargingData()
                                       .then((_) => Navigator.pop(

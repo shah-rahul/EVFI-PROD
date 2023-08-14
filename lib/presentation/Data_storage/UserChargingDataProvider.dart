@@ -18,7 +18,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     // vehicleManufacturer: '',
     // vehicleNumber: '',
     // chargingRequirements: '',
-    Uid: "Null",
+    uid: "Null",
     geohash: 'Null',
     // geopoint: const GeoPoint(0.0, 0.0),
     
@@ -32,16 +32,16 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
-    startavailability: DateTime.now(),
-    endavailability: DateTime.now(),
+    startAvailability: DateTime.now(),
+    endAvailability: DateTime.now(),
     price: 'Null',
     amenities: 'Null',
     //image of charger
-    imageurl: 'Null',
+    imageUrl: 'Null',
   );
   // ignore: prefer_final_fields
   CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('Chargers');
+      FirebaseFirestore.instance.collection('chargers');
 
   UserChargingData get userChargingData => _userChargingData;
   void setUserChargingData(UserChargingData data) {
@@ -55,28 +55,28 @@ class UserChargingDataProvider extends ChangeNotifier {
       // ignore: unused_local_variable
        User? user = FirebaseAuth.instance.currentUser;
       DocumentReference documentRef = await _usersCollection.add({
-        'Uid':user!.uid,
+        'uid':user!.uid,
         'g':{
-         'geohash': _userChargingData.geohash,
-         'geopoint':_userChargingData.geopoint,
+         'geoHash': _userChargingData.geohash,
+         'geoPoint':_userChargingData.geopoint,
         },
         'info': {
-          'Station Name': _userChargingData.stationName,
-          'Address': _userChargingData.address,
-          'City':_userChargingData.city,
-          'Pin':_userChargingData.pin,
-          'State':_userChargingData.state,
+          'stationName': _userChargingData.stationName,
+          'address': _userChargingData.address,
+          'city':_userChargingData.city,
+          'pin':_userChargingData.pin,
+          'state':_userChargingData.state,
           //loaction from marker
-          'Aadhar Number': _userChargingData.aadharNumber,
-          'Host Name ': _userChargingData.hostName,
-          'Charger Type': _userChargingData.chargerType,
+          'aadharNumber': _userChargingData.aadharNumber,
+          'hostName ': _userChargingData.hostName,
+          'chargerType': _userChargingData.chargerType,
           //availability
-          'Price': _userChargingData.price,
-          'Amenities': _userChargingData.amenities,
-          'Imageurl':_userChargingData.imageurl,
-          'Availability':{
-            'Start ':_userChargingData.startavailability,
-            'End':_userChargingData.endavailability,
+          'price': _userChargingData.price,
+          'amenities': _userChargingData.amenities,
+          'imageUrl':_userChargingData.imageUrl,
+          'availability':{
+            'start ':_userChargingData.startAvailability,
+            'end':_userChargingData.endAvailability,
           },
           //charger image
           // 'isProvider':_userChargingData.isProvider,
