@@ -52,7 +52,7 @@ class _ListChargerState extends State<ListCharger> {
   final _stateFocusNode = FocusNode();
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
-
+  late List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
   DateTime? _startAvailabilityTime, _endAvailabilityTime;
@@ -250,17 +250,36 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {});
   }
 
-  Future<String> uploadImage(XFile imageFile) async {
-    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('charger_images')
-        .child('$imageName.jpg');
+  // Future<String> uploadImage(XFile imageFile) async {
+  //   String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+  //       .ref()
+  //       .child('charger_images')
+  //       .child('$imageName.jpg');
 
-    await ref.putFile(File(imageFile.path));
-    String imageUrl = await ref.getDownloadURL();
+  //   await ref.putFile(File(imageFile.path));
+  //   String imageUrl = await ref.getDownloadURL();
 
-    return imageUrl;
+  //   return imageUrl;
+  // }
+  Future<List<String>> uploadImages(List<XFile> imageFiles) async {
+    for (XFile imageFile in imageFiles) {
+      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('charger_images')
+          .child('$imageName.jpg');
+
+      await ref.putFile(File(imageFile.path));
+      String imageUrl = await ref.getDownloadURL();
+     
+
+      imageUrls.add(imageUrl);
+//       print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+//       print(imageUrls);
+    }
+    
+    return imageUrls;
   }
 
   Future<void> _showPhotoOptionsDialog() {
@@ -421,10 +440,10 @@ class _ListChargerState extends State<ListCharger> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreImageurl(String imageUrl) {
+    void StoreImageurl(List<String> imageUrls) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
-      userChargingData.imageUrl = imageUrl;
+      userChargingData.imageUrl = imageUrls;
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
@@ -641,29 +660,6 @@ class _ListChargerState extends State<ListCharger> {
                                         TextStyle(color: ColorManager.darkGrey),
                                   ),
                                 ),
-                                // Expanded(
-                                //     child: TextFormField(
-                                //   onChanged: StoreState,
-                                //   validator: (value) {
-                                //     if (value!.isEmpty) {
-                                //       return 'Enter State';
-                                //     }
-                                //     return null;
-                                //   },
-                                //   style:
-                                //       TextStyle(color: ColorManager.darkGrey),
-                                //   decoration: const InputDecoration(
-                                //       hintText: 'Uttar Pradesh',
-                                //       enabledBorder: OutlineInputBorder(
-                                //           borderRadius: BorderRadius.all(
-                                //               Radius.circular(10)))),
-                                //   textInputAction: TextInputAction.done,
-                                //   keyboardType: TextInputType.text,
-                                //   focusNode: _stateFocusNode,
-                                //   onSaved: (newValue) {
-                                //     state = newValue!;
-                                //   },
-                                // ))
                               ],
                             ),
                             const SizedBox(
@@ -850,15 +846,14 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                               
                                 onPressed: () {
                                   _submitForm;
                                   StoreChargerType(++chargerType);
                                   StoreAvailability(_startAvailabilityTime!,
                                       _endAvailabilityTime!);
                                   Storeg(_position);
-                                 
-
+                                uploadImages(_imageList!) ;
+                                  StoreImageurl(imageUrls);
                                   // UserChargingData? userChargingData =
                                   //     userChargingDataProvider.userChargingData;
                                   // userChargingDataProvider
