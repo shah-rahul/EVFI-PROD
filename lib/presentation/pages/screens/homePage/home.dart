@@ -35,6 +35,8 @@ class Home extends StatefulWidget {
   State<Home> createState() => HomeState();
 }
 
+double batteryCap = 0;
+
 class HomeState extends State<Home> {
   FocusNode _searchFocusNode = FocusNode();
   final Completer<GoogleMapController> _controller =
@@ -56,6 +58,7 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getCurrentLocation();
+    getBatteryCap();
   }
 
   late CameraPosition _kGooglePlex = const CameraPosition(
@@ -63,6 +66,41 @@ class HomeState extends State<Home> {
     zoom: 13.4746,
     tilt: 15,
   );
+
+  void getBatteryCap() async {
+    QuerySnapshot querySnapshot = await UserChargingReference.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data());
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Loop through the documents in the collection
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        final detailsMap = documentSnapshot.data() as Map<String, dynamic>;
+
+        if (detailsMap != null) {
+          print(currentUserUID);
+          print(detailsMap['uid']);
+
+          // print(detailsMap['pinCode']);
+          if (currentUserUID == detailsMap['uid']) {
+            print(detailsMap);
+            dynamic level2 = detailsMap['level2'];
+            print(level2);
+            if (level2 != null && level2 != false) {
+              String batteryCapacity = level2['Battery Capacity'];
+              batteryCap = double.parse(batteryCapacity);
+            }
+            return;
+          }
+        } else {
+          print(
+              'Map "details" is null in the document ${documentSnapshot.id}.');
+        }
+      }
+    } else {
+      print('No documents found in the collection.');
+    }
+  }
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -98,7 +136,7 @@ class HomeState extends State<Home> {
 
 // Reference to locations collection.
   final CollectionReference<Map<String, dynamic>> chargersReference =
-      FirebaseFirestore.instance.collection('Chargers');
+      FirebaseFirestore.instance.collection('chargers');
   final CollectionReference<Map<String, dynamic>> UserChargingReference =
       FirebaseFirestore.instance.collection('UserChargingRegister');
 
@@ -124,36 +162,6 @@ class HomeState extends State<Home> {
     String field = 'g';
 
 //user data from database
-    double batteryCap = 65;
-
-    QuerySnapshot querySnapshot = await UserChargingReference.get();
-    final allData = querySnapshot.docs.map((doc) => doc.data());
-    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // Loop through the documents in the collection
-      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        final detailsMap = documentSnapshot.data() as Map<String, dynamic>;
-
-        if (detailsMap != null) {
-          // print(detailsMap['pinCode']);
-          if (currentUserUID == detailsMap['Uid']) {
-            print(detailsMap);
-            dynamic level2 = detailsMap['level2'];
-            print(level2);
-            if (level2 != null) {
-              String batteryCapacity = level2['Battery Capacity'];
-              batteryCap = double.parse(batteryCapacity);
-            }
-          }
-        } else {
-          print(
-              'Map "details" is null in the document ${documentSnapshot.id}.');
-        }
-      }
-    } else {
-      print('No documents found in the collection.');
-    }
 
 // Streamed document snapshots of geo query under given conditions.
     late final Stream<List<DocumentSnapshot<Map<String, dynamic>>>> stream =
@@ -178,13 +186,13 @@ class HomeState extends State<Home> {
         final geohash =
             (data['g'] as Map<String, dynamic>)['geohash'] as String;
         final stnName =
-            (data['info'] as Map<String, dynamic>)['Station Name'] as String;
+            (data['info'] as Map<String, dynamic>)['stationName'] as String;
         final stnAddress =
-            (data['info'] as Map<String, dynamic>)['Address'] as String;
+            (data['info'] as Map<String, dynamic>)['address'] as String;
         final stnImgUrl =
-            (data['info'] as Map<String, dynamic>)['Imageurl'] as String;
+            (data['info'] as Map<String, dynamic>)['imageUrl'] as String;
         final stateName =
-            (data['info'] as Map<String, dynamic>)['State'] as String;
+            (data['info'] as Map<String, dynamic>)['state'] as String;
 
         _markers.add(Marker(
             markerId: MarkerId(geohash),
@@ -201,7 +209,7 @@ class HomeState extends State<Home> {
                 builder: (context) {
                   // String addressState = getAddressState(stnAddress);
                   double price =
-                      mypricing.fullChargeCost(batteryCap as double, stateName);
+                      mypricing.fullChargeCost(batteryCap, stateName);
                   return CustomMarkerPopup(
                       stationName: stnName,
                       address: stnAddress,
