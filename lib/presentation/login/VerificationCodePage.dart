@@ -38,7 +38,7 @@ class VerificationCodePage extends StatefulWidget {
 
 class _VerificationCodePageState extends State<VerificationCodePage> {
   final TextEditingController _codeController = TextEditingController();
-  final databaseRef = FirebaseDatabase.instance.ref('UserChargingRegister');
+  final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     final double heightScreen = MediaQuery.of(context).size.height;
@@ -249,7 +249,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
 
   Future<bool> checkNumberIsRegistered({required String number}) async {
     final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('UserChargingRegister');
+    final collectionRef = firestore.collection('user');
     bool isNumberRegistered = false;
     // storePhoneNumber(number);
 
@@ -257,7 +257,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
       final querySnapshot = await collectionRef.get();
 
       for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['PhoneNumber'].toString();
+        final phoneNumber = doc.data()['phoneNumber'].toString();
 
         if (number == phoneNumber) {
           isNumberRegistered = true;

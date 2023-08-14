@@ -25,7 +25,7 @@ class UserChargingData {
   String price;
   String amenities;
   // image of charger
-  String imageUrl;
+ List<String> imageUrl;
 
   UserChargingData({
     required this.uid,
