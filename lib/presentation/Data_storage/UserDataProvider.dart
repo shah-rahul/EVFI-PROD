@@ -12,7 +12,7 @@ import 'package:flutter/foundation.dart';
 class UserDataProvider extends ChangeNotifier {
   //late UserData _userData;
   UserData _userData = UserData(
-    Uid: "Null",
+    uid: "Null",
 
     name: 'Null',
     phoneNumber: 'Null',
@@ -34,7 +34,7 @@ class UserDataProvider extends ChangeNotifier {
   );
   // ignore: prefer_final_fields
   CollectionReference _usersCollection =
-      FirebaseFirestore.instance.collection('UserChargingRegister');
+      FirebaseFirestore.instance.collection('user');
 
   UserData get userData => _userData;
   void setUserData(UserData data) {
@@ -49,18 +49,18 @@ class UserDataProvider extends ChangeNotifier {
       // ignore: unused_local_variable
       if (user != null) {
         DocumentReference documentRef = await _usersCollection.add({
-          'Uid': user.uid,
-          'Name': _userData.name,
-          'PhoneNumber': _userData.phoneNumber,
-          'level 1': _userData.level1,
+          'uid': user.uid,
+          'name': _userData.name,
+          'phoneNumber': _userData.phoneNumber,
+          'level1': _userData.level1,
 
           // 'level 2': _userData.level2,
-         'level 2':{
-            'Vehicle Manufacturer': _userData.vehicleManufacturer,
-            'Vehicle Registration Number': _userData.vehicleRegistrationNumber,
-            'Battery Capacity':_userData.batteryCapacity,
-            'Mileage (Range)':_userData.range,
-            'Charger Info': _userData.chargerInfo,
+         'level2':{
+            'vehicleManufacturer': _userData.vehicleManufacturer,
+            'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
+            'batteryCapacity':_userData.batteryCapacity,
+            'mileage':_userData.range,
+            'chargerInfo': _userData.chargerInfo,
          },
           // 'Station Name':_userData.stationName,
           // 'Address':_userData.address,
@@ -84,23 +84,23 @@ class UserDataProvider extends ChangeNotifier {
     try {
       // Reference to the document you want to update
       User? user = FirebaseAuth.instance.currentUser;
-      DocumentReference documentRef = _usersCollection.doc('Uid');
+      DocumentReference documentRef = _usersCollection.doc('uid');
 
       // Update the fields you want to change
       await documentRef.update({
-        'Name': _userData.name,
-        'PhoneNumber': _userData.phoneNumber,
-        'level 1': _userData.level1,
+        'name': _userData.name,
+        'phoneNumber': _userData.phoneNumber,
+        'level1': _userData.level1,
         // 'level 2.Vehicle Manufacturer': _userData.vehicleManufacturer,
         // 'level 2.Vehicle Registration Number':
         //     _userData.vehicleRegistrationNumber,
           
         // 'level 2.Charger Info': _userData.chargerInfo,
-         'Vehicle Manufacturer': _userData.vehicleManufacturer,
-            'Vehicle Registration Number': _userData.vehicleRegistrationNumber,
-            'Battery Capacity':_userData.batteryCapacity,
-            'Mileage (Range)':_userData.range,
-              'Charger Info': _userData.chargerInfo,
+         'vehicleManufacturer': _userData.vehicleManufacturer,
+            'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
+            'batteryCapacity':_userData.batteryCapacity,
+            'mileage':_userData.range,
+              'chargerInfo': _userData.chargerInfo,
         'isProvider': _userData.isProvider,
       });
 

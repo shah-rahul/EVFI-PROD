@@ -59,7 +59,7 @@ class _VehicleFormState extends State<VehicleForm> {
           FocusScope.of(context).unfocus();
         }
       },
-      // controller: vehicleregistrationController,
+     
       decoration: InputDecoration(
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
@@ -213,19 +213,15 @@ class _VehicleFormState extends State<VehicleForm> {
                                 width: AppSize.s12,
                               ),
                               ElevatedButton(
-                                onPressed: () async {
+                                onPressed: ()  {
                                   updateVehicleData(
                                       vehicleManufacturerController.text,
                                       vehicleregistrationController.text,
                                       vehicleBatteryCapController.text,
                                       vehicleMileageController.text);
 
-                                  UserData? userData =
-                                      userDataProvider.userData;
-                                  userDataProvider.setUserData(userData);
-
-                                  // await userDataProvider.updateUserData();
-                                  await userDataProvider.saveUserData();
+                                
+                                   userDataProvider.saveUserData();
 
                                   Navigator.push(
                                     context,
