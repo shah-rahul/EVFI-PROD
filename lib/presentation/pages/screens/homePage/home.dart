@@ -178,54 +178,62 @@ class HomeState extends State<Home> {
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
-        print(data);
+
         if (data == null) {
           continue;
         }
+       
+        var geoPoint = (data['g'] as Map<String, dynamic>)['geopoint'];
+        var geohash = (data['g'] as Map<String, dynamic>)['geohash'];
+        var stnName = (data['info'] as Map<String, dynamic>)['stationName'];
+        var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
+        var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
+        var stateName = (data['info'] as Map<String, dynamic>)['state'];
 
-        final geoPoint =
-            (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-        final geohash =
-            (data['g'] as Map<String, dynamic>)['geohash'] as String;
-        final stnName =
-            (data['info'] as Map<String, dynamic>)['stationName'] as String;
-        final stnAddress =
-            (data['info'] as Map<String, dynamic>)['address'] as String;
-        final stnImgUrl =
-            (data['info'] as Map<String, dynamic>)['imageUrl'] as String;
-        final stateName =
-            (data['info'] as Map<String, dynamic>)['state'] as String;
-        print(geohash);
-        _markers.add(Marker(
-            markerId: MarkerId(geohash),
-            position: LatLng(geoPoint.latitude, geoPoint.longitude),
-            onTap: () {
-              _mapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                      zoom: 13)));
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                backgroundColor: Colors.amber.withOpacity(0.0),
-                builder: (context) {
-                  // String addressState = getAddressState(stnAddress);
+        if (geoPoint != null &&
+            geohash != null &&
+            stnName != null &&
+            stnAddress != null &&
+            stnImgUrl != null &&
+            stateName != null) {
+          geoPoint = geoPoint as GeoPoint;
+          geohash = geohash as String;
+          stnName = stnName as String;
+          stnAddress = stnAddress as String;
+          stnImgUrl = stnImgUrl as String;
+          stateName = stateName as String;
 
-                  double price =
-                      mypricing.fullChargeCost(batteryCap, stateName);
-                  return CustomMarkerPopup(
-                      stationName: stnName,
-                      address: stnAddress,
-                      imageUrl: stnImgUrl,
-                      geopoint: geoPoint,
-                      geohash: geohash,
-                      costOfFullCharge: price);
-                },
-              );
-            },
-            icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
+          _markers.add(Marker(
+              markerId: MarkerId(geohash),
+              position: LatLng(geoPoint.latitude, geoPoint.longitude),
+              onTap: () {
+                _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                        target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                        zoom: 13)));
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.amber.withOpacity(0.0),
+                  builder: (context) {
+                    // String addressState = getAddressState(stnAddress);
 
-        setState(() {});
+                    double price =
+                        mypricing.fullChargeCost(batteryCap, stateName);
+                    return CustomMarkerPopup(
+                        stationName: stnName,
+                        address: stnAddress,
+                        imageUrl: stnImgUrl,
+                        geopoint: geoPoint,
+                        geohash: geohash,
+                        costOfFullCharge: price);
+                  },
+                );
+              },
+              icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
+
+          setState(() {});
+        }
       }
     });
   }

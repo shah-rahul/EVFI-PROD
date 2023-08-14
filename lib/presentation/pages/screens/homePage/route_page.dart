@@ -222,53 +222,60 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           continue;
         }
 
-        final geoPoint =
-            (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
-        final geohash =
-            (data['g'] as Map<String, dynamic>)['geohash'] as String;
-        final stnName =
-            (data['info'] as Map<String, dynamic>)['stationName'] as String;
-        final stnAddress =
-            (data['info'] as Map<String, dynamic>)['address'] as String;
-        final stnImgUrl =
-            (data['info'] as Map<String, dynamic>)['imageUrl'] as String;
-        final stateName =
-            (data['info'] as Map<String, dynamic>)['state'] as String;
+        var geoPoint = (data['g'] as Map<String, dynamic>)['geopoint'];
+        var geohash = (data['g'] as Map<String, dynamic>)['geohash'];
+        var stnName = (data['info'] as Map<String, dynamic>)['stationName'];
+        var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
+        var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
+        var stateName = (data['info'] as Map<String, dynamic>)['state'];
 
-        //  print(geoPoint.latitude);
-        _newMarkers.add(Marker(
-            markerId: MarkerId(geohash),
-            onTap: () {
-              _googleMapController.animateCamera(CameraUpdate.newCameraPosition(
-                  CameraPosition(
-                      target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                      zoom: 13)));
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                transitionAnimationController: AnimationController(
-                    vsync: this, duration: const Duration(milliseconds: 400)),
-                backgroundColor: Colors.amber.withOpacity(0.0),
-                builder: (context) {
-                  double price =
-                      mypricing.fullChargeCost(batteryCap, stateName);
-                  return CustomMarkerPopup(
-                    stationName: stnName,
-                    address: stnAddress,
-                    imageUrl: stnImgUrl,
-                    geopoint: geoPoint,
-                    geohash: geohash,
-                    costOfFullCharge: price,
-                  );
-                },
-              );
-            },
-            position: LatLng(geoPoint.latitude, geoPoint.longitude),
-            icon: BitmapDescriptor.fromBytes(stationMarker)));
+        if (geoPoint != null &&
+            geohash != null &&
+            stnName != null &&
+            stnAddress != null &&
+            stnImgUrl != null &&
+            stateName != null) {
+          geoPoint = geoPoint as GeoPoint;
+          geohash = geohash as String;
+          stnName = stnName as String;
+          stnAddress = stnAddress as String;
+          stnImgUrl = stnImgUrl as String;
+          stateName = stateName as String;
+          //  print(geoPoint.latitude);
+          _newMarkers.add(Marker(
+              markerId: MarkerId(geohash),
+              onTap: () {
+                _googleMapController.animateCamera(
+                    CameraUpdate.newCameraPosition(CameraPosition(
+                        target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                        zoom: 13)));
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  transitionAnimationController: AnimationController(
+                      vsync: this, duration: const Duration(milliseconds: 400)),
+                  backgroundColor: Colors.amber.withOpacity(0.0),
+                  builder: (context) {
+                    double price =
+                        mypricing.fullChargeCost(batteryCap, stateName);
+                    return CustomMarkerPopup(
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                    );
+                  },
+                );
+              },
+              position: LatLng(geoPoint.latitude, geoPoint.longitude),
+              icon: BitmapDescriptor.fromBytes(stationMarker)));
+        }
+        setState(() {
+          updateMarkers(_newMarkers);
+        });
       }
-      setState(() {
-        updateMarkers(_newMarkers);
-      });
     });
   }
 
