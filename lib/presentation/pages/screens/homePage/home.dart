@@ -1,10 +1,10 @@
 //ignore_for_file: unused_local_variable, unnecessary_null_comparison, non_constant_identifier_names, unnecessary_import, prefer_const_constructors, no_leading_underscores_for_local_identifiers
 
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,10 +15,12 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:evfi/presentation/pages/widgets/marker_infowindow.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
+import '../../widgets/marker_infowindow.dart';
 import '../../widgets/search_widget.dart';
 import '../../models/pricing_model.dart';
 
@@ -145,6 +147,7 @@ class HomeState extends State<Home> {
 // Function to get GeoPoint instance from Cloud Firestore document data.
   GeoPoint geopointFrom(Map<String, dynamic> data) =>
       (data['g'] as Map<String, dynamic>)['geopoint'] as GeoPoint;
+
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
@@ -182,26 +185,33 @@ class HomeState extends State<Home> {
         if (data == null) {
           continue;
         }
-       
         var geoPoint = (data['g'] as Map<String, dynamic>)['geopoint'];
         var geohash = (data['g'] as Map<String, dynamic>)['geohash'];
         var stnName = (data['info'] as Map<String, dynamic>)['stationName'];
         var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
         var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
+        var startTime = (data['info'] as Map<String, dynamic>)['start'];
+        var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        // DateTime? endTime =
+        //     (data['info'] as Map<String, dynamic>)['availability']['end'];
 
         if (geoPoint != null &&
             geohash != null &&
             stnName != null &&
             stnAddress != null &&
             stnImgUrl != null &&
-            stateName != null) {
+            stateName != null &&
+            startTime != null &&
+            endTime != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
           stnAddress = stnAddress as String;
-          stnImgUrl = stnImgUrl as String;
+          stnImgUrl = stnImgUrl as List<dynamic>;
           stateName = stateName as String;
+          startTime = startTime as String;
+          endTime = endTime as String;
 
           _markers.add(Marker(
               markerId: MarkerId(geohash),
@@ -210,14 +220,12 @@ class HomeState extends State<Home> {
                 _mapController.animateCamera(CameraUpdate.newCameraPosition(
                     CameraPosition(
                         target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                        zoom: 13)));
+                        zoom: 16)));
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
                   backgroundColor: Colors.amber.withOpacity(0.0),
                   builder: (context) {
-                    // String addressState = getAddressState(stnAddress);
-
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
@@ -226,7 +234,8 @@ class HomeState extends State<Home> {
                         imageUrl: stnImgUrl,
                         geopoint: geoPoint,
                         geohash: geohash,
-                        costOfFullCharge: price);
+                        costOfFullCharge: price,
+                        timeStamp: '$startTime - $endTime');
                   },
                 );
               },
@@ -369,6 +378,7 @@ class HomeState extends State<Home> {
             future: getData(),
             builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
               return WillPopScope(
+                  onWillPop: _onBackPressed,
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height,
                     child: Stack(
@@ -385,7 +395,7 @@ class HomeState extends State<Home> {
                           markers: Set<Marker>.of(_markers),
                           zoomControlsEnabled: false,
                           compassEnabled: false,
-                          zoomGesturesEnabled: false,
+                          mapToolbarEnabled: false,
                           myLocationButtonEnabled: false,
                         ),
                         Padding(
@@ -395,8 +405,7 @@ class HomeState extends State<Home> {
                         ),
                       ],
                     ),
-                  ),
-                  onWillPop: _onBackPressed);
+                  ));
             }));
   }
 

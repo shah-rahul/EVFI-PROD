@@ -32,8 +32,8 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
-    startAvailability: DateTime.now(),
-    endAvailability: DateTime.now(),
+    startAvailability: 'Null',// DateTime.now(),
+    endAvailability: 'Null',//DateTime.now(),
     price: 'Null',
     amenities: 'Null',
     //image of charger
@@ -66,18 +66,14 @@ class UserChargingDataProvider extends ChangeNotifier {
           'city': _userChargingData.city,
           'pin': _userChargingData.pin,
           'state': _userChargingData.state,
-          //loaction from marker
           'aadharNumber': _userChargingData.aadharNumber,
-          'hostName ': _userChargingData.hostName,
+          'hostName': _userChargingData.hostName,
           'chargerType': _userChargingData.chargerType,
-          //availability
           'price': _userChargingData.price,
           'amenities': _userChargingData.amenities,
           'imageUrl': _userChargingData.imageUrl,
-          'availability': {
-            'start ': _userChargingData.startAvailability,
-            'end': _userChargingData.endAvailability,
-          },
+          'start': _userChargingData.startAvailability,
+          'end': _userChargingData.endAvailability,
           //charger image
           // 'isProvider':_userChargingData.isProvider,
         }

@@ -94,18 +94,15 @@ class LoginViewState extends State<LoginView> {
                         });
                       },
                     
-                      
                       decoration: InputDecoration(
                         prefixText: "+91| \t",
-                        
                         enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
                                 width: AppSize.s4 - 3,
                                 color: ColorManager.darkGrey)),
                         labelText: 'Phone Number',
-                        // prefixText: '+91\t',
                         prefixStyle: getBoldStyle(color: Colors.black),
-                        suffixIcon: phoneController.text.length > 9
+                        suffixIcon: phoneController.text.length > 12
                             ? Container(
                                 height: 20,
                                 width: 20,

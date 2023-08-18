@@ -36,6 +36,13 @@ class SearchPageState extends State<SearchPage> {
     }
   }
 
+  @override
+  void dispose() {
+    controller1.dispose();
+    controller2.dispose();
+    super.dispose();
+  }
+
   Widget buildListView(TextEditingController controller, bool val) {
     return ListView.builder(
       shrinkWrap: true,
@@ -53,10 +60,6 @@ class SearchPageState extends State<SearchPage> {
                 style: TextStyle(color: ColorManager.appBlack)),
             trailing: const Icon(Icons.north_west, color: Colors.grey),
             onTap: () {
-              // print(_options[index].displayname);
-              // print(
-              //   LatLng(_options[index].latitude, _options[index].longitude),
-              // );
               setState(() {
                 controller.text = _options[index].displayname;
                 (val)
@@ -92,49 +95,8 @@ class SearchPageState extends State<SearchPage> {
                     'geohash': encodeGeohash(endL.latitude, endL.longitude),
                     'geopoint': '${endL.latitude}, ${endL.longitude}',
                   });
-
-                  // 'position': {
-                  //     'geohash':
-                  //         encodeGeohash(startL.latitude, startL.longitude),
-                  //     'geopoint':
-                  //         '${startL.latitude}, ${startL.longitude}',
-                  //     'geohash2':
-                  //         encodeGeohash(endL.latitude, endL.longitude),
-                  //     'geopoint2':
-                  //         '${endL.latitude}, ${endL.longitude}',
-                  //   },
-
-                  // final databaseReference2 =
-                  //     FirebaseDatabase.instance.reference();
-                  // final routeMapReference2 = databaseReference2
-                  //     .child('RouteMap')
-                  //     .child('endLocation')
-                  //     .push();
-                  // await routeMapReference2.update({
-                  //   'position': {
-                  //     'geohash': encodeGeohash(endL.latitude, endL.longitude),
-                  //     'geopoint':
-                  //         '[${convertToDegrees(endL.latitude, 'N', 'S')},${convertToDegrees(endL.longitude, 'E', 'W')}]',
-                  //   }
-                  // });
-
-                  // await routeMapReference.update({
-                  //   'startLocation': {
-                  //     'geohash':
-                  //         encodeGeohash(startL.latitude, startL.longitude),
-                  //     'geopoint':
-                  //         '[${convertToDegrees(startL.latitude, 'N', 'S')},${convertToDegrees(startL.longitude, 'E', 'W')}]',
-                  //   },
-                  //   'endLocation': {
-                  //     'geohash': encodeGeohash(endL.latitude, endL.longitude),
-                  //     'geopoint':
-                  //         '[${convertToDegrees(endL.latitude, 'N', 'S')},${convertToDegrees(endL.longitude, 'E', 'W')}]',
-                  //   },
-                  // });
-
-                 // print('Start and end locations stored successfully!');
                 } catch (error) {
-                 // print('Failed to store start and end locations: $error');
+                  debugPrint('Failed to store start and end locations: $error');
                 }
               }
 
@@ -214,7 +176,7 @@ class SearchPageState extends State<SearchPage> {
                   .toList();
               setState(() {});
             } on Exception catch (e) {
-             // print(e);
+              // print(e);
             } finally {
               client.close();
             }

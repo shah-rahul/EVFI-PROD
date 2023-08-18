@@ -2,9 +2,10 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'package:intl/intl.dart';
+
 import '../../models/pricing_model.dart';
 
-import 'package:evfi/presentation/pages/models/decode_geohash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -55,9 +56,9 @@ class _ListChargerState extends State<ListCharger> {
   late List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
-  DateTime? _startAvailabilityTime, _endAvailabilityTime;
+  // DateTime? _startAvailabilityTime, _endAvailabilityTime;
   String? StationName, StationAddress, aadharNumber, city, pinCode;
-  String? hostNames, amenities, state; //later define hosts as list<string>
+  String? hostNames, amenities, state, _startAvailabilityTime, _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
   final _form = GlobalKey<FormState>();
@@ -414,7 +415,7 @@ class _ListChargerState extends State<ListCharger> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreAvailability(DateTime start, DateTime end) {
+    void StoreAvailability(String start, String end) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
 
@@ -636,8 +637,9 @@ class _ListChargerState extends State<ListCharger> {
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
                                     value: state,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Punjab',
+                                    decoration: InputDecoration(
+                                        hintText: 'Select State',
+                                        // : ColorManager.primary.withOpacity(0.17),
                                         enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(10)))),
@@ -745,8 +747,8 @@ class _ListChargerState extends State<ListCharger> {
                                 endLimit: DateTimeExtension.todayMidnight,
                                 startLimit: DateTimeExtension.todayStart,
                                 onChanged: (start, end, isAllDay) {
-                                  _startAvailabilityTime = start!;
-                                  _endAvailabilityTime = end!;
+                                  _startAvailabilityTime = DateFormat('h:mm a').format(start!).toString();
+                                  _endAvailabilityTime = DateFormat('h:mm a').format(end!).toString();
                                 }),
                             const SizedBox(
                               height: 15,

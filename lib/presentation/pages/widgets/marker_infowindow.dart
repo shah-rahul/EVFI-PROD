@@ -1,17 +1,16 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
-import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
-import 'package:evfi/presentation/resources/color_manager.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import '../../Data_storage/UserData.dart';
+
 import '../../Data_storage/UserDataProvider.dart';
 import '../../register/UserChargingRegister.dart';
-import './../models/pricing_model.dart';
+import '../screens/accountPage/payments.dart';
 import '../../resources/values_manager.dart';
+import '../../resources/color_manager.dart';
 
 bool? isRegistered;
 
@@ -24,6 +23,7 @@ ChargerTypes? selectedType = ChargerTypes.A;
 /*Dropdown*/
 String selectedTime = '10:00-11:00';
 List<String> timings = [
+  '9:00-10:00',
   '10:00-11:00',
   '11:00-12:00',
   '12:00-01:00',
@@ -39,8 +39,9 @@ class CustomMarkerPopup extends StatefulWidget {
   final String geohash;
   final String stationName;
   final String address;
-  final String imageUrl;
+  final List<dynamic> imageUrl;
   final double costOfFullCharge;
+  final String timeStamp;
   //final String stationName = 'EVFI Charging Station';
   //final String address =
   //'Sector 39, Karnal, NH-1, GT Karnal Road,, Haryana, 132001';
@@ -52,6 +53,7 @@ class CustomMarkerPopup extends StatefulWidget {
     required this.geopoint,
     required this.geohash,
     required this.costOfFullCharge,
+    required this.timeStamp,
   });
 
   @override
@@ -66,14 +68,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
     setState(() {
       selectedType = val;
     });
-  }
-
-  Widget callContent() {
-    if (isBooking) {
-      return bookingSection(context, onchanRadio);
-    } else {
-      return startingSection(context, widget.costOfFullCharge);
-    }
   }
 
   void changecontent(bool isRegistered) {
@@ -100,8 +94,6 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   @override
   Widget build(BuildContext context) {
     final userDataProvider = Provider.of<UserDataProvider>(context);
-    UserData userData = userDataProvider.userData;
-    // userDataProvider.setUserData(userData);
 
     return SingleChildScrollView(
       child: Container(
@@ -173,7 +165,10 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     return const Text('Error occurred');
                   } else {
                     isRegistered = snapshot.data;
-                    return callContent();
+                    return (isBooking)
+                        ? bookingSection(context, onchanRadio)
+                        : startingSection(
+                            context, widget.costOfFullCharge, widget.timeStamp);
                   }
                 },
               ),
@@ -333,17 +328,17 @@ Widget bookingSection(
   );
 }
 
-Widget startingSection(BuildContext context, double cost) {
+Widget startingSection(BuildContext context, double cost, String timeStamp) {
   return Column(
     children: [
       Row(children: [
         const Icon(Icons.access_time),
-        Padding(
-            padding: const EdgeInsets.all(AppPadding.p12 - 8),
-            child: Text(DateTime.now().toString())),
+        // Padding(
+        //     padding: const EdgeInsets.all(AppPadding.p12 - 8),
+        //     child: Text('$w'),
+        Text('\t $timeStamp'),
         Spacer(),
-        Text("₹ " + cost.toString(),
-            style: TextStyle(fontWeight: FontWeight.bold))
+        Text("₹ $cost", style: TextStyle(fontWeight: FontWeight.bold))
       ]),
       const SizedBox(height: 1),
       Row(

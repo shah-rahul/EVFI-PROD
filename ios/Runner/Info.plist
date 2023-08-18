@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Add Images of your Charger</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Make your charger standout</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow Microphone Usage for Video</string>
 	<key>NSLocationAlwaysAndWhenInUsageDescription</key>
 	<string>App app want's to access your location to get address</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

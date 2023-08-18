@@ -9,7 +9,7 @@ enum States {
   Chhattisgarh,
   Delhi,
   Goa,
-  Gujrat,
+  Gujarat,
   Haryana,
   HimachalPradesh,
   Jharkhand,

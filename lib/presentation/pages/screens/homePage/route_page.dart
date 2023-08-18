@@ -61,7 +61,6 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     myKey.getBatteryCap().then((value) => batCap = value);
     super.initState();
   }
@@ -128,7 +127,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
               initialCameraPosition: _initialCameraPosition,
               polylines: polylines,
               onMapCreated: _onMapCreated,
-              zoomControlsEnabled: true,
+              mapToolbarEnabled: false,
+              zoomControlsEnabled: false,
               compassEnabled: false,
               myLocationButtonEnabled: false,
               rotateGesturesEnabled: false,
@@ -228,27 +228,32 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
         var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
+        var startTime = (data['info'] as Map<String, dynamic>)['start'];
+        var endTime = (data['info'] as Map<String, dynamic>)['end'];
 
         if (geoPoint != null &&
             geohash != null &&
             stnName != null &&
             stnAddress != null &&
             stnImgUrl != null &&
-            stateName != null) {
+            stateName != null &&
+            startTime != null &&
+            endTime != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
           stnAddress = stnAddress as String;
-          stnImgUrl = stnImgUrl as String;
+          stnImgUrl = stnImgUrl as List<dynamic>;
           stateName = stateName as String;
-          //  print(geoPoint.latitude);
+          startTime = startTime as String;
+          endTime = endTime as String;
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
                 _googleMapController.animateCamera(
                     CameraUpdate.newCameraPosition(CameraPosition(
                         target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                        zoom: 13)));
+                        zoom: 16)));
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -265,6 +270,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       geopoint: geoPoint,
                       geohash: geohash,
                       costOfFullCharge: price,
+                      timeStamp: '$startTime - $endTime'
                     );
                   },
                 );

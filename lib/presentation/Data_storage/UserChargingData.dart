@@ -19,8 +19,8 @@ class UserChargingData {
   String hostName;
   String chargerType;
 
-  DateTime startAvailability;
-  DateTime endAvailability;
+  String startAvailability;
+  String endAvailability;
 
   String price;
   String amenities;
