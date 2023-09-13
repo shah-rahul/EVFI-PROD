@@ -2,25 +2,22 @@ import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:evfi/presentation/register/chargerform.dart';
 import 'package:flutter/material.dart';
 
-import '../forgot_password/forgot_password.dart';
-// import '../login/verifyotp.dart';
 import '../login/login.dart';
 import '../main/main_view.dart';
 import '../onboarding/onboarding.dart';
 import '../register/register.dart';
 import '../resources/strings_manager.dart';
 import '../splash/splash.dart';
-import '../pages/screens/homePage/search_page.dart';
+import '../pages/screens/1homePage/search_page.dart';
 import '../store_details/store_details.dart';
 import '../register/vehicleform.dart';
-import '../pages/screens/mycharging/MyChargingScreen.dart';
+import '../pages/screens/3Chargings/MyChargingScreen.dart';
 
 class Routes {
   static const String splashRoute = "/";
   static const String onBoardingRoute = "/onBoarding";
   static const String loginRoute = "/login";
   static const String registerRoute = "/register";
-  static const String forgotPasswordRoute = "/forgotPassword";
   static const String mainRoute = "/main";
   static const String storeDetailsRoute = "/storeDetails";
   static const String verifyOtpRoute = "/verify_otp";
@@ -46,8 +43,6 @@ class RouteGenerator {
             builder: (_) => RegisterView(
                   phoneNumber: '',
                 ));
-      case Routes.forgotPasswordRoute:
-        return MaterialPageRoute(builder: (_) => const ForgotPasswordView());
       case Routes.mainRoute:
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:

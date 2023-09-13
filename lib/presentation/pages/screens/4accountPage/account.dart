@@ -2,10 +2,10 @@
 
 import 'dart:io';
 import 'package:evfi/presentation/login/login.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/profilesection.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/settings.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/profilesection.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/settings.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

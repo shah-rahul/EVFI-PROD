@@ -17,19 +17,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:time_interval_picker/time_interval_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-import '../../models/my_charging.dart';
-import '../../models/chargers_data.dart';
 import '../../models/encode_geohash.dart';
 import '../../../resources/color_manager.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../Data_storage/UserChargingData.dart';
-import '../../../Data_storage/UserChargingDataProvider.dart';
+import '../../../storage/UserChargingData.dart';
+import '../../../storage/UserChargingData.dart';
+import '../../../storage/UserChargingData.dart';
+import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
-import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/pages/screens/mycharging/MyChargingScreen.dart';
+import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
+import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 
 class ListCharger extends StatefulWidget {
   const ListCharger({Key? key}) : super(key: key);
@@ -39,7 +38,7 @@ class ListCharger extends StatefulWidget {
 }
 
 class _ListChargerState extends State<ListCharger> {
-  Chargers charger = Chargers();
+  // Chargers charger = Chargers();
   late GoogleMapController _controller;
 
   final _formKey = GlobalKey<FormState>();
@@ -56,7 +55,7 @@ class _ListChargerState extends State<ListCharger> {
   late List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
-  // DateTime? _startAvailabilityTime, _endAvailabilityTime;
+  
   String? StationName, StationAddress, aadharNumber, city, pinCode;
   String? hostNames, amenities, state, _startAvailabilityTime, _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;

@@ -1,60 +1,65 @@
 // ignore_for_file: non_constant_identifier_names, file_names, prefer_const_constructors, sized_box_for_whitespace
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import '../../models/Booking.dart';
-import 'dart:async';
+import 'package:page_transition/page_transition.dart';
+
+import 'package:evfi/presentation/resources/assets_manager.dart';
+import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:evfi/presentation/resources/styles_manager.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers.dart';
+import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
-
-import '../../widgets/BookingWidget.dart';
+import '../../widgets/booking_item_widget.dart';
 
 List<Booking> BookingList = [
   Booking(
-      CustomerName: "Arshdeep Singh",
-      mobileNumber: "+918989898989",
-      StationName: "Aomg Charging Station Hub",
-      datetime: DateTime.now(),
+      customerName: "Arshdeep Singh",
+      customerMobileNumber: "+918989898989",
+      stationName: "Aomg Charging Station Hub",
+      timeStamp: DateTime.now().toString(),
       amount: 120,
       status: 0,
       ratings: 2.0),
   Booking(
-      CustomerName: "Rahul Shah",
-      mobileNumber: "+918989898989",
-      StationName: "Aomg Charging Station Hub",
-      datetime: DateTime.now(),
+      customerName: "Rahul Shah",
+      customerMobileNumber: "+918989898989",
+      stationName: "Aomg Charging Station Hub",
+      timeStamp: DateTime.now().toString(),
       amount: 80,
       status: 1,
       ratings: 4.0),
   Booking(
-      CustomerName: "Priyanshu Maikhuri",
-      StationName: "Aomg Charging Station Hub",
-      mobileNumber: "+918989898989",
-      datetime: DateTime.now(),
-      amount: 100,
+      customerName: "Priyanshu Maikhuri",
+      stationName: "Aomg Charging Station Hub",
+      customerMobileNumber: "+918989898989",
+      timeStamp: DateTime.now().toString(),
+      amount: 200,
       status: 0,
       ratings: 4.0),
   Booking(
-      CustomerName: "Rajkumar ",
-      StationName: "Aomg Charging Station Hub",
-      mobileNumber: "+918989898989",
-      datetime: DateTime.now(),
+      customerName: "Rajkumar ",
+      stationName: "Aomg Charging Station Hub",
+      customerMobileNumber: "+918989898989",
+      timeStamp: DateTime.now().toString(),
       amount: 120,
       status: 0,
       ratings: 4.0),
   Booking(
-      CustomerName: "Arshdeep Singh",
-      StationName: "Aomg Charging Station Hub",
-      mobileNumber: "+918989898989",
-      datetime: DateTime.now(),
+      customerName: "Arshdeep Singh",
+      stationName: "Aomg Charging Station Hub",
+      customerMobileNumber: "+918989898989",
+      timeStamp: DateTime.now().toString(),
       amount: 120,
       status: 1,
       ratings: 4.0),
   Booking(
-      CustomerName: "Arshdeep Singh",
-      StationName: "Aomg Charging Station Hub",
-      mobileNumber: "+918989898989",
-      datetime: DateTime.now(),
+      customerName: "Priyanshu Maikhuri",
+      stationName: "Aomg Charging Station Hub",
+      customerMobileNumber: "+913131313131",
+      timeStamp: DateTime.now().toString(),
       amount: 120,
       status: 1,
       ratings: 4.0)
@@ -67,21 +72,95 @@ class BookingsScreen extends StatefulWidget {
 }
 
 class _BookingsScreenState extends State<BookingsScreen> {
-  bool _currentSelected = true;
+  bool _currentSelected = true, _listedChargers = false;
+
+  void _addCharger() {
+    Navigator.of(context).push(PageTransition(
+        child: const ListCharger(), type: PageTransitionType.theme));
+    _listedChargers = true;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppStrings.BookingTitle,
-          textAlign: TextAlign.start,
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.white,
-      ),
-      body: Container(
-          child: _currentSelected ? PendingScreen(context) : RecentScreen()),
-    );
+    // BookingDataWidget newBookingElement = context.watch<BookingDataWidget>();
+    return _listedChargers
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(
+                AppStrings.BookingTitle,
+                textAlign: TextAlign.start,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              backgroundColor: Colors.white,
+              actions: [
+                IconButton(
+                    onPressed: _addCharger,
+                    icon: const Icon(
+                      Icons.add_business_outlined,
+                      color: Colors.black,
+                    ))
+              ],
+            ),
+            body: Container(
+                child:
+                    _currentSelected ? PendingScreen(context) : RecentScreen()),
+          )
+        : Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              // height: MediaQuery.sizeOf(context).height,
+              height: MediaQuery.of(context).size.height,
+              // width: MediaQuery.sizeOf(context).width,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.all(25),
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        ColorManager.grey3.withOpacity(0.68),
+                        Colors.black87
+                      ],
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      stops: const [0.3, 0.7])),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                      margin: EdgeInsets.only(
+                          // top: MediaQuery.sizeOf(context).height * 0.24),
+                          top: MediaQuery.of(context).size.height * 0.24),
+                      child: Image.asset(
+                        ImageAssets.carCharger,
+                        scale: 1.35,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'List, Rent \nand Earn easily.',
+                    style: getBoldStyle(
+                        fontSize: FontSize.s35, color: ColorManager.primary),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
+                  const SizedBox(
+                    height: 35,
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: _addCharger,
+                      icon:
+                          const Icon(Icons.bolt, color: Colors.green, size: 35),
+                      style: Theme.of(context).elevatedButtonTheme.style,
+                      label: const Text(
+                        'List your charger',
+                        style: TextStyle(
+                            fontSize: FontSize.s14,
+                            fontWeight: FontWeight.w600),
+                      ))
+                ],
+              ),
+            ));
   }
 
   Widget PendingScreen(BuildContext context) {
