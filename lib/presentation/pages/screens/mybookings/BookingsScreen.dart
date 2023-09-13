@@ -3,10 +3,11 @@
 import 'package:flutter/material.dart';
 import '../../models/Booking.dart';
 import 'dart:async';
+import '../../widgets/BookingDataWidget.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
-
+import '../../Providers/bookingProvider.dart';
 import '../../widgets/BookingWidget.dart';
 
 List<Booking> BookingList = [
@@ -67,6 +68,7 @@ class BookingsScreen extends StatefulWidget {
 }
 
 class _BookingsScreenState extends State<BookingsScreen> {
+  BookingProviderState bookingProviderObject = BookingProviderState();
   bool _currentSelected = true;
   @override
   Widget build(BuildContext context) {
@@ -87,6 +89,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget PendingScreen(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Column(
       children: [
         Container(
@@ -146,7 +149,19 @@ class _BookingsScreenState extends State<BookingsScreen> {
         Container(
           height: height * 0.75,
           padding: EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
-          child: SingleChildScrollView(
+          child: getBookingTabs(height),
+        )
+      ],
+    );
+  }
+
+  Widget getBookingTabs(double height) {
+    return StreamBuilder<BookingDataWidget>(
+        stream: bookingProviderObject.stream,
+        builder: (context, snapShot) {
+          print(snapShot.data);
+          print("************");
+          return SingleChildScrollView(
             child: Container(
               height: height * 0.85,
               child: ListView.builder(
@@ -154,6 +169,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   return Column(
                     children: [
                       BookingWidget(BookingList[ind], _currentSelected),
+                      Text(snapShot.data != null
+                          ? snapShot.data!.stationName
+                          : ""),
                       SizedBox(
                         height: 5,
                       )
@@ -163,10 +181,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 itemCount: BookingList.length,
               ),
             ),
-          ),
-        )
-      ],
-    );
+          );
+        });
   }
 
   Widget RecentScreen() {

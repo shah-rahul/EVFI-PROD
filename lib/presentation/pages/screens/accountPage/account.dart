@@ -9,8 +9,9 @@ import 'package:evfi/presentation/pages/screens/accountPage/settings.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../../Providers/bookingProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '../../widgets/BookingDataWidget.dart';
 import 'new_station.dart';
 
 String username = "Mr. evfi";
@@ -26,6 +27,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final FirebaseAuth auth = FirebaseAuth.instance;
+  BookingProviderState bookingObject = BookingProviderState();
 
   void editProfile() async {
     final newDetails =
@@ -130,6 +132,15 @@ class _AccountState extends State<Account> {
                 child: settingSection(
                     context, Icons.location_on_outlined, 'Add Station')),
             const SizedBox(height: 100),
+            StreamBuilder<BookingDataWidget>(
+                stream: bookingObject.stream,
+                builder: (context, snapshot) {
+                  print("************");
+                  if (snapshot.data != null)
+                    return Text(snapshot.data!.stationName);
+
+                  return Text(" ");
+                })
           ],
         ),
       ),

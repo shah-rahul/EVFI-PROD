@@ -5,7 +5,9 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
+import 'BookingDataWidget.dart';
 
+import '../Providers/bookingProvider.dart';
 import '../../Data_storage/UserDataProvider.dart';
 import '../../register/UserChargingRegister.dart';
 import '../screens/accountPage/payments.dart';
@@ -301,12 +303,26 @@ Widget bookingSection(
               width: 200,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: const PaymentScreen()),
-                  );
+                  BookingProviderState().addBooking(BookingDataWidget(
+                      stationName: "ABC",
+                      userName: "userName",
+                      price: 80,
+                      startTime: "90",
+                      endTime: "80",
+                      status: BookingStatus.Requested));
+                  // BookingProviderState().addBooking(BookingDataWidget(
+                  //     stationName: "ABC",
+                  //     userName: "userName",
+                  //     price: 80,
+                  //     startTime: "90",
+                  //     endTime: "80",
+                  //     status: BookingStatus.Requested));
+                  // Navigator.push(
+                  //   context,
+                  //   PageTransition(
+                  //       type: PageTransitionType.rightToLeft,
+                  //       child: const PaymentScreen()),
+                  // );
                 },
                 style: const ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
