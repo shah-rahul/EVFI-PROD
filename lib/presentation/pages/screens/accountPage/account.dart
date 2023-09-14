@@ -1,6 +1,5 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
-
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/payments.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
@@ -15,6 +14,7 @@ import 'new_station.dart';
 
 String username = "Mr. evfi";
 String email = "evfi.tech@gmail.com";
+String phoneNo = "8989898989";
 File? clickedImage;
 
 class Account extends StatefulWidget {
@@ -25,7 +25,36 @@ class Account extends StatefulWidget {
 }
 
 class _AccountState extends State<Account> {
+  
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        // User is signed in, fetch user data from Firestore
+        _fetchUserData(user.uid);
+      }
+    });
+  }
+
+  Future<void> _fetchUserData(String userId) async{
+    try{
+      DocumentSnapshot userDoc = await _firestore.collection('user').doc(userId).get();
+
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      setState(() {
+        _user = auth.currentUser;
+        username = userData['name'];
+        phoneNo = userData['phoneNumber'];
+      });
+    } catch (e){
+      print('Error fetching user data: $e');
+    }
+  }
 
   void editProfile() async {
     final newDetails =
@@ -164,7 +193,7 @@ Widget profileSection(BuildContext context) {
   Widget content = CircleAvatar(
     radius: 30,
     backgroundColor: ColorManager.primary,
-    child: Icon(
+    child: const Icon(
       Icons.camera_alt_rounded,
       color: Colors.black,
       size: 40,
@@ -205,7 +234,7 @@ Widget profileSection(BuildContext context) {
               ),
             ),
             Text(
-              email,
+              phoneNo,
               style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontStyle: FontStyle.italic,
@@ -242,12 +271,12 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
     child: Column(
       children: [
         Icon(icon),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Text(
           str,
-          style: TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12),
         ),
       ],
     ),
