@@ -2,6 +2,8 @@
 
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:evfi/presentation/pages/streams/charging_stream.dart';
@@ -19,6 +21,34 @@ class MyChargingScreen extends StatefulWidget {
 
 class _MyChargingScreenState extends State<MyChargingScreen> {
   bool _currentSelected = true;
+  // List<Charging> _streamData = [];
+  // late Stream bookingReference;
+
+  // void function() {
+  //   bookingReference = FirebaseFirestore.instance
+  //       .collection('booking')
+  //       .snapshots()
+  //       .map((QuerySnapshot querySnapshot) {
+  //     // print(querySnapshot);
+  //     print('000000000000');
+  //     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+
+  //     for (QueryDocumentSnapshot bookingSnapshot in querySnapshot.docs) {
+  //       // Assuming your Charging class has a constructor that takes a Map<String, dynamic>
+  //       Charging bookingUid =
+  //           (bookingSnapshot.data() as Map<String, dynamic>)['uid'];
+
+  //       if ("LUE2zApEe9RA58RybIQswHvR2h03" == bookingUid) {
+  //         print(bookingSnapshot.data());
+  //         print("------------");
+  //       }
+  //       print('11111111');
+  //     }
+  //     print('2222222');
+  //   });
+
+  //   print('33333333333');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +76,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           child: Row(
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  // function();
+                  // print('Called Function');
+                },
                 child: Container(
                   width: width * 0.5,
                   child: Column(
