@@ -5,13 +5,13 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../resources/routes_manager.dart';
-import '../screens/homePage/home.dart';
+import '../screens/1homePage/home.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../resources/color_manager.dart';
 import '../models/auto_search.dart';
-import '../screens/homePage/search_page.dart';
+import '../screens/1homePage/search_page.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function(Position) onLocationSelected;

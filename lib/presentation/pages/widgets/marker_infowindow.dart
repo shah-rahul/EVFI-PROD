@@ -1,16 +1,17 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
+import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
-import 'BookingDataWidget.dart';
 
-import '../Providers/bookingProvider.dart';
-import '../../Data_storage/UserDataProvider.dart';
+import '../../storage/UserDataProvider.dart';
 import '../../register/UserChargingRegister.dart';
-import '../screens/accountPage/payments.dart';
+import '../../storage/booking_data_provider.dart';
+import '../screens/4accountPage/payments.dart';
 import '../../resources/values_manager.dart';
 import '../../resources/color_manager.dart';
 
@@ -33,6 +34,7 @@ List<String> timings = [
   '02:00-03:00',
   '03:00-04:00',
   '04:00-05:00',
+  '05:00-06:00'
 ];
 /*Dropdown*/
 
@@ -44,9 +46,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
   final String timeStamp;
-  //final String stationName = 'EVFI Charging Station';
-  //final String address =
-  //'Sector 39, Karnal, NH-1, GT Karnal Road,, Haryana, 132001';
+  //take input of chargerType as well from firebase fetching to show charger level
 
   const CustomMarkerPopup({
     required this.stationName,
@@ -131,8 +131,9 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                       onPressed: () {
                         changecontent(isRegistered!);
                       },
-                      style: const ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll(Colors.amber),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll(ColorManager.primary),
                       ),
                       child: Text(
                         str,
@@ -167,8 +168,17 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     return const Text('Error occurred');
                   } else {
                     isRegistered = snapshot.data;
+                    Charging newRequest = Charging(
+                        stationName: widget.stationName,
+                        stationAddress: widget.address,
+                        slotChosen: widget.timeStamp,
+                        amount: widget.costOfFullCharge,
+                        position: LatLng(widget.geopoint.latitude,
+                            widget.geopoint.longitude),
+                        status: LendingStatus.requested,
+                        type: ChargerTypes.A.index);
                     return (isBooking)
-                        ? bookingSection(context, onchanRadio)
+                        ? bookingSection(context, onchanRadio, newRequest)
                         : startingSection(
                             context, widget.costOfFullCharge, widget.timeStamp);
                   }
@@ -180,168 +190,163 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
       ),
     );
   }
-}
 
-Widget bookingSection(
-    BuildContext context, void Function(ChargerTypes val) onchanRadio) {
-  return Card(
-    shadowColor: ColorManager.CardshadowBottomRight,
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadiusDirectional.all(
-      Radius.circular(15),
-    )),
-    elevation: 4,
-    color: Colors.white,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 15),
-        Row(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: [
-            SizedBox(width: 14),
-            Text('Select your Charger Type',
-                style: TextStyle(
-                    fontSize: AppSize.s14, fontWeight: FontWeight.w500)),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
-              child: RadioListTile<ChargerTypes>(
-                contentPadding: const EdgeInsets.all(0.0),
-                value: ChargerTypes.A,
-                title:
-                    const Text('Type A', style: TextStyle(color: Colors.black)),
-                dense: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                activeColor: Colors.amber,
-                groupValue: selectedType,
-                onChanged: (value) {
-                  onchanRadio(value!);
-                  //selectedType = value;
-                },
-              ),
-            ),
-            const SizedBox(width: 2),
-            Expanded(
-              child: RadioListTile<ChargerTypes>(
-                contentPadding: const EdgeInsets.all(0.0),
-                value: ChargerTypes.B,
-                title:
-                    const Text('Type B', style: TextStyle(color: Colors.black)),
-                dense: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                activeColor: Colors.amber,
-                groupValue: selectedType,
-                onChanged: (value) {
-                  onchanRadio(value!);
-                  //selectedType = value;
-                },
-              ),
-            ),
-            const SizedBox(width: 2),
-            Expanded(
-              child: RadioListTile<ChargerTypes>(
-                contentPadding: const EdgeInsets.all(0.0),
-                value: ChargerTypes.C,
-                title: const Text(
-                  'Type C',
-                  style: TextStyle(color: Colors.black),
-                ),
-                dense: true,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5)),
-                activeColor: Colors.amber,
-                groupValue: selectedType,
-                onChanged: (value) {
-                  onchanRadio(value!);
-                  //selectedType = value;
-                },
-              ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: DropdownButtonFormField<String>(
-            value: selectedTime,
-            icon: const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
-            dropdownColor: Colors.amber.shade100,
-            elevation: 4,
-            decoration: const InputDecoration(
-              labelStyle: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AppMargin.m14),
-              labelText: "Time Slot",
-              border: UnderlineInputBorder(),
-            ),
-            items: timings.map((String item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                child: Text(
-                  item,
-                  style: const TextStyle(color: Colors.black),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              selectedTime = value!;
-            },
-          ),
-        ),
-        const SizedBox(height: 1),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 35,
-              width: 200,
-              child: ElevatedButton(
-                onPressed: () {
-                  BookingProviderState().addBooking(BookingDataWidget(
-                      stationName: "ABC",
-                      userName: "userName",
-                      price: 80,
-                      startTime: "90",
-                      endTime: "80",
-                      status: BookingStatus.Requested));
-                  // BookingProviderState().addBooking(BookingDataWidget(
-                  //     stationName: "ABC",
-                  //     userName: "userName",
-                  //     price: 80,
-                  //     startTime: "90",
-                  //     endTime: "80",
-                  //     status: BookingStatus.Requested));
-                  // Navigator.push(
-                  //   context,
-                  //   PageTransition(
-                  //       type: PageTransitionType.rightToLeft,
-                  //       child: const PaymentScreen()),
-                  // );
-                },
-                style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                        Color.fromARGB(255, 84, 194, 87))),
-                child: const Text(
-                  'Proceed to Pay',
+  Widget bookingSection(BuildContext context,
+      void Function(ChargerTypes val) onchanRadio, Charging chargingRequest) {
+    return Card(
+      shadowColor: ColorManager.CardshadowBottomRight,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadiusDirectional.all(
+        Radius.circular(15),
+      )),
+      elevation: 4,
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 15),
+          Row(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              SizedBox(width: 14),
+              Text('Select your Charger Type',
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700),
+                      fontSize: AppSize.s14, fontWeight: FontWeight.w500)),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: RadioListTile<ChargerTypes>(
+                  contentPadding: const EdgeInsets.all(0.0),
+                  value: ChargerTypes.A,
+                  title: const Text('Type A',
+                      style: TextStyle(color: Colors.black)),
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  activeColor: Colors.amber,
+                  groupValue: selectedType,
+                  onChanged: (value) {
+                    onchanRadio(value!);
+                    //selectedType = value;
+                  },
                 ),
               ),
+              const SizedBox(width: 2),
+              Expanded(
+                child: RadioListTile<ChargerTypes>(
+                  contentPadding: const EdgeInsets.all(0.0),
+                  value: ChargerTypes.B,
+                  title: const Text('Type B',
+                      style: TextStyle(color: Colors.black)),
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  activeColor: Colors.amber,
+                  groupValue: selectedType,
+                  onChanged: (value) {
+                    onchanRadio(value!);
+                    //selectedType = value;
+                  },
+                ),
+              ),
+              const SizedBox(width: 2),
+              Expanded(
+                child: RadioListTile<ChargerTypes>(
+                  contentPadding: const EdgeInsets.all(0.0),
+                  value: ChargerTypes.C,
+                  title: const Text(
+                    'Type C',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  dense: true,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  activeColor: Colors.amber,
+                  groupValue: selectedType,
+                  onChanged: (value) {
+                    onchanRadio(value!);
+                    //selectedType = value;
+                  },
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: DropdownButtonFormField<String>(
+              value: selectedTime,
+              icon:
+                  const Icon(Icons.arrow_drop_down_circle, color: Colors.amber),
+              dropdownColor: Colors.amber.shade100,
+              elevation: 4,
+              decoration: const InputDecoration(
+                labelStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: AppMargin.m14),
+                labelText: "Time Slot",
+                border: UnderlineInputBorder(),
+              ),
+              items: timings.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                selectedTime = value!;
+              },
             ),
-          ],
-        ),
-        const SizedBox(height: 15),
-      ],
-    ),
-  );
+          ),
+          const SizedBox(height: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                height: 35,
+                width: 200,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   PageTransition(
+                    //       type: PageTransitionType.rightToLeft,
+                    //       child: const PaymentScreen()),
+                    // ).then((_) {
+                    BookingDataProvider(
+                        chargerId: '30AEOAYQwfJWo29LJGoU',
+                        price: widget.costOfFullCharge,
+                        timeSlot: selectedTime);
+                    Provider.of<UserChargings>(context, listen: false)
+                        .addCharging(chargingRequest);
+                    Navigator.pop(context);
+                    // });
+                  },
+                  style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(
+                          Color.fromARGB(255, 84, 194, 87))),
+                  child: const Text(
+                    'Proceed to Pay',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 15),
+        ],
+      ),
+    );
+  }
 }
 
 Widget startingSection(BuildContext context, double cost, String timeStamp) {

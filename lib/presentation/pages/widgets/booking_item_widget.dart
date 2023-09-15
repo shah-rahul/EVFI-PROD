@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_final_fields, file_names, use_key_in_widget_constructors, sort_child_properties_last, prefer_const_constructors
 
-import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-import '../models/Booking.dart';
-import 'package:intl/intl.dart';
+import '../models/charger_bookings.dart';
+
+import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../resources/strings_manager.dart';
 import '../../resources/color_manager.dart';
 
@@ -14,11 +14,11 @@ class BookingWidget extends StatelessWidget {
   BookingWidget(this.bookingRequest, this._currentSelected);
 
   Widget statusButton() {
-    Status status;
+    LendingStatus status;
     if (bookingRequest.status == 0) {
-      status = Status.accepted;
+      status = LendingStatus.accepted;
     } else {
-      status = Status.declined;
+      status = LendingStatus.declined;
     }
     final Color buttonColor, textColor;
     if (bookingRequest.status == 0) {
@@ -35,7 +35,7 @@ class BookingWidget extends StatelessWidget {
       child: ElevatedButton(
           onPressed: () {},
           child: Text(
-            status == Status.accepted
+            status == LendingStatus.accepted
                 ? AppStrings.AcceptedStatus
                 : AppStrings.DeclinedStatus,
             style: TextStyle(color: textColor),
@@ -49,8 +49,6 @@ class BookingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String dateTime =
-        DateFormat.jm().format(bookingRequest.datetime).toString();
     return Card(
       shadowColor: ColorManager.CardshadowBottomRight,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -63,7 +61,7 @@ class BookingWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                bookingRequest.CustomerName,
+                bookingRequest.customerName,
                 style: const TextStyle(
                     fontSize: AppSize.s20, fontWeight: FontWeight.w600),
               ),
@@ -85,7 +83,7 @@ class BookingWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Text(bookingRequest.StationName,
+          Text(bookingRequest.stationName,
               style: const TextStyle(fontSize: AppSize.s12)),
           const SizedBox(
             height: 5,
@@ -95,7 +93,7 @@ class BookingWidget extends StatelessWidget {
               const Icon(Icons.access_time),
               Padding(
                   padding: const EdgeInsets.all(AppPadding.p12 - 8),
-                  child: Text(dateTime)),
+                  child: Text(bookingRequest.timeStamp)),
             ],
           ),
           const SizedBox(
@@ -110,7 +108,7 @@ class BookingWidget extends StatelessWidget {
                     Icons.call,
                     size: AppSize.s18,
                   ),
-                  Text(bookingRequest.mobileNumber,
+                  Text(bookingRequest.customerMobileNumber,
                       style: const TextStyle(fontSize: AppSize.s12)),
                 ],
               ),

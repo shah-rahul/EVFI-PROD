@@ -32,7 +32,7 @@ class _PaymentSuccessfulState extends State<PaymentSuccessful> {
             //2nd column
             const SizedBox(height: 10),
             const Text(
-              'Successfull',
+              'Successfully Booked',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             const SizedBox(height: 30),

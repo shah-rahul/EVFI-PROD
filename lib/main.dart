@@ -1,10 +1,11 @@
-import 'package:evfi/presentation/Data_storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/Data_storage/UserDataProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import './app/app.dart';
 import 'package:provider/provider.dart';
+import './app/app.dart';
+
+import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
+import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
+import 'package:evfi/presentation/storage/UserDataProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +19,9 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => UserDataProvider()),
         ChangeNotifierProvider(create: (context) => UserChargingDataProvider()),
-        // Add more providers here if needed
+        ChangeNotifierProvider(create: (_) => UserChargings()),
       ],
-      child: MyApp(),
+      child: MyApp()
     ),
   );
 }
-
