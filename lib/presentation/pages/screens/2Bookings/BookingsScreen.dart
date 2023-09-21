@@ -229,6 +229,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
+                if (documents.length == 0)
+                  return Center(
+                    child: Text('No Bookings yet'),
+                  );
 
                 return ListView.builder(
                   itemBuilder: (context, index) {

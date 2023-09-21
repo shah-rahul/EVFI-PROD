@@ -117,6 +117,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
                 // print(documents[0]);
+                if (documents.length == 0)
+                  return Center(
+                    child: Text('No Charging yet'),
+                  );
 
                 return ListView.builder(
                   itemBuilder: (context, index) {
