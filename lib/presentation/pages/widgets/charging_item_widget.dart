@@ -11,20 +11,39 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 
 class MyChargingWidget extends StatefulWidget {
   Charging chargingItem;
-  MyChargingWidget({
-    required this.chargingItem,
-  });
+  String tab;
+  MyChargingWidget({required this.chargingItem, required this.tab});
 
   @override
   State<MyChargingWidget> createState() => _MyChargingWidgetState();
 }
 
 class _MyChargingWidgetState extends State<MyChargingWidget> {
+  String determineStatusText(LendingStatus status) {
+    String textContent = "";
+    if (widget.tab == AppStrings.ChargingScreenCurrentTab) {
+      if (status == LendingStatus.accepted)
+        textContent = AppStrings.AcceptedStatus;
+      if (status == LendingStatus.requested)
+        textContent = AppStrings.RequestedStatus;
+      else if (status == LendingStatus.charging)
+        textContent = AppStrings.chargingStatus;
+    }
+    if (widget.tab == AppStrings.ChargingScreenRecentTab) {
+      if (status == LendingStatus.completed)
+        textContent = AppStrings.CompletedStatus;
+      if (status == LendingStatus.declined)
+        textContent = AppStrings.DeclinedStatus;
+    }
+    return textContent;
+  }
+
   Widget statusButton(LendingStatus status) {
     // if (status == BookingStatus.Requested) {
     //   bookstatus = BookingStatus.Requested as String;
     // }
     final Color buttonColor, textColor;
+
     if (status == LendingStatus.requested) {
       buttonColor = Colors.green[500]!;
       textColor = Colors.white;
@@ -32,22 +51,23 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
       buttonColor = ColorManager.grey3;
       textColor = Colors.white;
     }
+    String textContent = determineStatusText(status);
+
+    if (widget.tab == AppStrings.ChargingScreenCurrentTab &&
+        (status == LendingStatus.declined || status == LendingStatus.completed))
+      return Container();
+    if (widget.tab == AppStrings.ChargingScreenRecentTab &&
+        (status == LendingStatus.accepted ||
+            status == LendingStatus.requested ||
+            status == LendingStatus.charging)) return Container();
 
     return SizedBox(
       width: 90,
       height: 30,
-      child: ElevatedButton(
-          onPressed: () {},
-          child: Text(
-            status == LendingStatus.requested
-                ? AppStrings.RequestedStatus
-                : AppStrings.AcceptedStatus,
-            style: TextStyle(color: textColor),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttonColor,
-            elevation: 3,
-          )),
+      child: Text(
+        textContent,
+        style: TextStyle(color: textColor),
+      ),
     );
   }
 
@@ -105,8 +125,15 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               ),
               const Spacer(),
               ElevatedButton.icon(
-                  onPressed: widget.chargingItem.status == LendingStatus.requested? () {} : null,
-                  icon: const Icon(Icons.close, color: Colors.white, size: 20,),
+                  onPressed:
+                      widget.chargingItem.status == LendingStatus.requested
+                          ? () {}
+                          : null,
+                  icon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                   label: const Text(
                     'Cancel',
                     style: TextStyle(color: Colors.white),

@@ -32,6 +32,9 @@ class AppStrings {
   static const AcceptedStatus = "Accepted";
   static const DeclinedStatus = "Declined";
   static const RequestedStatus = "Requested";
+  static const CanceledStatus = "Canceled";
+  static const CompletedStatus = "Completed";
+  static const chargingStatus = "Charging";
 
   static const AcceptButton = "Accept";
   static const DeclineButton = "Decline";

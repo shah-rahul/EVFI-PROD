@@ -67,19 +67,18 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         ));
   }
 
-  late DocumentSnapshot<Map<String, dynamic>> chargerDetails;
-  Future<void> getChargerDetailsByChargerId(String chargerId) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
+      String chargerId) async {
     print("88");
-    final v = await FirebaseFirestore.instance
+    final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
         .doc(chargerId)
         .get();
-    chargerDetails = v;
-    print(v.data());
+    return chargerDetails;
   }
 
+  final currentUid = FirebaseAuth.instance.currentUser?.uid;
   Widget currentScreen(BuildContext context) {
-    final currentUid = FirebaseAuth.instance.currentUser?.uid;
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
@@ -142,73 +141,81 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         const SizedBox(
           height: 5,
         ),
-        Container(
-          height: height * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
-          child: SingleChildScrollView(
-            child: Container(
-                height: height * 0.85,
-                child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('booking')
-                      .where('userId', isEqualTo: currentUid)
-                      .snapshots(),
-                  builder: (context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting ||
-                        !snapshot.hasData) {
-                      // return const CircularProgressIndicator();
-                      return const Center(
-                        child: Text('No Bookings yet..'),
-                      );
-                    }
-
-                    if (snapshot.hasError) {
-                      return const Center(child: Text('Something went wrong'));
-                    }
-
-                    // final listOfChargings = snapshot.data!;
-                    List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                        snapshot.data!.docs;
-
-                    print(currentUid);
-                    print(documents[2].data());
-                    print("--------------");
-
-                    return ListView.builder(
-                      itemBuilder: (context, index) {
-                        return FutureBuilder(
-                            future: getChargerDetailsByChargerId(
-                                documents[index].data()?['chargerId']),
-                            builder: ((context, snapshot) {
-                              return Column(children: [
-                                MyChargingWidget(
-                                  chargingItem: Charging(
-                                      amount: 12,
-                                      position: LatLng(0, 0),
-                                      slotChosen: "0",
-                                      stationAddress: chargerDetails
-                                          .data()!['info']['address'],
-                                      stationName: chargerDetails
-                                          .data()!['info']['stationName'],
-                                      status: LendingStatus.accepted,
-                                      type: 1,
-                                      ratings: 0),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                )
-                              ]);
-                            }));
-                      },
-                      itemCount: documents.length,
-                    );
-                  },
-                )),
-          ),
-        )
+        streamBuilder(AppStrings.ChargingScreenCurrentTab)
       ],
+    );
+  }
+
+  Widget streamBuilder(String tab) {
+    final height = MediaQuery.of(context).size.height;
+    return Container(
+      height: height * 0.75,
+      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+      child: SingleChildScrollView(
+        child: Container(
+            height: height * 0.85,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('booking')
+                  .where('userId', isEqualTo: currentUid)
+                  .snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting ||
+                    !snapshot.hasData) {
+                  // return const CircularProgressIndicator();
+                  return const Center(
+                    child: Text('No Bookings yet..'),
+                  );
+                }
+
+                if (snapshot.hasError) {
+                  return const Center(child: Text('Something went wrong'));
+                }
+
+                // final listOfChargings = snapshot.data!;
+                List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                    snapshot.data!.docs;
+
+                print(currentUid);
+
+                print("--------------");
+
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return FutureBuilder(
+                        future: getChargerDetailsByChargerId(
+                            documents[index].data()?['chargerId']),
+                        builder: ((context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshots) {
+                          return Column(children: [
+                            MyChargingWidget(
+                              chargingItem: Charging(
+                                  amount: 12,
+                                  position: LatLng(0, 0),
+                                  slotChosen: "0",
+                                  stationAddress: snapshots.data!['info']
+                                      ['address'],
+                                  stationName: snapshots.data!['info']
+                                      ['stationName'],
+                                  status: LendingStatus.requested,
+                                  type: 1,
+                                  ratings: 0),
+                              tab: tab,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            )
+                          ]);
+                        }));
+                  },
+                  itemCount: documents.length,
+                );
+              },
+            )),
+      ),
     );
   }
 
@@ -272,49 +279,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         const SizedBox(
           height: 5,
         ),
-        Container(
-          height: height * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
-          child: SingleChildScrollView(
-            child: Container(
-                height: height * 0.82,
-                child: StreamBuilder<List<Charging>>(
-                  stream: ChargingStream.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
-
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text('No Bookings yet..'),
-                      );
-                    }
-
-                    if (snapshot.hasError) {
-                      return const Center(child: Text('Something went wrong'));
-                    }
-
-                    final listOfChargings = snapshot.data!;
-
-                    return ListView.builder(
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            MyChargingWidget(
-                                chargingItem: listOfChargings[index]),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ],
-                        );
-                      },
-                      itemCount: listOfChargings.length,
-                    );
-                  },
-                )),
-          ),
-        )
+        streamBuilder(AppStrings.ChargingScreenRecentTab)
       ],
     );
   }
