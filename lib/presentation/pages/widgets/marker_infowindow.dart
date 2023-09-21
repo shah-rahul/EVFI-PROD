@@ -28,12 +28,12 @@ List<String> timings = [
   '09:00 AM - 10:00 AM',
   '10:00 AM - 11:00 AM',
   '11:00 AM - 12:00 AM',
-  '12:00 AM - 01:00 AM',
-  '01:00 AM - 02:00 AM',
-  '02:00 AM - 03:00 AM',
-  '03:00 AM - 04:00 AM',
-  '04:00 AM - 05:00 AM',
-  '05:00 AM - 06:00 AM'
+  '12:00 PM - 01:00 PM',
+  '01:00 PM - 02:00 PM',
+  '02:00 PM - 03:00 PM',
+  '03:00 PM - 04:00 PM',
+  '04:00 PM - 05:00 PM',
+  '05:00 PM - 06:00 PM'
 ];
 /*Dropdown*/
 
@@ -45,6 +45,8 @@ class CustomMarkerPopup extends StatefulWidget {
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
   final String timeStamp;
+  final String chargerId;
+  final String providerId;
   //take input of chargerType as well from firebase fetching to show charger level
 
   const CustomMarkerPopup({
@@ -55,6 +57,8 @@ class CustomMarkerPopup extends StatefulWidget {
     required this.geohash,
     required this.costOfFullCharge,
     required this.timeStamp,
+    required this.chargerId,
+    required this.providerId
   });
 
   @override
@@ -174,7 +178,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         amount: widget.costOfFullCharge,
                         position: LatLng(widget.geopoint.latitude,
                             widget.geopoint.longitude),
-                        status: LendingStatus.requested,
+                        status: 1,
                         type: ChargerTypes.A.index);
                     return (isBooking)
                         ? bookingSection(context, onchanRadio, newRequest)
@@ -318,9 +322,13 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     //       type: PageTransitionType.rightToLeft,
                     //       child: const PaymentScreen()),
                     // ).then((_) {
-                    BookingDataProvider(chargerId: '30AEOAYQwfJWo29LJGoU', price: widget.costOfFullCharge, timeSlot: selectedTime);
-                    Provider.of<UserChargings>(context, listen: false)
-                        .addCharging(chargingRequest);
+                    BookingDataProvider(
+                        providerId: widget.providerId,
+                        chargerId: widget.chargerId,
+                        price: widget.costOfFullCharge,
+                        timeSlot: selectedTime);
+                    // Provider.of<UserChargings>(context, listen: false)
+                    //     .addCharging(chargingRequest);
                     Navigator.pop(context);
                     // });
                   },

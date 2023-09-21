@@ -12,7 +12,7 @@ class Charging {
   double amount;
   LatLng position;
 
-  LendingStatus status;
+  int status;
   double ratings;
   int type;
 
@@ -37,7 +37,7 @@ class UserChargings extends ChangeNotifier {
         slotChosen: DateTime.now().toString(),
         amount: 120,
         position: const LatLng(1.8, 2.4),
-        status: LendingStatus.charging,
+        status: 0,
         type: 0,
         ratings: 2.0),
     // Charging(

@@ -8,20 +8,25 @@ import '../../resources/strings_manager.dart';
 import '../../resources/color_manager.dart';
 
 // ignore: must_be_immutable
-class BookingWidget extends StatelessWidget {
-  Booking bookingRequest;
-  bool _currentSelected;
-  BookingWidget(this.bookingRequest, this._currentSelected);
+class BookingWidget extends StatefulWidget {
+  Booking bookingItem;
+  final String currentTab, bookingId;
+  BookingWidget({required this.bookingItem, required this.currentTab, required this.bookingId});
 
+  @override
+  State<BookingWidget> createState() => _BookingWidgetState();
+}
+
+class _BookingWidgetState extends State<BookingWidget> {
   Widget statusButton() {
     LendingStatus status;
-    if (bookingRequest.status == 0) {
+    if (widget.bookingItem.status == 0) {
       status = LendingStatus.accepted;
     } else {
       status = LendingStatus.declined;
     }
     final Color buttonColor, textColor;
-    if (bookingRequest.status == 0) {
+    if (widget.bookingItem.status == 0) {
       buttonColor = Colors.white;
       textColor = Colors.black;
     } else {
@@ -61,7 +66,7 @@ class BookingWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                bookingRequest.customerName,
+                widget.bookingItem.customerName,
                 style: const TextStyle(
                     fontSize: AppSize.s20, fontWeight: FontWeight.w600),
               ),
@@ -72,7 +77,7 @@ class BookingWidget extends StatelessWidget {
                     size: AppSize.s18,
                   ),
                   Text(
-                    bookingRequest.amount.toString(),
+                    widget.bookingItem.amount.toString(),
                     style: const TextStyle(
                         fontSize: AppSize.s20, fontWeight: FontWeight.w600),
                   ),
@@ -83,7 +88,7 @@ class BookingWidget extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Text(bookingRequest.stationName,
+          Text(widget.bookingItem.stationName,
               style: const TextStyle(fontSize: AppSize.s12)),
           const SizedBox(
             height: 5,
@@ -93,7 +98,7 @@ class BookingWidget extends StatelessWidget {
               const Icon(Icons.access_time),
               Padding(
                   padding: const EdgeInsets.all(AppPadding.p12 - 8),
-                  child: Text(bookingRequest.timeStamp)),
+                  child: Text(widget.bookingItem.timeStamp)),
             ],
           ),
           const SizedBox(
@@ -108,12 +113,10 @@ class BookingWidget extends StatelessWidget {
                     Icons.call,
                     size: AppSize.s18,
                   ),
-                  Text(bookingRequest.customerMobileNumber,
+                  Text(widget.bookingItem.customerMobileNumber,
                       style: const TextStyle(fontSize: AppSize.s12)),
                 ],
-              ),
-              _currentSelected == true
-                  ? Row(
+              ),Row(
                       children: [
                         SizedBox(
                           width: 84,
@@ -148,7 +151,6 @@ class BookingWidget extends StatelessWidget {
                         ),
                       ],
                     )
-                  : statusButton()
             ],
           ),
           const SizedBox(
