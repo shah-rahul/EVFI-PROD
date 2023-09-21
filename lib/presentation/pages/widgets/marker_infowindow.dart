@@ -1,6 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
+import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,8 +11,6 @@ import 'package:provider/provider.dart';
 
 import '../../storage/UserDataProvider.dart';
 import '../../register/UserChargingRegister.dart';
-import '../../storage/booking_data_provider.dart';
-import '../screens/4accountPage/payments.dart';
 import '../../resources/values_manager.dart';
 import '../../resources/color_manager.dart';
 
@@ -24,17 +23,17 @@ ChargerTypes? selectedType = ChargerTypes.A;
 /*RadioButtons*/
 
 /*Dropdown*/
-String selectedTime = '10:00-11:00';
+String selectedTime = '10:00 AM - 11:00 AM';
 List<String> timings = [
-  '9:00-10:00',
-  '10:00-11:00',
-  '11:00-12:00',
-  '12:00-01:00',
-  '01:00-02:00',
-  '02:00-03:00',
-  '03:00-04:00',
-  '04:00-05:00',
-  '05:00-06:00'
+  '09:00 AM - 10:00 AM',
+  '10:00 AM - 11:00 AM',
+  '11:00 AM - 12:00 AM',
+  '12:00 PM - 01:00 PM',
+  '01:00 PM - 02:00 PM',
+  '02:00 PM - 03:00 PM',
+  '03:00 PM - 04:00 PM',
+  '04:00 PM - 05:00 PM',
+  '05:00 PM - 06:00 PM'
 ];
 /*Dropdown*/
 
@@ -46,17 +45,20 @@ class CustomMarkerPopup extends StatefulWidget {
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
   final String timeStamp;
+  final String chargerId;
+  final String providerId;
   //take input of chargerType as well from firebase fetching to show charger level
 
-  const CustomMarkerPopup({
-    required this.stationName,
-    required this.address,
-    required this.imageUrl,
-    required this.geopoint,
-    required this.geohash,
-    required this.costOfFullCharge,
-    required this.timeStamp,
-  });
+  const CustomMarkerPopup(
+      {required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.geopoint,
+      required this.geohash,
+      required this.costOfFullCharge,
+      required this.timeStamp,
+      required this.chargerId,
+      required this.providerId});
 
   @override
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();
@@ -175,7 +177,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         amount: widget.costOfFullCharge,
                         position: LatLng(widget.geopoint.latitude,
                             widget.geopoint.longitude),
-                        status: LendingStatus.requested,
+                        status: 1,
                         type: ChargerTypes.A.index);
                     return (isBooking)
                         ? bookingSection(context, onchanRadio, newRequest)
@@ -320,11 +322,12 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     //       child: const PaymentScreen()),
                     // ).then((_) {
                     BookingDataProvider(
-                        chargerId: '30AEOAYQwfJWo29LJGoU',
+                        providerId: widget.providerId,
+                        chargerId: widget.chargerId,
                         price: widget.costOfFullCharge,
                         timeSlot: selectedTime);
-                    Provider.of<UserChargings>(context, listen: false)
-                        .addCharging(chargingRequest);
+                    // Provider.of<UserChargings>(context, listen: false)
+                    //     .addCharging(chargingRequest);
                     Navigator.pop(context);
                     // });
                   },

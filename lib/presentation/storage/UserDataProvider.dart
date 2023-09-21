@@ -53,30 +53,22 @@ class UserDataProvider extends ChangeNotifier {
           'name': _userData.name,
           'phoneNumber': _userData.phoneNumber,
           'level1': _userData.level1,
-
           // 'level 2': _userData.level2,
-         'level2':{
+          'level2': {
             'vehicleManufacturer': _userData.vehicleManufacturer,
             'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
-            'batteryCapacity':_userData.batteryCapacity,
-            'mileage':_userData.range,
+            'batteryCapacity': _userData.batteryCapacity,
+            'mileage': _userData.range,
             'chargerInfo': _userData.chargerInfo,
-         },
-          // 'Station Name':_userData.stationName,
-          // 'Address':_userData.address,
-          // 'Aadhar Number':_userData.aadharNumber,
-          // 'Host Name ':_userData.hostName,
+          },
           // 'Charger Type':_userData.chargerType,
-          // 'Price':_userData.price,
-          // 'Amenities':_userData.amenities,
           'isProvider': _userData.isProvider,
         });
-
         // Log the ID of the newly created document
         // print('User document ID: ${documentRef.id}');
       }
     } catch (e) {
-      // print('Error saving user data: $e');
+      debugPrint('Error saving user data: $e');
     }
   }
 
@@ -94,13 +86,13 @@ class UserDataProvider extends ChangeNotifier {
         // 'level 2.Vehicle Manufacturer': _userData.vehicleManufacturer,
         // 'level 2.Vehicle Registration Number':
         //     _userData.vehicleRegistrationNumber,
-          
+
         // 'level 2.Charger Info': _userData.chargerInfo,
-         'vehicleManufacturer': _userData.vehicleManufacturer,
-            'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
-            'batteryCapacity':_userData.batteryCapacity,
-            'mileage':_userData.range,
-              'chargerInfo': _userData.chargerInfo,
+        'vehicleManufacturer': _userData.vehicleManufacturer,
+        'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
+        'batteryCapacity': _userData.batteryCapacity,
+        'mileage': _userData.range,
+        'chargerInfo': _userData.chargerInfo,
         'isProvider': _userData.isProvider,
       });
 

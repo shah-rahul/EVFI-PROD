@@ -1,10 +1,6 @@
 // ignore: duplicate_ignore
-
 // ignore: file_names
-
 // ignore_for_file: file_names, duplicate_ignore
-
-import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +18,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     geohash: 'Null',
     // geopoint: const GeoPoint(0.0, 0.0),
 
-    geopoint: new GeoPoint(0.0, 0.0),
+    geopoint: const GeoPoint(0.0, 0.0),
     stationName: 'Null',
     address: 'Null',
     //loaction from marker
@@ -32,15 +28,15 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
-    startAvailability: 'Null',// DateTime.now(),
-    endAvailability: 'Null',//DateTime.now(),
+    startAvailability: 'Null', // DateTime.now(),
+    endAvailability: 'Null', //DateTime.now(),
     price: 'Null',
     amenities: 'Null',
     //image of charger
     imageUrl: [],
   );
   // ignore: prefer_final_fields
-  CollectionReference _usersCollection =
+  CollectionReference _chargersCollection =
       FirebaseFirestore.instance.collection('chargers');
 
   UserChargingData get userChargingData => _userChargingData;
@@ -54,7 +50,7 @@ class UserChargingDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       User? user = FirebaseAuth.instance.currentUser;
-      DocumentReference documentRef = await _usersCollection.add({
+      DocumentReference documentRef = await _chargersCollection.add({
         'uid': user!.uid,
         'g': {
           'geohash': _userChargingData.geohash,
@@ -78,11 +74,17 @@ class UserChargingDataProvider extends ChangeNotifier {
           // 'isProvider':_userChargingData.isProvider,
         }
       });
-
+      // .then((docRef) async {
+      //   print(docRef.id);
+      //   await _chargersCollection
+      //       .doc(docRef.id)
+      //       .update({'chargerId': docRef.id});
+      //   return docRef;
+      // });
       // Log the ID of the newly created document
       //  print('User document ID: ${documentRef.id}');
     } catch (e) {
-      // print('Error saving user data: $e');
+      print('Error saving user data: $e');
     }
   }
 }

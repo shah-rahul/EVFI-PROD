@@ -60,7 +60,6 @@ class _ListChargerState extends State<ListCharger> {
   String? hostNames, amenities, state, _startAvailabilityTime, _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
-  final _form = GlobalKey<FormState>();
   var _isLoading = false;
   typeCharger? _type;
 

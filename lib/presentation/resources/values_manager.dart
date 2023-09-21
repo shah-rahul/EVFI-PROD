@@ -1,14 +1,14 @@
 enum LendingStatus {
+  canceled(-2),
   declined(-1),
-  requested(0),
-  accepted(1),
-  charging(2),
+  charging(0),
+  requested(1),
+  accepted(2),
   completed(3);
 
   final int code;
 
   const LendingStatus(this.code);
-  // canceled,
 }
 
 enum typeCharger {

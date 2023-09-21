@@ -4,9 +4,11 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:evfi/presentation/pages/streams/charging_stream.dart';
+// import 'package:evfi/presentation/pages/streams/charging_stream.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../resources/strings_manager.dart';
@@ -50,6 +52,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
   //   print('33333333333');
   // }
+  final currentUid = FirebaseAuth.instance.currentUser?.uid;
+  bool _fetchingBookings = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +81,195 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return chargerDetails;
   }
 
-  final currentUid = FirebaseAuth.instance.currentUser?.uid;
+  Widget streamBuilder(String tab) {
+    final height = MediaQuery.of(context).size.height;
+    return Container(
+      height: height * 0.75,
+      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+      child: SingleChildScrollView(
+        child: Container(
+            height: height * 0.85,
+            child: StreamBuilder(
+              stream: (tab == AppStrings.ChargingScreenCurrentTab)
+                  ? FirebaseFirestore.instance
+                      .collection('booking')
+                      .where('userId', isEqualTo: currentUid)
+                      .where('status', whereIn: [0, 1, 2]).snapshots()
+                  : FirebaseFirestore.instance
+                      .collection('booking')
+                      .where('userId', isEqualTo: currentUid)
+                      .where('status', whereIn: [-1, -2, 3]).snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text('No Chargings yet..'),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text('Something went wrong'));
+                }
+
+                // final listOfChargings = snapshot.data!;
+                List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                    snapshot.data!.docs;
+                // print(documents[0]);
+
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return FutureBuilder(
+                        future: getChargerDetailsByChargerId(
+                            documents[index].data()!['chargerId']),
+                        builder: ((context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshots) {
+                          if (snapshots.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+                          if (!snapshots.hasData) {
+                            return const Center(
+                              child: Text('No Bookings yet..'),
+                            );
+                          }
+                          if (snapshots.hasError) {
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          }
+                          return Column(children: [
+                            MyChargingWidget(
+                                chargingItem: Charging(
+                                    amount: documents[index]['price'],
+                                    position: const LatLng(0,
+                                        0), //later to show path till charger we'll use charger coordinates
+                                    slotChosen: documents[index]['timeSlot'],
+                                    stationAddress: snapshots.data!['info']
+                                        ['address'],
+                                    stationName: snapshots.data!['info']
+                                        ['stationName'],
+                                    status: documents[index]['status'],
+                                    type: 1,
+                                    ratings: 1),
+                                currentTab: tab,
+                                bookingId: documents[index].id),
+                            const SizedBox(
+                              height: 5,
+                            )
+                          ]);
+                        }));
+                  },
+                  itemCount: documents.length,
+                );
+              },
+            )),
+      ),
+    );
+  }
+
+  // Widget streamBuilder(String tab) {
+  //   final height = MediaQuery.of(context).size.height;
+  //   return Container(
+  //     height: height * 0.75,
+  //     padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+  //     child: SingleChildScrollView(
+  //       child: Container(
+  //           height: height * 0.85,
+  //           child: StreamBuilder(
+  //             stream: (tab == AppStrings.ChargingScreenCurrentTab)
+  //                 ? FirebaseFirestore.instance
+  //                     .collection('booking')
+  //                     .where('userId', isEqualTo: currentUid)
+  //                     .where('status', whereIn: [0, 1, 2]).snapshots()
+  //                 : FirebaseFirestore.instance
+  //                     .collection('booking')
+  //                     .where('userId', isEqualTo: currentUid)
+  //                     .where('status', whereIn: [-1, -2, 3]).snapshots(),
+  //             builder: (context,
+  //                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+  //               if (snapshot.connectionState == ConnectionState.waiting) {
+  //                 return const CircularProgressIndicator();
+  //               }
+  //               if (!snapshot.hasData) {
+  //                 return const Center(
+  //                   child: Text('No Chargings yet..'),
+  //                 );
+  //               }
+  //               if (snapshot.hasError) {
+  //                 return const Center(child: Text('Something went wrong'));
+  //               }
+
+  //               // final listOfChargings = snapshot.data!;
+  //               List<DocumentSnapshot<Map<String, dynamic>>> documents =
+  //                   snapshot.data!.docs;
+  //               // print(documents[0]);
+
+  //               return ListView.builder(
+  //                 itemBuilder: (context, index) {
+  //                   return FutureBuilder(
+  //                       future: getChargerDetailsByChargerId(
+  //                           documents[index].data()!['chargerId']),
+  //                       builder: ((context,
+  //                           AsyncSnapshot<
+  //                                   DocumentSnapshot<Map<String, dynamic>>>
+  //                               snapshots) {
+  //                         if (snapshots.connectionState ==
+  //                             ConnectionState.waiting) {
+  //                           return const CircularProgressIndicator();
+  //                         }
+  //                         if (!snapshots.hasData) {
+  //                           return const Center(
+  //                             child: Text('No Bookings yet..'),
+  //                           );
+  //                         }
+  //                         if (snapshots.hasError) {
+  //                           return const Center(
+  //                               child: Text('Something went wrong'));
+  //                         }
+  //                         return Column(children: [
+  //                           MyChargingWidget(
+  //                               chargingItem: Charging(
+  //                                   amount: documents[index]['price'],
+  //                                   position: const LatLng(0,
+  //                                       0), //later to show path till charger we'll use charger coordinates
+  //                                   slotChosen: documents[index]['timeSlot'],
+  //                                   stationAddress: snapshots.data!['info']
+  //                                       ['address'],
+  //                                   stationName: snapshots.data!['info']
+  //                                       ['stationName'],
+  //                                   status: documents[index]['status'],
+  //                                   type: 1,
+  //                                   ratings: 1),
+  //                               currentTab: tab,
+  //                               bookingId: documents[index].id),
+  //                           const SizedBox(
+  //                             height: 5,
+  //                           )
+  //                         ]);
+  //                       }));
+  //                 },
+  //                 itemCount: documents.length,
+  //               );
+  //             },
+  //           )),
+  //     ),
+  //   );
+  // }
+
+  // Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
+  //     String chargerId) async {
+  //   print("88");
+  //   final chargerDetails = await FirebaseFirestore.instance
+  //       .collection('chargers')
+  //       .doc(chargerId)
+  //       .get();
+  //   return chargerDetails;
+  // }
+
+  // final currentUid = FirebaseAuth.instance.currentUser?.uid;
   Widget currentScreen(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -143,79 +335,6 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         ),
         streamBuilder(AppStrings.ChargingScreenCurrentTab)
       ],
-    );
-  }
-
-  Widget streamBuilder(String tab) {
-    final height = MediaQuery.of(context).size.height;
-    return Container(
-      height: height * 0.75,
-      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
-      child: SingleChildScrollView(
-        child: Container(
-            height: height * 0.85,
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('booking')
-                  .where('userId', isEqualTo: currentUid)
-                  .snapshots(),
-              builder: (context,
-                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting ||
-                    !snapshot.hasData) {
-                  // return const CircularProgressIndicator();
-                  return const Center(
-                    child: Text('No Bookings yet..'),
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  return const Center(child: Text('Something went wrong'));
-                }
-
-                // final listOfChargings = snapshot.data!;
-                List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                    snapshot.data!.docs;
-
-                print(currentUid);
-
-                print("--------------");
-
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    return FutureBuilder(
-                        future: getChargerDetailsByChargerId(
-                            documents[index].data()?['chargerId']),
-                        builder: ((context,
-                            AsyncSnapshot<
-                                    DocumentSnapshot<Map<String, dynamic>>>
-                                snapshots) {
-                          return Column(children: [
-                            MyChargingWidget(
-                              chargingItem: Charging(
-                                  amount: 12,
-                                  position: LatLng(0, 0),
-                                  slotChosen: "0",
-                                  stationAddress: snapshots.data!['info']
-                                      ['address'],
-                                  stationName: snapshots.data!['info']
-                                      ['stationName'],
-                                  status: LendingStatus.requested,
-                                  type: 1,
-                                  ratings: 0),
-                              tab: tab,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ]);
-                        }));
-                  },
-                  itemCount: documents.length,
-                );
-              },
-            )),
-      ),
     );
   }
 
