@@ -38,7 +38,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         {
           buttonColor = ColorManager.error;
           textColor = Colors.white;
-          statusText = 'Canceled';
+          statusText = 'Declined';
         }
         break;
       case 0: //charging
