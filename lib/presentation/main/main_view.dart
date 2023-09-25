@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 import '../resources/color_manager.dart';
 
-import '../pages/screens/homePage/home.dart';
-import '../pages/screens/accountPage/account.dart';
-import '../pages/screens/mybookings/BookingsScreen.dart';
-import '../pages/screens/mycharging/MyChargingScreen.dart';
+import '../pages/screens/1homePage/home.dart';
+import '../pages/screens/4accountPage/account.dart';
+import '../pages/screens/2Bookings/BookingsScreen.dart';
+import '../pages/screens/3Chargings/MyChargingScreen.dart';
 
 class MainView extends StatefulWidget {
   @override
@@ -32,7 +32,7 @@ class _MainViewState extends State<MainView> {
       bottomNavigationBar: DotNavigationBar(
         currentIndex: _currentScreen,
         //margin: EdgeInsets.symmetric(horizontal: 10.0),
-        marginR: const EdgeInsets.symmetric(horizontal:25, vertical: 20),
+        marginR: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
         borderRadius: 20,
         paddingR: const EdgeInsets.all(5),
         backgroundColor: ColorManager.appBlack,
@@ -83,17 +83,17 @@ class _MainViewState extends State<MainView> {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _currentScreen,
-        children: screens
-        // const [
-        //   Home(),
-        //   BookingsScreen(),
-        //   MyChargingScreen(),
-        //   Account(),
-        // ],
-      ),
-      // body: screens.elementAt(_currentScreen),
+      // body: IndexedStack(
+      //   index: _currentScreen,
+      //   children: screens
+      // const [
+      //   Home(),
+      //   BookingsScreen(),
+      //   MyChargingScreen(),
+      //   Account(),
+      // ],
+      // ),
+      body: screens.elementAt(_currentScreen),
     );
   }
 }

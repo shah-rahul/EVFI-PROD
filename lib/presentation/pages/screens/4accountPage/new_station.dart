@@ -4,10 +4,10 @@
 // ignore_for_file: unused_field, non_constant_identifier_names, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../models/my_charging.dart';
 import '../../../resources/color_manager.dart';
 import '../../models/encode_geohash.dart';
 

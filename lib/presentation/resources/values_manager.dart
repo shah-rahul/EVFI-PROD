@@ -1,3 +1,22 @@
+enum LendingStatus {
+  canceled(-2),
+  declined(-1),
+  charging(0),
+  requested(1),
+  accepted(2),
+  completed(3);
+
+  final int code;
+
+  const LendingStatus(this.code);
+}
+
+enum typeCharger {
+  Level1,
+  Level2,
+  Level3,
+}
+
 class AppMargin {
   static const double m8 = 8.0;
   static const double m12 = 12.0;

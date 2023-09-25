@@ -5,8 +5,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../Data_storage/UserData.dart';
-import '../Data_storage/UserDataProvider.dart';
+import '../storage/UserData.dart';
+import '../storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import './chargerform.dart';

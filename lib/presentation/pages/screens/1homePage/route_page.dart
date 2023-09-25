@@ -247,6 +247,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           stateName = stateName as String;
           startTime = startTime as String;
           endTime = endTime as String;
+
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
@@ -270,7 +271,9 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       geopoint: geoPoint,
                       geohash: geohash,
                       costOfFullCharge: price,
-                      timeStamp: '$startTime - $endTime'
+                      timeStamp: '$startTime - $endTime',
+                      chargerId: ds.id,
+                      providerId: data['uid']
                     );
                   },
                 );

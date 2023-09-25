@@ -59,11 +59,11 @@ class SplashViewState extends State<SplashView> {
                 context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
           } else {
             Navigator.pushReplacementNamed(
-                context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+                context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
           }
         } else {
           Navigator.pushReplacementNamed(
-              context, /*Routes.onBoardingRoute*/ Routes.loginRoute);
+              context, /*Routes.onBoardingRoute*/ Routes.mainRoute);
         }
       },
     );

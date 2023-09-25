@@ -1,7 +1,7 @@
 // ignore_for_file: use_key_in_widget_constructors
 
-import 'package:evfi/presentation/pages/screens/accountPage/user_profile.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/image_input.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/image_input.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';

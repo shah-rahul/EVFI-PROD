@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:evfi/presentation/Data_storage/UserDataProvider.dart';
+import 'package:evfi/presentation/storage/UserDataProvider.dart';
 import 'package:evfi/presentation/main/main_view.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../Data_storage/UserData.dart';
+import '../storage/UserData.dart';
 
 class UserChargingRegister extends StatefulWidget {
   const UserChargingRegister({

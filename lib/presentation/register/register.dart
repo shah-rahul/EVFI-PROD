@@ -6,7 +6,7 @@ import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../Data_storage/UserDataProvider.dart';
+import '../storage/UserDataProvider.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
@@ -15,7 +15,7 @@ import '../resources/values_manager.dart';
 import '../login/signup_controller.dart';
 
 import 'package:get/get.dart';
-import '../Data_storage/UserData.dart';
+import '../storage/UserData.dart';
 
 class RegisterView extends StatefulWidget {
   // const RegisterView({

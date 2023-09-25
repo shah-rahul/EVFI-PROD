@@ -15,7 +15,6 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../resources/assets_manager.dart';
@@ -40,7 +39,6 @@ class Home extends StatefulWidget {
 double batteryCap = 0;
 
 class HomeState extends State<Home> {
-  FocusNode _searchFocusNode = FocusNode();
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final List<Marker> _markers = <Marker>[];
@@ -108,8 +106,9 @@ class HomeState extends State<Home> {
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!isLocationServiceEnabled)
+    if (!isLocationServiceEnabled) {
       return Future.error('Location services are disabled.');
+    }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLocationPermissionRequested =
         prefs.getBool('location_permission_requested') ?? false;
@@ -229,13 +228,16 @@ class HomeState extends State<Home> {
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        timeStamp: '$startTime - $endTime');
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                      timeStamp: '$startTime - $endTime',
+                      chargerId: ds.id,
+                      providerId: data['uid']
+                    );
                   },
                 );
               },
