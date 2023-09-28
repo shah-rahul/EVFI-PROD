@@ -14,6 +14,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     // vehicleManufacturer: '',
     // vehicleNumber: '',
     // chargingRequirements: '',
+    chargerId: "Null",
     uid: "Null",
     geohash: 'Null',
     // geopoint: const GeoPoint(0.0, 0.0),
@@ -51,6 +52,7 @@ class UserChargingDataProvider extends ChangeNotifier {
       // ignore: unused_local_variable
       User? user = FirebaseAuth.instance.currentUser;
       DocumentReference documentRef = await _chargersCollection.add({
+        'chargerId':_userChargingData.chargerId,
         'uid': user!.uid,
         'g': {
           'geohash': _userChargingData.geohash,
@@ -73,14 +75,14 @@ class UserChargingDataProvider extends ChangeNotifier {
           //charger image
           // 'isProvider':_userChargingData.isProvider,
         }
+      })
+      .then((docRef) async {
+        // print(docRef.id);
+        await _chargersCollection
+            .doc(docRef.id)
+            .update({'chargerId': docRef.id});
+        return docRef;
       });
-      // .then((docRef) async {
-      //   print(docRef.id);
-      //   await _chargersCollection
-      //       .doc(docRef.id)
-      //       .update({'chargerId': docRef.id});
-      //   return docRef;
-      // });
       // Log the ID of the newly created document
       //  print('User document ID: ${documentRef.id}');
     } catch (e) {

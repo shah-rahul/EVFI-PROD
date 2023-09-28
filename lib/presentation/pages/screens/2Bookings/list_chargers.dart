@@ -52,7 +52,7 @@ class _ListChargerState extends State<ListCharger> {
   final _stateFocusNode = FocusNode();
   final ImagePicker imagePicker = ImagePicker();
   final List<XFile>? _imageList = [];
-  late List<String> imageUrls = [];
+  final List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
   
@@ -249,18 +249,6 @@ class _ListChargerState extends State<ListCharger> {
     setState(() {});
   }
 
-  // Future<String> uploadImage(XFile imageFile) async {
-  //   String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-  //   firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-  //       .ref()
-  //       .child('charger_images')
-  //       .child('$imageName.jpg');
-
-  //   await ref.putFile(File(imageFile.path));
-  //   String imageUrl = await ref.getDownloadURL();
-
-  //   return imageUrl;
-  // }
   Future<List<String>> uploadImages(List<XFile> imageFiles) async {
     for (XFile imageFile in imageFiles) {
       String imageName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -274,11 +262,12 @@ class _ListChargerState extends State<ListCharger> {
      
 
       imageUrls.add(imageUrl);
-//       print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-//       print(imageUrls);
+      // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+      // print(imageUrls);
     }
     
     return imageUrls;
+    
   }
 
   Future<void> _showPhotoOptionsDialog() {
@@ -713,7 +702,7 @@ class _ListChargerState extends State<ListCharger> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText:
-                                      'Priyanshu Maikhuri\nArshdeep Singh',
+                                      'Priyanshu Maikhuri\nArshdeep Singh\nRaj',
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
@@ -854,10 +843,8 @@ class _ListChargerState extends State<ListCharger> {
                                   Storeg(_position);
                                 uploadImages(_imageList!) ;
                                   StoreImageurl(imageUrls);
-                                  // UserChargingData? userChargingData =
-                                  //     userChargingDataProvider.userChargingData;
-                                  // userChargingDataProvider
-                                  //     .setUserChargingData(userChargingData);
+                               
+
 
                                   userChargingDataProvider
                                       .saveUserChargingData()
