@@ -55,9 +55,13 @@ class _ListChargerState extends State<ListCharger> {
   final List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
-  
+
   String? StationName, StationAddress, aadharNumber, city, pinCode;
-  String? hostNames, amenities, state, _startAvailabilityTime, _endAvailabilityTime; //later define hosts as list<string>
+  String? hostNames,
+      amenities,
+      state,
+      _startAvailabilityTime,
+      _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
   var _isLoading = false;
@@ -259,15 +263,13 @@ class _ListChargerState extends State<ListCharger> {
 
       await ref.putFile(File(imageFile.path));
       String imageUrl = await ref.getDownloadURL();
-     
 
       imageUrls.add(imageUrl);
       // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
       // print(imageUrls);
     }
-    
+
     return imageUrls;
-    
   }
 
   Future<void> _showPhotoOptionsDialog() {
@@ -734,8 +736,12 @@ class _ListChargerState extends State<ListCharger> {
                                 endLimit: DateTimeExtension.todayMidnight,
                                 startLimit: DateTimeExtension.todayStart,
                                 onChanged: (start, end, isAllDay) {
-                                  _startAvailabilityTime = DateFormat('h:mm a').format(start!).toString();
-                                  _endAvailabilityTime = DateFormat('h:mm a').format(end!).toString();
+                                  _startAvailabilityTime = DateFormat('h:mm a')
+                                      .format(start!)
+                                      .toString();
+                                  _endAvailabilityTime = DateFormat('h:mm a')
+                                      .format(end!)
+                                      .toString();
                                 }),
                             const SizedBox(
                               height: 15,
@@ -834,17 +840,18 @@ class _ListChargerState extends State<ListCharger> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: ElevatedButton(
-                                onPressed: () {
+                            child: ElevatedButton(//boolean function
+                                onPressed: () async {
                                   _submitForm;
                                   StoreChargerType(++chargerType);
                                   StoreAvailability(_startAvailabilityTime!,
                                       _endAvailabilityTime!);
                                   Storeg(_position);
-                                uploadImages(_imageList!) ;
-                                  StoreImageurl(imageUrls);
-                               
-
+                                  await uploadImages(_imageList!).then(
+                                      (value) => {
+                                        // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+                                        // print(imageUrls),
+                                        StoreImageurl(imageUrls)});
 
                                   userChargingDataProvider
                                       .saveUserChargingData()
