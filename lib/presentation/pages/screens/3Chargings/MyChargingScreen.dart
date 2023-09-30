@@ -278,6 +278,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
+    double widthInLogicalPixels1 =
+        394.835 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels1 =
+        81.83 / MediaQuery.of(context).devicePixelRatio;
+
     return Column(
       children: [
         Container(
@@ -307,7 +315,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                         child: Container(
                           height: 1.8,
                           width: width * 0.32,
-                          color: ColorManager.primary,
+                          // color: ColorManager.primary,
+                          color: Color(0xFFFCFCFD),
                         ),
                       )
                     ],
@@ -337,7 +346,332 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         const SizedBox(
           height: 5,
         ),
-        streamBuilder(AppStrings.ChargingScreenCurrentTab)
+
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the first button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                      child: const Text('Accept',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the second button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      child: const Text('Decline',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the first button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                      child: const Text('Accept',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the second button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      child: const Text('Decline',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 60),
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the first button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                      ),
+                      child: const Text('Accept',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                  Container(
+                    width: widthInLogicalPixels1,
+                    height: heightInLogicalPixels1,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Handle the second button click
+                      },
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                      ),
+                      child: const Text('Decline',
+                          style: TextStyle(color: Colors.black)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        // streamBuilder(AppStrings.ChargingScreenCurrentTab)
       ],
     );
   }
@@ -345,6 +679,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   Widget RecentScreen() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
     return Column(
       children: [
         Container(
@@ -399,10 +737,293 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        const SizedBox(height: 10),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFF6D4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        streamBuilder(AppStrings.ChargingScreenRecentTab)
+
+        SizedBox(
+          height: 10,
+        ),
+
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(
+          height: 10,
+        ),
+
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // streamBuilder(AppStrings.ChargingScreenRecentTab)
       ],
     );
   }
