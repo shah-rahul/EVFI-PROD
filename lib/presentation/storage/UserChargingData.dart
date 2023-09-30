@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserChargingData {
+  String chargerId;
   String uid;
   String geohash;
   GeoPoint geopoint;
@@ -25,9 +26,10 @@ class UserChargingData {
   String price;
   String amenities;
   // image of charger
- List<String> imageUrl;
+  List<String> imageUrl;
 
   UserChargingData({
+    required this.chargerId,
     required this.uid,
     required this.geohash,
     required this.geopoint,
