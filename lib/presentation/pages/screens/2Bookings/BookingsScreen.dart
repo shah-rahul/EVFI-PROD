@@ -5,6 +5,7 @@ import 'package:evfi/presentation/pages/widgets/BookingDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:evfi/presentation/resources/assets_manager.dart';
@@ -231,7 +232,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     snapshot.data!.docs;
                 if (documents.length == 0)
                   return Center(
-                    child: Text('No Bookings yet'),
+                    child: Text('No Bookings yet '),
                   );
 
                 return ListView.builder(
@@ -287,6 +288,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
     return Column(
       children: [
         Container(
@@ -343,7 +347,284 @@ class _BookingsScreenState extends State<BookingsScreen> {
         SizedBox(
           height: 5,
         ),
-        streamBuilder(AppStrings.BookingScreenPendingTab)
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Row(
+            children: const [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Time slot- 23:00 3:00',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '73085789349854',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(40),
+                  ),
+                  ClipOval(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Row(
+            children: const [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Time slot- 23:00 3:00',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '73085789349854',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(40),
+                  ),
+                  ClipOval(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as needed
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Row(
+            children: const [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Rahul ka Charger',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      'Time slot- 23:00 3:00',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '73085789349854',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        // fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 30), // Add vertical padding
+                    child: Text(
+                      '₹ 600',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(40),
+                  ),
+                  ClipOval(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        // streamBuilder(AppStrings.BookingScreenPendingTab)
       ],
     );
   }
@@ -381,6 +662,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget RecentScreen() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
     return Column(
       children: [
         Container(
@@ -408,37 +693,320 @@ class _BookingsScreenState extends State<BookingsScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                    width: width * 0.5,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          AppStrings.BookingScreenRecentTab,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: AppSize.s20,
-                              fontWeight: FontWeight.w500),
+                  width: width * 0.5,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppStrings.BookingScreenRecentTab,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: AppPadding.p12 - 2,
+                            vertical: AppMargin.m12 - 8),
+                        child: Container(
+                          height: 1.8,
+                          width: width * 0.32,
+                          color: ColorManager.primary,
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: AppPadding.p12 - 2,
-                              vertical: AppMargin.m12 - 8),
-                          child: Container(
-                            height: 1.8,
-                            width: width * 0.32,
-                            color: ColorManager.primary,
-                          ),
-                        )
-                      ],
-                    )),
+                      )
+                    ],
+                  ),
+                ),
               )
             ],
           ),
         ),
-        SizedBox(
-          height: 5,
+        const SizedBox(height: 10),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFF6D4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-        streamBuilder(AppStrings.BookingScreenRecentTab)
+
+        SizedBox(
+          height: 10,
+        ),
+
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        SizedBox(
+          height: 10,
+        ),
+
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          width: widthInLogicalPixels, // Adjust as needed
+          height: heightInLogicalPixels, // Adjust as neede
+          decoration: BoxDecoration(
+            color: Color(0xFFD0F4D5),
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(-8, 6),
+                blurRadius: 50,
+                color: Color.fromRGBO(0, 0, 0, 0.25),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Rahul ka Charger',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  'Time slot- 23:00 3:00',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '73085789349854',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  '₹ 600',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        // streamBuilder(AppStrings.BookingScreenRecentTab)
       ],
     );
   }

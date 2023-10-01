@@ -48,22 +48,23 @@ class UserDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       if (user != null) {
-        DocumentReference documentRef = await _usersCollection.add({
-          'uid': user.uid,
-          'name': _userData.name,
-          'phoneNumber': _userData.phoneNumber,
-          'level1': _userData.level1,
-          // 'level 2': _userData.level2,
-          'level2': {
-            'vehicleManufacturer': _userData.vehicleManufacturer,
-            'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
-            'batteryCapacity': _userData.batteryCapacity,
-            'mileage': _userData.range,
-            'chargerInfo': _userData.chargerInfo,
-          },
-          // 'Charger Type':_userData.chargerType,
-          'isProvider': _userData.isProvider,
-        });
+        DocumentReference documentRef = _usersCollection.doc(user.uid); // Replace 'documentId' with the desired document ID
+
+await documentRef.set({
+  'uid': user.uid,
+  'name': _userData.name,
+  'phoneNumber': _userData.phoneNumber,
+  'level1': _userData.level1,
+  'level2': {
+    'vehicleManufacturer': _userData.vehicleManufacturer,
+    'vehicleRegistrationNumber': _userData.vehicleRegistrationNumber,
+    'batteryCapacity': _userData.batteryCapacity,
+    'mileage': _userData.range,
+    'chargerInfo': _userData.chargerInfo,
+  },
+  'isProvider': _userData.isProvider,
+});
+        
         // Log the ID of the newly created document
         // print('User document ID: ${documentRef.id}');
       }
