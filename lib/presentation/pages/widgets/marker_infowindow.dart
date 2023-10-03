@@ -49,17 +49,16 @@ class CustomMarkerPopup extends StatefulWidget {
   final String providerId;
   //take input of chargerType as well from firebase fetching to show charger level
 
-  const CustomMarkerPopup({
-    required this.stationName,
-    required this.address,
-    required this.imageUrl,
-    required this.geopoint,
-    required this.geohash,
-    required this.costOfFullCharge,
-    required this.timeStamp,
-    required this.chargerId,
-    required this.providerId
-  });
+  const CustomMarkerPopup(
+      {required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.geopoint,
+      required this.geohash,
+      required this.costOfFullCharge,
+      required this.timeStamp,
+      required this.chargerId,
+      required this.providerId});
 
   @override
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();

@@ -17,7 +17,10 @@ class BookingDataProvider {
 
 
   BookingDataProvider(
-      {required this.providerId, required this.chargerId, required this.price, required this.timeSlot}) {
+      {required this.providerId,
+      required this.chargerId,
+      required this.price,
+      required this.timeSlot}) {
     try {
       _booking.add({
         'status': LendingStatus.requested.code,

@@ -21,10 +21,10 @@ class AppStrings {
 
   static const chargerformtitle = "Charger Info";
 
-  static const MyChargingTitle = "My Chargings";
-  static const BookingTitle = "My Bookings";
+  static const MyChargingTitle = "Your Bookings";
+  static const BookingTitle = "Dashboard";
   static const ChargingScreenRecentTab = "Recent";
-  static const ChargingScreenCurrentTab = "Current";
+  static const ChargingScreenCurrentTab = "Pending";
   static const BookingScreenPendingTab = "Pending";
   static const BookingScreenRecentTab = "Recent";
 
@@ -32,6 +32,9 @@ class AppStrings {
   static const AcceptedStatus = "Accepted";
   static const DeclinedStatus = "Declined";
   static const RequestedStatus = "Requested";
+  static const CanceledStatus = "Canceled";
+  static const CompletedStatus = "Completed";
+  static const chargingStatus = "Charging";
 
   static const AcceptButton = "Accept";
   static const DeclineButton = "Decline";

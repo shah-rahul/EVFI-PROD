@@ -36,7 +36,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         {
           buttonColor = ColorManager.error;
           textColor = Colors.white;
-          statusText = 'Canceled';
+          statusText = 'Declined';
         }
         break;
       case 0: //charging
@@ -64,6 +64,15 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         }
         break;
     }
+    // String textContent = determineStatusText(status);
+
+    // if (widget.tab == AppStrings.ChargingScreenCurrentTab &&
+    //     (status == LendingStatus.declined || status == LendingStatus.completed))
+    //   return Container();
+    // if (widget.tab == AppStrings.ChargingScreenRecentTab &&
+    //     (status == LendingStatus.accepted ||
+    //         status == LendingStatus.requested ||
+    //         status == LendingStatus.charging)) return Container();
 
     return ElevatedButton(
         onPressed: () {},
@@ -109,6 +118,9 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               const Spacer(),
               Text(widget.chargingItem.date),
             ],
+          ),
+          const SizedBox(
+            height: 8,
           ),
           Row(
             children: [
