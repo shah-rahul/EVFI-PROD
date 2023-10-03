@@ -15,6 +15,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../resources/assets_manager.dart';
@@ -106,12 +107,23 @@ class HomeState extends State<Home> {
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
+    print(isLocationServiceEnabled);
     if (!isLocationServiceEnabled) {
-      return Future.error('Location services are disabled.');
+      bool serviceEnabled = await Geolocator.openLocationSettings();
+
+      if (serviceEnabled) {
+        print('Location services are now enabled');
+      } else {
+        print('Location services remain disabled');
+        print(serviceEnabled);
+
+        return Future.error('Location services are disabled.');
+      }
     }
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isLocationPermissionRequested =
         prefs.getBool('location_permission_requested') ?? false;
+    print(isLocationPermissionRequested);
     if (!isLocationPermissionRequested) {
       // If location permission is not requested before, request it now
 
@@ -120,6 +132,7 @@ class HomeState extends State<Home> {
     }
 
     LocationPermission permission = await Geolocator.checkPermission();
+    print(permission);
     if (permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse) {
       try {
@@ -199,7 +212,7 @@ class HomeState extends State<Home> {
             geohash != null &&
             stnName != null &&
             stnAddress != null &&
-            stnImgUrl != null &&
+            // stnImgUrl != null &&
             stateName != null &&
             startTime != null &&
             endTime != null) {
@@ -211,6 +224,8 @@ class HomeState extends State<Home> {
           stateName = stateName as String;
           startTime = startTime as String;
           endTime = endTime as String;
+          print(data);
+          print("------");
 
           _markers.add(Marker(
               markerId: MarkerId(geohash),
@@ -228,16 +243,15 @@ class HomeState extends State<Home> {
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
-                      stationName: stnName,
-                      address: stnAddress,
-                      imageUrl: stnImgUrl,
-                      geopoint: geoPoint,
-                      geohash: geohash,
-                      costOfFullCharge: price,
-                      timeStamp: '$startTime - $endTime',
-                      chargerId: ds.id,
-                      providerId: data['uid']
-                    );
+                        stationName: stnName,
+                        address: stnAddress,
+                        imageUrl: stnImgUrl,
+                        geopoint: geoPoint,
+                        geohash: geohash,
+                        costOfFullCharge: price,
+                        timeStamp: '$startTime - $endTime',
+                        chargerId: ds.id,
+                        providerId: data['uid']);
                   },
                 );
               },
@@ -388,7 +402,11 @@ class HomeState extends State<Home> {
                         const GFLoader(type: GFLoaderType.circle),
                         GoogleMap(
                           mapType: MapType.normal,
-                          initialCameraPosition: _kGooglePlex,
+                          initialCameraPosition: CameraPosition(
+                            target: LatLng(_currentPosition.latitude,
+                                _currentPosition.longitude),
+                            zoom: 16.0,
+                          ),
                           onMapCreated: (GoogleMapController controller) {
                             _mapController = controller;
                             updateCameraPosition(_currentPosition);
