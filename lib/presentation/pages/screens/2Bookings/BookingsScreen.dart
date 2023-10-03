@@ -16,24 +16,24 @@ import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
 
-List<Booking> BookingList = [
-  Booking(
-      customerName: "Arshdeep Singh",
-      stationName: "Aomg Charging Station Hub",
-      customerMobileNumber: "+918989898989",
-      timeStamp: DateTime.now().toString(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0),
-  Booking(
-      customerName: "Priyanshu Maikhuri",
-      stationName: "Aomg Charging Station Hub",
-      customerMobileNumber: "+913131313131",
-      timeStamp: DateTime.now().toString(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0)
-];
+// List<Booking> BookingList = [
+//   Booking(
+//       customerName: "Arshdeep Singh",
+//       stationName: "Aomg Charging Station Hub",
+//       customerMobileNumber: "+918989898989",
+//       timeStamp: DateTime.now().toString(),
+//       amount: 120,
+//       status: 1,
+//       ratings: 4.0),
+//   Booking(
+//       customerName: "Priyanshu Maikhuri",
+//       stationName: "Aomg Charging Station Hub",
+//       customerMobileNumber: "+913131313131",
+//       timeStamp: DateTime.now().toString(),
+//       amount: 120,
+//       status: 1,
+//       ratings: 4.0)
+// ];
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({Key? key}) : super(key: key);
@@ -185,14 +185,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
     await FirebaseFirestore.instance
         .collection('chargers')
         .where('uId', isEqualTo: userId)
-        .get().then(
-      (QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+        .get()
+        .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         var doc = querySnapshot.docs[0];
         stationName = doc.data()['uid'];
       }
-    }
-    );
+    });
     setState(() {});
     print('$stationName is i*********************');
     print('uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu');
@@ -258,17 +257,19 @@ class _BookingsScreenState extends State<BookingsScreen> {
                           }
                           return Column(children: [
                             BookingWidget(
-                                bookingItem: Booking(
-                                    amount: documents[index]['price'],
-                                    timeStamp: documents[index]['timeSlot'],
-                                    stationName: stationName,
-                                    customerName: snapshots.data!['name'],
-                                    customerMobileNumber:
-                                        snapshots.data!['phoneNumber'],
-                                    status: documents[index]['status'],
-                                    ratings: 4),
-                                currentTab: tab,
-                                bookingId: documents[index].id),
+                              bookingItem: Booking(
+                                  amount: documents[index]['price'],
+                                  timeStamp: documents[index]['timeSlot'],
+                                  stationName: stationName,
+                                  customerName: snapshots.data!['name'],
+                                  customerMobileNumber:
+                                      snapshots.data!['phoneNumber'],
+                                  status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
+                                  ratings: 4),
+                              currentTab: tab,
+                            ),
                             const SizedBox(
                               height: 5,
                             )

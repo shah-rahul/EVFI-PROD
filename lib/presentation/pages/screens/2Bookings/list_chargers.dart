@@ -2,10 +2,12 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:intl/intl.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../models/pricing_model.dart';
 
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -55,9 +57,13 @@ class _ListChargerState extends State<ListCharger> {
   late List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
-  
+
   String? StationName, StationAddress, aadharNumber, city, pinCode;
-  String? hostNames, amenities, state, _startAvailabilityTime, _endAvailabilityTime; //later define hosts as list<string>
+  String? hostNames,
+      amenities,
+      state,
+      _startAvailabilityTime,
+      _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
   var _isLoading = false;
@@ -271,13 +277,12 @@ class _ListChargerState extends State<ListCharger> {
 
       await ref.putFile(File(imageFile.path));
       String imageUrl = await ref.getDownloadURL();
-     
 
       imageUrls.add(imageUrl);
 //       print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 //       print(imageUrls);
     }
-    
+
     return imageUrls;
   }
 
@@ -630,12 +635,12 @@ class _ListChargerState extends State<ListCharger> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 3,
                                 ),
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
                                     value: state,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: 'Select State',
                                         // : ColorManager.primary.withOpacity(0.17),
                                         enabledBorder: OutlineInputBorder(
@@ -745,8 +750,12 @@ class _ListChargerState extends State<ListCharger> {
                                 endLimit: DateTimeExtension.todayMidnight,
                                 startLimit: DateTimeExtension.todayStart,
                                 onChanged: (start, end, isAllDay) {
-                                  _startAvailabilityTime = DateFormat('h:mm a').format(start!).toString();
-                                  _endAvailabilityTime = DateFormat('h:mm a').format(end!).toString();
+                                  _startAvailabilityTime = DateFormat('h:mm a')
+                                      .format(start!)
+                                      .toString();
+                                  _endAvailabilityTime = DateFormat('h:mm a')
+                                      .format(end!)
+                                      .toString();
                                 }),
                             const SizedBox(
                               height: 15,
@@ -846,13 +855,13 @@ class _ListChargerState extends State<ListCharger> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   _submitForm;
                                   StoreChargerType(++chargerType);
                                   StoreAvailability(_startAvailabilityTime!,
                                       _endAvailabilityTime!);
                                   Storeg(_position);
-                                uploadImages(_imageList!) ;
+                                  uploadImages(_imageList!);
                                   StoreImageurl(imageUrls);
                                   // UserChargingData? userChargingData =
                                   //     userChargingDataProvider.userChargingData;
@@ -868,10 +877,20 @@ class _ListChargerState extends State<ListCharger> {
                                               child:
                                                   const MyChargingScreen())));
 
-                                  // print(
-                                  //     'Latitude: ${_selectedLocation.latitude}');
-                                  // print(
-                                  //     'Longitude: ${_selectedLocation.longitude}');
+                                  await FirebaseFirestore.instance
+                                      .collection('user')
+                                      .where('uid',
+                                          isEqualTo: FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      .get()
+                                      .then((QuerySnapshot<Map<String, dynamic>>
+                                          querySnapshot) {
+                                    if (querySnapshot.docs.isNotEmpty) {
+                                      var doc = querySnapshot.docs[0];
+                                      doc.reference
+                                          .update({'isProvider': true});
+                                    }
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:

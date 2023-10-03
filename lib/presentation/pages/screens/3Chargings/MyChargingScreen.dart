@@ -122,10 +122,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                   stationName: snapshots.data!['info']
                                       ['stationName'],
                                   status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
                                   type: 1,
                                   ratings: 1),
                               currentTab: tab,
-                              bookingId: documents[index].id
                             ),
                             const SizedBox(
                               height: 5,
