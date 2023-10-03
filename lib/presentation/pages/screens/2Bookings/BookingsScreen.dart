@@ -237,7 +237,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
-                            documents[index].data()!['userId']),
+                            documents[index].data()!['uId']),
                         builder: ((context,
                             AsyncSnapshot<
                                     QueryDocumentSnapshot<Map<String, dynamic>>>
