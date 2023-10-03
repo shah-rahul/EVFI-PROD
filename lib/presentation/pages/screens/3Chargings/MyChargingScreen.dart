@@ -146,20 +146,22 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           }
                           return Column(children: [
                             MyChargingWidget(
-                                chargingItem: Charging(
-                                    amount: documents[index]['price'],
-                                    position: const LatLng(0,
-                                        0), //later to show path till charger we'll use charger coordinates
-                                    slotChosen: documents[index]['timeSlot'],
-                                    stationAddress: snapshots.data!['info']
-                                        ['address'],
-                                    stationName: snapshots.data!['info']
-                                        ['stationName'],
-                                    status: documents[index]['status'],
-                                    type: 1,
-                                    ratings: 1),
-                                currentTab: tab,
-                                bookingId: documents[index].id),
+                              chargingItem: Charging(
+                                  amount: documents[index]['price'],
+                                  position: const LatLng(0,
+                                      0), //later to show path till charger we'll use charger coordinates
+                                  slotChosen: documents[index]['timeSlot'],
+                                  stationAddress: snapshots.data!['info']
+                                      ['address'],
+                                  stationName: snapshots.data!['info']
+                                      ['stationName'],
+                                  status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
+                                  type: 1,
+                                  ratings: 1),
+                              currentTab: tab,
+                            ),
                             const SizedBox(
                               height: 5,
                             )

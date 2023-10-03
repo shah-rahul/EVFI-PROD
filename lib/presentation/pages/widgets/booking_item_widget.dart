@@ -11,11 +11,8 @@ import '../../resources/color_manager.dart';
 // ignore: must_be_immutable
 class BookingWidget extends StatefulWidget {
   Booking bookingItem;
-  final String currentTab, bookingId;
-  BookingWidget(
-      {required this.bookingItem,
-      required this.currentTab,
-      required this.bookingId});
+  final String currentTab;
+  BookingWidget({required this.bookingItem, required this.currentTab});
 
   @override
   State<BookingWidget> createState() => _BookingWidgetState();
@@ -37,7 +34,6 @@ class _BookingWidgetState extends State<BookingWidget> {
   //     buttonColor = ColorManager.grey3;
   //     textColor = Colors.white;
   //   }
-
   //   return SizedBox(
   //     width: 84,
   //     height: 20,
@@ -157,6 +153,17 @@ class _BookingWidgetState extends State<BookingWidget> {
           const SizedBox(
             height: 5,
           ),
+//           Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 8),
+//             child: Row(
+//               children: [
+//                 const Icon(Icons.access_time),
+//                 Text(widget.bookingItem.timeStamp, style: TextStyle(fontSize: 12)),
+//                 Spacer(),
+//                 Text(widget.bookingItem.date),
+//               ],
+//             ),
+//           ),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
               children: [

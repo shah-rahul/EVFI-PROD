@@ -6,17 +6,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/vehicle_chargings.dart';
 import '../../resources/color_manager.dart';
-import '../../resources/strings_manager.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class MyChargingWidget extends StatefulWidget {
   Charging chargingItem;
-  String currentTab, bookingId;
+  String currentTab;
   MyChargingWidget(
       {required this.chargingItem,
-      required this.currentTab,
-      required this.bookingId});
+      required this.currentTab});
 
   @override
   State<MyChargingWidget> createState() => _MyChargingWidgetState();
@@ -76,21 +74,17 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     //         status == LendingStatus.requested ||
     //         status == LendingStatus.charging)) return Container();
 
-    return SizedBox(
-      width: 95,
-      height: 35,
-      child: ElevatedButton(
-          onPressed: () {},
-          child: Text(
-            statusText,
-            // style: TextStyle(color: textColor),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttonColor,
-            foregroundColor: textColor,
-            elevation: 3,
-          )),
-    );
+    return ElevatedButton(
+        onPressed: () {},
+        child: Text(
+          statusText,
+          // style: TextStyle(color: textColor),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
+          foregroundColor: textColor,
+          elevation: 3,
+        ));
   }
 
   @override
@@ -114,27 +108,21 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               statusButton(widget.chargingItem.status),
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
           Text(widget.chargingItem.stationAddress,
               style: const TextStyle(fontSize: AppSize.s14)),
-          const SizedBox(
-            height: 8,
-          ),
+              const SizedBox(height: 5,),
           Row(
             children: [
               const Icon(Icons.access_time),
-              Padding(
-                  padding: const EdgeInsets.only(left: AppPadding.p12 - 8),
-                  child: Text(widget.chargingItem.slotChosen)),
+              Text(widget.chargingItem.slotChosen, style: const TextStyle(fontSize: 12),),
+              const Spacer(),
+              Text(widget.chargingItem.date),
             ],
           ),
           const SizedBox(
             height: 8,
           ),
           Row(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               RatingBarIndicator(
                 rating: Random().nextDouble() * 5,
@@ -152,7 +140,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                     onPressed: () async {
                       CollectionReference users =
                           FirebaseFirestore.instance.collection('booking');
-                      DocumentReference docRef = users.doc(widget.bookingId);
+                      DocumentReference docRef = users.doc(widget.chargingItem.id);
                       await docRef.update({
                         'status': -1,
                       });

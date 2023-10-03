@@ -3,6 +3,7 @@ import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BookingDataProvider {
   final String chargerId;
@@ -14,6 +15,7 @@ class BookingDataProvider {
       FirebaseFirestore.instance.collection('booking');
   final _userId = FirebaseAuth.instance.currentUser!.uid;
 
+
   BookingDataProvider(
       {required this.providerId,
       required this.chargerId,
@@ -22,11 +24,12 @@ class BookingDataProvider {
     try {
       _booking.add({
         'status': LendingStatus.requested.code,
-        'userId': _userId,
+        'uId': _userId,
         'chargerId': chargerId,
         'price': price,
-        'timeSlot': timeSlot,
-        'providerId': providerId
+        'timeStamp': timeSlot,
+        'providerId': providerId,
+        'bookingDate': DateFormat('d MMMM yyyy').format(DateTime.now())
       });
     } catch (error) {
       debugPrint('$error');

@@ -170,17 +170,17 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     return const Text('Error occurred');
                   } else {
                     isRegistered = snapshot.data;
-                    Charging newRequest = Charging(
-                        stationName: widget.stationName,
-                        stationAddress: widget.address,
-                        slotChosen: widget.timeStamp,
-                        amount: widget.costOfFullCharge,
-                        position: LatLng(widget.geopoint.latitude,
-                            widget.geopoint.longitude),
-                        status: 1,
-                        type: ChargerTypes.A.index);
+                    // Charging newRequest = Charging(
+                    //     stationName: widget.stationName,
+                    //     stationAddress: widget.address,
+                    //     slotChosen: widget.timeStamp,
+                    //     amount: widget.costOfFullCharge,
+                    //     position: LatLng(widget.geopoint.latitude,
+                    //         widget.geopoint.longitude),
+                    //     status: 1,
+                    //     type: ChargerTypes.A.index);
                     return (isBooking)
-                        ? bookingSection(context, onchanRadio, newRequest)
+                        ? bookingSection(context, onchanRadio)//, newRequest)
                         : startingSection(
                             context, widget.costOfFullCharge, widget.timeStamp);
                   }
@@ -194,7 +194,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   }
 
   Widget bookingSection(BuildContext context,
-      void Function(ChargerTypes val) onchanRadio, Charging chargingRequest) {
+      void Function(ChargerTypes val) onchanRadio) {
     return Card(
       shadowColor: ColorManager.CardshadowBottomRight,
       shape: const RoundedRectangleBorder(
