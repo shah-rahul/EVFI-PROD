@@ -206,7 +206,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                 .instance
                                 .collection('booking');
                             DocumentReference docRef =
-                                users.doc(widget.bookingId);
+                                users.doc(widget.bookingItem.id);
                             await docRef.update({
                               'status': 2,
                             });
@@ -233,7 +233,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                                 .instance
                                 .collection('booking');
                             DocumentReference docRef =
-                                users.doc(widget.bookingId);
+                                users.doc(widget.bookingItem.id);
                             await docRef.update({
                               'status': -1,
                             });

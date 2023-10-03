@@ -177,13 +177,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ));
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
+  Future<QueryDocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
       String customerId, String chargerId) async {
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
         .doc(chargerId)
         .get();
-
     stationName = chargerDetails['info']['stationName'];
     print(stationName);
     print(customerId);
@@ -191,7 +190,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
         .collection('user')
         .where('uid', isEqualTo: customerId)
         .get();
-    return customerDetails;
+    return customerDetails.docs[0];
   }
 
   Widget streamBuilder(String tab) {
@@ -238,11 +237,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
-                            documents[index].data()!['uId']),
+                            documents[index].data()!['uId'],
+                            documents[index].data()!['chargerId']),
                         builder: ((context,
-                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            AsyncSnapshot<
+                                    QueryDocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
-                          print(snapshots);
+                          // print(snapshots);
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
                             return const CircularProgressIndicator();
