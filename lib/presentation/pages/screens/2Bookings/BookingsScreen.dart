@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names, prefer_const_constructors, sized_box_for_whitespace
 import 'dart:async';
 
+import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/pages/widgets/BookingDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/styles_manager.dart';
-import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -75,7 +76,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   void _addCharger() async {
     Navigator.of(context).push(PageTransition(
-        child: const ListCharger(), type: PageTransitionType.theme));
+        child: const ListChargerForm(), type: PageTransitionType.theme));
     if (_isProvider) {
       return;
     }
@@ -111,7 +112,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 IconButton(
                     onPressed: () {
                       Navigator.of(context).push(PageTransition(
-                          child: const ListCharger(),
+                          child: const ListChargerForm(),
                           type: PageTransitionType.theme));
                     },
                     icon: const Icon(
@@ -124,61 +125,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 child:
                     _currentSelected ? PendingScreen(context) : RecentScreen()),
           )
-        : Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        ColorManager.grey3.withOpacity(0.68),
-                        Colors.black87
-                      ],
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      stops: const [0.3, 0.7])),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.24),
-                      child: Image.asset(
-                        ImageAssets.carCharger,
-                        scale: 1.35,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'List, Rent \nand Earn easily.',
-                    style: getBoldStyle(
-                        fontSize: FontSize.s35, color: ColorManager.primary),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  ElevatedButton.icon(
-                      onPressed: _addCharger,
-                      icon:
-                          const Icon(Icons.bolt, color: Colors.green, size: 35),
-                      style: Theme.of(context).elevatedButtonTheme.style,
-                      label: const Text(
-                        'List your charger',
-                        style: TextStyle(
-                            fontSize: FontSize.s14,
-                            fontWeight: FontWeight.w600),
-                      ))
-                ],
-              ),
-            ));
+        : ListChargersPage(addCharger: _addCharger);
   }
 
-  Future<QueryDocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
-      String customerId, String chargerId) async {
+  Future<QueryDocumentSnapshot<Map<String, dynamic>>>
+      getCustomerDetailsByUserId(String customerId, String chargerId) async {
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
         .doc(chargerId)

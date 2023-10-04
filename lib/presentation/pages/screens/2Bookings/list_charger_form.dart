@@ -32,14 +32,14 @@ import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
-class ListCharger extends StatefulWidget {
-  const ListCharger({Key? key}) : super(key: key);
+class ListChargerForm extends StatefulWidget {
+  const ListChargerForm({Key? key}) : super(key: key);
 
   @override
-  State<ListCharger> createState() => _ListChargerState();
+  State<ListChargerForm> createState() => _ListChargerFormState();
 }
 
-class _ListChargerState extends State<ListCharger> {
+class _ListChargerFormState extends State<ListChargerForm> {
   // Chargers charger = Chargers();
   late GoogleMapController _controller;
 

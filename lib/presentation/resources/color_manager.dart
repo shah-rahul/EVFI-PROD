@@ -10,7 +10,6 @@ class ColorManager {
   static Color darkGrey = HexColor.fromHex("#525252");
   static Color darkGreyOpacity40 = HexColor.fromHex("#313131");
   static Color grey = HexColor.fromHex("#737477");
-  static Color primaryOpacity70 = HexColor.fromHex("#B39728");
 
   //gradients
   static Color gradTopLeft = HexColor.fromHex("#f0f0f0");
@@ -22,6 +21,7 @@ class ColorManager {
   static Color shadowBottomRight = HexColor.fromHex("#d9d9d9");
 
   // new colors
+  static Color primaryOpacity70 = HexColor.fromHex("#B39728");
   static Color darkPrimary = HexColor.fromHex("#d17d11");
   static Color grey1 = HexColor.fromHex("#707070");
   static Color grey2 = HexColor.fromHex("#797979");
