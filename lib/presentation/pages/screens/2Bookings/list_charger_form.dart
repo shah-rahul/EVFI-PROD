@@ -123,7 +123,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
             border: Border.all(), //width: 3.5, color: ColorManager.appBlack),
             boxShadow: [
               BoxShadow(
-                  color: ColorManager.primary.withOpacity(0.17),
+                  color: ColorManager.primaryWithOpacity,
                   blurRadius: 2,
                   offset: const Offset(2, 3))
             ]),
@@ -155,7 +155,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
         : Card(
             elevation: 2,
             child: ListTile(
-              tileColor: ColorManager.primary.withOpacity(0.17),
+              tileColor: ColorManager.primaryWithOpacity,
               textColor: Colors.black,
               selectedColor: Colors.green,
               title: const Text('Select Charger location',
@@ -182,7 +182,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           contentPadding: const EdgeInsets.all(0.0),
           value: typeCharger.Level1,
           groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.1),
+          tileColor: ColorManager.primaryWithOpacity,
           onChanged: (val) {
             setState(() {
               // debugPrint('Selected Charger: \t$val');
@@ -202,7 +202,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           contentPadding: const EdgeInsets.all(0.0),
           value: typeCharger.Level2,
           groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.17),
+          tileColor: ColorManager.primaryWithOpacity,
           onChanged: (val) {
             setState(() {
               debugPrint('Selected Charger: \t$val');
@@ -221,7 +221,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           contentPadding: const EdgeInsets.all(0.0),
           value: typeCharger.Level3,
           groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.17),
+          tileColor: ColorManager.primaryWithOpacity,
           onChanged: (val) {
             setState(() {
               debugPrint('Selected Charger: \t$val');
@@ -322,7 +322,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
         ),
         Container(
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 border: Border.all()),
             padding: const EdgeInsets.all(4),
             height: 150,
@@ -462,15 +462,15 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.clear, color: Colors.white)),
+              icon: const Icon(Icons.arrow_back_ios_new)),
           title: const Text(
-            'Rent your Charger',
+            'List your Charger',
           ),
-          backgroundColor: ColorManager.appBlack.withOpacity(0.88),
         ),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: ColorManager.lightGrey,
         body: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -478,441 +478,405 @@ class _ListChargerFormState extends State<ListChargerForm> {
             : Form(
                 key: _formKey,
                 child: ListView(
+                  padding: const EdgeInsets.all(15.0),
                   children: <Widget>[
-                    Container(
-                      height: 220,
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child:
-                          const HeaderUI(220, true, ImageAssets.oldBlackMarker),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _makeTitle(title: 'Station Name'),
-                            TextFormField(
-                              onChanged: StoreStationName,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter a valid station name.';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText: 'Amog Public Charging Station',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_addressFocusNode),
-                              onSaved: (newValue) {
-                                setState(() {
-                                  StationName = newValue!;
-                                });
-                                // StoreStationName(StationName!);
-                              },
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Address'),
-                            TextFormField(
-                              onChanged: StoreStationAddress,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter a valid address.';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText:
-                                      '255-A, Himadri Society, Hudson Lane',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              keyboardType: TextInputType.streetAddress,
-                              textInputAction: TextInputAction.next,
-                              focusNode: _addressFocusNode,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_cityFocusNode),
-                              onSaved: (newValue) {
-                                setState(() {
-                                  StationAddress = newValue!;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'City'),
-                            TextFormField(
-                              onChanged: StoreCity,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter your city.';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText: 'Ambala',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              focusNode: _cityFocusNode,
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_pinCodeFocusNode),
-                              onSaved: (newValue) {
-                                city = newValue!;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                _makeTitle(title: 'Pin/Postal Code'),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.19,
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _makeTitle(title: 'Station Name'),
+                          TextFormField(
+                            onChanged: StoreStationName,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a valid station name.';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText: 'Amog Public Charging Station',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_addressFocusNode),
+                            onSaved: (newValue) {
+                              setState(() {
+                                StationName = newValue!;
+                              });
+                              // StoreStationName(StationName!);
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Address'),
+                          TextFormField(
+                            onChanged: StoreStationAddress,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a valid address.';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText: '255-A, Himadri Society, Hudson Lane',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            keyboardType: TextInputType.streetAddress,
+                            textInputAction: TextInputAction.next,
+                            focusNode: _addressFocusNode,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_cityFocusNode),
+                            onSaved: (newValue) {
+                              setState(() {
+                                StationAddress = newValue!;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'City'),
+                          TextFormField(
+                            onChanged: StoreCity,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter your city.';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText: 'Ambala',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            focusNode: _cityFocusNode,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_pinCodeFocusNode),
+                            onSaved: (newValue) {
+                              city = newValue!;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              _makeTitle(title: 'Pin/Postal Code'),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.19,
+                              ),
+                              _makeTitle(title: 'State/Province')
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  onChanged: StorePin,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Enter Pin.';
+                                    }
+                                    if (value.length < 6) {
+                                      return 'Enter Valid Code.';
+                                    }
+                                    return null;
+                                  },
+                                  textInputAction: TextInputAction.done,
+                                  style:
+                                      TextStyle(color: ColorManager.darkGrey),
+                                  decoration: InputDecoration(
+                                    hintText: '80085',
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8)),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  focusNode: _pinCodeFocusNode,
+                                  onFieldSubmitted: (_) =>
+                                      FocusScope.of(context)
+                                          .requestFocus(_stateFocusNode),
+                                  onSaved: (newValue) {
+                                    pinCode = newValue!;
+                                  },
                                 ),
-                                _makeTitle(title: 'State/Province')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    onChanged: StorePin,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Enter Pin.';
-                                      }
-                                      if (value.length < 6) {
-                                        return 'Enter Valid Code.';
-                                      }
-                                      return null;
-                                    },
-                                    textInputAction: TextInputAction.done,
-                                    style:
-                                        TextStyle(color: ColorManager.darkGrey),
-                                    decoration: InputDecoration(
-                                      hintText: '80085',
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  value: state,
+                                  decoration: const InputDecoration(
+                                      hintText: 'Select State',
+                                      // : ColorManager.primary.withOpacity(0.17),
                                       enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    focusNode: _pinCodeFocusNode,
-                                    onFieldSubmitted: (_) =>
-                                        FocusScope.of(context)
-                                            .requestFocus(_stateFocusNode),
-                                    onSaved: (newValue) {
-                                      pinCode = newValue!;
-                                    },
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8)))),
+                                  items: States.values
+                                      .map<DropdownMenuItem<String>>(
+                                          (States st) {
+                                    return DropdownMenuItem<String>(
+                                      value: st.toString().split('.')[1],
+                                      child: Text(st.toString().split('.')[1]),
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    if (val != null) StoreState(val);
+                                    setState(() {
+                                      state = val;
+                                    });
+                                  },
+                                  style:
+                                      TextStyle(color: ColorManager.darkGrey),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _takeChargerLocation(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          // _askCoordinates(),
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
+                          _makeTitle(title: 'Aadhar No.'),
+                          TextFormField(
+                            onChanged: StoreAadharNumber,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a valid aadhar number.';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText: 'XXXX-XXXX-XXXX-XXXX',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            focusNode: _aadharFocusNode,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_hostsFocusNode),
+                            onSaved: (newValue) {
+                              aadharNumber = newValue!;
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Host Names'),
+                          TextFormField(
+                            onChanged: StoreHostName,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter valid names.';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText:
+                                    'Priyanshu Maikhuri\nArshdeep Singh\nRaj',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            maxLines: 3,
+                            keyboardType: TextInputType.name,
+                            focusNode: _hostsFocusNode,
+                            textInputAction: TextInputAction.newline,
+                            onSaved: (newValue) {
+                              setState(() {
+                                hostNames = newValue!;
+                              });
+                            },
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Charger Type'),
+                          _chargerTypeRadioButtons(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Availability'),
+                          TimeIntervalPicker(
+                              borderColor: Colors.black,
+                              fillColor: ColorManager.primaryWithOpacity,
+                              borderRadius: 10,
+                              endLimit: DateTimeExtension.todayMidnight,
+                              startLimit: DateTimeExtension.todayStart,
+                              onChanged: (start, end, isAllDay) {
+                                _startAvailabilityTime = DateFormat('h:mm a')
+                                    .format(start!)
+                                    .toString();
+                                _endAvailabilityTime = DateFormat('h:mm a')
+                                    .format(end!)
+                                    .toString();
+                              }),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Price (₹KW/h)'),
+                          TextFormField(
+                            onChanged: StorePrice,
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                prefixText: '₹\t',
+                                prefixStyle: TextStyle(fontSize: FontSize.s16),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            focusNode: _priceFocusNode,
+                            onFieldSubmitted: (_) => FocusScope.of(context)
+                                .requestFocus(_amenitiesFocusNode),
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please provide a price greater than zero.';
+                              }
+                              return null;
+                            },
+                            onSaved: (newValue) {
+                              setState(() {
+                                amount = double.parse(newValue!);
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 15),
+                          _makeTitle(title: 'Amenities'),
+                          TextFormField(
+                            onChanged: Storeamenities,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please provide a list of available services';
+                              }
+                              return null;
+                            },
+                            style: TextStyle(color: ColorManager.darkGrey),
+                            decoration: const InputDecoration(
+                                hintText: 'Cafeteria/Toilets/Rest Room',
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                )),
+                            focusNode: _amenitiesFocusNode,
+                            maxLines: 3,
+                            keyboardType: TextInputType.multiline,
+                            textInputAction: TextInputAction.newline,
+                            onSaved: (newValue) {
+                              setState(() {
+                                amenities = newValue!;
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 15),
+                          Container(
+                            margin: const EdgeInsets.only(top: 15),
+                            child: _imageList!.isNotEmpty
+                                ? _showChargerImages()
+                                : SizedBox(
+                                    width: double.infinity,
+                                    height: MediaQuery.sizeOf(context).height *
+                                        0.04,
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          _showPhotoOptionsDialog();
+                                        },
+                                        style: //Theme.of(context).elevatedButtonTheme.style!.copyWith(backgroundColor: ColorManager.primaryWithOpacity,),
+                                            ElevatedButton.styleFrom(
+                                                backgroundColor: ColorManager
+                                                    .primaryWithOpacity,
+                                                foregroundColor:
+                                                    ColorManager.appBlack,
+                                                shadowColor:
+                                                    ColorManager.appBlack,
+                                                elevation: 6,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8))),
+                                        child: const Text(
+                                          'Charger-Location Images',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white),
+                                        )),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Expanded(
-                                  child: DropdownButtonFormField<String>(
-                                    value: state,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Select State',
-                                        // : ColorManager.primary.withOpacity(0.17),
-                                        enabledBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
-                                    items: States.values
-                                        .map<DropdownMenuItem<String>>(
-                                            (States st) {
-                                      return DropdownMenuItem<String>(
-                                        value: st.toString().split('.')[1],
-                                        child:
-                                            Text(st.toString().split('.')[1]),
-                                      );
-                                    }).toList(),
-                                    onChanged: (val) {
-                                      if (val != null) StoreState(val);
-                                      setState(() {
-                                        state = val;
-                                      });
-                                    },
-                                    style:
-                                        TextStyle(color: ColorManager.darkGrey),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _takeChargerLocation(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            // _askCoordinates(),
-                            // const SizedBox(
-                            //   height: 15,
-                            // ),
-                            _makeTitle(title: 'Aadhar No.'),
-                            TextFormField(
-                              onChanged: StoreAadharNumber,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter a valid aadhar number.';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText: 'XXXX-XXXX-XXXX-XXXX',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              focusNode: _aadharFocusNode,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_hostsFocusNode),
-                              onSaved: (newValue) {
-                                aadharNumber = newValue!;
-                              },
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Host Names'),
-                            TextFormField(
-                              onChanged: StoreHostName,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter valid names.';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText:
-                                      'Priyanshu Maikhuri\nArshdeep Singh\nRaj',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              maxLines: 3,
-                              keyboardType: TextInputType.name,
-                              focusNode: _hostsFocusNode,
-                              textInputAction: TextInputAction.newline,
-                              onSaved: (newValue) {
-                                setState(() {
-                                  hostNames = newValue!;
-                                });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Charger Type'),
-                            _chargerTypeRadioButtons(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Availability'),
-                            TimeIntervalPicker(
-                                borderColor: Colors.black,
-                                fillColor:
-                                    ColorManager.primary.withOpacity(0.17),
-                                borderRadius: 10,
-                                endLimit: DateTimeExtension.todayMidnight,
-                                startLimit: DateTimeExtension.todayStart,
-                                onChanged: (start, end, isAllDay) {
-                                  _startAvailabilityTime = DateFormat('h:mm a')
-                                      .format(start!)
-                                      .toString();
-                                  _endAvailabilityTime = DateFormat('h:mm a')
-                                      .format(end!)
-                                      .toString();
-                                }),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Price (₹KW/h)'),
-                            TextFormField(
-                              onChanged: StorePrice,
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  prefixText: '₹\t',
-                                  prefixStyle:
-                                      TextStyle(fontSize: FontSize.s16),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              focusNode: _priceFocusNode,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_amenitiesFocusNode),
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please provide a price greater than zero.';
-                                }
-                                return null;
-                              },
-                              onSaved: (newValue) {
-                                setState(() {
-                                  amount = double.parse(newValue!);
-                                });
-                              },
-                            ),
-                            const SizedBox(height: 15),
-                            _makeTitle(title: 'Amenities'),
-                            TextFormField(
-                              onChanged: Storeamenities,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please provide a list of available services';
-                                }
-                                return null;
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText: 'Cafeteria/Toilets/Rest Room',
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  )),
-                              focusNode: _amenitiesFocusNode,
-                              maxLines: 3,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.newline,
-                              onSaved: (newValue) {
-                                setState(() {
-                                  amenities = newValue!;
-                                });
-                              },
-                            ),
-                            const SizedBox(width: 15),
-                            Container(
-                              margin: const EdgeInsets.only(top: 15),
-                              child: _imageList!.isNotEmpty
-                                  ? _showChargerImages()
-                                  : Align(
-                                      alignment: Alignment.center,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            _showPhotoOptionsDialog();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.black87,
-                                              shadowColor:
-                                                  ColorManager.appBlack,
-                                              elevation: 6,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25))),
-                                          child: const Text(
-                                            'Charger Images',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white),
-                                          )),
-                                    ),
-                            )
-                          ]),
-                    ),
+                          )
+                        ]),
                     const SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: () async {
-                                  _submitForm;
-                                  StoreChargerType(++chargerType);
-                                  StoreAvailability(_startAvailabilityTime!,
-                                      _endAvailabilityTime!);
-                                  Storeg(_position);
-                                  await uploadImages(_imageList!).then(
-                                      (value) => {
-                                        // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-                                        // print(imageUrls),
-                                        StoreImageurl(imageUrls)});
+                    SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.sizeOf(context).height * 0.04,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            _submitForm;
+                            StoreChargerType(++chargerType);
+                            StoreAvailability(
+                                _startAvailabilityTime!, _endAvailabilityTime!);
+                            Storeg(_position);
+                            await uploadImages(_imageList!).then((value) => {
+                                  // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
+                                  // print(imageUrls),
+                                  StoreImageurl(imageUrls)
+                                });
 
-                                  userChargingDataProvider
-                                      .saveUserChargingData()
-                                      .then((_) => Navigator.pop(
-                                          context,
-                                          PageTransition(
-                                              type: PageTransitionType.fade,
-                                              child:
-                                                  const MyChargingScreen())));
+                            userChargingDataProvider
+                                .saveUserChargingData()
+                                .then((_) => Navigator.pop(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.fade,
+                                        child: const MyChargingScreen())));
 
-                                  await FirebaseFirestore.instance
-                                      .collection('user')
-                                      .where('uid',
-                                          isEqualTo: FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                      .get()
-                                      .then((QuerySnapshot<Map<String, dynamic>>
-                                          querySnapshot) {
-                                    if (querySnapshot.docs.isNotEmpty) {
-                                      var doc = querySnapshot.docs[0];
-                                      doc.reference
-                                          .update({'isProvider': true});
-                                    }
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorManager.primary.withOpacity(0.7),
-                                    shadowColor: ColorManager.appBlack,
-                                    elevation: 6,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25))),
-                                child: const Text(
-                                  'Add',
-                                  style: TextStyle(fontSize: 15),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorManager.primary.withOpacity(0.7),
-                                    shadowColor: ColorManager.appBlack,
-                                    elevation: 6,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25))),
-                                child: const Text(
-                                  'Cancel',
-                                  style: TextStyle(fontSize: 15),
-                                )),
-                          ),
-                        ],
-                      ),
+                            await FirebaseFirestore.instance
+                                .collection('user')
+                                .where('uid',
+                                    isEqualTo:
+                                        FirebaseAuth.instance.currentUser!.uid)
+                                .get()
+                                .then((QuerySnapshot<Map<String, dynamic>>
+                                    querySnapshot) {
+                              if (querySnapshot.docs.isNotEmpty) {
+                                var doc = querySnapshot.docs[0];
+                                doc.reference.update({'isProvider': true});
+                              }
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  ColorManager.primaryWithOpacity,
+                              shadowColor: ColorManager.appBlack,
+                              elevation: 6,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          child: const Text(
+                            'Add',
+                            style: TextStyle(fontSize: 15),
+                          )),
                     ),
                     const SizedBox(
                       height: 40,
