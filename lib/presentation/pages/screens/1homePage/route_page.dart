@@ -230,6 +230,9 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
+        var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
+        var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
 
         if (geoPoint != null &&
             geohash != null &&
@@ -238,7 +241,10 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             stnImgUrl != null &&
             stateName != null &&
             startTime != null &&
-            endTime != null) {
+            endTime != null &&
+            chargerType != null &&
+            amenities != null &&
+            hostName != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -247,7 +253,9 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           stateName = stateName as String;
           startTime = startTime as String;
           endTime = endTime as String;
-
+          chargerType = chargerType as String;
+          amenities = amenities as String;
+          hostName = hostName as String;
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
@@ -265,16 +273,18 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
-                      stationName: stnName,
-                      address: stnAddress,
-                      imageUrl: stnImgUrl,
-                      geopoint: geoPoint,
-                      geohash: geohash,
-                      costOfFullCharge: price,
-                      timeStamp: '$startTime - $endTime',
+                        stationName: stnName,
+                        address: stnAddress,
+                        imageUrl: stnImgUrl,
+                        geopoint: geoPoint,
+                        geohash: geohash,
+                        costOfFullCharge: price,
+                        chargerType: chargerType,
+                        amenities: amenities,
+                        hostName: hostName,
+                        timeStamp: '$startTime - $endTime',
                       chargerId: ds.id,
-                      providerId: data['uid']
-                    );
+                      providerId: data['uid']);
                   },
                 );
               },

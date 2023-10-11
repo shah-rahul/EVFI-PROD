@@ -167,7 +167,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                       speed: 0,
                       heading: 0,
                       speedAccuracy: 0,
-                      floor: 0);
+                      floor: 0, altitudeAccuracy: 0, headingAccuracy: 0);
                   widget.onLocationSelected(placePos);
                   _options.clear();
                   suggestions = false;
