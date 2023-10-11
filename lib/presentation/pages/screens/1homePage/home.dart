@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,9 +14,7 @@ import 'package:getwidget/getwidget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../resources/assets_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../widgets/marker_infowindow.dart';
@@ -53,7 +50,9 @@ class HomeState extends State<Home> {
       altitude: 0,
       heading: 0,
       speed: 0,
-      speedAccuracy: 0);
+      speedAccuracy: 0,
+      altitudeAccuracy: 0,
+      headingAccuracy: 0);
 
   @override
   void initState() {
@@ -205,6 +204,10 @@ class HomeState extends State<Home> {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
+        var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
+        var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
+
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
 
@@ -215,7 +218,10 @@ class HomeState extends State<Home> {
             // stnImgUrl != null &&
             stateName != null &&
             startTime != null &&
-            endTime != null) {
+            endTime != null &&
+            chargerType != null &&
+            amenities != null &&
+            hostName != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -224,8 +230,9 @@ class HomeState extends State<Home> {
           stateName = stateName as String;
           startTime = startTime as String;
           endTime = endTime as String;
-          print(data);
-          print("------");
+          chargerType = chargerType as String;
+          amenities = amenities as String;
+          hostName = hostName as String;
 
           _markers.add(Marker(
               markerId: MarkerId(geohash),
@@ -249,6 +256,9 @@ class HomeState extends State<Home> {
                         geopoint: geoPoint,
                         geohash: geohash,
                         costOfFullCharge: price,
+                        chargerType: chargerType,
+                        amenities: amenities,
+                        hostName: hostName,
                         timeStamp: '$startTime - $endTime',
                         chargerId: ds.id,
                         providerId: data['uid']);

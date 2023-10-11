@@ -1,19 +1,16 @@
-// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
-
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/profilesection.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/settings.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../Providers/bookingProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../widgets/BookingDataWidget.dart';
-import 'new_station.dart';
+
+import '../4accountPage/new_station.dart';
 
 String username = "Mr. evfi";
 String firstname = "";
@@ -25,6 +22,7 @@ String country = "";
 String state = "";
 String city = "";
 String pincode = "";
+List<dynamic> user_images = [];
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -45,6 +43,7 @@ class _AccountState extends State<Account> {
       if (user != null) {
         // User is signed in, fetch user data from Firestore
         _fetchUserData(user.uid);
+        setState(() {});
       }
     });
   }
@@ -66,7 +65,8 @@ class _AccountState extends State<Account> {
         state = userData['state'];
         city = userData['city'];
         pincode = userData['pinCode'];
-        clickedImage = userData['userImage'];
+        //clickedImage = userData['userImage'];
+        user_images = userData['userImage'];
       });
     } catch (e) {
       print('Error fetching user data: $e');
@@ -188,15 +188,6 @@ class _AccountState extends State<Account> {
                 child: settingSection(
                     context, Icons.location_on_outlined, 'Add Station')),
             const SizedBox(height: 100),
-            // StreamBuilder<BookingDataWidget>(
-            //     stream: bookingObject.stream,
-            //     builder: (context, snapshot) {
-            //       print("************");
-            //       if (snapshot.data != null)
-            //         return Text(snapshot.data!.stationName);
-
-            //       return Text(" ");
-            //     })
           ],
         ),
       ),
@@ -231,7 +222,7 @@ Widget profileSection(BuildContext context) {
   Widget content = CircleAvatar(
     radius: 30,
     backgroundColor: ColorManager.primary,
-    child: Icon(
+    child: const Icon(
       Icons.camera_alt_rounded,
       color: Colors.black,
       size: 40,
@@ -272,7 +263,7 @@ Widget profileSection(BuildContext context) {
               ),
             ),
             Text(
-              email,
+              phoneNo,
               style: const TextStyle(
                 fontWeight: FontWeight.w300,
                 fontStyle: FontStyle.italic,
@@ -310,12 +301,12 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
     child: Column(
       children: [
         Icon(icon),
-        SizedBox(
+        const SizedBox(
           height: 4,
         ),
         Text(
           str,
-          style: TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12),
         ),
       ],
     ),
