@@ -205,6 +205,7 @@ class HomeState extends State<Home> {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        print(data);
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
 

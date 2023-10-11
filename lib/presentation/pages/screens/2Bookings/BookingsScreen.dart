@@ -177,7 +177,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ));
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
+  Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
       String customerId, String chargerId) async {
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
@@ -189,7 +189,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     print(customerId);
     final customerDetails = await FirebaseFirestore.instance
         .collection('user')
-        .where('uid', isEqualTo: customerId)
+        .doc(customerId)
         .get();
 
     return customerDetails;
@@ -242,7 +242,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             documents[index].data()!['userId'],
                             documents[index].data()!['chargerId']),
                         builder: ((context,
-                            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
                           print(snapshots);
                           if (snapshots.connectionState ==
