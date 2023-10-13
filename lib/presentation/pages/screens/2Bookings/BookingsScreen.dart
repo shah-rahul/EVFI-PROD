@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names, prefer_const_constructors, sized_box_for_whitespace
 import 'dart:async';
 
+import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/pages/widgets/BookingDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,31 +12,31 @@ import 'package:page_transition/page_transition.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/styles_manager.dart';
-import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
 
-List<Booking> BookingList = [
-  Booking(
-      customerName: "Arshdeep Singh",
-      stationName: "Aomg Charging Station Hub",
-      customerMobileNumber: "+918989898989",
-      timeStamp: DateTime.now().toString(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0),
-  Booking(
-      customerName: "Priyanshu Maikhuri",
-      stationName: "Aomg Charging Station Hub",
-      customerMobileNumber: "+913131313131",
-      timeStamp: DateTime.now().toString(),
-      amount: 120,
-      status: 1,
-      ratings: 4.0)
-];
+// List<Booking> BookingList = [
+//   Booking(
+//       customerName: "Arshdeep Singh",
+//       stationName: "Aomg Charging Station Hub",
+//       customerMobileNumber: "+918989898989",
+//       timeStamp: DateTime.now().toString(),
+//       amount: 120,
+//       status: 1,
+//       ratings: 4.0),
+//   Booking(
+//       customerName: "Priyanshu Maikhuri",
+//       stationName: "Aomg Charging Station Hub",
+//       customerMobileNumber: "+913131313131",
+//       timeStamp: DateTime.now().toString(),
+//       amount: 120,
+//       status: 1,
+//       ratings: 4.0)
+// ];
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   void _addCharger() async {
     Navigator.of(context).push(PageTransition(
-        child: const ListCharger(), type: PageTransitionType.theme));
+        child: const ListChargerForm(), type: PageTransitionType.theme));
     if (_isProvider) {
       return;
     }
@@ -111,7 +112,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 IconButton(
                     onPressed: () {
                       Navigator.of(context).push(PageTransition(
-                          child: const ListCharger(),
+                          child: const ListChargerForm(),
                           type: PageTransitionType.theme));
                     },
                     icon: const Icon(
@@ -124,57 +125,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 child:
                     _currentSelected ? PendingScreen(context) : RecentScreen()),
           )
-        : Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.all(25),
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        ColorManager.grey3.withOpacity(0.68),
-                        Colors.black87
-                      ],
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      stops: const [0.3, 0.7])),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      margin: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.24),
-                      child: Image.asset(
-                        ImageAssets.carCharger,
-                        scale: 1.35,
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'List, Rent \nand Earn easily.',
-                    style: getBoldStyle(
-                        fontSize: FontSize.s35, color: ColorManager.primary),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  ElevatedButton.icon(
-                      onPressed: _addCharger,
-                      icon:
-                          const Icon(Icons.bolt, color: Colors.green, size: 35),
-                      style: Theme.of(context).elevatedButtonTheme.style,
-                      label: const Text(
-                        'List your charger',
-                        style: TextStyle(
-                            fontSize: FontSize.s14,
-                            fontWeight: FontWeight.w600),
-                      ))
-                ],
-              ),
-            ));
+        : ListChargersPage(addCharger: _addCharger);
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
@@ -183,7 +134,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
         .collection('chargers')
         .doc(chargerId)
         .get();
-
     stationName = chargerDetails['info']['stationName'];
     print(stationName);
     print(customerId);
@@ -191,7 +141,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
         .collection('user')
         .doc(customerId)
         .get();
-
     return customerDetails;
   }
 
@@ -239,7 +188,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
-                            documents[index].data()!['userId'],
+                            documents[index].data()!['uId'],
                             documents[index].data()!['chargerId']),
                         builder: ((context,
                             AsyncSnapshot<
@@ -261,16 +210,19 @@ class _BookingsScreenState extends State<BookingsScreen> {
                           }
                           return Column(children: [
                             BookingWidget(
-                                bookingItem: Booking(
-                                    amount: documents[index]['price'],
-                                    timeStamp: documents[index]['timeSlot'],
-                                    stationName: stationName,
-                                    customerName: 'snapshots',
-                                    customerMobileNumber: 'phoneNumber',
-                                    status: documents[index]['status'],
-                                    ratings: 4),
-                                currentTab: tab,
-                                bookingId: documents[index].id),
+                              bookingItem: Booking(
+                                  amount: documents[index]['price'],
+                                  timeStamp: documents[index]['timeSlot'],
+                                  stationName: stationName,
+                                  customerName: snapshots.data!['name'],
+                                  customerMobileNumber:
+                                      snapshots.data!['phoneNumber'],
+                                  status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
+                                  ratings: 4),
+                              currentTab: tab,
+                            ),
                             const SizedBox(
                               height: 5,
                             )
@@ -345,287 +297,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
-        SizedBox(
-          height: 5,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Row(
-            children: const [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Time slot- 23:00 3:00',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '73085789349854',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(40),
-                  ),
-                  ClipOval(
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Row(
-            children: const [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Time slot- 23:00 3:00',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '73085789349854',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(40),
-                  ),
-                  ClipOval(
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Row(
-            children: const [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      'Time slot- 23:00 3:00',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '73085789349854',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        // fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: 30), // Add vertical padding
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(40),
-                  ),
-                  ClipOval(
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        // streamBuilder(AppStrings.BookingScreenPendingTab)
+        streamBuilder(AppStrings.BookingScreenPendingTab)
       ],
     );
   }
@@ -664,9 +336,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels =
-        340 / MediaQuery.of(context).devicePixelRatio;
     return Column(
       children: [
         Container(
@@ -721,293 +390,76 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 10),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFF6D4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(
-          height: 10,
-        ),
-
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(
-          height: 10,
-        ),
-
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // streamBuilder(AppStrings.BookingScreenRecentTab)
+        // const SizedBox(height: 10),
+        // Container(
+        //   width: widthInLogicalPixels, // Adjust as needed
+        //   height: heightInLogicalPixels, // Adjust as neede
+        //   decoration: BoxDecoration(
+        //     color: Color(0xFFD0F4D5),
+        //     borderRadius: BorderRadius.circular(30),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         offset: Offset(-8, 6),
+        //         blurRadius: 50,
+        //         color: Color.fromRGBO(0, 0, 0, 0.25),
+        //       ),
+        //     ],
+        //   ),
+        //   child: Column(
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 30),
+        //         child: Text(
+        //           'Rahul ka Charger',
+        //           style: TextStyle(
+        //             color: Colors.black,
+        //             fontSize: 18,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //       ),
+        //       SizedBox(height: 5),
+        //       Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 30),
+        //         child: Text(
+        //           'Time slot- 23:00 3:00',
+        //           style: TextStyle(
+        //             color: Colors.black,
+        //             fontSize: 18,
+        //             // fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //       ),
+        //       SizedBox(height: 5),
+        //       Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 30),
+        //         child: Text(
+        //           '73085789349854',
+        //           style: TextStyle(
+        //             color: Colors.black,
+        //             fontSize: 18,
+        //             // fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //       ),
+        //       SizedBox(height: 5),
+        //       Padding(
+        //         padding: EdgeInsets.symmetric(horizontal: 30),
+        //         child: Text(
+        //           '₹ 600',
+        //           style: TextStyle(
+        //             color: Colors.black,
+        //             fontSize: 18,
+        //             fontWeight: FontWeight.bold,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        streamBuilder(AppStrings.BookingScreenRecentTab)
       ],
     );
   }

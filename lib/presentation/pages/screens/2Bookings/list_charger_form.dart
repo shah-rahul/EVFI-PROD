@@ -2,10 +2,12 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:intl/intl.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../models/pricing_model.dart';
 
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -30,14 +32,14 @@ import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
-class ListCharger extends StatefulWidget {
-  const ListCharger({Key? key}) : super(key: key);
+class ListChargerForm extends StatefulWidget {
+  const ListChargerForm({Key? key}) : super(key: key);
 
   @override
-  State<ListCharger> createState() => _ListChargerState();
+  State<ListChargerForm> createState() => _ListChargerFormState();
 }
 
-class _ListChargerState extends State<ListCharger> {
+class _ListChargerFormState extends State<ListChargerForm> {
   // Chargers charger = Chargers();
   late GoogleMapController _controller;
 
@@ -621,12 +623,12 @@ class _ListChargerState extends State<ListCharger> {
                                   ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 3,
                                 ),
                                 Expanded(
                                   child: DropdownButtonFormField<String>(
                                     value: state,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                         hintText: 'Select State',
                                         // : ColorManager.primary.withOpacity(0.17),
                                         enabledBorder: OutlineInputBorder(
@@ -840,7 +842,7 @@ class _ListChargerState extends State<ListCharger> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: ElevatedButton(//boolean function
+                            child: ElevatedButton(
                                 onPressed: () async {
                                   _submitForm;
                                   StoreChargerType(++chargerType);
@@ -862,10 +864,20 @@ class _ListChargerState extends State<ListCharger> {
                                               child:
                                                   const MyChargingScreen())));
 
-                                  // print(
-                                  //     'Latitude: ${_selectedLocation.latitude}');
-                                  // print(
-                                  //     'Longitude: ${_selectedLocation.longitude}');
+                                  await FirebaseFirestore.instance
+                                      .collection('user')
+                                      .where('uid',
+                                          isEqualTo: FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                      .get()
+                                      .then((QuerySnapshot<Map<String, dynamic>>
+                                          querySnapshot) {
+                                    if (querySnapshot.docs.isNotEmpty) {
+                                      var doc = querySnapshot.docs[0];
+                                      doc.reference
+                                          .update({'isProvider': true});
+                                    }
+                                  });
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:

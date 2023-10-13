@@ -6,17 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/vehicle_chargings.dart';
 import '../../resources/color_manager.dart';
-import '../../resources/strings_manager.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class MyChargingWidget extends StatefulWidget {
   Charging chargingItem;
-  String currentTab, bookingId;
-  MyChargingWidget(
-      {required this.chargingItem,
-      required this.currentTab,
-      required this.bookingId});
+  String currentTab;
+  MyChargingWidget({required this.chargingItem, required this.currentTab});
 
   @override
   State<MyChargingWidget> createState() => _MyChargingWidgetState();
@@ -76,104 +72,224 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     //         status == LendingStatus.requested ||
     //         status == LendingStatus.charging)) return Container();
 
-    return SizedBox(
-      width: 95,
-      height: 35,
-      child: ElevatedButton(
-          onPressed: () {},
-          child: Text(
-            statusText,
-            // style: TextStyle(color: textColor),
-          ),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: buttonColor,
-            foregroundColor: textColor,
-            elevation: 3,
-          )),
-    );
+    return ElevatedButton(
+        onPressed: () {},
+        child: Text(
+          statusText,
+          // style: TextStyle(color: textColor),
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonColor,
+          foregroundColor: textColor,
+          elevation: 3,
+        ));
   }
 
+  Color statusColor = Colors.white;
   @override
+  void initState() {
+    getStatusColor();
+    super.initState();
+  }
+
+  void getStatusColor() {
+    if (widget.chargingItem.status == 2)
+      statusColor = Colors.green;
+    else if (widget.chargingItem.status == -1) statusColor = Colors.red;
+  }
+
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: ColorManager.CardshadowBottomRight,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(AppMargin.m12 - 4),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+    getStatusColor();
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
+    double widthInLogicalPixels1 =
+        394.835 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels1 =
+        81.83 / MediaQuery.of(context).devicePixelRatio;
+    return Container(
+      width: widthInLogicalPixels, // Adjust as needed
+      height: heightInLogicalPixels, // Adjust as needed
+      decoration: BoxDecoration(
+        color: statusColor,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-8, 6),
+            blurRadius: 50,
+            color: Color.fromRGBO(0, 0, 0, 0.25),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.chargingItem.stationName,
-                style: const TextStyle(
-                    fontSize: AppSize.s20, fontWeight: FontWeight.bold),
-              ),
-              statusButton(widget.chargingItem.status),
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(widget.chargingItem.stationAddress,
-              style: const TextStyle(fontSize: AppSize.s14)),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            children: [
-              const Icon(Icons.access_time),
               Padding(
-                  padding: const EdgeInsets.only(left: AppPadding.p12 - 8),
-                  child: Text(widget.chargingItem.slotChosen)),
-            ],
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          Row(
-            // crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              RatingBarIndicator(
-                rating: Random().nextDouble() * 5,
-                itemBuilder: (context, index) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
+                padding: EdgeInsets.symmetric(horizontal: 30),
+                child: Text(
+                  widget.chargingItem.stationName,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                itemCount: 5,
-                itemSize: 23.0,
-                direction: Axis.horizontal,
               ),
-              const Spacer(),
-              if (widget.chargingItem.status == 1)
-                ElevatedButton.icon(
-                    onPressed: () async {
-                      CollectionReference users =
-                          FirebaseFirestore.instance.collection('booking');
-                      DocumentReference docRef = users.doc(widget.bookingId);
-                      await docRef.update({
-                        'status': -1,
-                      });
-                    },
-                    icon: const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                    label: const Text(
-                      '\tCancel',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorManager.error,
-                      elevation: 3,
-                    )),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 60),
+                child: Text(
+                  '₹ ${widget.chargingItem.amount.toString()}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
-        ]),
+          SizedBox(height: 5),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              'Time slot- ${widget.chargingItem.slotChosen}',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          SizedBox(height: 5),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30),
+            child: Text(
+              widget.chargingItem.phoneNumber,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+          ),
+          SizedBox(height: 2),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(40),
+              ),
+              if (widget.chargingItem.status == 1)
+                GestureDetector(
+                  onTap: () async {
+                    CollectionReference users =
+                        FirebaseFirestore.instance.collection('booking');
+                    DocumentReference docRef =
+                        users.doc(widget.chargingItem.id);
+                    await docRef.update({
+                      'status': -1,
+                    });
+                  },
+                  child: ClipOval(
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          // if (widget.chargingItem.status == 2 ||
+          //     widget.chargingItem.status == -1)
+
+          //change the color accordingly
+        ],
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Card(
+  //     shadowColor: ColorManager.CardshadowBottomRight,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //     elevation: 4,
+  //     color: Colors.white,
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(AppMargin.m12 - 4),
+  //       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Text(
+  //               widget.chargingItem.stationName,
+  //               style: const TextStyle(
+  //                   fontSize: AppSize.s20, fontWeight: FontWeight.bold),
+  //             ),
+  //             statusButton(widget.chargingItem.status),
+  //           ],
+  //         ),
+  //         Text(widget.chargingItem.stationAddress,
+  //             style: const TextStyle(fontSize: AppSize.s14)),
+  //         const SizedBox(
+  //           height: 5,
+  //         ),
+  //         Row(
+  //           children: [
+  //             const Icon(Icons.access_time),
+  //             Text(
+  //               widget.chargingItem.slotChosen,
+  //               style: const TextStyle(fontSize: 12),
+  //             ),
+  //             const Spacer(),
+  //             Text(widget.chargingItem.date),
+  //           ],
+  //         ),
+  //         const SizedBox(
+  //           height: 8,
+  //         ),
+  //         Row(
+  //           children: [
+  //             RatingBarIndicator(
+  //               rating: Random().nextDouble() * 5,
+  //               itemBuilder: (context, index) => const Icon(
+  //                 Icons.star,
+  //                 color: Colors.amber,
+  //               ),
+  //               itemCount: 5,
+  //               itemSize: 23.0,
+  //               direction: Axis.horizontal,
+  //             ),
+  //             const Spacer(),
+  //             if (widget.chargingItem.status == 1)
+  //               ElevatedButton.icon(
+  //                   onPressed: () async {
+  //                     CollectionReference users =
+  //                         FirebaseFirestore.instance.collection('booking');
+  //                     DocumentReference docRef =
+  //                         users.doc(widget.chargingItem.id);
+  //                     await docRef.update({
+  //                       'status': -1,
+  //                     });
+  //                   },
+  //                   icon: const Icon(
+  //                     Icons.close,
+  //                     color: Colors.white,
+  //                     size: 20,
+  //                   ),
+  //                   label: const Text(
+  //                     '\tCancel',
+  //                     style: TextStyle(color: Colors.white),
+  //                   ),
+  //                   style: ElevatedButton.styleFrom(
+  //                     backgroundColor: ColorManager.error,
+  //                     elevation: 3,
+  //                   )),
+  //           ],
+  //         ),
+  //       ]),
+  //     ),
+  //   );
+  // }
 }

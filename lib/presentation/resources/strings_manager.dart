@@ -24,7 +24,7 @@ class AppStrings {
   static const MyChargingTitle = "Your Bookings";
   static const BookingTitle = "Dashboard";
   static const ChargingScreenRecentTab = "Recent";
-  static const ChargingScreenCurrentTab = "Pending";
+  static const ChargingScreenCurrentTab = "Current";
   static const BookingScreenPendingTab = "Pending";
   static const BookingScreenRecentTab = "Recent";
 

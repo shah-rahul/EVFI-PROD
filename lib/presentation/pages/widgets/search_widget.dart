@@ -159,6 +159,8 @@ class _SearchWidgetState extends State<SearchWidget> {
                     controller.text = _options[index].displayname;
                   });
                   Position placePos = Position(
+                      headingAccuracy: 0,
+                      altitudeAccuracy: 0,
                       latitude: _options[index].latitude,
                       longitude: _options[index].longitude,
                       timestamp: DateTime.now(),

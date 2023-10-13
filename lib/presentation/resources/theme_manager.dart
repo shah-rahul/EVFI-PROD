@@ -45,11 +45,10 @@ ThemeData getApplicationTheme() {
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               textStyle: getRegularStyle(color: Colors.white),
-              primary: Colors.white,
+              primary: ColorManager.primary,
               onPrimary: ColorManager.appBlack,
-              // padding: const EdgeInsets.all(5),
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(28)))),
+                  borderRadius: BorderRadius.circular(8)))),
 
       // Text theme
       textTheme: TextTheme(

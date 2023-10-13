@@ -11,11 +11,8 @@ import '../../resources/color_manager.dart';
 // ignore: must_be_immutable
 class BookingWidget extends StatefulWidget {
   Booking bookingItem;
-  final String currentTab, bookingId;
-  BookingWidget(
-      {required this.bookingItem,
-      required this.currentTab,
-      required this.bookingId});
+  final String currentTab;
+  BookingWidget({required this.bookingItem, required this.currentTab});
 
   @override
   State<BookingWidget> createState() => _BookingWidgetState();
@@ -37,7 +34,6 @@ class _BookingWidgetState extends State<BookingWidget> {
   //     buttonColor = ColorManager.grey3;
   //     textColor = Colors.white;
   //   }
-
   //   return SizedBox(
   //     width: 84,
   //     height: 20,
@@ -116,139 +112,289 @@ class _BookingWidgetState extends State<BookingWidget> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: ColorManager.CardshadowBottomRight,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(AppMargin.m12 - 4),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels =
+        340 / MediaQuery.of(context).devicePixelRatio;
+    double widthInLogicalPixels1 =
+        394.835 / MediaQuery.of(context).devicePixelRatio;
+    double heightInLogicalPixels1 =
+        81.83 / MediaQuery.of(context).devicePixelRatio;
+    return Container(
+      width: widthInLogicalPixels, // Adjust as needed
+      height: heightInLogicalPixels, // Adjust as needed
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(30),
+        boxShadow: [
+          BoxShadow(
+            offset: Offset(-8, 6),
+            blurRadius: 50,
+            color: Color.fromRGBO(0, 0, 0, 0.25),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                widget.bookingItem.customerName,
-                style: const TextStyle(
-                    fontSize: AppSize.s20, fontWeight: FontWeight.w600),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    Icons.currency_rupee,
-                    size: AppSize.s18,
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30), // Add vertical padding
+                child: Text(
+                  widget.bookingItem.customerName,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    widget.bookingItem.amount.toString(),
-                    style: const TextStyle(
-                        fontSize: AppSize.s20, fontWeight: FontWeight.w600),
-                  ),
-                ],
+                ),
               ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30), // Add vertical padding
+                child: Text(
+                  'Time slot- ${widget.bookingItem.timeStamp}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30), // Add vertical padding
+                child: Text(
+                  widget.bookingItem.customerMobileNumber,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    // fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 30), // Add vertical padding
+                child: Text(
+                  '₹ ${widget.bookingItem.amount.toString()}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              if (widget.bookingItem.status == 2 ||
+                  widget.bookingItem.status == -1)
+                statusButton(widget.bookingItem.status)
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Text(widget.bookingItem.stationName,
-              style: const TextStyle(fontSize: AppSize.s12)),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                const Icon(Icons.access_time),
-                Padding(
-                    padding: const EdgeInsets.all(AppPadding.p12 - 8),
-                    child: Text(widget.bookingItem.timeStamp)),
-              ],
-            ),
-            if (widget.bookingItem.status == 2 ||
-                widget.bookingItem.status == -1)
-              statusButton(widget.bookingItem.status)
-          ]),
-          const SizedBox(
-            height: 5,
-          ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.call,
-                    size: AppSize.s18,
-                  ),
-                  Text(widget.bookingItem.customerMobileNumber,
-                      style: const TextStyle(fontSize: AppSize.s12)),
-                ],
-              ),
-              Row(
-                children: [
-                  if (widget.bookingItem.status != 2 &&
-                      widget.bookingItem.status != -1)
-                    SizedBox(
-                      width: 84,
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            CollectionReference users = FirebaseFirestore
-                                .instance
-                                .collection('booking');
-                            DocumentReference docRef =
-                                users.doc(widget.bookingId);
-                            await docRef.update({
-                              'status': 2,
-                            });
-                          },
-                          child: Text(
-                            AppStrings.AcceptButton,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            elevation: 3,
-                          )),
+              if (widget.bookingItem.status != 2 &&
+                  widget.bookingItem.status != -1)
+                Container(
+                  width: widthInLogicalPixels1,
+                  height: heightInLogicalPixels1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      CollectionReference users =
+                          FirebaseFirestore.instance.collection('booking');
+                      DocumentReference docRef =
+                          users.doc(widget.bookingItem.id);
+                      await docRef.update({
+                        'status': 2,
+                      });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
                     ),
-                  SizedBox(
-                    width: AppSize.s12,
+                    child: const Text(AppStrings.AcceptButton,
+                        style: TextStyle(color: Colors.black)),
                   ),
-                  if (widget.bookingItem.status != -1)
-                    SizedBox(
-                      width: 84,
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            CollectionReference users = FirebaseFirestore
-                                .instance
-                                .collection('booking');
-                            DocumentReference docRef =
-                                users.doc(widget.bookingId);
-                            await docRef.update({
-                              'status': -1,
-                            });
-                          },
-                          child: Text(
-                            AppStrings.DeclineButton,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorManager.grey3,
-                            elevation: 3,
-                          )),
+                ),
+              if (widget.bookingItem.status != -1)
+                Container(
+                  width: widthInLogicalPixels1,
+                  height: heightInLogicalPixels1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      CollectionReference users =
+                          FirebaseFirestore.instance.collection('booking');
+                      DocumentReference docRef =
+                          users.doc(widget.bookingItem.id);
+                      await docRef.update({
+                        'status': -1,
+                      });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
                     ),
-                ],
-              )
+                    child: const Text(AppStrings.DeclineButton,
+                        style: TextStyle(color: Colors.black)),
+                  ),
+                ),
             ],
           ),
-          const SizedBox(
-            height: 5,
-          ),
-        ]),
+        ],
       ),
     );
   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Card(
+//       shadowColor: ColorManager.CardshadowBottomRight,
+//       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+//       elevation: 4,
+//       color: Colors.white,
+//       child: Padding(
+//         padding: const EdgeInsets.all(AppMargin.m12 - 4),
+//         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Text(
+//                 widget.bookingItem.customerName,
+//                 style: const TextStyle(
+//                     fontSize: AppSize.s20, fontWeight: FontWeight.w600),
+//               ),
+//               Row(
+//                 children: [
+//                   Icon(
+//                     Icons.currency_rupee,
+//                     size: AppSize.s18,
+//                   ),
+//                   Text(
+//                     widget.bookingItem.amount.toString(),
+//                     style: const TextStyle(
+//                         fontSize: AppSize.s20, fontWeight: FontWeight.w600),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//           const SizedBox(
+//             height: 8,
+//           ),
+//           Text(widget.bookingItem.stationName,
+//               style: const TextStyle(fontSize: AppSize.s12)),
+//           const SizedBox(
+//             height: 5,
+//           ),
+// //           Padding(
+// //             padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 8),
+// //             child: Row(
+// //               children: [
+// //                 const Icon(Icons.access_time),
+// //                 Text(widget.bookingItem.timeStamp, style: TextStyle(fontSize: 12)),
+// //                 Spacer(),
+// //                 Text(widget.bookingItem.date),
+// //               ],
+// //             ),
+// //           ),
+//           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+//             Row(
+//               children: [
+//                 const Icon(Icons.access_time),
+//                 Padding(
+//                     padding: const EdgeInsets.all(AppPadding.p12 - 8),
+//                     child: Text(widget.bookingItem.timeStamp)),
+//               ],
+//             ),
+//             if (widget.bookingItem.status == 2 ||
+//                 widget.bookingItem.status == -1)
+//               statusButton(widget.bookingItem.status)
+//           ]),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Row(
+//                 children: [
+//                   Icon(
+//                     Icons.call,
+//                     size: AppSize.s18,
+//                   ),
+//                   Text(widget.bookingItem.customerMobileNumber,
+//                       style: const TextStyle(fontSize: AppSize.s12)),
+//                 ],
+//               ),
+//               Row(
+//                 children: [
+//                   if (widget.bookingItem.status != 2 &&
+//                       widget.bookingItem.status != -1)
+//                     SizedBox(
+//                       width: 84,
+//                       height: 20,
+//                       child: ElevatedButton(
+//                           onPressed: () async {
+//                             CollectionReference users = FirebaseFirestore
+//                                 .instance
+//                                 .collection('booking');
+//                             DocumentReference docRef =
+//                                 users.doc(widget.bookingItem.id);
+//                             await docRef.update({
+//                               'status': 2,
+//                             });
+//                           },
+//                           child: Text(
+//                             AppStrings.AcceptButton,
+//                             style: TextStyle(color: Colors.black),
+//                           ),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: Colors.white,
+//                             elevation: 3,
+//                           )),
+//                     ),
+//                   SizedBox(
+//                     width: AppSize.s12,
+//                   ),
+//                   if (widget.bookingItem.status != -1)
+//                     SizedBox(
+//                       width: 84,
+//                       height: 20,
+//                       child: ElevatedButton(
+//                           onPressed: () async {
+//                             CollectionReference users = FirebaseFirestore
+//                                 .instance
+//                                 .collection('booking');
+//                             DocumentReference docRef =
+//                                 users.doc(widget.bookingItem.id);
+//                             await docRef.update({
+//                               'status': -1,
+//                             });
+//                           },
+//                           child: Text(
+//                             AppStrings.DeclineButton,
+//                             style: TextStyle(color: Colors.white),
+//                           ),
+//                           style: ElevatedButton.styleFrom(
+//                             backgroundColor: ColorManager.grey3,
+//                             elevation: 3,
+//                           )),
+//                     ),
+//                 ],
+//               )
+//             ],
+//           ),
+//           const SizedBox(
+//             height: 5,
+//           ),
+//         ]),
+//       ),
+//     );
+//   }
 }

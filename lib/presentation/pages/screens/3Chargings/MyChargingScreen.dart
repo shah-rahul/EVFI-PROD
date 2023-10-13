@@ -74,6 +74,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
       String chargerId) async {
     print("88");
+    print(chargerId);
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
         .doc(chargerId)
@@ -93,14 +94,16 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
                   ? FirebaseFirestore.instance
                       .collection('booking')
-                      .where('userId', isEqualTo: currentUid)
+                      .where('uId', isEqualTo: currentUid)
                       .where('status', whereIn: [0, 1, 2]).snapshots()
                   : FirebaseFirestore.instance
                       .collection('booking')
-                      .where('userId', isEqualTo: currentUid)
+                      .where('uId', isEqualTo: currentUid)
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                print(snapshot.data);
+                print("****");
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 }
@@ -124,6 +127,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
                 return ListView.builder(
                   itemBuilder: (context, index) {
+                    print(documents[index].data());
                     return FutureBuilder(
                         future: getChargerDetailsByChargerId(
                             documents[index].data()!['chargerId']),
@@ -146,20 +150,23 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           }
                           return Column(children: [
                             MyChargingWidget(
-                                chargingItem: Charging(
-                                    amount: documents[index]['price'],
-                                    position: const LatLng(0,
-                                        0), //later to show path till charger we'll use charger coordinates
-                                    slotChosen: documents[index]['timeSlot'],
-                                    stationAddress: snapshots.data!['info']
-                                        ['address'],
-                                    stationName: snapshots.data!['info']
-                                        ['stationName'],
-                                    status: documents[index]['status'],
-                                    type: 1,
-                                    ratings: 1),
-                                currentTab: tab,
-                                bookingId: documents[index].id),
+                              chargingItem: Charging(
+                                  amount: documents[index]['price'],
+                                  phoneNumber: '788998',
+                                  position: const LatLng(0,
+                                      0), //later to show path till charger we'll use charger coordinates
+                                  slotChosen: documents[index]['timeSlot'],
+                                  stationAddress: snapshots.data!['info']
+                                      ['address'],
+                                  stationName: snapshots.data!['info']
+                                      ['stationName'],
+                                  status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
+                                  type: 1,
+                                  ratings: 1),
+                              currentTab: tab,
+                            ),
                             const SizedBox(
                               height: 5,
                             )
@@ -346,332 +353,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         const SizedBox(
           height: 5,
         ),
-
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the first button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      child: const Text('Accept',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the second button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: const Text('Decline',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the first button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      child: const Text('Accept',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the second button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: const Text('Decline',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        const SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as needed
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 30),
-                    child: Text(
-                      'Rahul ka Charger',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 60),
-                    child: Text(
-                      '₹ 600',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-              SizedBox(height: 2),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the first button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      child: const Text('Accept',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                  Container(
-                    width: widthInLogicalPixels1,
-                    height: heightInLogicalPixels1,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle the second button click
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      child: const Text('Decline',
-                          style: TextStyle(color: Colors.black)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-
-        // streamBuilder(AppStrings.ChargingScreenCurrentTab)
+        streamBuilder(AppStrings.ChargingScreenCurrentTab)
       ],
     );
   }
@@ -738,292 +420,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFF6D4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(
-          height: 10,
-        ),
-
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        SizedBox(
-          height: 10,
-        ),
-
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-          width: widthInLogicalPixels, // Adjust as needed
-          height: heightInLogicalPixels, // Adjust as neede
-          decoration: BoxDecoration(
-            color: Color(0xFFD0F4D5),
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(-8, 6),
-                blurRadius: 50,
-                color: Color.fromRGBO(0, 0, 0, 0.25),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Rahul ka Charger',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  'Time slot- 23:00 3:00',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '73085789349854',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
-                child: Text(
-                  '₹ 600',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // streamBuilder(AppStrings.ChargingScreenRecentTab)
+        streamBuilder(AppStrings.ChargingScreenRecentTab)
       ],
     );
   }

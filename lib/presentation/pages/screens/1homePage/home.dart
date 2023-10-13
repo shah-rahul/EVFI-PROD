@@ -48,6 +48,8 @@ class HomeState extends State<Home> {
   Position _currentPosition = Position(
       longitude: 28.679079,
       latitude: 77.069710,
+      altitudeAccuracy: 0,
+      headingAccuracy: 0,
       timestamp: DateTime.now(),
       accuracy: 0,
       altitude: 0,
