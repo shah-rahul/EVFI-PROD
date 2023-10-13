@@ -43,16 +43,17 @@ class HomeState extends State<Home> {
   late GoogleMapController _mapController;
   MyPricing mypricing = MyPricing();
   Position _currentPosition = Position(
-      longitude: 28.679079,
-      latitude: 77.069710,
-      timestamp: DateTime.now(),
-      accuracy: 0,
-      altitude: 0,
-      heading: 0,
-      speed: 0,
-      speedAccuracy: 0,
-      altitudeAccuracy: 0,
-      headingAccuracy: 0);
+    longitude: 28.679079,
+    latitude: 77.069710,
+    altitudeAccuracy: 0,
+    headingAccuracy: 0,
+    timestamp: DateTime.now(),
+    accuracy: 0,
+    altitude: 0,
+    heading: 0,
+    speed: 0,
+    speedAccuracy: 0,
+  );
 
   @override
   void initState() {
