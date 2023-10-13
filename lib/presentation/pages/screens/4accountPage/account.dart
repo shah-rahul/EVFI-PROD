@@ -176,7 +176,7 @@ class _AccountState extends State<Account> {
                 await signOut();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginView()),
+                  MaterialPageRoute(builder: (context) => LoginView()),
                 );
               },
               child: settingSection(context, Icons.logout, 'Logout'),
