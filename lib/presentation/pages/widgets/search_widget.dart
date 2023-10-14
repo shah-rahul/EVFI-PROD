@@ -159,15 +159,18 @@ class _SearchWidgetState extends State<SearchWidget> {
                     controller.text = _options[index].displayname;
                   });
                   Position placePos = Position(
-                      latitude: _options[index].latitude,
-                      longitude: _options[index].longitude,
-                      timestamp: DateTime.now(),
-                      accuracy: 0,
-                      altitude: 0,
-                      speed: 0,
-                      heading: 0,
-                      speedAccuracy: 0,
-                      floor: 0);
+                    headingAccuracy: 0,
+                    altitudeAccuracy: 0,
+                    latitude: _options[index].latitude,
+                    longitude: _options[index].longitude,
+                    timestamp: DateTime.now(),
+                    accuracy: 0,
+                    altitude: 0,
+                    speed: 0,
+                    heading: 0,
+                    speedAccuracy: 0,
+                    floor: 0,
+                  );
                   widget.onLocationSelected(placePos);
                   _options.clear();
                   suggestions = false;

@@ -2,7 +2,7 @@
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class Booking {
-  double amount;
+  String amount;
   String timeStamp;
   String stationName;
   String customerName;

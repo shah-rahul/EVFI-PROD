@@ -14,9 +14,10 @@ class ImageAssets {
       "assets/images/map/destination_map_marker.png";
   static const String currentLocationMarker =
       "assets/images/map/current_location_markers.png";
-      static const String oldBlackMarker = "assets/images/map/blackMarker.png";
+  static const String oldBlackMarker = "assets/images/map/blackMarker.png";
   static const String blackMarker = "assets/images/map/currentBlackMarker.png";
   static const String greenMarker = "assets/images/map/GreenMarker.png";
   static const String destGreenMarker = "assets/images/map/DestGreenMarker.png";
   static const String listCharger = "assets/images/booking/electricCharger.png";
+  // static const String logo1 = "assets/assetss/logo.png";
 }

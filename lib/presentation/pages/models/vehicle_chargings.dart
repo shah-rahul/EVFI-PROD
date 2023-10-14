@@ -9,7 +9,8 @@ class Charging {
   String slotChosen;
   String id;
   String date;
-  double amount;
+  String amount;
+  String phoneNumber;
   LatLng position;
 
   int status;
@@ -21,6 +22,7 @@ class Charging {
     required this.stationAddress,
     required this.slotChosen,
     required this.amount,
+    required this.phoneNumber,
     required this.position,
     required this.id,
     required this.date,

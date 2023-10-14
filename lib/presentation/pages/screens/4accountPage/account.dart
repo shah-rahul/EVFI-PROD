@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
@@ -15,8 +16,15 @@ import '../../widgets/BookingDataWidget.dart';
 import 'new_station.dart';
 
 String username = "Mr. evfi";
-String email = "evfi.tech@gmail.com";
+String firstname = "";
+String lastname = "";
+String email = "";
+String phoneNo = "";
 File? clickedImage;
+String country = "";
+String state = "";
+String city = "";
+String pincode = "";
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -27,12 +35,58 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   final FirebaseAuth auth = FirebaseAuth.instance;
-  BookingProviderState bookingObject = BookingProviderState();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        // User is signed in, fetch user data from Firestore
+        _fetchUserData(user.uid);
+      }
+    });
+  }
+
+  Future<void> _fetchUserData(String userId) async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('user').doc(userId).get();
+
+      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      setState(() {
+        _user = auth.currentUser;
+        username = userData['firstName'] + " " + userData['lastName'];
+        phoneNo = userData['phoneNumber'];
+        firstname = userData['firstName'];
+        lastname = userData['lastName'];
+        email = userData['email'];
+        country = userData['country'];
+        state = userData['state'];
+        city = userData['city'];
+        pincode = userData['pinCode'];
+        clickedImage = userData['userImage'];
+      });
+    } catch (e) {
+      print('Error fetching user data: $e');
+    }
+  }
 
   void editProfile() async {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
-      builder: (context) => EditProfileScreen(name: username, email: email),
+      builder: (context) => EditProfileScreen(
+        name: username,
+        email: email,
+        phoneNo: phoneNo,
+        firstname: firstname,
+        lastname: lastname,
+        country: country,
+        state: state,
+        city: city,
+        pincode: pincode,
+      ),
     ));
     if (newDetails == null) {
       return;
@@ -64,15 +118,17 @@ class _AccountState extends State<Account> {
       ),
       backgroundColor: Colors.white,
       body: Container(
+        width: width * 0.96,
         margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10,
+        padding: EdgeInsets.symmetric(
+          horizontal: MediaQuery.of(context).size.width * 0.02,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             //1st column......
+            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
             GestureDetector(
               onTap: editProfile,
               child: Container(
@@ -80,14 +136,14 @@ class _AccountState extends State<Account> {
               ),
             ),
             //2nd column.......
-            const SizedBox(height: 20),
+            SizedBox(height: height * 0.03),
             //3rd column.......
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //3members in this row
-                serviceSection(context, Icons.charging_station, 'My Chargers'),
+                serviceSection(context, Icons.charging_station, 'Chargers'),
                 SizedBox(width: width * 0.04),
                 GestureDetector(
                     onTap: clickPayment,
@@ -98,7 +154,7 @@ class _AccountState extends State<Account> {
               ],
             ),
             //4th column
-            const SizedBox(height: 20),
+            SizedBox(height: height * 0.03),
             //5th column
             GestureDetector(
               child: settingSection(context, Icons.settings, 'Settings'),
@@ -120,7 +176,7 @@ class _AccountState extends State<Account> {
                 await signOut();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginView()),
+                  MaterialPageRoute(builder: (context) => LoginView()),
                 );
               },
               child: settingSection(context, Icons.logout, 'Logout'),
@@ -132,15 +188,15 @@ class _AccountState extends State<Account> {
                 child: settingSection(
                     context, Icons.location_on_outlined, 'Add Station')),
             const SizedBox(height: 100),
-            StreamBuilder<BookingDataWidget>(
-                stream: bookingObject.stream,
-                builder: (context, snapshot) {
-                  print("************");
-                  if (snapshot.data != null)
-                    return Text(snapshot.data!.stationName);
+            // StreamBuilder<BookingDataWidget>(
+            //     stream: bookingObject.stream,
+            //     builder: (context, snapshot) {
+            //       print("************");
+            //       if (snapshot.data != null)
+            //         return Text(snapshot.data!.stationName);
 
-                  return Text(" ");
-                })
+            //       return Text(" ");
+            //     })
           ],
         ),
       ),
@@ -244,8 +300,9 @@ Widget profileSection(BuildContext context) {
 
 Widget serviceSection(BuildContext context, IconData icon, String str) {
   return Container(
+    width: MediaQuery.of(context).size.width * 0.28,
     height: MediaQuery.of(context).size.height * 0.1,
-    padding: const EdgeInsetsDirectional.all(6),
+    padding: const EdgeInsetsDirectional.all(24),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(13),
       border: Border.all(width: 1.5, color: Colors.black),
