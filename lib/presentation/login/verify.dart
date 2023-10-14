@@ -55,7 +55,7 @@ final userDataProvider = Provider.of<UserDataProvider>(context);
           children: <Widget>[
             SizedBox(height: 30),
             Image.asset(
-              'assets/logo.png',
+              'assets/assetss/logo.png',
               height: 350,
               width: 350,
             ),

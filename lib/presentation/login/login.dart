@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../resources/assets_manager.dart';
+
 class LoginView extends StatefulWidget {
   @override
   _LoginViewState createState() => _LoginViewState();
@@ -28,6 +30,7 @@ class _LoginViewState extends State<LoginView> {
               height: 350,
               width: 350,
             ),
+           
             SizedBox(height: 30),
             Text(
               'login',
