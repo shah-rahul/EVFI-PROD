@@ -8,6 +8,7 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../resources/strings_manager.dart';
 import '../../resources/color_manager.dart';
 
+
 // ignore: must_be_immutable
 class BookingWidget extends StatefulWidget {
   Booking bookingItem;

@@ -241,9 +241,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels =
-        340 / MediaQuery.of(context).devicePixelRatio;
     return Column(
       children: [
         Container(
@@ -390,6 +387,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
+
         // const SizedBox(height: 10),
         // Container(
         //   width: widthInLogicalPixels, // Adjust as needed

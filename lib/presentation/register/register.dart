@@ -6,6 +6,7 @@ import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../onboarding/onboarding1.dart';
 import '../storage/UserDataProvider.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/color_manager.dart';
@@ -148,6 +149,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   nameController.text = value;
                                 });
 
+
                                 //          await userDataProvider.saveUserData();
                                 // UserData? userData = userDataProvider.userData;
                                 // userDataProvider.setUserData(userData);
@@ -202,7 +204,9 @@ class _RegisterViewState extends State<RegisterView> {
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         
-                                        child: OnBoardingView()),
+                                       
+                                        // child: OnBoardingView()),
+                                        child: Onboarding1()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

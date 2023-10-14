@@ -1,3 +1,4 @@
+// import 'package:evfi/presentation/login/login1.dart';
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:evfi/presentation/register/chargerform.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (_) => const LoginView());
+        return MaterialPageRoute(builder: (_) =>  LoginView());
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => const OnBoardingView());
       case Routes.registerRoute:
