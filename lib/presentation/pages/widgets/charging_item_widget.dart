@@ -2,7 +2,6 @@
 
 import 'dart:math';
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../models/vehicle_chargings.dart';
@@ -95,22 +94,21 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
 
   void getStatusColor() {
     if (widget.chargingItem.status == 2)
-      statusColor = Colors.green;
-    else if (widget.chargingItem.status == -1) statusColor = Colors.red;
+      // statusColor =Color(0xFFF6D4D5);
+      statusColor = Colors.white;
+    else if (widget.chargingItem.status == -1) statusColor = Color(0xFFD0F4D5);
+    ;
   }
 
   Widget build(BuildContext context) {
     getStatusColor();
-    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels =
-        340 / MediaQuery.of(context).devicePixelRatio;
-    double widthInLogicalPixels1 =
-        394.835 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels1 =
-        81.83 / MediaQuery.of(context).devicePixelRatio;
+
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Container(
-      width: widthInLogicalPixels, // Adjust as needed
-      height: heightInLogicalPixels, // Adjust as needed
+      width: width,
+      height: height * 0.143,
       decoration: BoxDecoration(
         color: statusColor,
         borderRadius: BorderRadius.circular(30),
@@ -129,7 +127,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                 child: Text(
                   widget.chargingItem.stationName,
                   style: TextStyle(
@@ -139,22 +137,22 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60),
-                child: Text(
-                  '₹ ${widget.chargingItem.amount.toString()}',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: 60),
+              //   child: Text(
+              //     '₹ ${widget.chargingItem.amount.toString()}',
+              //     style: TextStyle(
+              //       color: Colors.black,
+              //       fontSize: 18,
+              //       fontWeight: FontWeight.bold,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
-          SizedBox(height: 5),
+          // SizedBox(height: 5),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
             child: Text(
               'Time slot- ${widget.chargingItem.slotChosen}',
               style: TextStyle(
@@ -163,9 +161,9 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               ),
             ),
           ),
-          SizedBox(height: 5),
+          // SizedBox(height: 5),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30),
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
             child: Text(
               widget.chargingItem.phoneNumber,
               style: TextStyle(
@@ -174,33 +172,45 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               ),
             ),
           ),
-          SizedBox(height: 2),
-          Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(40),
+          // SizedBox(height: 0),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+            child: Text(
+              '₹ ${widget.chargingItem.amount.toString()}',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
               ),
-              if (widget.chargingItem.status == 1)
-                GestureDetector(
-                  onTap: () async {
-                    CollectionReference users =
-                        FirebaseFirestore.instance.collection('booking');
-                    DocumentReference docRef =
-                        users.doc(widget.chargingItem.id);
-                    await docRef.update({
-                      'status': -1,
-                    });
-                  },
-                  child: ClipOval(
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: 60,
-                    ),
-                  ),
-                ),
-            ],
+            ),
           ),
+
+          // Row(
+          //   children: [
+          //     Padding(
+          //       padding: EdgeInsets.all(40),
+          //     ),
+          //     if (widget.chargingItem.status == 1)
+          //       GestureDetector(
+          //         onTap: () async {
+          //           CollectionReference users =
+          //               FirebaseFirestore.instance.collection('booking');
+          //           DocumentReference docRef =
+          //               users.doc(widget.chargingItem.id);
+          //           await docRef.update({
+          //             'status': -1,
+          //           });
+          //         },
+          //         child: ClipOval(
+          //           child: Icon(
+          //             Icons.close,
+          //             color: Colors.red,
+          //             size: 60,
+          //           ),
+          //         ),
+          //       ),
+          //   ],
+          // ),
           // if (widget.chargingItem.status == 2 ||
           //     widget.chargingItem.status == -1)
 

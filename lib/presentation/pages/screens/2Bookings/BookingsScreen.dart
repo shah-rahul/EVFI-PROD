@@ -146,12 +146,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Widget streamBuilder(String tab) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Container(
       height: height * 0.75,
       padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
             height: height * 0.85,
+            // width: width*2,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
