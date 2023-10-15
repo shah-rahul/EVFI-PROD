@@ -28,7 +28,6 @@ import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
-import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
