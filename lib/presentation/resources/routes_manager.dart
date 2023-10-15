@@ -1,4 +1,5 @@
 // import 'package:evfi/presentation/login/login1.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:evfi/presentation/register/chargerform.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class Routes {
   static const String vehicleRegisterForm = "/VehicleRegisterForm";
   static const String chargerForm = "/chargerForm";
   static const String UserChargingRegister = "/UserChargingRegister";
+  static const String ListChargerPage = "/listChargerPage";
 }
 
 class RouteGenerator {
@@ -36,7 +38,7 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (_) =>  LoginView());
+        return MaterialPageRoute(builder: (_) => LoginView());
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => const OnBoardingView());
       case Routes.registerRoute:
@@ -48,8 +50,6 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
-      // case Routes.verifyOtpRoute:
-      //   return MaterialPageRoute(builder: (_) => const verify_otp());
       case Routes.myChargingRoute:
         return MaterialPageRoute(builder: (_) => const MyChargingScreen());
       case Routes.UserChargingRegister:
@@ -60,6 +60,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const VehicleForm());
       case Routes.chargerForm:
         return MaterialPageRoute(builder: (_) => const ChargerForm());
+      case Routes.ListChargerPage:
+        return MaterialPageRoute(builder: (_) => const ListChargersPage());
       default:
         return unDefinedRoute();
     }

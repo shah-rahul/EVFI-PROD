@@ -31,12 +31,11 @@ class _VerifyState extends State<Verify> {
   final Color myColor = Color.fromRGBO(208, 187, 30, 0.5);
   final Color myColor2 = Color.fromRGBO(99, 99, 95, 1);
   final Color mainColor = Color.fromRGBO(255, 216, 15, 1);
- final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
   final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
-
-final userDataProvider = Provider.of<UserDataProvider>(context);
+    final userDataProvider = Provider.of<UserDataProvider>(context);
 
     // ignore: non_constant_identifier_names
     void StorePhoneNumber(String phoneNumber) {
@@ -45,8 +44,6 @@ final userDataProvider = Provider.of<UserDataProvider>(context);
 
       userDataProvider.setUserData(userData);
     }
-
-
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -98,16 +95,18 @@ final userDataProvider = Provider.of<UserDataProvider>(context);
               child: SizedBox(
                 height: 60,
                 child: TextField(
-                     controller: _codeController,
+                  controller: _codeController,
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: myColor2,
                     hintText: 'OTP',
                     labelText: '**********',
-                    contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 105),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 105),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: mainColor.withOpacity(0.5)),
-                      borderRadius: BorderRadius.all(Radius.circular(10)), // Border color when the TextField is not focused
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          10)), // Border color when the TextField is not focused
                     ),
                     labelStyle: TextStyle(
                       color: Colors.black,
@@ -133,98 +132,91 @@ final userDataProvider = Provider.of<UserDataProvider>(context);
                   // );
 
                   // Add your login logic here
-                final String code = _codeController.text.trim();
-                        PhoneAuthCredential credential =
-                            PhoneAuthProvider.credential(
-                          verificationId: widget.verificationId,
-                          smsCode: code,
-                        );
-                        try {
-                          // ignore: unused_local_variable
-                          UserCredential userCredential = await FirebaseAuth
-                              .instance
-                              .signInWithCredential(credential);
-                          
-                          var sharedPref =
-                              await SharedPreferences.getInstance();
-                          sharedPref.setBool(SplashViewState.keyLogin, true);
+                  final String code = _codeController.text.trim();
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                    verificationId: widget.verificationId,
+                    smsCode: code,
+                  );
+                  try {
+                    // ignore: unused_local_variable
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .signInWithCredential(credential);
 
-                          Future<bool> check = checkNumberIsRegistered(
-                              number: widget.phoneNumber);
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.setBool(SplashViewState.keyLogin, true);
 
-                          if (await check) {
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                child: MainView(),
+                    Future<bool> check =
+                        checkNumberIsRegistered(number: widget.phoneNumber);
+
+                    if (await check) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: MainView(),
+                        ),
+                      );
+                    } else {
+                      StorePhoneNumber(widget.phoneNumber);
+
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          // child: RegisterView(
+                          //   phoneNumber: widget.phoneNumber,
+                          // ),
+                          child: ProfileImage(),
+                        ),
+                      );
+                    }
+                  } on FirebaseAuthException catch (e) {
+                    //  Handle authentication failure
+                    if (e.code == 'invalid-verification-code') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Invalid verification code'),
+                            content: const Text(
+                                'Please enter a valid verification code.'),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
-                            );
-                          } else {
-                            StorePhoneNumber(widget.phoneNumber);
-                            
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                // child: RegisterView(
-                                //   phoneNumber: widget.phoneNumber,
-                                // ),
-                                child: ProfileImage(),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Authentication failed'),
+                            content: const Text('Please try again later.'),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
                               ),
-                            );
-                          }
-                        } on FirebaseAuthException catch (e) {
-                          //  Handle authentication failure
-                          if (e.code == 'invalid-verification-code') {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title:
-                                      const Text('Invalid verification code'),
-                                  content: const Text(
-                                      'Please enter a valid verification code.'),
-                                  actions: [
-                                    ElevatedButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Authentication failed'),
-                                  content:
-                                      const Text('Please try again later.'),
-                                  actions: [
-                                    ElevatedButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        }
-
-
-
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0), // Set the border radius here
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Set the border radius here
                   ),
                   primary: mainColor, // Button background color
                 ),
@@ -246,29 +238,29 @@ final userDataProvider = Provider.of<UserDataProvider>(context);
     );
   }
 }
- Future<bool> checkNumberIsRegistered({required String number}) async {
-    final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('user');
-    bool isNumberRegistered = false;
-    // storePhoneNumber(number);
 
-    try {
-      final querySnapshot = await collectionRef.get();
+Future<bool> checkNumberIsRegistered({required String number}) async {
+  final firestore = FirebaseFirestore.instance;
+  final collectionRef = firestore.collection('user');
+  bool isNumberRegistered = false;
+  // storePhoneNumber(number);
 
-      for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['phoneNumber'].toString();
+  try {
+    final querySnapshot = await collectionRef.get();
 
-        if (number == phoneNumber) {
-          isNumberRegistered = true;
-          break;
-        } else {
-          // storePhoneNumber(number);
-        }
+    for (var doc in querySnapshot.docs) {
+      final phoneNumber = doc.data()['phoneNumber'].toString();
+
+      if (number == phoneNumber) {
+        isNumberRegistered = true;
+        break;
+      } else {
+        // storePhoneNumber(number);
       }
-
-      return isNumberRegistered;
-    } catch (e) {
-      return false;
     }
-  }
 
+    return isNumberRegistered;
+  } catch (e) {
+    return false;
+  }
+}
