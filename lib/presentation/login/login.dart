@@ -17,7 +17,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
 
- final phoneController = TextEditingController();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -40,8 +40,49 @@ class _LoginViewState extends State<LoginView> {
                   ImageAssets.logo3D,
                   height: screenWidth * 0.8,
                   width: screenWidth * 0.8,
+    backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            Image.asset(
+              'assets/assetss/logo.png',
+              height: MediaQuery.of(context).size.height * 0.4,
+            ),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.06),
+            Text(
+              'login',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 62,
+                fontFamily: 'fonts/Poppins',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(-5.0, 4.0),
+                    color: myColor,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 20,
+              width: 150,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignupPage()),
+                  );
+                  // Add your login logic here
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black, // Set the background color to black
                 ),
-               
+
                 SizedBox(height: screenHeight * 0.07),
                 Text(
                   AppStrings.login,
@@ -80,6 +121,39 @@ class _LoginViewState extends State<LoginView> {
                         fontSize: FontSize.s14,
                         fontFamily: 'Poppins',
                       ),
+                    fontSize: 18,
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 80),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.85,
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      phoneController.text = "+91" + value;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: myColor2,
+                    hintText: 'Enter Number',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 80),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide:
+                          BorderSide(color: Colors.yellow.withOpacity(0.5)),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          10)), // Border color when the TextField is not focused
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.black54,
                     ),
                   ),
                 ),
@@ -178,6 +252,68 @@ class _LoginViewState extends State<LoginView> {
                         fontSize: FontSize.s20,
                       ),
                     ),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.85,
+              child: ElevatedButton(
+                onPressed: () async {
+                  //  mobile number verification logic here
+                  final String phoneNumber = phoneController.text.trim();
+                  //  getPhoneNumber(phoneNumber);
+                  await FirebaseAuth.instance.verifyPhoneNumber(
+                    phoneNumber: phoneNumber,
+                    verificationCompleted:
+                        (PhoneAuthCredential credential) async {
+                      //  Authenticate user with credential
+                    },
+                    verificationFailed: (FirebaseAuthException e) {
+                      //  Handle verification failure
+                    },
+                    codeSent: (String verificationId, int? resendToken) {
+                      // Save verification ID and navigate to verification code page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          // child: VerificationCodePage(
+                          //   verificationId: verificationId,
+                          //   phoneNumber: phoneNumber,
+                          // ),
+                          child: Verify(
+                            verificationId: verificationId,
+                            phoneNumber: phoneNumber,
+                          ),
+                        ),
+                      );
+                    },
+                    codeAutoRetrievalTimeout: (String verificationId) {
+                      //  Handle code auto retrieval timeout
+                    },
+                  );
+                },
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => Verify()),
+                //   );
+                //   // Add your login logic here
+                // },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Set the border radius here
+                  ),
+                  primary: ColorManager.primary, // Button background color
+                ),
+                child: Text(
+                  'send otp',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
                   ),
                 ),
                 // Rest of your widgets

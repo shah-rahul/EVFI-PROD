@@ -32,14 +32,24 @@ class Verify extends StatefulWidget {
 }
 
 class _VerifyState extends State<Verify> {
+<<<<<<< HEAD
 
  final TextEditingController _codeController = TextEditingController();
+=======
+  final Color myColor = Color.fromRGBO(208, 187, 30, 0.5);
+  final Color myColor2 = Color.fromRGBO(99, 99, 95, 1);
+  final Color mainColor = Color.fromRGBO(255, 216, 15, 1);
+  final TextEditingController _codeController = TextEditingController();
+>>>>>>> ebf78f9851ee1124c49206fef4fc1a4d55477698
   final databaseRef = FirebaseDatabase.instance.ref('user');
   @override
   Widget build(BuildContext context) {
     final userDataProvider = Provider.of<UserDataProvider>(context);
+<<<<<<< HEAD
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+=======
+>>>>>>> ebf78f9851ee1124c49206fef4fc1a4d55477698
 
     // ignore: non_constant_identifier_names
     void StorePhoneNumber(String phoneNumber) {
@@ -48,6 +58,7 @@ class _VerifyState extends State<Verify> {
 
       userDataProvider.setUserData(userData);
     }
+<<<<<<< HEAD
     return Scaffold(
      backgroundColor: ColorManager.appBlack,
       resizeToAvoidBottomInset: true,
@@ -250,32 +261,225 @@ class _VerifyState extends State<Verify> {
          ),
        ),
      ),
+=======
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 30),
+            Image.asset(
+              'assets/assetss/logo.png',
+              height: 350,
+              width: 350,
+            ),
+            SizedBox(height: 30),
+            Text(
+              'almost',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 52,
+                fontFamily: 'fonts/Poppins',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(-5.0, 4.0),
+                    color: myColor,
+                  ),
+                ],
+              ),
+            ),
+            Text(
+              'there',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 52,
+                fontFamily: 'fonts/Poppins',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(-5.0, 4.0),
+                    color: myColor,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 80),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
+                height: 60,
+                child: TextField(
+                  controller: _codeController,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: myColor2,
+                    hintText: 'OTP',
+                    labelText: '**********',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 15, horizontal: 105),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: mainColor.withOpacity(0.5)),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          10)), // Border color when the TextField is not focused
+                    ),
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 26,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            SizedBox(
+              height: 50,
+              width: 330,
+              child: ElevatedButton(
+                onPressed: () async {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => ProfileImage()),
+                  // );
+
+                  // Add your login logic here
+                  final String code = _codeController.text.trim();
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                    verificationId: widget.verificationId,
+                    smsCode: code,
+                  );
+                  try {
+                    // ignore: unused_local_variable
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .signInWithCredential(credential);
+
+                    var sharedPref = await SharedPreferences.getInstance();
+                    sharedPref.setBool(SplashViewState.keyLogin, true);
+
+                    Future<bool> check =
+                        checkNumberIsRegistered(number: widget.phoneNumber);
+
+                    if (await check) {
+                      // ignore: use_build_context_synchronously
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          child: MainView(),
+                        ),
+                      );
+                    } else {
+                      StorePhoneNumber(widget.phoneNumber);
+
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          // child: RegisterView(
+                          //   phoneNumber: widget.phoneNumber,
+                          // ),
+                          child: ProfileImage(),
+                        ),
+                      );
+                    }
+                  } on FirebaseAuthException catch (e) {
+                    //  Handle authentication failure
+                    if (e.code == 'invalid-verification-code') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Invalid verification code'),
+                            content: const Text(
+                                'Please enter a valid verification code.'),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Authentication failed'),
+                            content: const Text('Please try again later.'),
+                            actions: [
+                              ElevatedButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Set the border radius here
+                  ),
+                  primary: mainColor, // Button background color
+                ),
+                child: Text(
+                  'Verify',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            // Rest of your widgets
+          ],
+        ),
+      ),
+>>>>>>> ebf78f9851ee1124c49206fef4fc1a4d55477698
     );
   }
 }
- Future<bool> checkNumberIsRegistered({required String number}) async {
-    final firestore = FirebaseFirestore.instance;
-    final collectionRef = firestore.collection('user');
-    bool isNumberRegistered = false;
-    // storePhoneNumber(number);
 
-    try {
-      final querySnapshot = await collectionRef.get();
+Future<bool> checkNumberIsRegistered({required String number}) async {
+  final firestore = FirebaseFirestore.instance;
+  final collectionRef = firestore.collection('user');
+  bool isNumberRegistered = false;
+  // storePhoneNumber(number);
 
-      for (var doc in querySnapshot.docs) {
-        final phoneNumber = doc.data()['phoneNumber'].toString();
+  try {
+    final querySnapshot = await collectionRef.get();
 
-        if (number == phoneNumber) {
-          isNumberRegistered = true;
-          break;
-        } else {
-          // storePhoneNumber(number);
-        }
+    for (var doc in querySnapshot.docs) {
+      final phoneNumber = doc.data()['phoneNumber'].toString();
+
+      if (number == phoneNumber) {
+        isNumberRegistered = true;
+        break;
+      } else {
+        // storePhoneNumber(number);
       }
-
-      return isNumberRegistered;
-    } catch (e) {
-      return false;
     }
-  }
 
+    return isNumberRegistered;
+  } catch (e) {
+    return false;
+  }
+}

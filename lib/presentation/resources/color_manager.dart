@@ -21,7 +21,7 @@ class ColorManager {
   static Color shadowBottomRight = HexColor.fromHex("#d9d9d9");
 
   // new colors
-  static Color primaryOpacity70 = HexColor.fromHex("#B39728");
+  static Color primaryWithOpacity = ColorManager.primary.withOpacity(0.5);
   static Color darkPrimary = HexColor.fromHex("#d17d11");
   static Color grey1 = HexColor.fromHex("#707070");
   static Color grey2 = HexColor.fromHex("#797979");
