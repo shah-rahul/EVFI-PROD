@@ -16,8 +16,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-
- final phoneController = TextEditingController();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -41,7 +40,7 @@ class _LoginViewState extends State<LoginView> {
                   height: screenWidth * 0.8,
                   width: screenWidth * 0.8,
                 ),
-               
+
                 SizedBox(height: screenHeight * 0.07),
                 Text(
                   AppStrings.login,
@@ -88,21 +87,24 @@ class _LoginViewState extends State<LoginView> {
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: SizedBox(
                     child: TextField(
-                        onChanged: (value) {
-
-                            setState(() {
-                              phoneController.text = "+91" + value;
-                            });
-                          },
+                      onChanged: (value) {
+                        setState(() {
+                          phoneController.text = "+91" + value;
+                        });
+                      },
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorManager.grey4,
                         hintText: '+91- 7303440170',
                         labelText: 'Phone Number',
-                        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.02, horizontal: screenWidth * 0.1),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.02,
+                            horizontal: screenWidth * 0.1),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: ColorManager.primary.withOpacity(0.5)),
-                          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+                          borderSide: BorderSide(
+                              color: ColorManager.primary.withOpacity(0.5)),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(screenWidth * 0.02)),
                         ),
                         labelStyle: TextStyle(
                           color: Colors.white,
@@ -122,42 +124,40 @@ class _LoginViewState extends State<LoginView> {
                   width: screenWidth * 0.8,
                   child: ElevatedButton(
                     onPressed: () async {
- //  mobile number verification logic here
-                            final String phoneNumber = phoneController.text.trim();
-                            //  getPhoneNumber(phoneNumber);
-                            await FirebaseAuth.instance.verifyPhoneNumber(
-                              phoneNumber: phoneNumber,
-                              verificationCompleted:
-                                  (PhoneAuthCredential credential) async {
-                                //  Authenticate user with credential
-                              },
-                              verificationFailed: (FirebaseAuthException e) {
-                                //  Handle verification failure
-                              },
-                              codeSent: (String verificationId, int? resendToken) {
-                                // Save verification ID and navigate to verification code page
-                                Navigator.push(
-                                  context,
-                                  PageTransition(
-                                    type: PageTransitionType.rightToLeft,
-                                    // child: VerificationCodePage(
-                                    //   verificationId: verificationId,
-                                    //   phoneNumber: phoneNumber,
-                                    // ),
-                                  child: Verify(
-                                     verificationId: verificationId,
-                                      phoneNumber: phoneNumber,
-                                  ),
-
-
-                                  ),
-                                );
-                              },
-                              codeAutoRetrievalTimeout: (String verificationId) {
-                                //  Handle code auto retrieval timeout
-                              },
-                            );
-                          },
+                      //  mobile number verification logic here
+                      final String phoneNumber = phoneController.text.trim();
+                      //  getPhoneNumber(phoneNumber);
+                      await FirebaseAuth.instance.verifyPhoneNumber(
+                        phoneNumber: phoneNumber,
+                        verificationCompleted:
+                            (PhoneAuthCredential credential) async {
+                          //  Authenticate user with credential
+                        },
+                        verificationFailed: (FirebaseAuthException e) {
+                          //  Handle verification failure
+                        },
+                        codeSent: (String verificationId, int? resendToken) {
+                          // Save verification ID and navigate to verification code page
+                          Navigator.push(
+                            context,
+                            PageTransition(
+                              type: PageTransitionType.rightToLeft,
+                              // child: VerificationCodePage(
+                              //   verificationId: verificationId,
+                              //   phoneNumber: phoneNumber,
+                              // ),
+                              child: Verify(
+                                verificationId: verificationId,
+                                phoneNumber: phoneNumber,
+                              ),
+                            ),
+                          );
+                        },
+                        codeAutoRetrievalTimeout: (String verificationId) {
+                          //  Handle code auto retrieval timeout
+                        },
+                      );
+                    },
                     //   Navigator.push(
                     //     context,
                     //     MaterialPageRoute(builder: (context) => Verify()),
@@ -165,7 +165,7 @@ class _LoginViewState extends State<LoginView> {
                     // },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(screenWidth * 0.02 ),
+                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),
                       primary: ColorManager.primary,
                     ),
