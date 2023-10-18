@@ -1,5 +1,6 @@
 import 'package:evfi/presentation/login/signUp.dart';
 import 'package:evfi/presentation/login/verify.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -16,7 +17,7 @@ class _LoginViewState extends State<LoginView> {
   final Color myColor2 = Color.fromRGBO(99, 99, 95, 1);
   final Color mainColor = Color.fromRGBO(255, 216, 15, 1);
 
- final phoneController = TextEditingController();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,19 +25,18 @@ class _LoginViewState extends State<LoginView> {
       body: Center(
         child: Column(
           children: <Widget>[
-            SizedBox(height: 30),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             Image.asset(
               'assets/assetss/logo.png',
-              height: 350,
-              width: 350,
+              height: MediaQuery.of(context).size.height * 0.4,
             ),
-           
-            SizedBox(height: 30),
+
+            SizedBox(height: MediaQuery.of(context).size.height * 0.06),
             Text(
               'login',
               style: TextStyle(
                 color: Colors.yellow,
-                fontSize: 52,
+                fontSize: 62,
                 fontFamily: 'fonts/Poppins',
                 fontWeight: FontWeight.bold,
                 letterSpacing: 2.0,
@@ -66,6 +66,7 @@ class _LoginViewState extends State<LoginView> {
                 child: Text(
                   'or SignUp',
                   style: TextStyle(
+                    fontSize: 18,
                     color: Colors.white,
                     fontFamily: 'Poppins',
                   ),
@@ -76,30 +77,28 @@ class _LoginViewState extends State<LoginView> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: SizedBox(
-                height: 60,
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.85,
                 child: TextField(
-                    onChanged: (value) {
-                       
-                        setState(() {
-                          phoneController.text = "+91" + value;
-                        });
-                      },
+                  onChanged: (value) {
+                    setState(() {
+                      phoneController.text = "+91" + value;
+                    });
+                  },
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: myColor2,
-                    hintText: '',
-                    labelText: '+91- 7303440170',
-                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 80),
+                    hintText: 'Enter Number',
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 10, horizontal: 80),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.yellow.withOpacity(0.5)),
-                      borderRadius: BorderRadius.all(Radius.circular(10)), // Border color when the TextField is not focused
-                    ),
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
+                      borderSide:
+                          BorderSide(color: Colors.yellow.withOpacity(0.5)),
+                      borderRadius: BorderRadius.all(Radius.circular(
+                          10)), // Border color when the TextField is not focused
                     ),
                     hintStyle: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black54,
                     ),
                   ),
                   style: TextStyle(color: Colors.black),
@@ -108,46 +107,44 @@ class _LoginViewState extends State<LoginView> {
             ),
             SizedBox(height: 20),
             SizedBox(
-              height: 50,
-              width: 330,
+              height: MediaQuery.of(context).size.height * 0.06,
+              width: MediaQuery.of(context).size.width * 0.85,
               child: ElevatedButton(
                 onPressed: () async {
- //  mobile number verification logic here
-                        final String phoneNumber = phoneController.text.trim();
-                        //  getPhoneNumber(phoneNumber);
-                        await FirebaseAuth.instance.verifyPhoneNumber(
-                          phoneNumber: phoneNumber,
-                          verificationCompleted:
-                              (PhoneAuthCredential credential) async {
-                            //  Authenticate user with credential
-                          },
-                          verificationFailed: (FirebaseAuthException e) {
-                            //  Handle verification failure
-                          },
-                          codeSent: (String verificationId, int? resendToken) {
-                            // Save verification ID and navigate to verification code page
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                // child: VerificationCodePage(
-                                //   verificationId: verificationId,
-                                //   phoneNumber: phoneNumber,
-                                // ),
-                              child: Verify(
-                                 verificationId: verificationId,
-                                  phoneNumber: phoneNumber,
-                              ),
-
-
-                              ),
-                            );
-                          },
-                          codeAutoRetrievalTimeout: (String verificationId) {
-                            //  Handle code auto retrieval timeout
-                          },
-                        );
-                      },
+                  //  mobile number verification logic here
+                  final String phoneNumber = phoneController.text.trim();
+                  //  getPhoneNumber(phoneNumber);
+                  await FirebaseAuth.instance.verifyPhoneNumber(
+                    phoneNumber: phoneNumber,
+                    verificationCompleted:
+                        (PhoneAuthCredential credential) async {
+                      //  Authenticate user with credential
+                    },
+                    verificationFailed: (FirebaseAuthException e) {
+                      //  Handle verification failure
+                    },
+                    codeSent: (String verificationId, int? resendToken) {
+                      // Save verification ID and navigate to verification code page
+                      Navigator.push(
+                        context,
+                        PageTransition(
+                          type: PageTransitionType.rightToLeft,
+                          // child: VerificationCodePage(
+                          //   verificationId: verificationId,
+                          //   phoneNumber: phoneNumber,
+                          // ),
+                          child: Verify(
+                            verificationId: verificationId,
+                            phoneNumber: phoneNumber,
+                          ),
+                        ),
+                      );
+                    },
+                    codeAutoRetrievalTimeout: (String verificationId) {
+                      //  Handle code auto retrieval timeout
+                    },
+                  );
+                },
                 //   Navigator.push(
                 //     context,
                 //     MaterialPageRoute(builder: (context) => Verify()),
@@ -156,9 +153,10 @@ class _LoginViewState extends State<LoginView> {
                 // },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0), // Set the border radius here
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Set the border radius here
                   ),
-                  primary: Colors.yellow, // Button background color
+                  primary: ColorManager.primary, // Button background color
                 ),
                 child: Text(
                   'send otp',

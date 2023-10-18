@@ -14,11 +14,11 @@ ThemeData getApplicationTheme() {
       
       // main colors of the app
       primaryColor: ColorManager.primary,
-      primaryColorLight: ColorManager.primaryOpacity70,
+      primaryColorLight: ColorManager.primaryWithOpacity,
       primaryColorDark: ColorManager.darkPrimary,
       disabledColor: ColorManager.grey1,
       // ripple color
-      splashColor: ColorManager.primaryOpacity70,
+      splashColor: ColorManager.primaryWithOpacity,
       // will be used incase of disabled button for example
       hintColor: ColorManager.grey,
       // card view theme
@@ -31,7 +31,7 @@ ThemeData getApplicationTheme() {
           centerTitle: true,
           color: ColorManager.primary,
           elevation: AppSize.s4,
-          shadowColor: ColorManager.primaryOpacity70,
+          shadowColor: ColorManager.primaryWithOpacity,
           titleTextStyle: getRegularStyle(
               color: Colors.white, fontSize: FontSize.s16)),
       // Button theme
@@ -39,14 +39,13 @@ ThemeData getApplicationTheme() {
           shape: const StadiumBorder(),
           disabledColor: ColorManager.grey1,
           buttonColor: ColorManager.primary,
-          splashColor: ColorManager.primaryOpacity70),
+          splashColor: ColorManager.primaryWithOpacity),
 
       // elevated button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-              textStyle: getRegularStyle(color: Colors.white),
-              primary: ColorManager.primary,
-              onPrimary: ColorManager.appBlack,
+              backgroundColor: ColorManager.primary,
+              foregroundColor: ColorManager.appBlack,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)))),
 

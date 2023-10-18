@@ -1,21 +1,21 @@
+import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class ListChargersPage extends StatelessWidget {
-  Function() addCharger;
-  ListChargersPage({super.key, required this.addCharger});
+  const ListChargersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: Container(
-          color: ColorManager.appBlack,
+          color: ColorManager.appBlack.withOpacity(0.967),
           height: height,
           width: width,
           padding: const EdgeInsets.all(AppPadding.p20),
@@ -49,7 +49,11 @@ class ListChargersPage extends StatelessWidget {
                 width: double.infinity,
                 height: height*0.06,
                 child: ElevatedButton(
-                    onPressed: addCharger,
+                  onPressed: () {
+                  Navigator.of(context).push(PageTransition(
+                      child: const ListChargerForm(),
+                      type: PageTransitionType.theme));
+                },
                     style: Theme.of(context).elevatedButtonTheme.style,
                     child: const Text(
                       'proceed to list',
