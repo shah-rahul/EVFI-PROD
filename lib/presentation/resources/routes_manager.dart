@@ -1,4 +1,5 @@
 // import 'package:evfi/presentation/login/login1.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:evfi/presentation/register/chargerform.dart';
@@ -25,11 +26,11 @@ class Routes {
   static const String verifyOtpRoute = "/verify_otp";
   static const String searchPageRoute = "/searchPage";
   static const String myChargingRoute = "/myCharging";
-  // ignore: constant_identifier_names
   static const String vehicleRegisterForm = "/VehicleRegisterForm";
   static const String chargerForm = "/chargerForm";
-  static const String UserChargingRegister = "/UserChargingRegister";
-  static const String ListChargerPage = "/listChargerPage";
+  static const String userChargingRegister = "/UserChargingRegister";
+  static const String listChargerPage = "/listChargerPage";
+  static const String listChargerFormRoute = "/listChargerForm";
 }
 
 class RouteGenerator {
@@ -52,7 +53,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
       case Routes.myChargingRoute:
         return MaterialPageRoute(builder: (_) => const MyChargingScreen());
-      case Routes.UserChargingRegister:
+      case Routes.userChargingRegister:
         return MaterialPageRoute(builder: (_) => const UserChargingRegister());
       case Routes.searchPageRoute:
         return MaterialPageRoute(builder: (_) => const SearchPage());
@@ -60,8 +61,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const VehicleForm());
       case Routes.chargerForm:
         return MaterialPageRoute(builder: (_) => const ChargerForm());
-      case Routes.ListChargerPage:
+      case Routes.listChargerPage:
         return MaterialPageRoute(builder: (_) => const ListChargersPage());
+      case Routes.listChargerFormRoute:
+        return MaterialPageRoute(builder: (_) => const ListChargerForm());
       default:
         return unDefinedRoute();
     }

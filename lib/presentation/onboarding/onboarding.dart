@@ -226,7 +226,7 @@ class OnBoardingPage extends StatelessWidget {
             _sliderObject.title,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontFamily: FontConstants.fontFamily,
+              fontFamily: FontConstants.bodyFontFamily,
               fontWeight: FontWeight.w600,
               fontSize: AppSize.s20,
             ),

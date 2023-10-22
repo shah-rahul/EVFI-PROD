@@ -10,8 +10,8 @@ import './values_manager.dart';
 ThemeData getApplicationTheme() {
   return ThemeData(
       //appwide font
-      fontFamily: 'Montserrat',
-      
+      fontFamily: 'Poppins',
+
       // main colors of the app
       primaryColor: ColorManager.primary,
       primaryColorLight: ColorManager.primaryWithOpacity,
@@ -21,6 +21,7 @@ ThemeData getApplicationTheme() {
       splashColor: ColorManager.primaryWithOpacity,
       // will be used incase of disabled button for example
       hintColor: ColorManager.grey,
+
       // card view theme
       cardTheme: CardTheme(
           color: Colors.white,
@@ -32,33 +33,42 @@ ThemeData getApplicationTheme() {
           color: ColorManager.primary,
           elevation: AppSize.s4,
           shadowColor: ColorManager.primaryWithOpacity,
-          titleTextStyle: getRegularStyle(
-              color: Colors.white, fontSize: FontSize.s16)),
-      // Button theme
-      buttonTheme: ButtonThemeData(
-          shape: const StadiumBorder(),
-          disabledColor: ColorManager.grey1,
-          buttonColor: ColorManager.primary,
-          splashColor: ColorManager.primaryWithOpacity),
+          titleTextStyle:
+              getRegularStyle(color: Colors.white, fontSize: FontSize.s16)),
+
+
+      // text Button theme
+      textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+        backgroundColor: ColorManager.primary,
+        foregroundColor: ColorManager.appBlack,
+      )),
 
       // elevated button theme
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
               backgroundColor: ColorManager.primary,
               foregroundColor: ColorManager.appBlack,
+              elevation: 6,
+              shadowColor: ColorManager.primaryWithOpacity,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)))),
 
       // Text theme
       textTheme: TextTheme(
-          headline1: getSemiBoldStyle(
-              color: ColorManager.darkGrey, fontSize: FontSize.s16),
-          subtitle1: getMediumStyle(
-              color: ColorManager.lightGrey, fontSize: FontSize.s14),
-          caption: getRegularStyle(color: ColorManager.grey1),
-          bodyText1: getRegularStyle(color: ColorManager.grey)),
-      // input decoration theme (text form field)
+          headlineMedium: getSemiBoldStyle(
+              color: ColorManager.appBlack, fontSize: FontSize.s18),
+          headlineSmall: getSemiBoldStyle(
+              color: ColorManager.appBlack, fontSize: FontSize.s16),
+          titleSmall: getSemiBoldStyle(
+              color: ColorManager.appBlack,
+              fontFamily: FontConstants.appTitleFontFamily,
+              fontSize: FontSize.s20),
+          bodyMedium: getMediumStyle(
+              color: ColorManager.darkGrey, fontSize: FontSize.s14),
+          bodySmall: getRegularStyle(color: ColorManager.grey)),
 
+      // input decoration theme (text form field)
       inputDecorationTheme: InputDecorationTheme(
         contentPadding: const EdgeInsets.all(AppPadding.p8),
         // hint style

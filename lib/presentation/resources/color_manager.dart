@@ -26,7 +26,6 @@ class ColorManager {
   static Color grey1 = HexColor.fromHex("#707070");
   static Color grey2 = HexColor.fromHex("#797979");
   static Color grey3 = HexColor.fromHex("#434343");
-
   static Color error = HexColor.fromHex("#e61f34"); // red color
 }
 
