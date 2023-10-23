@@ -1,10 +1,16 @@
-// import 'package:evfi_duplicate/onboarding1.dart';
+import 'package:controller/controller.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:evfi/presentation/resources/color_manager.dart';
 import '../onboarding/onboarding1.dart';
 import '../storage/UserData.dart';
 import '../storage/UserDataProvider.dart';
+import 'package:evfi/presentation/resources/assets_manager.dart';
+import '../resources/font_manager.dart';
+import '../resources/strings_manager.dart';
+import '../resources/values_manager.dart';
+import '../resources/routes_manager.dart';
+
 
 class Name extends StatefulWidget {
   @override
@@ -12,144 +18,142 @@ class Name extends StatefulWidget {
 }
 
 class _NameState extends State<Name> {
-  final Color myColor = Color.fromRGBO(208, 187, 30, 0.5);
-  final Color myColor2 = Color.fromRGBO(99, 99, 95, 1);
-  final Color mainColor = Color.fromRGBO(255, 216, 15, 1);
 
   TextEditingController nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     final userDataProvider = Provider.of<UserDataProvider>(context);
     //  Storing user's name  using provider
-
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;
       userData.name = name;
       userData.level1 = true;
-
       userDataProvider.setUserData(userData);
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 50),
-            Image.asset(
-              'assets/assetss/head.png',
-              height: 130,
-              width: 130,
-            ),
-            Image.asset(
-              'assets/assetss/body.png',
-              height: 200,
-              width: 200,
-            ),
-            SizedBox(height: 80),
-            Text(
-              'what should',
-              style: TextStyle(
-                color: mainColor,
-                fontSize: 30,
-                fontFamily: 'fonts/Poppins',
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(-5.0, 4.0),
-                    color: myColor,
+      backgroundColor: ColorManager.appBlack,
+      resizeToAvoidBottomInset: true,
+      body: GestureDetector(
+        onTap: () {
+          // Close the keyboard when tapped outside the text field
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                SizedBox(height: screenHeight * 0.10),
+                FractionallySizedBox(
+                  widthFactor: 0.3,
+                  child: Image.asset(
+                    ImageAssets.head,
+                    fit: BoxFit.contain,
                   ),
-                ],
-              ),
-            ),
-            Text(
-              'we call you',
-              style: TextStyle(
-                color: mainColor,
-                fontSize: 30,
-                fontFamily: 'fonts/Poppins',
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2.0,
-                shadows: <Shadow>[
-                  Shadow(
-                    offset: Offset(-5.0, 4.0),
-                    color: myColor,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 80),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 30),
-              child: SizedBox(
-                height: 60,
-                child: TextField(
-                  onChanged: (value) async {
-                    // Store the entered name in the provider
-                    setState(() {
-                      nameController.text = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: myColor2,
-                    hintText: 'OTP',
-                    labelText: '',
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 15, horizontal: 105),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: mainColor.withOpacity(0.5)),
-                      borderRadius: BorderRadius.all(Radius.circular(
-                          10)), // Border color when the TextField is not focused
-                    ),
-                    labelStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 26,
-                    ),
-                    hintStyle: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  style: TextStyle(color: Colors.black),
                 ),
-              ),
-            ),
-            SizedBox(height: 10),
-            SizedBox(
-              height: 50,
-              width: 330,
-              child: ElevatedButton(
-                onPressed: () async {
-                  StoreName(nameController.text);
-                  await userDataProvider.saveUserData();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Onboarding1()),
-                  );
-                  // Add your logic here
-                },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        10.0), // Set the border radius here
+                SizedBox(height: screenHeight * 0.01),
+                FractionallySizedBox(
+                  widthFactor: 0.4,
+                  child: Image.asset(
+                    ImageAssets.body,
+                    fit: BoxFit.contain,
                   ),
-                  primary: mainColor, // Button background color
                 ),
-                child: Text(
-                  'next',
+                SizedBox(height: screenHeight * 0.10),
+                Text(
+                  AppStrings.whatShould,
                   style: TextStyle(
-                    color: Colors.black,
-                    fontFamily: 'Poppins',
+                    color: ColorManager.primary,
+                    fontSize: FontSize.s35,
+                    fontFamily: 'fonts/Poppins',
                     fontWeight: FontWeight.bold,
-                    fontSize: 24,
+                    letterSpacing: 2.0,
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: Offset(-5.0, 4.0),
+                        color: ColorManager.dullYellow,
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                Text(
+                  AppStrings.weCallYou,
+                  style: TextStyle(
+                    color: ColorManager.primary,
+                    fontSize: FontSize.s35,
+                    fontFamily: 'fonts/Poppins',
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    shadows: <Shadow>[
+                      Shadow(
+                        offset: Offset(-5.0, 4.0),
+                        color: ColorManager.dullYellow,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.18),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: ColorManager.grey4,
+                      hintText: 'abc',
+                      labelText: 'Name',
+                      contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: ColorManager.primary.withOpacity(0.5)),
+                        borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+                      ),
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                        fontSize: FontSize.s12,
+                      ),
+                      hintStyle: TextStyle(
+                        color: ColorManager.appBlack,
+                      ),
+                    ),
+                    style: TextStyle(color: ColorManager.appBlack),
+                  ),
+                ),
+                SizedBox(height: screenHeight * 0.02),
+                SizedBox(
+                  height: screenHeight * 0.06,
+                  width: screenWidth * 0.8,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      StoreName(nameController.text);
+                      await userDataProvider.saveUserData();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Onboarding1()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(screenWidth * 0.02),
+                      ),
+                      primary: ColorManager.primary,
+                    ),
+                    child: Text(
+                      AppStrings.next,
+                      style: TextStyle(
+                        color: ColorManager.appBlack,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.bold,
+                        fontSize: FontSize.s20,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            // Rest of your widgets
-          ],
+          ),
         ),
       ),
     );
