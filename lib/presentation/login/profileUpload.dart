@@ -1,27 +1,29 @@
-// import 'package:evfi_duplicate/name.dart';
-// import 'package:evfi_duplicate/profileImage.dart';
 import 'package:evfi/presentation/login/profileImage.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:evfi/presentation/resources/assets_manager.dart';
+import '../resources/font_manager.dart';
+import '../resources/strings_manager.dart';
+import '../resources/values_manager.dart';
+import '../resources/routes_manager.dart';
 
 import 'name.dart';
 class ProfileUpload extends StatelessWidget {
-  final Color myColor = Color.fromRGBO(208, 187, 30, 0.5);
-  final Color myColor2 = Color.fromRGBO(99,99,95,1);
-  final Color mainColor = Color.fromRGBO(255,216,15,1);
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: ColorManager.appBlack,
         body: Center(
             child: Stack(
               children: <Widget>[
-                // First picture (at the bottom)
                 Positioned(
-                  top: 50, // Adjust the position as needed
-                  left: 30,
+                  top: screenHeight * 0.08,
+                  left:screenWidth * 0.05,
                   child: SizedBox(
-                    height: 60,
-                    width: 60,
+                    height: screenHeight * 0.12,
+                    width: screenWidth * 0.12,
                     child: SingleChildScrollView(
                       child: ElevatedButton(
                         onPressed: () {
@@ -31,11 +33,11 @@ class ProfileUpload extends StatelessWidget {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: mainColor, // Button background color
+                          primary: ColorManager.primary,
                         ),
                         child: Row(
                           children: <Widget>[
-                            Icon(Icons.chevron_left,size: 28,color: Colors.black,), // Your icon here
+                            Icon(Icons.chevron_left,size: screenWidth * 0.03,color: ColorManager.appBlack,), // Your icon here
                           ],
                         ),
                       ),
@@ -43,62 +45,60 @@ class ProfileUpload extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 150, // Adjust the position as needed
-                  left: 50, // Adjust the position as needed
+                  top: screenHeight * 0.15,
+                  left: screenWidth * 0.15,
                   child: Image.asset(
-                    'assets/assetss/Circle.png', // Path to your first picture
-                    width: 300, // Set the width of the first picture
-                    height: 300, // Set the height of the first picture
+                    ImageAssets.circle,
+                    width: screenWidth * 0.7,
+                    height: screenWidth * 0.7,
                   ),
                 ),
-                // Second picture (overlapping the first picture)
                 Positioned(
-                  top: 540, // Adjust the position as needed
-                  left: 100,
+                  top: screenHeight * 0.59,
+                  left: screenWidth * 0.23,
                   child: Text(
-                    'looking clean',
+                    AppStrings.lookingClean,
                     style: TextStyle(
-                      color: Colors.yellow,
-                      fontSize: 28,
+                      color: ColorManager.primary,
+                      fontSize: FontSize.s35,
                       fontFamily: 'fonts/Poppins',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
                       shadows: <Shadow>[
                         Shadow(
                             offset: Offset(-4.0, 3.0),
-                            color: myColor
+                            color: ColorManager.dullYellow
                         ),
                       ],
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 700, // Adjust the position as needed
-                  left: 30,
+                  top: screenHeight * 0.85,
+                  left: screenWidth * 0.10,
                   child: SizedBox(
-                    height: 50,
-                    width: 330,
+                    height: screenHeight * 0.06,
+                    width: screenWidth * 0.8,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => Name()),
                         );
-                        // Add your login logic here
                       },
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0), // Set the border radius here
+                          borderRadius: BorderRadius.circular(screenWidth * 0.02),
                         ),
-                        primary: mainColor, // Button background color
+                        primary: ColorManager.primary,
                       ),
                       child: Text(
-                        'upload',
+                        AppStrings.upload,
                         style: TextStyle(
-                            color: Colors.black,
+                            color: ColorManager.appBlack,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
-                            fontSize: 24
+                            fontSize: FontSize.s20
                         ),
                       ),
                     ),

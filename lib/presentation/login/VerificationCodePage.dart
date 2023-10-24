@@ -96,7 +96,7 @@ class _VerificationCodePageState extends State<VerificationCodePage> {
                       child: Text(
                         'Verify OTP',
                         style: TextStyle(
-                          fontFamily: FontConstants.fontFamily,
+                          fontFamily: FontConstants.bodyFontFamily,
                           fontWeight: FontWeight.w300,
                           fontSize: AppSize.s28,
                           color: ColorManager.darkGrey,

@@ -41,7 +41,7 @@ dependencies:
   geoflutterfire_plus: ^0.0.14
 
   cloud_firestore: ^4.8.5 #fire store cloud
-  get: ^4.6.5 #Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
+  get: ^4.6.6 #Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
   controller: ^0.1.12 #Write HTTP servers with metadata annotated classes with support for validation and security.
   firebase_database: ^10.2.2 #Flutter plugin for Firebase Database, a cloud-hosted NoSQL database with realtime data syncing across Android and iOS clients, and offline access.
   firebase_core: ^2.14.0 #Flutter plugin for Firebase Core, enabling connecting to multiple Firebase apps.
@@ -100,20 +100,6 @@ flutter:
     - assets/images/login/
     - assets/images/booking/
     - assets/images/map/carphoto.jpeg
-    - assets/assetss/Arrow.png
-    - assets/assetss/body.png
-    - assets/assetss/Car.png
-    - assets/assetss/Circle.png
-    - assets/assetss/head.png
-    - assets/assetss/left_arrow.png
-    - assets/assetss/left.png
-    - assets/assetss/logo.png
-    - assets/assetss/middle.png
-    - assets/assetss/plugged_car.png
-    - assets/assetss/Rectangle.png
-    - assets/assetss/right_arrow.png
-    - assets/assetss/right.png
-    - assets/assetss/sation.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -138,6 +124,11 @@ flutter:
           weight: 400
         - asset: assets/fonts/Montserrat-Light.ttf
           weight: 300
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Black.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -3,7 +3,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
+import 'package:evfi/presentation/resources/custom_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/pricing_model.dart';
 
@@ -26,7 +29,6 @@ import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
-import 'package:evfi/presentation/pages/models/header_ui.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
@@ -91,7 +93,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
   Widget _makeTitle({required String title}) {
     return Padding(
-        padding: const EdgeInsets.only(bottom: 4),
+        padding: const EdgeInsets.only(left: 5, bottom: 5),
         child:
             Text(title, style: const TextStyle(fontWeight: FontWeight.bold)));
   }
@@ -116,46 +118,45 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
   _showMap() {
     setState(() {});
-    return Container(
-        height: 250,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(), //width: 3.5, color: ColorManager.appBlack),
-            boxShadow: [
-              BoxShadow(
-                  color: ColorManager.primary.withOpacity(0.17),
-                  blurRadius: 2,
-                  offset: const Offset(2, 3))
-            ]),
-        child: GoogleMap(
-          onMapCreated: (argController) {
-            _controller = argController;
-          },
-          initialCameraPosition: const CameraPosition(
-              target: LatLng(29.946658, 76.817938), zoom: 16.3),
-          mapType: MapType.normal,
-          mapToolbarEnabled: false,
-          compassEnabled: false,
-          gestureRecognizers: Set()
-            ..add(Factory<EagerGestureRecognizer>(
-                () => EagerGestureRecognizer())),
-          onTap: (coordinates) {
-            _pinMarkerOnMap(coordinates);
-            setState(() {
-              _position = coordinates;
-            });
-          },
-          markers: {_station},
-        ));
+    return Card(
+      elevation: 4,
+      child: Container(
+          height: 250,
+          width: double.infinity,
+          child: GoogleMap(
+            onMapCreated: (argController) {
+              _controller = argController;
+            },
+            initialCameraPosition: const CameraPosition(
+                target: LatLng(29.946658, 76.817938), zoom: 16.3),
+            mapType: MapType.normal,
+            mapToolbarEnabled: false,
+            compassEnabled: false,
+            gestureRecognizers: Set()
+              ..add(Factory<EagerGestureRecognizer>(
+                  () => EagerGestureRecognizer())),
+            onTap: (coordinates) {
+              _pinMarkerOnMap(coordinates);
+              setState(() {
+                _position = coordinates;
+              });
+            },
+            markers: {_station},
+          )),
+    );
   }
 
   Widget _takeChargerLocation() {
     return _isPinning
         ? _showMap()
         : Card(
-            elevation: 2,
+            elevation: 4,
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             child: ListTile(
-              tileColor: ColorManager.primary.withOpacity(0.17),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
+              tileColor: ColorManager.primaryWithOpacity,
               textColor: Colors.black,
               selectedColor: Colors.green,
               title: const Text('Select Charger location',
@@ -173,65 +174,92 @@ class _ListChargerFormState extends State<ListChargerForm> {
           );
   }
 
-  late int chargerType;
+  int chargerType = -1;
   Widget _chargerTypeRadioButtons() {
     return Row(
       children: <Widget>[
         Expanded(
-            child: RadioListTile<typeCharger>(
-          contentPadding: const EdgeInsets.all(0.0),
-          value: typeCharger.Level1,
-          groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.1),
-          onChanged: (val) {
-            setState(() {
-              // debugPrint('Selected Charger: \t$val');
-              _type = val;
-              chargerType = _type!.index;
-              // print('8***********************$chargerType');
-            });
-          },
-          title: const Text(
-            'Level1',
-            style: TextStyle(color: Colors.black87),
+            child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: RadioListTile<typeCharger>(
+            contentPadding: const EdgeInsets.all(0.0),
+            dense: true,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            activeColor: Colors.transparent,
+            value: typeCharger.Level1,
+            groupValue: _type,
+            tileColor: (chargerType == 0) ? Colors.green[400] : Colors.white,
+            onChanged: (val) {
+              setState(() {
+                // debugPrint('Selected Charger: \t$val');
+                _type = val;
+                chargerType = _type!.index;
+                // print('8***********************$chargerType');
+              });
+            },
+            title: const Text(
+              'Level 1',
+              style: TextStyle(color: Colors.black87),
+            ),
           ),
         )),
-        const SizedBox(width: 8),
+        const SizedBox(width: 12),
         Expanded(
-            child: RadioListTile<typeCharger>(
-          contentPadding: const EdgeInsets.all(0.0),
-          value: typeCharger.Level2,
-          groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.17),
-          onChanged: (val) {
-            setState(() {
-              debugPrint('Selected Charger: \t$val');
-              _type = val;
-              chargerType = _type!.index;
-            });
-          },
-          title: const Text(
-            'Level2',
-            style: TextStyle(color: Colors.black87),
+            child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: RadioListTile<typeCharger>(
+            contentPadding: const EdgeInsets.all(0.0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            activeColor: Colors.transparent,
+            dense: true,
+            value: typeCharger.Level2,
+            groupValue: _type,
+            tileColor: (chargerType == 1) ? Colors.green[400] : Colors.white,
+            onChanged: (val) {
+              setState(() {
+                debugPrint('Selected Charger: \t$val');
+                _type = val;
+                chargerType = _type!.index;
+              });
+            },
+            title: const Text(
+              'Level 2',
+              style: TextStyle(color: Colors.black87),
+            ),
           ),
         )),
-        const SizedBox(width: 8),
+        const SizedBox(width: 12),
         Expanded(
-            child: RadioListTile<typeCharger>(
-          contentPadding: const EdgeInsets.all(0.0),
-          value: typeCharger.Level3,
-          groupValue: _type,
-          tileColor: ColorManager.primary.withOpacity(0.17),
-          onChanged: (val) {
-            setState(() {
-              debugPrint('Selected Charger: \t$val');
-              _type = val;
-              chargerType = _type!.index;
-            });
-          },
-          title: const Text(
-            'Level3',
-            style: TextStyle(color: Colors.black87),
+            child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 4,
+          child: RadioListTile<typeCharger>(
+            contentPadding: const EdgeInsets.all(0.0),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            dense: true,
+            activeColor: Colors.transparent,
+            value: typeCharger.Level3,
+            groupValue: _type,
+            tileColor: (chargerType == 2) ? Colors.green[400] : Colors.white,
+            onChanged: (val) {
+              setState(() {
+                debugPrint('Selected Charger: \t$val');
+                _type = val;
+                chargerType = _type!.index;
+              });
+            },
+            title: const Text(
+              'Level 3',
+              style: TextStyle(color: Colors.black87),
+            ),
           ),
         )),
       ],
@@ -267,8 +295,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
       String imageUrl = await ref.getDownloadURL();
 
       imageUrls.add(imageUrl);
-      // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-      // print(imageUrls);
     }
 
     return imageUrls;
@@ -322,7 +348,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
         ),
         Container(
             decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
                 border: Border.all()),
             padding: const EdgeInsets.all(4),
             height: 150,
@@ -460,17 +486,48 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
+    void addChargerFunction() async {
+      _submitForm;
+      StoreChargerType(++chargerType);
+      StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
+      Storeg(_position);
+      await uploadImages(_imageList!)
+          .then((value) => {StoreImageurl(imageUrls)});
+
+      await FirebaseFirestore.instance
+          .collection('user')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          var doc = querySnapshot.docs[0];
+          doc.reference.update({'isProvider': true});
+        }
+      });
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isProvider', true);
+
+      userChargingDataProvider.saveUserChargingData().then((_) => Navigator.pop(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: const BookingsScreen())));
+    }
+
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
           leading: IconButton(
               onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.clear, color: Colors.white)),
-          title: const Text(
-            'Rent your Charger',
-          ),
-          backgroundColor: ColorManager.appBlack.withOpacity(0.88),
+              icon: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.black,
+              )),
+          title: const Text('List your Charger',
+              style: TextStyle(color: Colors.black)),
+          elevation: 0,
         ),
-        backgroundColor: Colors.grey[200],
+        backgroundColor: ColorManager.lightGrey,
         body: _isLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -478,21 +535,18 @@ class _ListChargerFormState extends State<ListChargerForm> {
             : Form(
                 key: _formKey,
                 child: ListView(
+                  padding: const EdgeInsets.all(15.0),
                   children: <Widget>[
-                    Container(
-                      height: 220,
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 10),
-                      child:
-                          const HeaderUI(220, true, ImageAssets.oldBlackMarker),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _makeTitle(title: 'Station Name'),
-                            TextFormField(
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _makeTitle(title: 'Station Name'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: TextFormField(
                               onChanged: StoreStationName,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -503,9 +557,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'Amog Public Charging Station',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               textInputAction: TextInputAction.next,
                               onFieldSubmitted: (_) => FocusScope.of(context)
@@ -517,11 +574,17 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 // StoreStationName(StationName!);
                               },
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Address'),
-                            TextFormField(
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Address'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: TextFormField(
                               onChanged: StoreStationAddress,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -533,9 +596,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               decoration: const InputDecoration(
                                   hintText:
                                       '255-A, Himadri Society, Hudson Lane',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               keyboardType: TextInputType.streetAddress,
                               textInputAction: TextInputAction.next,
@@ -548,11 +614,17 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 });
                               },
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'City'),
-                            TextFormField(
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'City'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            child: TextFormField(
                               onChanged: StoreCity,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -563,9 +635,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'Ambala',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               focusNode: _cityFocusNode,
                               keyboardType: TextInputType.text,
@@ -576,22 +651,27 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 city = newValue!;
                               },
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                _makeTitle(title: 'Pin/Postal Code'),
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.19,
-                                ),
-                                _makeTitle(title: 'State/Province')
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Row(
+                            children: [
+                              _makeTitle(title: 'Pin/Postal Code'),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.19,
+                              ),
+                              _makeTitle(title: 'State/Province')
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  elevation: 4,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   child: TextFormField(
                                     onChanged: StorePin,
                                     validator: (value) {
@@ -608,9 +688,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                         TextStyle(color: ColorManager.darkGrey),
                                     decoration: InputDecoration(
                                       hintText: '80085',
+                                      fillColor: Colors.white,
+                                      filled: true,
                                       enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
                                           borderRadius:
-                                              BorderRadius.circular(10)),
+                                              BorderRadius.circular(8)),
                                     ),
                                     keyboardType: TextInputType.number,
                                     focusNode: _pinCodeFocusNode,
@@ -622,18 +705,29 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                     },
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 3,
-                                ),
-                                Expanded(
+                              ),
+                              const SizedBox(
+                                width: 3,
+                              ),
+                              Expanded(
+                                child: Card(
+                                  elevation: 4,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   child: DropdownButtonFormField<String>(
                                     value: state,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                     decoration: const InputDecoration(
                                         hintText: 'Select State',
+                                        fillColor: Colors.white,
+                                        filled: true,
                                         // : ColorManager.primary.withOpacity(0.17),
                                         enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
                                             borderRadius: BorderRadius.all(
-                                                Radius.circular(10)))),
+                                                Radius.circular(8)))),
                                     items: States.values
                                         .map<DropdownMenuItem<String>>(
                                             (States st) {
@@ -653,21 +747,28 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                         TextStyle(color: ColorManager.darkGrey),
                                   ),
                                 ),
-                              ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _takeChargerLocation(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          // _askCoordinates(),
+                          // const SizedBox(
+                          //   height: 15,
+                          // ),
+                          _makeTitle(title: 'Aadhar No.'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
                             ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _takeChargerLocation(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            // _askCoordinates(),
-                            // const SizedBox(
-                            //   height: 15,
-                            // ),
-                            _makeTitle(title: 'Aadhar No.'),
-                            TextFormField(
+                            child: TextFormField(
                               onChanged: StoreAadharNumber,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -678,9 +779,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'XXXX-XXXX-XXXX-XXXX',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               focusNode: _aadharFocusNode,
                               keyboardType: TextInputType.number,
@@ -691,11 +795,18 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 aadharNumber = newValue!;
                               },
                             ),
-                            const SizedBox(
-                              height: 15,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Host Names'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
                             ),
-                            _makeTitle(title: 'Host Names'),
-                            TextFormField(
+                            child: TextFormField(
                               onChanged: StoreHostName,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -707,9 +818,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               decoration: const InputDecoration(
                                   hintText:
                                       'Priyanshu Maikhuri\nArshdeep Singh\nRaj',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               maxLines: 3,
                               keyboardType: TextInputType.name,
@@ -721,44 +835,53 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 });
                               },
                             ),
-                            const SizedBox(
-                              height: 15,
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Charger Type'),
+                          _chargerTypeRadioButtons(),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Availability'),
+                          TimeIntervalPicker(
+                              borderColor: Colors.black,
+                              fillColor: ColorManager.primaryWithOpacity,
+                              borderRadius: 10,
+                              endLimit: DateTimeExtension.todayMidnight,
+                              startLimit: DateTimeExtension.todayStart,
+                              onChanged: (start, end, isAllDay) {
+                                _startAvailabilityTime = DateFormat('h:mm a')
+                                    .format(start!)
+                                    .toString();
+                                _endAvailabilityTime = DateFormat('h:mm a')
+                                    .format(end!)
+                                    .toString();
+                              }),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          _makeTitle(title: 'Price (₹KW/h)'),
+                          Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
                             ),
-                            _makeTitle(title: 'Charger Type'),
-                            _chargerTypeRadioButtons(),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Availability'),
-                            TimeIntervalPicker(
-                                borderColor: Colors.black,
-                                fillColor:
-                                    ColorManager.primary.withOpacity(0.17),
-                                borderRadius: 10,
-                                endLimit: DateTimeExtension.todayMidnight,
-                                startLimit: DateTimeExtension.todayStart,
-                                onChanged: (start, end, isAllDay) {
-                                  _startAvailabilityTime = DateFormat('h:mm a')
-                                      .format(start!)
-                                      .toString();
-                                  _endAvailabilityTime = DateFormat('h:mm a')
-                                      .format(end!)
-                                      .toString();
-                                }),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            _makeTitle(title: 'Price (₹KW/h)'),
-                            TextFormField(
+                            child: TextFormField(
                               onChanged: StorePrice,
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   prefixText: '₹\t',
                                   prefixStyle:
                                       TextStyle(fontSize: FontSize.s16),
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               focusNode: _priceFocusNode,
                               onFieldSubmitted: (_) => FocusScope.of(context)
@@ -777,9 +900,16 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 });
                               },
                             ),
-                            const SizedBox(height: 15),
-                            _makeTitle(title: 'Amenities'),
-                            TextFormField(
+                          ),
+                          const SizedBox(height: 15),
+                          _makeTitle(title: 'Amenities'),
+                          Card(
+                            elevation: 4,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8)),
+                            ),
+                            child: TextFormField(
                               onChanged: Storeamenities,
                               validator: (value) {
                                 if (value!.isEmpty) {
@@ -790,12 +920,15 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'Cafeteria/Toilets/Rest Room',
+                                  fillColor: Colors.white,
+                                  filled: true,
                                   enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               focusNode: _amenitiesFocusNode,
-                              maxLines: 3,
+                              maxLines: 5,
                               keyboardType: TextInputType.multiline,
                               textInputAction: TextInputAction.newline,
                               onSaved: (newValue) {
@@ -804,118 +937,26 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 });
                               },
                             ),
-                            const SizedBox(width: 15),
-                            Container(
-                              margin: const EdgeInsets.only(top: 15),
-                              child: _imageList!.isNotEmpty
-                                  ? _showChargerImages()
-                                  : Align(
-                                      alignment: Alignment.center,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            _showPhotoOptionsDialog();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                              backgroundColor: Colors.black87,
-                                              shadowColor:
-                                                  ColorManager.appBlack,
-                                              elevation: 6,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          25))),
-                                          child: const Text(
-                                            'Charger Images',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.white),
-                                          )),
-                                    ),
-                            )
-                          ]),
-                    ),
+                          ),
+                          // const SizedBox(width: 40),
+                          Container(
+                            margin: const EdgeInsets.only(top: 25),
+                            child: _imageList!.isNotEmpty
+                                ? _showChargerImages()
+                                : customElevatedButton(
+                                    context: context,
+                                    onTap: _showPhotoOptionsDialog,
+                                    text: 'Charger-Location Images',
+                                    color: ColorManager.primaryWithOpacity),
+                          )
+                        ]),
                     const SizedBox(
-                      height: 20,
+                      height: 30,
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: () async {
-                                  _submitForm;
-                                  StoreChargerType(++chargerType);
-                                  StoreAvailability(_startAvailabilityTime!,
-                                      _endAvailabilityTime!);
-                                  Storeg(_position);
-                                  await uploadImages(_imageList!).then(
-                                      (value) => {
-                                        // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"),
-                                        // print(imageUrls),
-                                        StoreImageurl(imageUrls)});
-
-                                  userChargingDataProvider
-                                      .saveUserChargingData()
-                                      .then((_) => Navigator.pop(
-                                          context,
-                                          PageTransition(
-                                              type: PageTransitionType.fade,
-                                              child:
-                                                  const MyChargingScreen())));
-
-                                  await FirebaseFirestore.instance
-                                      .collection('user')
-                                      .where('uid',
-                                          isEqualTo: FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                      .get()
-                                      .then((QuerySnapshot<Map<String, dynamic>>
-                                          querySnapshot) {
-                                    if (querySnapshot.docs.isNotEmpty) {
-                                      var doc = querySnapshot.docs[0];
-                                      doc.reference
-                                          .update({'isProvider': true});
-                                    }
-                                  });
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorManager.primary.withOpacity(0.7),
-                                    shadowColor: ColorManager.appBlack,
-                                    elevation: 6,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25))),
-                                child: const Text(
-                                  'Add',
-                                  style: TextStyle(fontSize: 15),
-                                )),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Expanded(
-                            child: ElevatedButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                style: ElevatedButton.styleFrom(
-                                    backgroundColor:
-                                        ColorManager.primary.withOpacity(0.7),
-                                    shadowColor: ColorManager.appBlack,
-                                    elevation: 6,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25))),
-                                child: const Text(
-                                  'Cancel',
-                                  style: TextStyle(fontSize: 15),
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
+                    customElevatedButton(
+                        context: context, onTap: addChargerFunction, text: 'Add'),
                     const SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
                   ],
                 )));

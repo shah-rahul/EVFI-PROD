@@ -4,39 +4,18 @@ import 'dart:async';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/pages/widgets/BookingDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:page_transition/page_transition.dart';
-
-import 'package:evfi/presentation/resources/assets_manager.dart';
-import 'package:evfi/presentation/resources/font_manager.dart';
-import 'package:evfi/presentation/resources/styles_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
-
-// List<Booking> BookingList = [
-//   Booking(
-//       customerName: "Arshdeep Singh",
-//       stationName: "Aomg Charging Station Hub",
-//       customerMobileNumber: "+918989898989",
-//       timeStamp: DateTime.now().toString(),
-//       amount: 120,
-//       status: 1,
-//       ratings: 4.0),
-//   Booking(
-//       customerName: "Priyanshu Maikhuri",
-//       stationName: "Aomg Charging Station Hub",
-//       customerMobileNumber: "+913131313131",
-//       timeStamp: DateTime.now().toString(),
-//       amount: 120,
-//       status: 1,
-//       ratings: 4.0)
-// ];
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({Key? key}) : super(key: key);
@@ -46,7 +25,7 @@ class BookingsScreen extends StatefulWidget {
 
 class _BookingsScreenState extends State<BookingsScreen> {
   bool _currentSelected = true;
-  bool _isProvider = false;
+  bool? _isProvider;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   QuerySnapshot<Map<String, dynamic>>? _userCollection;
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
@@ -55,77 +34,63 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   void initState() {
     super.initState();
-    initializeProvider();
-    // print(
-    //     'Value of Provide is: $_isProvider ******************************************************');
+    checkIfProvider();
   }
 
-  void initializeProvider() async {
-    _userCollection = await FirebaseFirestore.instance
-        .collection('user')
-        .where('uid', isEqualTo: userId)
-        .get();
-    // print('222222222222222222222');
-    if (_userCollection!.docs.isNotEmpty) {
-      var doc = _userCollection!.docs[0];
-      _isProvider = doc.data()['isProvider'];
-    }
-    setState(() {});
-    // print('*****************************$_isProvider');
-  }
-
-  void _addCharger() async {
-    Navigator.of(context).push(PageTransition(
-        child: const ListChargerForm(), type: PageTransitionType.theme));
-    if (_isProvider) {
-      return;
-    }
-    await FirebaseFirestore.instance
-        .collection('user')
-        .where('uid', isEqualTo: userId)
-        .get()
-        .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      if (querySnapshot.docs.isNotEmpty) {
-        var doc = querySnapshot.docs[0];
-        doc.reference.update({'isProvider': true});
+  Future<void> checkIfProvider() async {
+    final prefs = await SharedPreferences.getInstance();
+    _isProvider = prefs.getBool('isProvider');
+    if (_isProvider == null) {
+      _userCollection = await FirebaseFirestore.instance
+          .collection('user')
+          .where('uid', isEqualTo: userId)
+          .get();
+      if (_userCollection!.docs.isNotEmpty) {
+        var doc = _userCollection!.docs[0];
+        _isProvider = doc.data()['isProvider'];
+        prefs.setBool('isProvider', _isProvider!);
       }
-    });
-    setState(() {
-      _isProvider = true;
-    });
-    // await _userCollection!.update({'isProvider': _isProvider});
+    }
+    // if (!_isProvider!) {
+    //   //User is not a provider, show List charger page
+    //   Navigator.of(context).pushReplacementNamed(Routes.ListChargerPage);
+    // }
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return _isProvider
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text(
-                AppStrings.BookingTitle,
-                textAlign: TextAlign.start,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-              backgroundColor: Colors.white,
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(PageTransition(
-                          child: const ListChargerForm(),
-                          type: PageTransitionType.theme));
-                    },
-                    icon: const Icon(
-                      Icons.add_business_outlined,
-                      color: Colors.black,
-                    ))
-              ],
-            ),
-            body: Container(
-                child:
-                    _currentSelected ? PendingScreen(context) : RecentScreen()),
-          )
-        : ListChargersPage(addCharger: _addCharger);
+    checkIfProvider();
+    if (_isProvider == null) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    } else if (_isProvider == true) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            AppStrings.BookingTitle,
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
+                },
+                icon: const Icon(
+                  Icons.add_business_outlined,
+                  color: Colors.black,
+                ))
+          ],
+        ),
+        body: Container(
+            child: _currentSelected ? PendingScreen(context) : RecentScreen()),
+      );
+    } else {
+      return ListChargersPage();
+    }
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
@@ -135,8 +100,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         .doc(chargerId)
         .get();
     stationName = chargerDetails['info']['stationName'];
-    print(stationName);
-    print(customerId);
+    debugPrint(stationName);
+    debugPrint(customerId);
     final customerDetails = await FirebaseFirestore.instance
         .collection('user')
         .doc(customerId)
@@ -306,36 +271,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
     );
   }
 
-  // Widget getBookingTabs(double height) {
-  //   return StreamBuilder<BookingDataWidget>(
-  //       stream: bookingProviderObject.stream,
-  //       builder: (context, snapShot) {
-  //         print(snapShot.data);
-  //         print("************");
-  //         return SingleChildScrollView(
-  //           child: Container(
-  //             height: height * 0.85,
-  //             child: ListView.builder(
-  //               itemBuilder: (context, ind) {
-  //                 return Column(
-  //                   children: [
-  //                     BookingWidget(BookingList[ind], _currentSelected),
-  //                     Text(snapShot.data != null
-  //                         ? snapShot.data!.stationName
-  //                         : ""),
-  //                     SizedBox(
-  //                       height: 5,
-  //                     )
-  //                   ],
-  //                 );
-  //               },
-  //               itemCount: BookingList.length,
-  //             ),
-  //           ),
-  //         );
-  //       });
-  // }
-
   Widget RecentScreen() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -394,76 +329,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
-
-        // const SizedBox(height: 10),
-        // Container(
-        //   width: widthInLogicalPixels, // Adjust as needed
-        //   height: heightInLogicalPixels, // Adjust as neede
-        //   decoration: BoxDecoration(
-        //     color: Color(0xFFD0F4D5),
-        //     borderRadius: BorderRadius.circular(30),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         offset: Offset(-8, 6),
-        //         blurRadius: 50,
-        //         color: Color.fromRGBO(0, 0, 0, 0.25),
-        //       ),
-        //     ],
-        //   ),
-        //   child: Column(
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     crossAxisAlignment: CrossAxisAlignment.start,
-        //     children: [
-        //       Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 30),
-        //         child: Text(
-        //           'Rahul ka Charger',
-        //           style: TextStyle(
-        //             color: Colors.black,
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //           ),
-        //         ),
-        //       ),
-        //       SizedBox(height: 5),
-        //       Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 30),
-        //         child: Text(
-        //           'Time slot- 23:00 3:00',
-        //           style: TextStyle(
-        //             color: Colors.black,
-        //             fontSize: 18,
-        //             // fontWeight: FontWeight.bold,
-        //           ),
-        //         ),
-        //       ),
-        //       SizedBox(height: 5),
-        //       Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 30),
-        //         child: Text(
-        //           '73085789349854',
-        //           style: TextStyle(
-        //             color: Colors.black,
-        //             fontSize: 18,
-        //             // fontWeight: FontWeight.bold,
-        //           ),
-        //         ),
-        //       ),
-        //       SizedBox(height: 5),
-        //       Padding(
-        //         padding: EdgeInsets.symmetric(horizontal: 30),
-        //         child: Text(
-        //           '₹ 600',
-        //           style: TextStyle(
-        //             color: Colors.black,
-        //             fontSize: 18,
-        //             fontWeight: FontWeight.bold,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         streamBuilder(AppStrings.BookingScreenRecentTab)
       ],
     );

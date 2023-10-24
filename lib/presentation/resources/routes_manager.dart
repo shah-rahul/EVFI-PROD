@@ -1,4 +1,6 @@
 // import 'package:evfi/presentation/login/login1.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
 import 'package:evfi/presentation/register/chargerform.dart';
 import 'package:flutter/material.dart';
@@ -24,10 +26,11 @@ class Routes {
   static const String verifyOtpRoute = "/verify_otp";
   static const String searchPageRoute = "/searchPage";
   static const String myChargingRoute = "/myCharging";
-  // ignore: constant_identifier_names
   static const String vehicleRegisterForm = "/VehicleRegisterForm";
   static const String chargerForm = "/chargerForm";
-  static const String UserChargingRegister = "/UserChargingRegister";
+  static const String userChargingRegister = "/UserChargingRegister";
+  static const String listChargerPage = "/listChargerPage";
+  static const String listChargerFormRoute = "/listChargerForm";
 }
 
 class RouteGenerator {
@@ -36,7 +39,7 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (_) =>  LoginView());
+        return MaterialPageRoute(builder: (_) => LoginView());
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => const OnBoardingView());
       case Routes.registerRoute:
@@ -48,11 +51,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
         return MaterialPageRoute(builder: (_) => const StoreDetailsView());
-      // case Routes.verifyOtpRoute:
-      //   return MaterialPageRoute(builder: (_) => const verify_otp());
       case Routes.myChargingRoute:
         return MaterialPageRoute(builder: (_) => const MyChargingScreen());
-      case Routes.UserChargingRegister:
+      case Routes.userChargingRegister:
         return MaterialPageRoute(builder: (_) => const UserChargingRegister());
       case Routes.searchPageRoute:
         return MaterialPageRoute(builder: (_) => const SearchPage());
@@ -60,6 +61,10 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const VehicleForm());
       case Routes.chargerForm:
         return MaterialPageRoute(builder: (_) => const ChargerForm());
+      case Routes.listChargerPage:
+        return MaterialPageRoute(builder: (_) => const ListChargersPage());
+      case Routes.listChargerFormRoute:
+        return MaterialPageRoute(builder: (_) => const ListChargerForm());
       default:
         return unDefinedRoute();
     }

@@ -13,7 +13,6 @@ class UserDataProvider extends ChangeNotifier {
   //late UserData _userData;
   UserData _userData = UserData(
     uid: "Null",
-
     name: 'Null',
     phoneNumber: 'Null',
     level1: false,
@@ -23,13 +22,6 @@ class UserDataProvider extends ChangeNotifier {
     range: 'null',
     chargerInfo: 'Null',
     level2: false,
-    // stationName: '',
-    // address: '',
-    // aadharNumber: '',
-    // hostName: '',
-    // chargerType: '',
-    // price: '',
-    // amenities: '',
     isProvider: false,
   );
   // ignore: prefer_final_fields
