@@ -1,4 +1,4 @@
-name: EVFI
+name: evfi
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -18,16 +18,18 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=2.17.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  
+
   flutter_launcher_icons: ^0.13.1
+  
+  
   getwidget: ^3.1.1
   dot_navigation_bar: ^1.0.1+4
-  page_transition: "^2.0.9"
+  page_transition: '^2.0.9'
   dropdown_textfield: ^1.0.8
   firebase_auth: ^4.5.0
   intl: ^0.17.0
@@ -36,7 +38,9 @@ dependencies:
   shared_preferences: ^2.1.1 #shared preferences
   otp_text_field: ^1.1.3
   flutter_svg: ^2.0.5
-  cloud_firestore: ^4.8.0 #fire store cloud
+  geoflutterfire_plus: ^0.0.14
+
+  cloud_firestore: ^4.8.5 #fire store cloud
   get: ^4.6.5 #Open screens/snackbars/dialogs without context, manage states and inject dependencies easily with GetX.
   controller: ^0.1.12 #Write HTTP servers with metadata annotated classes with support for validation and security.
   firebase_database: ^10.2.2 #Flutter plugin for Firebase Database, a cloud-hosted NoSQL database with realtime data syncing across Android and iOS clients, and offline access.
@@ -44,18 +48,25 @@ dependencies:
   #basic_utils: ^5.6.0 #Common util classes for Strings, Dates, X509, PKCS, Cryptographie and more.
   google_maps_flutter: ^2.2.6
   geolocator: ^9.0.2
+  flutter_typeahead: ^4.6.2
   geocoding: ^2.1.0
+  dart_geohash: ^2.0.2
   http: ^0.13.5
   image_picker: ^0.8.9
+  provider: ^6.0.5
+  firebase_storage: ^11.2.6
+  time_interval_picker: ^0.0.2
+  carousel_slider: ^4.2.1
 
-
+analyzer:
+  exclude:
+    - missing_return
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.jpg"
-  adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/images/foreground_logo.png"
-
+  image_path: 'assets/images/logo.png'
+  adaptive_icon_background: '#ffffff'
+  adaptive_icon_foreground: 'assets/images/foreground_logo.png'
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -66,13 +77,12 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.0
-  
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -80,14 +90,30 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-     - assets/images/splash_logo.png
-     - assets/images/logo.jpg
-     - assets/images/navbar_icons/
-     - assets/images/lightning_icon.png
-     - assets/images/onboarding/
-     - assets/images/RegisterScreen/
-     - assets/images/map/
-
+    - assets/images/splash_logo.png
+    - assets/images/logo.png
+    - assets/images/navbar_icons/
+    - assets/images/lightning_icon.png
+    - assets/images/onboarding/
+    - assets/images/RegisterScreen/
+    - assets/images/map/
+    - assets/images/login/
+    - assets/images/booking/
+    - assets/images/map/carphoto.jpeg
+    - assets/assetss/Arrow.png
+    - assets/assetss/body.png
+    - assets/assetss/Car.png
+    - assets/assetss/Circle.png
+    - assets/assetss/head.png
+    - assets/assetss/left_arrow.png
+    - assets/assetss/left.png
+    - assets/assetss/logo.png
+    - assets/assetss/middle.png
+    - assets/assetss/plugged_car.png
+    - assets/assetss/Rectangle.png
+    - assets/assetss/right_arrow.png
+    - assets/assetss/right.png
+    - assets/assetss/sation.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -100,18 +126,18 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Montserrat
-       fonts:
-         - asset: assets/fonts/Montserrat-Bold.ttf
-           weight: 700
-         - asset: assets/fonts/Montserrat-SemiBold.ttf
-           weight: 600
-         - asset: assets/fonts/Montserrat-Medium.ttf
-           weight: 500
-         - asset: assets/fonts/Montserrat-Regular.ttf
-           weight: 400
-         - asset: assets/fonts/Montserrat-Light.ttf
-           weight: 300
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Montserrat-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Montserrat-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Montserrat-Light.ttf
+          weight: 300
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

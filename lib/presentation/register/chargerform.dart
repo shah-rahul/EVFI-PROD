@@ -1,27 +1,28 @@
-import 'package:EVFI/presentation/main/main_view.dart';
-import 'package:EVFI/presentation/register/vehicleform.dart';
-import 'package:EVFI/presentation/resources/strings_manager.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// ignore_for_file: use_build_context_synchronously, unused_element, unused_local_variable, library_private_types_in_public_api, unnecessary_null_comparison
+
+import 'package:evfi/presentation/main/main_view.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
+import 'package:provider/provider.dart';
+import '../storage/UserData.dart';
+import '../storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
 import '../resources/values_manager.dart';
 
 class ChargerForm extends StatefulWidget {
-  // const ChargerForm({Key? key}) : super(key: key);
-  final String username;
-  final String phoneNumber;
-  final String vehicleManufacturer;
-  final String VehicleRegistrationNumber;
-  const ChargerForm({required this.username,required this.phoneNumber,required this.vehicleManufacturer,required this.VehicleRegistrationNumber});
+  const ChargerForm({Key? key}) : super(key: key);
+
   @override
   _ChargerFormState createState() => _ChargerFormState();
 }
 
 class _ChargerFormState extends State<ChargerForm> {
+  String _selectedChargerType = '1';
+
   TextEditingController chargerspeedController = TextEditingController();
   final databaseRef = FirebaseDatabase.instance.ref('Users');
   @override
@@ -29,405 +30,238 @@ class _ChargerFormState extends State<ChargerForm> {
     //FocusNode myfocus = FocusNode();
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: ColorManager.appBlack,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: AppSize.s100 + AppSize.s18),
-              height: AppSize.s100 + AppSize.s100,
-              child: Image.asset(ImageAssets.chargerform),
-            ),
-            // Container(
-            //   alignment: Alignment.center,
-            //   margin: EdgeInsets.only(top: AppSize.s12),
-            //   padding: const EdgeInsets.all(10),
-            //   child: Text(
-            //     'Join EVFI',
-            //     style: TextStyle(
-            //         color: ColorManager.primary,
-            //         fontWeight: FontWeight.w500,
-            //         fontSize: 30),
-            //   ),
-            // ),
-            const SizedBox(
-              height: AppSize.s40,
-            ),
-            Container(
-              height: height * 0.7,
-              child: ListView(
-                children: <Widget>[
-                  Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(left: AppMargin.m12),
-                    child: const Text(
-                      AppStrings.chargerformtitle,
-                      style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.white,
+    final userDataProvider = Provider.of<UserDataProvider>(context);
+    void updateChargingData(String type, String speed) {
+      UserData userData = userDataProvider.userData;
+      // userData.chargingType = type;
+
+      userDataProvider.setUserData(userData);
+    }
+
+    final Map<String, String> dropdownItems = {
+      '1': 'Level 1',
+      '2': 'Level 2 ',
+      '3': 'Level 3',
+    };
+
+    return Container(
+      decoration: const BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage(ImageAssets.loginBackground),
+        fit: BoxFit.cover,
+      )),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: height * 0.38,
+                margin: EdgeInsets.only(
+                    top: height * 0.48,
+                    left: AppMargin.m14,
+                    right: AppMargin.m14),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    color: Colors.white.withOpacity(0.90),
+                    boxShadow: [
+                      BoxShadow(
+                        blurRadius: 2,
+                        color: ColorManager.shadowBottomRight.withOpacity(0.3),
+                        offset: const Offset(4, 4),
+                      ),
+                      BoxShadow(
+                        blurRadius: 2,
+                        color: ColorManager.shadowTopLeft.withOpacity(0.4),
+                        offset: const Offset(2, 2),
+                      ),
+                    ]),
+                child: ListView(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: height * 0.02),
+                      alignment: Alignment.center,
+                      child: Text(
+                        AppStrings.chargerformtitle,
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: ColorManager.darkGrey,
+                        ),
                       ),
                     ),
-                  ),
-                  // Container(
-                  //   alignment: Alignment.center,
-                  //   margin: EdgeInsets.only(left: AppMargin.m12),
-                  //   padding: const EdgeInsets.all(10),
-                  //   child: Text(
-                  //     'Create your Account',
-                  //     style: TextStyle(
-                  //       fontSize: 14,
-                  //       color: ColorManager.primary,
-                  //     ),
-                  //   ),
-                  // ),
-                  const SizedBox(height: 20),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-                    decoration: BoxDecoration(
-                      borderRadius:const  BorderRadius.all(Radius.circular(20)),
-                      color: ColorManager.darkGreyOpacity40,
-                      boxShadow: [
-                        BoxShadow(
-                          blurRadius: 3,
-                          color: ColorManager.darkGrey,
-                          offset: const Offset(-1, -1),
-                        ),
-                        const BoxShadow(
-                          blurRadius: 6,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.all(AppPadding.p20),
-                    child: Column(
-                      children: [
-                        // child: CircleAvatar(
-                        //   backgroundColor: ColorManager.primary,
-                        //   radius: 42,
-                        //   child: CircleAvatar(
-                        //     radius: 50,
-                        //     backgroundImage:
-                        //         AssetImage(ImageAssets.registerDp),
-                        //   ),
-                        // ),
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p8,
-                              vertical: AppPadding.p8),
-                          child: DropDownTextField(
-                            //controller: chargetypeController,
-                            dropDownItemCount: 3,
-                            clearOption: false,
-                            dropDownList: const [
-                              DropDownValueModel(
-                                  name: 'Type A', value: "Type A"),
-                              DropDownValueModel(
-                                  name: 'Type B', value: "Type B"),
-                              DropDownValueModel(
-                                  name: 'Type C', value: "Type C"),
-                            ],
-                            dropdownColor: ColorManager.darkGrey,
-                            textFieldDecoration: InputDecoration(
-                              hoverColor: ColorManager.primary,
-                              iconColor: ColorManager.primary,
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 1,
-                                  color: ColorManager.darkGrey,
-                                ),
-                              ),
-                              labelText: 'Charger Type',
-                              labelStyle: const TextStyle(
-                                fontSize: AppSize.s14,
-                              ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.all(AppPadding.p20),
+                      child: Column(
+                        children: [
+                          Text('Select Charger Type'),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppPadding.p8,
+                                vertical: AppPadding.p8),
+                            child: DropdownButton<String>(
+                              value: _selectedChargerType,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  print(newValue);
+                                  _selectedChargerType = newValue!;
+                                });
+                              },
+                              items: dropdownItems.keys.map((String key) {
+                                return DropdownMenuItem<String>(
+                                  value: key,
+                                  child: Text(
+                                    dropdownItems[key]!,
+                                    style:
+                                        TextStyle(color: ColorManager.darkGrey),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                            onChanged: (val) {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            },
                           ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p8,
-                              vertical: AppPadding.p8),
-                          child: TextField(
-                            controller: chargerspeedController,
-                            decoration: InputDecoration(
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: ColorManager.darkGrey,
-                                  ),
-                                ),
-                                labelText: 'Charger Speed',
-                                labelStyle: const TextStyle(fontSize: AppSize.s14)),
+                          //controller: chargetypeController,
+                          // dropDownItemCount: 3,
+                          // clearOption: false,
+                          // dropDownList: const [
+                          //   DropDownValueModel(
+                          //       name: 'Level 1 / Slow', value: 'level1'),
+                          //   DropDownValueModel(
+                          //       name: 'Level 2 / Fast', value: 'level2'),
+                          //   DropDownValueModel(
+                          //       name: 'Level 3 / DC Fast', value: 'level3'),
+                          // ],
+                          //                  onChanged: (value) {
+                          //   updateChargingData(value, userDataProvider.userData.chargingSpeed);
+                          // },
+
+                          // style:
+                          //     TextStyle(color: ColorManager.darkGrey),
+                          // dropdownColor: Colors.white,
+                          // itemHeight: ,
+                          // textFieldDecoration: InputDecoration(
+                          //   hoverColor: ColorManager.primary,
+                          //   iconColor: ColorManager.primary,
+                          //   enabledBorder: UnderlineInputBorder(
+                          //     borderSide: BorderSide(
+                          //       width: 1,
+                          //       color: ColorManager.darkGrey,
+                          //     ),
+                          //   ),
+                          //   labelText: 'Charger Type',
+                          //   labelStyle: const TextStyle(
+                          //     fontSize: AppSize.s14,
+                          //   ),
+                          // ),
+                          // onChanged: (value) => ,
+
+                          // onChanged: (val) {
+                          //   updateChargingData(val.toString(),
+                          //      // userDataProvider.userData.chargingType);
+                          //   FocusScope.of(context)
+                          //       .requestFocus(FocusNode());
+                          // },
+                          //   ),
+                          // ),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: AppPadding.p8,
+                          //       vertical: AppPadding.p8),
+                          //   child: TextField(
+                          //     onChanged: (value) {
+                          //       updateChargingData(
+                          //           userDataProvider.userData.chargingSpeed,
+                          //           value);
+                          //     },
+                          //     style: TextStyle(color: ColorManager.darkGrey),
+                          //     //controller: chargerspeedController,
+                          //     decoration: InputDecoration(
+                          //         enabledBorder: UnderlineInputBorder(
+                          //           borderSide: BorderSide(
+                          //             width: 1,
+                          //             color: ColorManager.darkGrey,
+                          //           ),
+                          //         ),
+                          //         labelText: 'Charger Speed',
+                          //         labelStyle:
+                          //             const TextStyle(fontSize: AppSize.s14)),
+                          //   ),
+                          // ),
+                          const SizedBox(
+                            height: 20,
                           ),
-                        ),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: AppPadding.p8,
-                        //       vertical: AppPadding.p8),
-                        //   child: TextField(
-
-                        //     controller: passwordController,
-                        //     decoration: InputDecoration(
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             width: 1,
-                        //             color: ColorManager.darkGrey,
-                        //           ),
-                        //         ),
-                        //         labelText: 'Password',
-                        //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                        //   ),
-                        // ),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(
-                        //       horizontal: AppPadding.p8,
-                        //       vertical: AppPadding.p8),
-                        //   child: TextField(
-                        //     obscureText: true,
-                        //     style: TextStyle(color: ColorManager.darkGrey),
-                        //     controller: verifypasswordController,
-                        //     decoration: InputDecoration(
-                        //         enabledBorder: UnderlineInputBorder(
-                        //           borderSide: BorderSide(
-                        //             width: 1,
-                        //             color: ColorManager.darkGrey,
-                        //           ),
-                        //         ),
-                        //         labelText: 'Verify Password',
-                        //         labelStyle: TextStyle(fontSize: AppSize.s14)),
-                        //   ),
-                        // ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-
-                        // TextButton(
-                        //   onPressed: () {
-                        //     //forgot password screen
-                        //   },
-                        //   child: const Text(
-                        //     'Forgot Password',
-                        //     style: TextStyle(fontSize: 18, color: Colors.amberAccent),
-                        //   ),
-                        // ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: AppSize.s60 - 10,
-                              width: width * 0.23,
-                              margin: const EdgeInsets.only(
-                                top: AppMargin.m20,
-                              ),
-                              child: ElevatedButton(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
                                 onPressed: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          type: PageTransitionType.leftToRight,
-                                          ctx: context,
-                                          child: VehicleForm(
-                                             username: widget.username,
-                                          phoneNumber: widget.phoneNumber,
-                                          )));
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.darkGrey.withOpacity(0.4),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  // side: BorderSide(color: Colors.white)),
-                                  elevation: 0,
-
-                                  textStyle: const TextStyle(
-                                    fontSize: AppSize.s18,
-                                  ),
-                                ),
-                                child: const Text("Back",
-                                    textAlign: TextAlign.center),
-                              ),
-                            ),
-                            Container(
-                              height: AppSize.s60 - 10,
-                              width: width * 0.23,
-                              margin: const EdgeInsets.only(
-                                top: AppMargin.m20,
-                              ),
-
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  //  var userKey =
-                                  //     databaseRef.child('Users').push().key;
-
-                                  //   //Create a new user object
-                                  // var newUser = {
-                                  //   'name': widget.username,
-                                  //   'phone': widget.phoneNumber,
-                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
-                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
-                                  //   'charger type':"Type A",
-                                  //   'charger speed ':chargerspeedController.text.toString(),
-                                  // };
-                                  // //Add the new user under the unique key
-                                  // databaseRef
-                                  //     .child('Users/$userKey')
-                                  //     .set(newUser)
-                                  //     .then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //  // print('User added successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error adding user: $error');
-                                  // });
-                                  // databaseRef.set({
-                                  //   'name': widget.username,
-                                  //   'phone': widget.phoneNumber,
-                                  //   'vehicle manufacturer':widget.vehicleManufacturer,
-                                  //   'vehicle registration number':widget.VehicleRegistrationNumber,
-                                  //   'charger type':"Type A",
-                                  //   'charger speed ':chargerspeedController.text.toString(),
-                                  // }).then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //   //print('Data saved successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error saving data: $error');
-                                  // });
-                                //  SignUpController.instance.createUser(user);
-                                  Navigator.pushReplacement(
+                                  int count = 0;
+                                  // Navigator.of(context)
+                                  //     .popUntil((_) => count++ > 3);
+                                  Navigator.push(
                                     context,
                                     PageTransition(
                                         type: PageTransitionType.rightToLeft,
+                                        ctx: context,
                                         child: MainView()),
                                   );
                                 },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.darkGrey.withOpacity(0.4),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  // side: BorderSide(color: Colors.white)),
-                                  elevation: 0,
-
-                                  textStyle:
-                                      const TextStyle(fontSize: AppSize.s18),
+                                child: Text(
+                                  AppStrings.skip,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: ColorManager.darkGrey,
+                                      fontSize: AppSize.s16),
                                 ),
-                                child: const Text(AppStrings.skip,
-                                    textAlign: TextAlign.center),
                               ),
-
-                              // print(nameController.text);
-                              // print(passwordController.text);
-                            ),
-                            Container(
-                              height: AppSize.s60 - 10,
-                              width: width * 0.3,
-                              margin: const EdgeInsets.only(
-                                top: AppMargin.m20,
+                              const SizedBox(
+                                width: AppSize.s12,
                               ),
-                              // padding: const EdgeInsets.only(right: AppPadding.p20),
-                              child: ElevatedButton(
+                              ElevatedButton(
                                 onPressed: () async {
-                                  final dbref = FirebaseDatabase.instance.ref('Users');
-                          await dbref.child("RegisteredNumbers").push().set({
-                            "phoneNo":
-                                FirebaseAuth.instance.currentUser!.phoneNumber,
-                          });
-                         
-                                  var userKey =
-                                      databaseRef.child('User').push().key;
+                                  // await userDataProvider.saveUserData();
 
-                                    //Create a new user object
-                                  var newUser = {
-                                    'name': widget.username,
-                                    'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':widget.vehicleManufacturer,
-                                    'vehicle registration number':widget.VehicleRegistrationNumber,
-                                    'charger type':"Type A",
-                                    'charger speed ':chargerspeedController.text.toString(),
-                                  };
-                                  //Add the new user under the unique key
-                                  // databaseRef
-                                  //     .child('Users/$userKey')
-                                  //     .set(newUser)
-                                  //     .then((value) {
-                                  //   // Code to execute after the data is successfully saved.
-                                  //  // print('User added successfully!');
-                                  // }).catchError((error) {
-                                  //   // Code to handle any errors that occurred during the data saving process.
-                                  //   //print('Error adding user: $error');
-                                  // });
-                                  databaseRef.child('Users/$userKey').set({
-                                    'name': widget.username,
-                                    'phone': widget.phoneNumber,
-                                    'vehicle manufacturer':widget.vehicleManufacturer,
-                                    'vehicle registration number':widget.VehicleRegistrationNumber,
-                                    'charger type':"Type A",
-                                    'charger speed ':chargerspeedController.text.toString(),
-                                  }).then((value) {
-                                    // Code to execute after the data is successfully saved.
-                                    //print('Data saved successfully!');
-                                  }).catchError((error) {
-                                    // Code to handle any errors that occurred during the data saving process.
-                                    //print('Error saving data: $error');
-                                  });
-                                  Navigator.pushReplacement(
+                                  // Example: Storing charging information
+                                  String chargingType = 'Type A';
+                                  String chargingSpeed =
+                                      chargerspeedController.text.toString();
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  userDataProvider.setUserData(userData);
+
+                                  int count = 0;
+                                  // Navigator.of(context)
+                                  //     .popUntil((_) => count++ > 3);
+                                  Navigator.push(
                                     context,
                                     PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: MainView()),
+                                      type: PageTransitionType.rightToLeft,
+                                      child: MainView(),
+                                    ),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      ColorManager.primary.withOpacity(0.9),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  elevation: 0,
-                                  textStyle:
-                                      const TextStyle(fontSize: AppSize.s18),
+                                  backgroundColor: Colors.white,
+                                  shadowColor: Colors.white,
+                                  elevation: 6,
                                 ),
-                                child: const Text("Save",
-                                    textAlign: TextAlign.center),
+                                child: Text(
+                                  'Save',
+                                  style: TextStyle(
+                                    color: ColorManager.appBlack,
+                                    fontSize: AppSize.s16,
+                                  ),
+                                ),
                               ),
-
-                              // print(nameController.text);
-                              // print(passwordController.text);
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.center,
-                  //   children: <Widget>[
-                  //     const Text('Does not have account?'),
-                  //     TextButton(
-                  //       child: const Text(
-                  //         'Sign up',
-                  //         style: TextStyle(
-                  //             fontSize: 20, color: Colors.amberAccent),
-                  //       ),
-                  //       onPressed: () {
-                  //         //signup screen
-                  //         Navigator.pushNamed(context, '/login');
-                  //       },
-                  //     )
-                  // ],
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

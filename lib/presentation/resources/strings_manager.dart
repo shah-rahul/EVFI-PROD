@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 class AppStrings {
   static const String noRouteFound = "No Route Found";
 
@@ -7,7 +9,8 @@ class AppStrings {
   static const onboardingSubTitle1 = "";
   static const onboardingSubTitle2 = "";
   static const onboardingSubTitle3 = "";
-  static const skip = "SKIP";
+  static const skip = "Skip";
+  static const next = "Next";
 
   static const registerSignup = "Sign Up";
   static const registercancel = "Cancel";
@@ -18,8 +21,8 @@ class AppStrings {
 
   static const chargerformtitle = "Charger Info";
 
-  static const MyChargingTitle = "My Chargings";
-  static const BookingTitle = "Bookings";
+  static const MyChargingTitle = "Your Bookings";
+  static const BookingTitle = "Dashboard";
   static const ChargingScreenRecentTab = "Recent";
   static const ChargingScreenCurrentTab = "Current";
   static const BookingScreenPendingTab = "Pending";
@@ -28,6 +31,10 @@ class AppStrings {
   static const WaitingStatus = "Waiting";
   static const AcceptedStatus = "Accepted";
   static const DeclinedStatus = "Declined";
+  static const RequestedStatus = "Requested";
+  static const CanceledStatus = "Canceled";
+  static const CompletedStatus = "Completed";
+  static const chargingStatus = "Charging";
 
   static const AcceptButton = "Accept";
   static const DeclineButton = "Decline";

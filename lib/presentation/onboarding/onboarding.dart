@@ -1,8 +1,12 @@
+// ignore_for_file: library_private_types_in_public_api, unnecessary_import
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:EVFI/presentation/resources/font_manager.dart';
+import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../domain/model.dart';
-import './onboarding_viewmodel.dart';
+import '../onboarding/onboarding_ViewModel.dart';
+import '../register/vehicleform.dart';
 import '../resources/color_manager.dart';
 import '../resources/routes_manager.dart';
 import '../resources/strings_manager.dart';
@@ -58,24 +62,25 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   }
 
   Widget _getContentWidget(SliderViewObject? sliderViewObject) {
+    final height = MediaQuery.of(context).size.height;
     if (sliderViewObject == null) {
       return Container();
     } else {
       return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: ColorManager.appBlack,
-          elevation: AppSize.s4,
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            statusBarColor: Colors.white,
-            statusBarBrightness: Brightness.dark,
-            statusBarIconBrightness: Brightness.dark,
-          ),
-        ),
+        // appBar: AppBar(
+        //   backgroundColor: ColorManager.appBlack,
+        //   elevation: AppSize.s4,
+        //   systemOverlayStyle: const SystemUiOverlayStyle(
+        //     statusBarColor: Colors.white,
+        //     statusBarBrightness: Brightness.dark,
+        //     statusBarIconBrightness: Brightness.dark,
+        //   ),
+        // ),
         body: Column(
           children: [
             Expanded(
-              flex: 3,
+              flex: 2,
               child: PageView.builder(
                   controller: _pageController,
                   itemCount: sliderViewObject.numOfSlides,
@@ -86,8 +91,8 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     return OnBoardingPage(sliderViewObject.sliderObject);
                   }),
             ),
-            const SizedBox(
-              height: AppSize.s20,
+            SizedBox(
+              height: height * 0.02,
             ),
             Expanded(
               flex: 1,
@@ -116,8 +121,15 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context)
-                                .pushReplacementNamed(Routes.mainRoute);
+                            // Navigator.of(context)
+                            //     .pushReplacementNamed(Routes.mainRoute);
+                             Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                       
+                                        child: VehicleForm()),
+                                  );
                           },
                           style: TextButton.styleFrom(
                             elevation: 0,
@@ -133,14 +145,25 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            int ind = _viewModel.goNext();
-                            ind != sliderViewObject.currentIndex
-                                ? _pageController.animateToPage(ind,
-                                    duration: const Duration(
-                                        milliseconds: DurationConstant.d300),
-                                    curve: Curves.bounceInOut)
-                                : Navigator.of(context)
-                                    .pushNamed(Routes.mainRoute);
+                          //   int ind = _viewModel.goNext();
+                          //  // print("---------------");
+                          // //  print(ind);
+                          //   ind != sliderViewObject.currentIndex
+                          //       ? _pageController.animateToPage(ind,
+                          //           duration: const Duration(
+                          //               milliseconds: DurationConstant.d300),
+                          //           curve: Curves.bounceInOut)
+                          //       : Navigator.of(context)
+                          //           .pushNamed(Routes.mainRoute);
+                           Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        type: PageTransitionType.rightToLeft,
+                                        child: VehicleForm()),
+                                       
+                                       
+                                       
+                                  );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
@@ -152,7 +175,10 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                                 horizontal: 25, vertical: 15),
                             textStyle: const TextStyle(fontSize: AppSize.s18),
                           ),
-                          child: const Text("NEXT"),
+                          child: const Text(
+                            AppStrings.next,
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),

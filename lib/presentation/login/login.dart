@@ -1,203 +1,177 @@
+import 'package:evfi/presentation/login/signUp.dart';
+import 'package:evfi/presentation/login/verify.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../resources/font_manager.dart';
-import '../resources/assets_manager.dart';
-import '../resources/values_manager.dart';
-import '../resources/color_manager.dart';
 import 'package:page_transition/page_transition.dart';
-import 'VerificationCodePage.dart';
+
+import '../resources/assets_manager.dart';
 
 class LoginView extends StatefulWidget {
-  const LoginView({Key? key}) : super(key: key);
-
   @override
-  LoginViewState createState() => LoginViewState();
+  _LoginViewState createState() => _LoginViewState();
 }
 
-class LoginViewState extends State<LoginView> {
-  final phoneController = TextEditingController();
-  //final _otpController = TextEditingController();
+class _LoginViewState extends State<LoginView> {
+  final Color myColor = Color.fromRGBO(208, 187, 30, 0.5);
+  final Color myColor2 = Color.fromRGBO(99, 99, 95, 1);
+  final Color mainColor = Color.fromRGBO(255, 216, 15, 1);
 
+ final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    phoneController.selection = TextSelection.fromPosition(
-      TextPosition(
-        offset: phoneController.text.length,
-      ),
-    );
     return Scaffold(
-      backgroundColor: ColorManager.appBlack,
-      // appBar: AppBar(
-      //   title: Text('Mobile verify'),
-      // ),
-      body: SingleChildScrollView(
+      backgroundColor: Colors.black,
+      body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(top: height * 0.16),
-              height: height * 0.2,
-              child: Image.asset(ImageAssets.logo),
+            SizedBox(height: 30),
+            Image.asset(
+              'assets/assetss/logo.png',
+              height: 350,
+              width: 350,
             ),
-
-            Container(
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Ev',
-                      style: TextStyle(
-                        fontSize: AppSize.s28,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      'FI',
-                      style: TextStyle(
-                        fontFamily: FontConstants.fontFamily,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AppSize.s28,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                )),
-            SizedBox(height: height * 0.06),
-            // Container(
-            //   width: 500,
-            //   decoration: BoxDecoration(
-            //     boxShadow: [
-            //       BoxShadow(
-            //         offset: Offset(5.0, 5.0),
-            //         spreadRadius: 5,
-            //         blurRadius: 2.0,
-            //       ),
-            //     ],
-            //   ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: AppMargin.m20),
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(20)),
-                color: ColorManager.darkGreyOpacity40,
-                // gradient: LinearGradient(
-                //   begin: Alignment.topLeft,
-                //   end: Alignment.bottomRight,
-                //   colors: [
-                //     ColorManager.gradTopLeft,
-                //     ColorManager.gradBottomRight
-                //   ],
-                // ),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 2,
-                    color: ColorManager.shadowBottomRight,
-                    offset: const Offset(-4, -4),
-                  ),
-                  BoxShadow(
-                    blurRadius: 2,
-                    color: ColorManager.shadowTopLeft,
-                    offset: const Offset(4, 4),
+           
+            SizedBox(height: 30),
+            Text(
+              'login',
+              style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 52,
+                fontFamily: 'fonts/Poppins',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 2.0,
+                shadows: <Shadow>[
+                  Shadow(
+                    offset: Offset(-5.0, 4.0),
+                    color: myColor,
                   ),
                 ],
               ),
-              padding: const EdgeInsets.all(AppPadding.p20),
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                        bottom: AppPadding.p30, top: AppPadding.p8),
-                    child: const Text(
-                      'LOGIN',
-                      style: TextStyle(
-                        fontFamily: FontConstants.fontFamily,
-                        fontWeight: FontWeight.w300,
-                        fontSize: AppSize.s28 + 2,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 20,
+              width: 150,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignupPage()),
+                  );
+                  // Add your login logic here
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.black, // Set the background color to black
+                ),
+                child: Text(
+                  'or SignUp',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Poppins',
                   ),
-                  TextFormField(
-                    style: const TextStyle(color: Colors.white),
-                    controller: phoneController,
+                ),
+              ),
+            ),
+            SizedBox(height: 80),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: SizedBox(
+                height: 60,
+                child: TextField(
                     onChanged: (value) {
-                      setState(() {
-                        phoneController.text = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Phone Number',
-                      suffixIcon: phoneController.text.length > 11
-                          ? Container(
-                              height: 20,
-                              width: 20,
-                              decoration: const BoxDecoration(),
-                              child: const Icon(
-                                Icons.done,
-                                color: Colors.green,
-                                size: 20,
-                              ),
-                            )
-                          : null,
-                      border: InputBorder.none,
+                       
+                        setState(() {
+                          phoneController.text = "+91" + value;
+                        });
+                      },
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: myColor2,
+                    hintText: '',
+                    labelText: '+91- 7303440170',
+                    contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 80),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.yellow.withOpacity(0.5)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)), // Border color when the TextField is not focused
                     ),
-                    keyboardType: TextInputType.phone,
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () async {
-                      //  mobile number verification logic here
-                      final String phoneNumber = phoneController.text.trim();
-                      //  getPhoneNumber(phoneNumber);
-                      await FirebaseAuth.instance.verifyPhoneNumber(
-                        phoneNumber: phoneNumber,
-                        verificationCompleted:
-                            (PhoneAuthCredential credential) async {
-                          //  Authenticate user with credential
-                        },
-                        verificationFailed: (FirebaseAuthException e) {
-                          //  Handle verification failure
-                        },
-                        codeSent: (String verificationId, int? resendToken) {
-                          // Save verification ID and navigate to verification code page
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: VerificationCodePage(
-                                verificationId: verificationId,
-                                phoneNumber: phoneNumber,
-                              ),
-                            ),
-                          );
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {
-                          //  Handle code auto retrieval timeout
-                        },
-                      );
-                      // Navigator.pushNamed(context, '/verify_otp');
-                    },
-                    child: const Text('Get OTP'),
-                  ),
-                ],
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
-            // SizedBox(height: 16.0),
-            // OTPTextField(
-            //   // controller: _otpController,
-            //   length: 6,
-            //   width: MediaQuery.of(context).size.width,
-            //   fieldWidth: 20,
-            //   style: TextStyle(fontSize: 17),
-            //   textFieldAlignment: MainAxisAlignment.spaceAround,
-            //   fieldStyle: FieldStyle.underline,
-            //   onCompleted: (pin) {
-            //     //   OTP verification logic here
-            //   },
-            // ),
+            SizedBox(height: 20),
+            SizedBox(
+              height: 50,
+              width: 330,
+              child: ElevatedButton(
+                onPressed: () async {
+ //  mobile number verification logic here
+                        final String phoneNumber = phoneController.text.trim();
+                        //  getPhoneNumber(phoneNumber);
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: phoneNumber,
+                          verificationCompleted:
+                              (PhoneAuthCredential credential) async {
+                            //  Authenticate user with credential
+                          },
+                          verificationFailed: (FirebaseAuthException e) {
+                            //  Handle verification failure
+                          },
+                          codeSent: (String verificationId, int? resendToken) {
+                            // Save verification ID and navigate to verification code page
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                type: PageTransitionType.rightToLeft,
+                                // child: VerificationCodePage(
+                                //   verificationId: verificationId,
+                                //   phoneNumber: phoneNumber,
+                                // ),
+                              child: Verify(
+                                 verificationId: verificationId,
+                                  phoneNumber: phoneNumber,
+                              ),
+
+
+                              ),
+                            );
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {
+                            //  Handle code auto retrieval timeout
+                          },
+                        );
+                      },
+                //   Navigator.push(
+                //     context,
+                //     MaterialPageRoute(builder: (context) => Verify()),
+                //   );
+                //   // Add your login logic here
+                // },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Set the border radius here
+                  ),
+                  primary: Colors.yellow, // Button background color
+                ),
+                child: Text(
+                  'send otp',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+              ),
+            ),
+            // Rest of your widgets
           ],
         ),
       ),

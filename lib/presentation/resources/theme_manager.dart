@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 import './color_manager.dart';
@@ -7,6 +9,9 @@ import './values_manager.dart';
 
 ThemeData getApplicationTheme() {
   return ThemeData(
+      //appwide font
+      fontFamily: 'Montserrat',
+      
       // main colors of the app
       primaryColor: ColorManager.primary,
       primaryColorLight: ColorManager.primaryOpacity70,
@@ -41,8 +46,9 @@ ThemeData getApplicationTheme() {
           style: ElevatedButton.styleFrom(
               textStyle: getRegularStyle(color: Colors.white),
               primary: ColorManager.primary,
+              onPrimary: ColorManager.appBlack,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSize.s12)))),
+                  borderRadius: BorderRadius.circular(8)))),
 
       // Text theme
       textTheme: TextTheme(
