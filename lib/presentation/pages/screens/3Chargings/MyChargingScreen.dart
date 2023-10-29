@@ -81,7 +81,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         .get();
     return chargerDetails;
   }
-
+//your bookings
   Widget streamBuilder(String tab) {
     final height = MediaQuery.of(context).size.height;
     return Container(
@@ -90,6 +90,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
       child: SingleChildScrollView(
         child: Container(
             height: height * 0.85,
+            
+            width: 400,
             child: StreamBuilder(
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
                   ? FirebaseFirestore.instance
@@ -322,8 +324,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                         child: Container(
                           height: 1.8,
                           width: width * 0.32,
-                          // color: ColorManager.primary,
-                          color: Color(0xFFFCFCFD),
+                          color: ColorManager.primary,
+                          // color: Color(0xFFFCFCFD),
                         ),
                       )
                     ],

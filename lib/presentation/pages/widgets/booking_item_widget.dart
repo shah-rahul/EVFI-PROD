@@ -8,7 +8,6 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../resources/strings_manager.dart';
 import '../../resources/color_manager.dart';
 
-
 // ignore: must_be_immutable
 class BookingWidget extends StatefulWidget {
   Booking bookingItem;
@@ -60,14 +59,16 @@ class _BookingWidgetState extends State<BookingWidget> {
       case -2: //canceled
         {
           buttonColor = ColorManager.error;
-          textColor = Colors.white;
+          // textColor = Colors.white;
+          textColor = ColorManager.appBlack;
           statusText = 'Canceled';
         }
         break;
       case -1: //declined
         {
           buttonColor = ColorManager.error;
-          textColor = Colors.white;
+          // textColor = Colors.white;
+          textColor = ColorManager.appBlack;
           statusText = 'Declined';
         }
         break;
@@ -77,15 +78,19 @@ class _BookingWidgetState extends State<BookingWidget> {
       case 1: //requested
         {
           buttonColor = Colors.green[500]!;
-          textColor = Colors.white;
+
+          // textColor = Colors.white;
+          textColor = ColorManager.appBlack;
           statusText = 'Requested';
         }
         break;
       case 2:
         {
           buttonColor = Colors.green;
-          textColor = Colors.white;
+          // textColor = Colors.white;
+          textColor = ColorManager.appBlack;
           statusText = 'Accepted';
+          //  statusColor = Colors.green;
         }
         break;
       case 3:
@@ -113,19 +118,37 @@ class _BookingWidgetState extends State<BookingWidget> {
     );
   }
 
+  Color statusColor = Colors.white;
+  void initState() {
+    getStatusColor();
+    super.initState();
+  }
+
+  void getStatusColor() {
+    if (widget.bookingItem.status == 2)
+      // statusColor =;
+      // statusColor = Colors.white;
+      statusColor = Color(0xFFD0F4D5);
+    else if (widget.bookingItem.status == 1)
+      statusColor = Colors.white;
+    else
+      statusColor = Color(0xFFF6D4D5);
+    // statusColor = Colors.white;
+    ;
+  }
+
   Widget build(BuildContext context) {
-    double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels =
-        340 / MediaQuery.of(context).devicePixelRatio;
-    double widthInLogicalPixels1 =
-        394.835 / MediaQuery.of(context).devicePixelRatio;
-    double heightInLogicalPixels1 =
-        81.83 / MediaQuery.of(context).devicePixelRatio;
+    getStatusColor();
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Container(
-      width: widthInLogicalPixels, // Adjust as needed
-      height: heightInLogicalPixels, // Adjust as needed
+      // width: width*2,
+      height: height * 0.171,
       decoration: BoxDecoration(
-        color: Colors.white,
+        // color: Colors.white,
+        color: statusColor,
+
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(
@@ -143,7 +166,8 @@ class _BookingWidgetState extends State<BookingWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 30), // Add vertical padding
+                  horizontal: 30,
+                ),
                 child: Text(
                   widget.bookingItem.customerName,
                   style: TextStyle(
@@ -155,8 +179,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               ),
               SizedBox(height: 5),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 30), // Add vertical padding
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
                   'Time slot- ${widget.bookingItem.timeStamp}',
                   style: TextStyle(
@@ -192,63 +215,78 @@ class _BookingWidgetState extends State<BookingWidget> {
                   ),
                 ),
               ),
-              if (widget.bookingItem.status == 2 ||
-                  widget.bookingItem.status == -1)
-                statusButton(widget.bookingItem.status)
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              if (widget.bookingItem.status != 2 &&
-                  widget.bookingItem.status != -1)
-                Container(
-                  width: widthInLogicalPixels1,
-                  height: heightInLogicalPixels1,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      CollectionReference users =
-                          FirebaseFirestore.instance.collection('booking');
-                      DocumentReference docRef =
-                          users.doc(widget.bookingItem.id);
-                      await docRef.update({
-                        'status': 2,
-                      });
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
+              // if (widget.bookingItem.status == 2 ||
+              //     widget.bookingItem.status == -1)
+              //    getStatusColor(widget.bookingItem.status),
+              // statusButton(widget.bookingItem.status),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (widget.bookingItem.status != 2 &&
+                      widget.bookingItem.status != -1)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        width: width * 0.4,
+                        height: height * 0.03,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            CollectionReference users = FirebaseFirestore
+                                .instance
+                                .collection('booking');
+                            DocumentReference docRef =
+                                users.doc(widget.bookingItem.id);
+                            await docRef.update({
+                              'status': 2,
+                            });
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          child: const Text(AppStrings.AcceptButton,
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ),
                     ),
-                    child: const Text(AppStrings.AcceptButton,
-                        style: TextStyle(color: Colors.black)),
-                  ),
-                ),
-              if (widget.bookingItem.status != -1)
-                Container(
-                  width: widthInLogicalPixels1,
-                  height: heightInLogicalPixels1,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      CollectionReference users =
-                          FirebaseFirestore.instance.collection('booking');
-                      DocumentReference docRef =
-                          users.doc(widget.bookingItem.id);
-                      await docRef.update({
-                        'status': -1,
-                      });
-                    },
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.red),
+                  if (widget.bookingItem.status != -1)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // width: widthInLogicalPixels1,
+                        // height: heightInLogicalPixels1,
+                        width: width * 0.4,
+                        height: height * 0.03,
+
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            CollectionReference users = FirebaseFirestore
+                                .instance
+                                .collection('booking');
+                            DocumentReference docRef =
+                                users.doc(widget.bookingItem.id);
+                            await docRef.update({
+                              'status': -1,
+                            });
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.red),
+                          ),
+                          child: const Text(AppStrings.DeclineButton,
+                              style: TextStyle(color: Colors.black)),
+                        ),
+                      ),
                     ),
-                    child: const Text(AppStrings.DeclineButton,
-                        style: TextStyle(color: Colors.black)),
-                  ),
-                ),
+                ],
+              ),
             ],
           ),
         ],
       ),
+      // SizedBox(height: 100,),
     );
   }
 
