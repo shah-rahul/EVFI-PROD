@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
+import 'package:evfi/presentation/resources/custom_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -119,7 +120,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
     setState(() {});
     return Card(
       elevation: 4,
-        child: Container(
+      child: Container(
           height: 250,
           width: double.infinity,
           child: GoogleMap(
@@ -294,8 +295,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
       String imageUrl = await ref.getDownloadURL();
 
       imageUrls.add(imageUrl);
-      // print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-      // print(imageUrls);
     }
 
     return imageUrls;
@@ -485,6 +484,33 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.state = state;
       userChargingDataProvider.setUserChargingData(userChargingData);
+    }
+
+    void addChargerFunction() async {
+      _submitForm;
+      StoreChargerType(++chargerType);
+      StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
+      Storeg(_position);
+      await uploadImages(_imageList!)
+          .then((value) => {StoreImageurl(imageUrls)});
+
+      await FirebaseFirestore.instance
+          .collection('user')
+          .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .get()
+          .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          var doc = querySnapshot.docs[0];
+          doc.reference.update({'isProvider': true});
+        }
+      });
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setBool('isProvider', true);
+
+      userChargingDataProvider.saveUserChargingData().then((_) => Navigator.pop(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: const BookingsScreen())));
     }
 
     return Scaffold(
@@ -917,83 +943,18 @@ class _ListChargerFormState extends State<ListChargerForm> {
                             margin: const EdgeInsets.only(top: 25),
                             child: _imageList!.isNotEmpty
                                 ? _showChargerImages()
-                                : SizedBox(
-                                    width: double.infinity,
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.05,
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          _showPhotoOptionsDialog();
-                                        },
-                                        style: //Theme.of(context).elevatedButtonTheme.style!.copyWith(backgroundColor: ColorManager.primaryWithOpacity,),
-                                            ElevatedButton.styleFrom(
-                                                backgroundColor: ColorManager.primaryWithOpacity,
-                                                foregroundColor:
-                                                    ColorManager.appBlack,
-                                                elevation: 6,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8))),
-                                        child: const Text(
-                                          'Charger-Location Images',
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                          ),
-                                        )),
-                                  ),
+                                : customElevatedButton(
+                                    context: context,
+                                    onTap: _showPhotoOptionsDialog,
+                                    text: 'Charger-Location Images',
+                                    color: ColorManager.primaryWithOpacity),
                           )
                         ]),
                     const SizedBox(
                       height: 30,
                     ),
-                    SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height * 0.05,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            _submitForm;
-                            StoreChargerType(++chargerType);
-                            StoreAvailability(
-                                _startAvailabilityTime!, _endAvailabilityTime!);
-                            Storeg(_position);
-                            await uploadImages(_imageList!)
-                                .then((value) => {StoreImageurl(imageUrls)});
-
-                            await FirebaseFirestore.instance
-                                .collection('user')
-                                .where('uid',
-                                    isEqualTo:
-                                        FirebaseAuth.instance.currentUser!.uid)
-                                .get()
-                                .then((QuerySnapshot<Map<String, dynamic>>
-                                    querySnapshot) {
-                              if (querySnapshot.docs.isNotEmpty) {
-                                var doc = querySnapshot.docs[0];
-                                doc.reference.update({'isProvider': true});
-                              }
-                            });
-                            final prefs = await SharedPreferences.getInstance();
-                            prefs.setBool('isProvider', true);
-
-                            userChargingDataProvider
-                                .saveUserChargingData()
-                                .then((_) => Navigator.pop(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.fade,
-                                        child: const BookingsScreen())));
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: ColorManager.primary,
-                              elevation: 6,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8))),
-                          child: const Text(
-                            'Add',
-                            style: TextStyle(fontSize: 15),
-                          )),
-                    ),
+                    customElevatedButton(
+                        context: context, onTap: addChargerFunction, text: 'Add'),
                     const SizedBox(
                       height: 30,
                     ),

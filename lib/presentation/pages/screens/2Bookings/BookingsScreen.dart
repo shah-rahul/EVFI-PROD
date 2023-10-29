@@ -65,7 +65,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       return Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
-    } else if (_isProvider!) {
+    } else if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -77,9 +77,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(PageTransition(
-                      child: const ListChargerForm(),
-                      type: PageTransitionType.theme));
+                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
                 },
                 icon: const Icon(
                   Icons.add_business_outlined,
