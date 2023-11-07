@@ -131,11 +131,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                print(snapshot.data);
+                print('${snapshot.connectionState}');
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return Center(child: const CircularProgressIndicator());
                 }
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData && snapshot.data != null) {
+                  print(snapshot.data!.docs[0].data());
                   return const Center(
                     child: Text('No Bookings yet..'),
                   );

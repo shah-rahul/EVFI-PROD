@@ -105,9 +105,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 print(snapshot.data);
-                print("****");
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData) {
                   return const Center(
