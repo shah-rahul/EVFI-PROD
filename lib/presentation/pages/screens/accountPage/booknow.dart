@@ -1,7 +1,9 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
+import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,16 +11,17 @@ import 'package:page_transition/page_transition.dart';
 import '../../../resources/color_manager.dart';
 
 class Booknow extends StatefulWidget {
-  const Booknow({
-    required this.stationName,
-    required this.address,
-    required this.imageUrl,
-    required this.costOfFullCharge,
-    required this.chargerType,
-    required this.amenities,
-    required this.timeStamp,
-    required this.hostName,
-  });
+  const Booknow(
+      {required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.costOfFullCharge,
+      required this.chargerType,
+      required this.amenities,
+      required this.timeStamp,
+      required this.hostName,
+      required this.chargerId,
+      required this.providerId});
 
   final String stationName;
   final String address;
@@ -28,6 +31,8 @@ class Booknow extends StatefulWidget {
   final String chargerType;
   final String amenities;
   final String hostName;
+  final String chargerId;
+  final String providerId;
 
   @override
   State<Booknow> createState() {
@@ -36,27 +41,6 @@ class Booknow extends StatefulWidget {
 }
 
 class _Booknow extends State<Booknow> {
-  bool isLoading = true;
-  Future<void> fetchImage() async {
-    await Future.delayed(Duration(seconds: 8));
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchImage();
-  }
-
-  // final List<String> imageUrls = [
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  // ];
   int _currentIndex = 0;
   final CarouselController carouselController = CarouselController();
 
@@ -88,44 +72,49 @@ class _Booknow extends State<Booknow> {
                 fit: StackFit.passthrough,
                 alignment: Alignment.bottomCenter,
                 children: [
-                  if (isLoading)
-                    Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                      ),
-                    )
-                  else
-                    CarouselSlider(
-                      items: widget.imageUrl.map((imageUrl) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.cover,
-                                height: 150,
-                                width: double.infinity,
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                          scrollDirection: Axis.horizontal,
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          aspectRatio: 2,
-                          //viewportFraction: 1,  //get checked by rahul sir
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 2),
-                          enlargeCenterPage: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          }),
+                  // if (isLoading)
+                  //   Center(
+                  //     child: CircularProgressIndicator(
+                  //       strokeWidth: 2.0,
+                  //     ),
+                  //   )
+                  // else
+                  CarouselSlider(
+                    items: widget.imageUrl.map((imageUrl) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                              height: 150,
+                              width: double.infinity,
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                    carouselController: carouselController,
+                    options: CarouselOptions(
+                      scrollDirection: Axis.horizontal,
+                      scrollPhysics: const BouncingScrollPhysics(),
+                      aspectRatio: 2,
+                      //viewportFraction: 1,  //get checked by rahul sir
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 2),
+                      enlargeCenterPage: true,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
                     ),
+                  ),
                   Positioned(
                     bottom: 5,
                     left: 0,
@@ -139,10 +128,11 @@ class _Booknow extends State<Booknow> {
                           height: 7.0,
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: _currentIndex == index
-                                  ? Colors.yellow
-                                  : Colors.orange),
+                            borderRadius: BorderRadius.circular(10),
+                            color: _currentIndex == index
+                                ? Colors.yellow
+                                : Colors.orange,
+                          ),
                         );
                       }).toList(),
                     ),
@@ -283,12 +273,18 @@ class _Booknow extends State<Booknow> {
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const PaymentScreen()),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   PageTransition(
+                      //       type: PageTransitionType.rightToLeft,
+                      //       child: const PaymentScreen()),
+                      // ).then((_) {
+                      BookingDataProvider(
+                          providerId: widget.providerId,
+                          chargerId: widget.chargerId,
+                          price: "${widget.costOfFullCharge}",
+                          timeSlot: '10:00 AM - 11:00 AM');
+                      Navigator.pop(context);
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,

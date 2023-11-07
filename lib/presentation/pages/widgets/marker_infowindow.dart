@@ -249,7 +249,9 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                             chargerType: widget.chargerType,
                             amenities: widget.amenities,
                             hostName: widget.hostName,
-                            timeStamp: widget.timeStamp)));
+                            timeStamp: widget.timeStamp,
+                            chargerId: widget.chargerId,
+                            providerId: widget.providerId,)));
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.04,

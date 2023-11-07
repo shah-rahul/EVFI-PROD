@@ -2,15 +2,11 @@
 import 'dart:async';
 
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
-import 'package:evfi/presentation/pages/widgets/BookingDataWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -39,28 +35,25 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Future<void> checkIfProvider() async {
     final prefs = await SharedPreferences.getInstance();
-    _isProvider = prefs.getBool('isProvider');
-    if (_isProvider == null) {
+    var provider = prefs.getBool('isProvider');
+    if (provider == null) {
       _userCollection = await FirebaseFirestore.instance
           .collection('user')
           .where('uid', isEqualTo: userId)
           .get();
       if (_userCollection!.docs.isNotEmpty) {
         var doc = _userCollection!.docs[0];
-        _isProvider = doc.data()['isProvider'];
-        prefs.setBool('isProvider', _isProvider!);
+        provider = doc.data()['isProvider'];
+        prefs.setBool('isProvider', provider!);
       }
     }
-    // if (!_isProvider!) {
-    //   //User is not a provider, show List charger page
-    //   Navigator.of(context).pushReplacementNamed(Routes.ListChargerPage);
-    // }
-    setState(() {});
+    setState(() {
+      _isProvider = provider!;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    checkIfProvider();
     if (_isProvider == null) {
       return Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -100,8 +93,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         .doc(chargerId)
         .get();
     stationName = chargerDetails['info']['stationName'];
-    debugPrint(stationName);
-    debugPrint(customerId);
+    print(stationName);
+    print(customerId);
     final customerDetails = await FirebaseFirestore.instance
         .collection('user')
         .doc(customerId)
@@ -111,14 +104,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Widget streamBuilder(String tab) {
     final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Container(
       height: height * 0.75,
       padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
             height: height * 0.85,
-            // width: width*2,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
@@ -131,12 +122,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                print('${snapshot.connectionState}');
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: const CircularProgressIndicator());
                 }
-                if (!snapshot.hasData && snapshot.data != null) {
-                  print(snapshot.data!.docs[0].data());
+                if (!snapshot.hasData) {
                   return const Center(
                     child: Text('No Bookings yet..'),
                   );
@@ -149,7 +138,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     snapshot.data!.docs;
                 if (documents.isEmpty) {
                   return Center(
-                    child: Text('No Bookings yet '),
+                    child: Text('No Bookings yet...'),
                   );
                 }
 
@@ -163,10 +152,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
-                          print(snapshots);
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -177,6 +166,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
+                          print('hihihihihihihihihihihihihihihihihihihihijui');
                           return Column(children: [
                             BookingWidget(
                               bookingItem: Booking(
