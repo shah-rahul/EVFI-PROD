@@ -282,9 +282,10 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                         chargerType: chargerType,
                         amenities: amenities,
                         hostName: hostName,
-                        timeStamp: '$startTime - $endTime',
-                      chargerId: ds.id,
-                      providerId: data['uid']);
+                        startTime: startTime,
+                        endTime: endTime,
+                        chargerId: ds.id,
+                        providerId: data['uid']);
                   },
                 );
               },

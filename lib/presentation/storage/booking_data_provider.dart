@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 class BookingDataProvider {
   final String chargerId;
-  final double price;
+  final String price;
   final String timeSlot;
   final String providerId;
 
@@ -27,7 +27,7 @@ class BookingDataProvider {
         'uId': _userId,
         'chargerId': chargerId,
         'price': price,
-        'timeStamp': timeSlot,
+        'timeSlot': timeSlot,
         'providerId': providerId,
         'bookingDate': DateFormat('d MMMM yyyy').format(DateTime.now())
       });

@@ -229,8 +229,8 @@ class HomeState extends State<Home> {
           stnAddress = stnAddress as String;
           stnImgUrl = stnImgUrl as List<dynamic>;
           stateName = stateName as String;
-          startTime = startTime as String;
-          endTime = endTime as String;
+          startTime = startTime as int;
+          endTime = endTime as int;
           chargerType = chargerType as String;
           amenities = amenities as String;
           hostName = hostName as String;
@@ -260,7 +260,8 @@ class HomeState extends State<Home> {
                         chargerType: chargerType,
                         amenities: amenities,
                         hostName: hostName,
-                        timeStamp: '$startTime - $endTime',
+                        startTime: startTime.toString(),
+                        endTime: endTime.toString(),
                         chargerId: ds.id,
                         providerId: data['uid']);
                   },

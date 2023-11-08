@@ -1,7 +1,10 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
+import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -9,25 +12,30 @@ import 'package:page_transition/page_transition.dart';
 import '../../../resources/color_manager.dart';
 
 class Booknow extends StatefulWidget {
-  const Booknow({
-    required this.stationName,
-    required this.address,
-    required this.imageUrl,
-    required this.costOfFullCharge,
-    required this.chargerType,
-    required this.amenities,
-    required this.timeStamp,
-    required this.hostName,
-  });
+  const Booknow(
+      {required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.costOfFullCharge,
+      required this.chargerType,
+      required this.amenities,
+      required this.startTime,
+      required this.endTime,
+      required this.hostName,
+      required this.chargerId,
+      required this.providerId});
 
   final String stationName;
   final String address;
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
-  final String timeStamp;
+  final String startTime;
+  final String endTime;
   final String chargerType;
   final String amenities;
   final String hostName;
+  final String chargerId;
+  final String providerId;
 
   @override
   State<Booknow> createState() {
@@ -36,29 +44,15 @@ class Booknow extends StatefulWidget {
 }
 
 class _Booknow extends State<Booknow> {
-  bool isLoading = true;
-  Future<void> fetchImage() async {
-    await Future.delayed(Duration(seconds: 8));
-    setState(() {
-      isLoading = false;
-    });
-  }
+  int _currentIndex = 0;
+  final CarouselController carouselController = CarouselController();
 
   @override
   void initState() {
+    // TODO: implement initState
+    streamBuilder();
     super.initState();
-    fetchImage();
   }
-
-  // final List<String> imageUrls = [
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  //   'assets/images/map/carphoto.jpeg',
-  // ];
-  int _currentIndex = 0;
-  final CarouselController carouselController = CarouselController();
 
   @override
   Widget build(BuildContext context) {
@@ -88,44 +82,49 @@ class _Booknow extends State<Booknow> {
                 fit: StackFit.passthrough,
                 alignment: Alignment.bottomCenter,
                 children: [
-                  if (isLoading)
-                    Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                      ),
-                    )
-                  else
-                    CarouselSlider(
-                      items: widget.imageUrl.map((imageUrl) {
-                        return Builder(
-                          builder: (BuildContext context) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.cover,
-                                height: 150,
-                                width: double.infinity,
-                              ),
-                            );
-                          },
-                        );
-                      }).toList(),
-                      carouselController: carouselController,
-                      options: CarouselOptions(
-                          scrollDirection: Axis.horizontal,
-                          scrollPhysics: const BouncingScrollPhysics(),
-                          aspectRatio: 2,
-                          //viewportFraction: 1,  //get checked by rahul sir
-                          autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 2),
-                          enlargeCenterPage: true,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _currentIndex = index;
-                            });
-                          }),
+                  // if (isLoading)
+                  //   Center(
+                  //     child: CircularProgressIndicator(
+                  //       strokeWidth: 2.0,
+                  //     ),
+                  //   )
+                  // else
+                  CarouselSlider(
+                    items: widget.imageUrl.map((imageUrl) {
+                      return Builder(
+                        builder: (BuildContext context) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child: CachedNetworkImage(
+                              imageUrl: imageUrl,
+                              fit: BoxFit.cover,
+                              height: 150,
+                              width: double.infinity,
+                              placeholder: (context, url) =>
+                                  Center(child: CircularProgressIndicator()),
+                              errorWidget: (context, url, error) =>
+                                  Icon(Icons.error),
+                            ),
+                          );
+                        },
+                      );
+                    }).toList(),
+                    carouselController: carouselController,
+                    options: CarouselOptions(
+                      scrollDirection: Axis.horizontal,
+                      scrollPhysics: const BouncingScrollPhysics(),
+                      aspectRatio: 2,
+                      //viewportFraction: 1,  //get checked by rahul sir
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 2),
+                      enlargeCenterPage: true,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
                     ),
+                  ),
                   Positioned(
                     bottom: 5,
                     left: 0,
@@ -139,10 +138,11 @@ class _Booknow extends State<Booknow> {
                           height: 7.0,
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: _currentIndex == index
-                                  ? Colors.yellow
-                                  : Colors.orange),
+                            borderRadius: BorderRadius.circular(10),
+                            color: _currentIndex == index
+                                ? Colors.yellow
+                                : Colors.orange,
+                          ),
                         );
                       }).toList(),
                     ),
@@ -210,7 +210,7 @@ class _Booknow extends State<Booknow> {
                   Row(children: [
                     const Icon(Icons.access_time),
                     Text(
-                      '\t ${widget.timeStamp}',
+                      '\t ${widget.startTime}-${widget.endTime}',
                       style: TextStyle(
                           fontSize: AppSize.s14, fontWeight: FontWeight.w600),
                     ),
@@ -226,6 +226,7 @@ class _Booknow extends State<Booknow> {
                         fontSize: AppSize.s14, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 5),
+
                   //..................................................................................
                   //.....................Available slots for today..............................................
                   Card(
@@ -238,7 +239,7 @@ class _Booknow extends State<Booknow> {
                     color: Colors.white,
                     child: Container(
                       padding: EdgeInsets.all(15),
-                      height: height * 0.25,
+                      height: height * 0.27,
                       width: double.infinity,
                       child: Column(
                         children: [
@@ -250,7 +251,7 @@ class _Booknow extends State<Booknow> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          containersTable(context),
+                          streamBuilder(),
                         ],
                       ),
                     ),
@@ -283,12 +284,18 @@ class _Booknow extends State<Booknow> {
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        PageTransition(
-                            type: PageTransitionType.rightToLeft,
-                            child: const PaymentScreen()),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   PageTransition(
+                      //       type: PageTransitionType.rightToLeft,
+                      //       child: const PaymentScreen()),
+                      // ).then((_) {
+                      BookingDataProvider(
+                          providerId: widget.providerId,
+                          chargerId: widget.chargerId,
+                          price: "${widget.costOfFullCharge}",
+                          timeSlot: '10:00 AM - 11:00 AM');
+                      Navigator.pop(context);
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,
@@ -320,41 +327,131 @@ class _Booknow extends State<Booknow> {
       ),
     );
   }
-}
 
-//..........................................................................................
-//.........................Table of Time Slots..............................................
-Widget containersTable(BuildContext context) {
-  List<Widget> rows = [];
-
-  // 4x4 table of containers
-  for (int i = 0; i < 4; i++) {
-    List<Widget> columns = [];
-    for (int j = 0; j < 4; j++) {
-      columns.add(
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
-          height: MediaQuery.of(context).size.height * 0.03,
-          width: MediaQuery.of(context).size.width * 0.18,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(40),
-            color: Color.fromARGB(255, 214, 205, 205),
-          ),
-          padding: EdgeInsets.all(5),
-          child: Center(child: Text('1 pm')),
-        ),
-      );
+  bool isValidTimeSlot(String time) {
+    String ampm = time.substring(time.length - 2);
+    int timeExtracted = int.parse(time.substring(0, time.length - 3));
+    if (ampm == "am" && timeExtracted == 12) {
+      timeExtracted = 0;
     }
-    rows.add(
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: columns,
+    if (ampm == "pm" && timeExtracted != 12) {
+      timeExtracted += 12;
+    }
+
+    return timeExtracted >= int.parse(widget.startTime) &&
+        timeExtracted <= int.parse(widget.endTime) &&
+        !(bookedSlots[timeExtracted - 1] == "1");
+  }
+
+  String bookedSlots = "";
+  String timeToBinary(int time) {
+    String binaryTime = "";
+    print(time);
+    print(time.runtimeType);
+    // counter for binary array
+    int n = time;
+    while (n > 0) {
+      // storing remainder in binary array
+      binaryTime = (n % 2).toString() + binaryTime;
+      n = (n / 2).toInt();
+    }
+    print(binaryTime);
+    return binaryTime;
+
+    // printing binary array in reverse order
+  }
+
+  Widget streamBuilder() {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('chargers')
+            .doc(widget.chargerId)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          // if (snapshot.connectionState == ConnectionState.waiting) {
+          //   return Center(child: const CircularProgressIndicator());
+          // }
+          if (!snapshot.hasData) {
+            return Center(child: Text(''));
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text(''));
+          }
+
+          // if (snapshot.data!.docChanges.isNotEmpty) {
+          print(snapshot.data?['timeSlot'].runtimeType);
+
+          bookedSlots = timeToBinary((snapshot.data?['timeSlot']));
+          for (int i = bookedSlots.length; i <= 24; i++)
+            bookedSlots = "0" + bookedSlots;
+          return containersTable(context);
+          // }
+          // return Container();
+        });
+  }
+
+  Widget timeSlot(String text, BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+      height: MediaQuery.of(context).size.height * 0.03,
+      width: MediaQuery.of(context).size.width * 0.18,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(40),
+        color: isValidTimeSlot(text)
+            ? Colors.green
+            : Color.fromARGB(255, 214, 205, 205),
       ),
+      padding: EdgeInsets.all(5),
+      child: Center(child: Text(text)),
     );
   }
 
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: rows,
-  );
+//..........................................................................................
+//.........................Table of Time Slots..............................................
+  Widget containersTable(BuildContext context) {
+    List<Widget> rows = [];
+
+    // 4x4 table of containers
+    int time = 1;
+    for (int i = 0; i < 3; i++) {
+      List<Widget> columns = [];
+      if (i == 0) columns.add(timeSlot("12 am", context));
+      for (int j = 0; j < 4; j++) {
+        if (i == 0 && j == 0) continue;
+        columns.add(timeSlot('${time} am', context));
+        time++;
+      }
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: columns,
+        ),
+      );
+    }
+    time = 1;
+    for (int i = 0; i < 3; i++) {
+      List<Widget> columns = [];
+      if (i == 0) columns.add(timeSlot("12 pm", context));
+      for (int j = 0; j < 4; j++) {
+        if (i == 0 && j == 0) continue;
+        columns.add(timeSlot('${time} pm', context));
+        time++;
+      }
+
+      rows.add(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: columns,
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: rows,
+      ),
+    );
+  }
 }

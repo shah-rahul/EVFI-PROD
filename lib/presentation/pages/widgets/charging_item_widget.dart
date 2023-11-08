@@ -176,7 +176,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
             child: Text(
-              '₹ ${widget.chargingItem.amount.toString()}',
+              '₹ ${widget.chargingItem.amount}',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 25,

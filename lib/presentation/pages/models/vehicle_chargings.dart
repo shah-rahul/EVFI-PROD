@@ -1,3 +1,4 @@
+import 'package:evfi/presentation/pages/streams/charging_stream.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -52,5 +53,6 @@ class UserChargings extends ChangeNotifier {
     // print(userChargings.length);
     _vehicleChargings.add(newCharging);
     notifyListeners();
+    ChargingStream.updateChargingStream(_vehicleChargings);
   }
 }

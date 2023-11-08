@@ -105,9 +105,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 print(snapshot.data);
-                print("****");
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -124,7 +123,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 // print(documents[0]);
                 if (documents.length == 0)
                   return Center(
-                    child: Text('No Charging yet'),
+                    child: Text('No Chargings yet..'),
                   );
 
                 return ListView.builder(
@@ -139,7 +138,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
+                            return const Center(child: CircularProgressIndicator());
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -153,7 +152,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           return Column(children: [
                             MyChargingWidget(
                               chargingItem: Charging(
-                                  amount: documents[index]['price'],
+                                  amount: documents[index]['price'] as String,
                                   phoneNumber: '788998',
                                   position: const LatLng(0,
                                       0), //later to show path till charger we'll use charger coordinates
