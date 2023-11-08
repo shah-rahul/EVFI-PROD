@@ -89,9 +89,9 @@ await documentRef.set({
         'isProvider': _userData.isProvider,
       });
 
-      // print('User data updated successfully!');
+      print('User data updated successfully!');
     } catch (e) {
-      //print('Error updating user data: $e');
+      print('Error updating user data: $e');
     }
   }
 }
