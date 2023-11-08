@@ -166,7 +166,7 @@ class _BookingWidgetState extends State<BookingWidget> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 30,
+                  horizontal: width*0.1,
                 ),
                 child: Text(
                   widget.bookingItem.customerName,
@@ -177,9 +177,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: width*0.09),
                 child: Text(
                   'Time slot- ${widget.bookingItem.timeStamp}',
                   style: TextStyle(
@@ -189,10 +189,10 @@ class _BookingWidgetState extends State<BookingWidget> {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: height * 0.01),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 30), // Add vertical padding
+                    horizontal: width*0.08), // Add vertical padding
                 child: Text(
                   widget.bookingItem.customerMobileNumber,
                   style: TextStyle(
@@ -202,10 +202,10 @@ class _BookingWidgetState extends State<BookingWidget> {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
+              SizedBox(height: height * 0.01),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 30), // Add vertical padding
+                    horizontal: width*0.08), // Add vertical padding
                 child: Text(
                   '₹ ${widget.bookingItem.amount.toString()}',
                   style: TextStyle(
@@ -228,7 +228,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: EdgeInsets.symmetric(horizontal: height * 0.01),
                         width: width * 0.4,
                         height: height * 0.03,
                         child: ElevatedButton(
