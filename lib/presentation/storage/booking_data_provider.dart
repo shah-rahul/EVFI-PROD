@@ -8,13 +8,12 @@ import 'package:intl/intl.dart';
 class BookingDataProvider {
   final String chargerId;
   final String price;
-  final String timeSlot;
+  final int timeSlot;
   final String providerId;
 
   final CollectionReference _booking =
       FirebaseFirestore.instance.collection('booking');
   final _userId = FirebaseAuth.instance.currentUser!.uid;
-
 
   BookingDataProvider(
       {required this.providerId,

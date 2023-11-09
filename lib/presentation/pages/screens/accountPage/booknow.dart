@@ -290,12 +290,20 @@ class _Booknow extends State<Booknow> {
                       //       type: PageTransitionType.rightToLeft,
                       //       child: const PaymentScreen()),
                       // ).then((_) {
+                      int updatedTimeSlot = binaryToDecimal(
+                          newTimeSlots(previousTImeSlot, selectedTimeSlot));
+                      print("--");
+                      print(previousTImeSlot);
+                      print(selectedTimeSlot);
+                      print(updatedTimeSlot);
+                      updateFireStoreTimeStamp(updatedTimeSlot);
+
                       BookingDataProvider(
                           providerId: widget.providerId,
                           chargerId: widget.chargerId,
                           price: "${widget.costOfFullCharge}",
-                          timeSlot: '10:00 AM - 11:00 AM');
-                      Navigator.pop(context);
+                          timeSlot: selectedTimeSlot);
+                      // Navigator.pop(context);
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,
@@ -331,6 +339,7 @@ class _Booknow extends State<Booknow> {
   bool isValidTimeSlot(String time) {
     String ampm = time.substring(time.length - 2);
     int timeExtracted = int.parse(time.substring(0, time.length - 3));
+
     if (ampm == "am" && timeExtracted == 12) {
       timeExtracted = 0;
     }
@@ -340,7 +349,45 @@ class _Booknow extends State<Booknow> {
 
     return timeExtracted >= int.parse(widget.startTime) &&
         timeExtracted <= int.parse(widget.endTime) &&
-        !(bookedSlots[timeExtracted - 1] == "1");
+        !(bookedSlots[timeExtracted] == "1");
+  }
+
+  void updateFireStoreTimeStamp(int time) async {
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('chargers');
+    DocumentReference docRef = users.doc(widget.chargerId);
+    await docRef.update({
+      'timeSlot': time,
+    });
+  }
+
+  int binaryToDecimal(String n) {
+    String num = n;
+    int dec_value = 0;
+
+    // Initializing base value to 1, i.e 2^0
+    int base = 1;
+
+    int len = num.length;
+    for (int i = len - 1; i >= 0; i--) {
+      if (num[i] == '1') dec_value += base;
+      base = base * 2;
+    }
+
+    return dec_value;
+  }
+
+  String newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
+    String prevBin = timeToBinary(prevTimeSlot);
+    for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
+    String newTimeSlot = "";
+    for (int i = 0; i < 24; i++) {
+      if (i == bookedTimeSlot) {
+        newTimeSlot += "1";
+      } else
+        newTimeSlot += prevBin[i];
+    }
+    return newTimeSlot;
   }
 
   String bookedSlots = "";
@@ -380,9 +427,9 @@ class _Booknow extends State<Booknow> {
 
           // if (snapshot.data!.docChanges.isNotEmpty) {
           print(snapshot.data?['timeSlot'].runtimeType);
-
+          previousTImeSlot = snapshot.data?['timeSlot'];
           bookedSlots = timeToBinary((snapshot.data?['timeSlot']));
-          for (int i = bookedSlots.length; i <= 24; i++)
+          for (int i = bookedSlots.length; i < 24; i++)
             bookedSlots = "0" + bookedSlots;
           return containersTable(context);
           // }
@@ -390,16 +437,48 @@ class _Booknow extends State<Booknow> {
         });
   }
 
+  int selectedTimeSlot = 0;
+  int previousTImeSlot = 0; //previosu value of timeslot fetched from database
   Widget timeSlot(String text, BuildContext context) {
+    if (isValidTimeSlot(text)) {
+      return GestureDetector(
+        onTap: () {
+          String ampm = text.substring(text.length - 2);
+          int timeExtracted = int.parse(text.substring(0, text.length - 3));
+          if (ampm == "am" && timeExtracted == 12) {
+            timeExtracted = 0;
+          }
+          if (ampm == "pm" && timeExtracted != 12) {
+            timeExtracted += 12;
+          }
+          setState(() {
+            selectedTimeSlot = timeExtracted;
+          });
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
+          height: MediaQuery.of(context).size.height * 0.03,
+          width: MediaQuery.of(context).size.width * 0.18,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(blurRadius: 2.0),
+            ],
+            borderRadius: BorderRadius.circular(40),
+            color: Colors.green,
+          ),
+          padding: EdgeInsets.all(5),
+          child: Center(child: Text(text)),
+        ),
+      );
+    }
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
       height: MediaQuery.of(context).size.height * 0.03,
       width: MediaQuery.of(context).size.width * 0.18,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(40),
-        color: isValidTimeSlot(text)
-            ? Colors.green
-            : Color.fromARGB(255, 214, 205, 205),
+        color: Color.fromARGB(255, 214, 205, 205),
       ),
       padding: EdgeInsets.all(5),
       child: Center(child: Text(text)),
