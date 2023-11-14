@@ -16,7 +16,8 @@ class CustomMarkerPopup extends StatefulWidget {
   final String address;
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
-  final String timeStamp;
+  final String startTime;
+  final String endTime;
   final String chargerType;
   final String amenities;
   final String hostName;
@@ -34,7 +35,8 @@ class CustomMarkerPopup extends StatefulWidget {
     required this.chargerType,
     required this.amenities,
     required this.hostName,
-    required this.timeStamp,
+    required this.startTime,
+    required this.endTime,
     required this.chargerId,
     required this.providerId,
   });
@@ -119,7 +121,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                             CarouselSlider(
                               items: widget.imageUrl.map((imageUrl) {
                                 return Builder(
-                                  builder: (BuildContext context){
+                                  builder: (BuildContext context) {
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(40),
                                       child: Image.network(
@@ -242,16 +244,18 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => Booknow(
-                            stationName: widget.stationName,
-                            address: widget.address,
-                            imageUrl: widget.imageUrl,
-                            costOfFullCharge: widget.costOfFullCharge,
-                            chargerType: widget.chargerType,
-                            amenities: widget.amenities,
-                            hostName: widget.hostName,
-                            timeStamp: widget.timeStamp,
-                            chargerId: widget.chargerId,
-                            providerId: widget.providerId,)));
+                              stationName: widget.stationName,
+                              address: widget.address,
+                              imageUrl: widget.imageUrl,
+                              costOfFullCharge: widget.costOfFullCharge,
+                              chargerType: widget.chargerType,
+                              amenities: widget.amenities,
+                              hostName: widget.hostName,
+                              startTime: widget.startTime,
+                              endTime: widget.endTime,
+                              chargerId: widget.chargerId,
+                              providerId: widget.providerId,
+                            )));
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.04,

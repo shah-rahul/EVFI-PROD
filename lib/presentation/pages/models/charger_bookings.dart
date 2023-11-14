@@ -3,7 +3,7 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 
 class Booking {
   String amount;
-  String timeStamp;
+  int timeStamp;
   String stationName;
   String customerName;
   String id;

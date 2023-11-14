@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 class Charging {
   String stationName;
   String stationAddress;
-  String slotChosen;
+  int slotChosen;
   String id;
   String date;
   String amount;

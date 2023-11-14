@@ -79,8 +79,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         .collection('chargers')
         .doc(chargerId)
         .get();
+    print(chargerDetails.data());
     return chargerDetails;
   }
+
 //your bookings
   Widget streamBuilder(String tab) {
     final height = MediaQuery.of(context).size.height;
@@ -90,7 +92,6 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
       child: SingleChildScrollView(
         child: Container(
             height: height * 0.85,
-            
             width: 400,
             child: StreamBuilder(
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
@@ -128,6 +129,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
                 return ListView.builder(
                   itemBuilder: (context, index) {
+                    print('****');
                     print(documents[index].data());
                     return FutureBuilder(
                         future: getChargerDetailsByChargerId(
@@ -138,7 +140,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -149,6 +152,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
+                          print(documents[index].data());
+                          print('----');
                           return Column(children: [
                             MyChargingWidget(
                               chargingItem: Charging(
