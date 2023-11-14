@@ -111,95 +111,87 @@ class _BookingsScreenState extends State<BookingsScreen> {
         child: Container(
             height: height * 0.85,
             child: StreamBuilder(
-                stream: (tab == AppStrings.BookingScreenPendingTab)
-                    ? FirebaseFirestore.instance
-                        .collection('booking')
-                        .where('providerId', isEqualTo: currentUid)
-                        .where('status', whereIn: [0, 1, 2]).snapshots()
-                    : FirebaseFirestore.instance
-                        .collection('booking')
-                        .where('providerId', isEqualTo: currentUid)
-                        .where('status', whereIn: [-1, -2, 3]).snapshots(),
-                builder: (context,
-                    AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                        snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: const CircularProgressIndicator());
-                  }
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: Text('No Bookings yet..'),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Something went wrong'));
-                  }
-                  if (snapshot.data!.docChanges.isNotEmpty) {
-                    List<DocumentSnapshot<Map<String, dynamic>>> documents =
-                        snapshot.data!.docs;
-                    if (documents.length == 0)
-                      return Center(
-                        child: Text('No Bookings yet '),
-                      );
+              stream: (tab == AppStrings.BookingScreenPendingTab)
+                  ? FirebaseFirestore.instance
+                      .collection('booking')
+                      .where('providerId', isEqualTo: currentUid)
+                      .where('status', whereIn: [0, 1, 2]).snapshots()
+                  : FirebaseFirestore.instance
+                      .collection('booking')
+                      .where('providerId', isEqualTo: currentUid)
+                      .where('status', whereIn: [-1, -2, 3]).snapshots(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: const CircularProgressIndicator());
+                }
+                if (!snapshot.hasData) {
+                  return const Center(
+                    child: Text('No Bookings yet..'),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(child: Text('Something went wrong'));
+                }
 
-                    if (documents.isEmpty) {
-                      return Center(
-                        child: Text('No Bookings yet...'),
-                      );
-                    }
+                List<DocumentSnapshot<Map<String, dynamic>>> documents =
+                    snapshot.data!.docs;
+                if (documents.isEmpty) {
+                  return Center(
+                    child: Text('No Bookings yet...'),
+                  );
+                }
 
-                    return ListView.builder(
-                      itemBuilder: (context, index) {
-                        return FutureBuilder(
-                            future: getCustomerDetailsByUserId(
-                                documents[index].data()!['uId'],
-                                documents[index].data()!['chargerId']),
-                            builder: ((context,
-                                AsyncSnapshot<
-                                        DocumentSnapshot<Map<String, dynamic>>>
-                                    snapshots) {
-                              if (snapshots.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
-                              if (!snapshots.hasData) {
-                                return const Center(
-                                  child: Text('No Bookings yet..'),
-                                );
-                              }
-                              if (snapshots.hasError) {
-                                return const Center(
-                                    child: Text('Something went wrong'));
-                              }
-                              print(
-                                  'hihihihihihihihihihihihihihihihihihihihijui');
-                              return Column(children: [
-                                BookingWidget(
-                                  bookingItem: Booking(
-                                      amount: documents[index]['price'],
-                                      timeStamp: documents[index]['timeSlot'],
-                                      stationName: stationName,
-                                      customerName: snapshots.data!['name'],
-                                      customerMobileNumber:
-                                          snapshots.data!['phoneNumber'],
-                                      status: documents[index]['status'],
-                                      date: documents[index]['bookingDate'],
-                                      id: documents[index].id,
-                                      ratings: 4),
-                                  currentTab: tab,
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                )
-                              ]);
-                            }));
-                      },
-                      itemCount: documents.length,
-                    );
-                  }
-                  return Container();
-                })),
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return FutureBuilder(
+                        future: getCustomerDetailsByUserId(
+                            documents[index].data()!['uId'],
+                            documents[index].data()!['chargerId']),
+                        builder: ((context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshots) {
+                          if (snapshots.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+                          if (!snapshots.hasData) {
+                            return const Center(
+                              child: Text('No Bookings yet..'),
+                            );
+                          }
+                          if (snapshots.hasError) {
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          }
+                          print('hihihihihihihihihihihihihihihihihihihihijui');
+                          return Column(children: [
+                            BookingWidget(
+                              bookingItem: Booking(
+                                  amount: documents[index]['price'],
+                                  timeStamp: documents[index]['timeSlot'],
+                                  stationName: stationName,
+                                  customerName: snapshots.data!['name'],
+                                  customerMobileNumber:
+                                      snapshots.data!['phoneNumber'],
+                                  status: documents[index]['status'],
+                                  date: documents[index]['bookingDate'],
+                                  id: documents[index].id,
+                                  ratings: 4),
+                              currentTab: tab,
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            )
+                          ]);
+                        }));
+                  },
+                  itemCount: documents.length,
+                );
+              },
+            )),
       ),
     );
   }

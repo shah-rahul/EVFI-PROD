@@ -211,7 +211,7 @@ class HomeState extends State<Home> {
 
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
-
+        print(data);
         if (geoPoint != null &&
             geohash != null &&
             stnName != null &&
@@ -232,9 +232,13 @@ class HomeState extends State<Home> {
           startTime = startTime as int;
           endTime = endTime as int;
           chargerType = chargerType as String;
-          amenities = amenities as String;
-          hostName = hostName as String;
 
+          amenities = amenities as String;
+
+          hostName = hostName as String;
+          print('****');
+          print(data);
+          print('------');
           _markers.add(Marker(
               markerId: MarkerId(geohash),
               position: LatLng(geoPoint.latitude, geoPoint.longitude),

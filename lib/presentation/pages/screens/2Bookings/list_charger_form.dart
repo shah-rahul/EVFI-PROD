@@ -60,10 +60,14 @@ class _ListChargerFormState extends State<ListChargerForm> {
   late LatLng _selectedLocation;
   late LatLng _position;
 
-  String? StationName, StationAddress, aadharNumber, city, pinCode;
-  String? hostNames,
-      amenities,
-      state,
+  String? StationName = "",
+      StationAddress = "",
+      aadharNumber = "",
+      city = "",
+      pinCode = "";
+  String? hostNames = "",
+      amenities = "",
+      state = "",
       _startAvailabilityTime,
       _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
@@ -812,7 +816,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 if (value!.isEmpty) {
                                   return 'Please enter valid names.';
                                 }
-                                return null;
+                                return "";
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
@@ -892,7 +896,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 if (value!.isEmpty) {
                                   return 'Please provide a price greater than zero.';
                                 }
-                                return null;
+                                return "";
                               },
                               onSaved: (newValue) {
                                 setState(() {
@@ -915,7 +919,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 if (value!.isEmpty) {
                                   return 'Please provide a list of available services';
                                 }
-                                return null;
+                                return "";
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
@@ -954,7 +958,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
                       height: 30,
                     ),
                     customElevatedButton(
-                        context: context, onTap: addChargerFunction, text: 'Add'),
+                        context: context,
+                        onTap: addChargerFunction,
+                        text: 'Add'),
                     const SizedBox(
                       height: 30,
                     ),
