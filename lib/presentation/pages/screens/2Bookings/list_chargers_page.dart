@@ -2,6 +2,7 @@ import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
+import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -50,9 +51,7 @@ class ListChargersPage extends StatelessWidget {
                 height: height*0.06,
                 child: ElevatedButton(
                   onPressed: () {
-                  Navigator.of(context).push(PageTransition(
-                      child: const ListChargerForm(),
-                      type: PageTransitionType.theme));
+                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
                 },
                     style: Theme.of(context).elevatedButtonTheme.style,
                     child: const Text(

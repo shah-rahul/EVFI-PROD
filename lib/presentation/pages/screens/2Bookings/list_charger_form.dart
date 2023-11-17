@@ -31,7 +31,7 @@ import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/3Chargings/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class ListChargerForm extends StatefulWidget {
@@ -60,14 +60,10 @@ class _ListChargerFormState extends State<ListChargerForm> {
   late LatLng _selectedLocation;
   late LatLng _position;
 
-  String? StationName = "",
-      StationAddress = "",
-      aadharNumber = "",
-      city = "",
-      pinCode = "";
-  String? hostNames = "",
-      amenities = "",
-      state = "",
+  String? StationName, StationAddress, aadharNumber, city, pinCode;
+  String? hostNames,
+      amenities,
+      state,
       _startAvailabilityTime,
       _endAvailabilityTime; //later define hosts as list<string>
   double? amount, latitude = 0.0, longitude = 0.0;
@@ -722,7 +718,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                   child: DropdownButtonFormField<String>(
                                     value: state,
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
+                                        const BorderRadius.all(Radius.circular(8)),
                                     decoration: const InputDecoration(
                                         hintText: 'Select State',
                                         fillColor: Colors.white,
@@ -821,7 +817,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText:
-                                      'Priyanshu Maikhuri\nArshdeep Singh\nRaj',
+                                      'Owner\'s Name',
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(

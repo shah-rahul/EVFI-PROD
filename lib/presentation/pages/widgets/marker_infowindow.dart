@@ -98,7 +98,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 ),
                 const SizedBox(height: 10),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     //..................................................................................
                     //..................Charger Images..................................................
@@ -223,7 +223,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                                   color: ColorManager.primary,
                                 ),
                                 itemCount: 5,
-                                itemSize: 20.0,
+                                itemSize: 17.0,
                                 direction: Axis.horizontal,
                               ),
                             ],

@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 // import 'package:evfi/presentation/pages/streams/charging_stream.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../resources/strings_manager.dart';
-import '../../../resources/color_manager.dart';
+import '../../../../resources/strings_manager.dart';
+import '../../../../resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
-import '../../widgets/charging_item_widget.dart';
+import '../../../widgets/charging_item_widget.dart';
 
 class MyChargingScreen extends StatefulWidget {
   const MyChargingScreen({Key? key}) : super(key: key);
