@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/image_input.dart';
+import 'package:evfi/presentation/pages/screens/accountPage/account.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -35,30 +36,18 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formkey = GlobalKey<FormState>();
-  var _enteredFName = "";
-  var _enteredLName = "";
-  var _enteredEmail = "";
+  var _enteredFName = firstname;
+  var _enteredLName = lastname;
+  var _enteredEmail = email;
   File? _selectedImage;
-  var _enteredMobileno = "";
-  var _enteredCountry = "";
-  var _enteredState = "";
-  var _enteredCity = "";
-  var _enteredPincode = "";
-  void accessData() {
-    _enteredFName = widget.name;
-    _enteredEmail = widget.email;
-    _enteredMobileno = widget.phoneNo;
-    _enteredFName = widget.firstname;
-    _enteredLName = widget.lastname;
-    _enteredCountry = widget.country;
-    _enteredState = widget.state;
-    _enteredCity = widget.city;
-    _enteredPincode = widget.pincode;
-  }
+  var _enteredMobileno = phoneNo;
+  var _enteredCountry = country;
+  var _enteredState = state;
+  var _enteredCity = city;
+  var _enteredPincode = pincode;
 
   @override
   void initState() {
-    accessData();
     fetchUserDataAndInitializeFields();
     super.initState();
   }
@@ -168,7 +157,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('First Name'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredFName,
+                    initialValue: widget.firstname,
                     onSaved: (newValue) {
                       _enteredFName = newValue!;
                     },
@@ -179,7 +168,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('Last Name'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredLName,
+                    initialValue: widget.lastname,
                     onSaved: (newValue) {
                       _enteredLName = newValue!;
                     },
@@ -193,7 +182,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('User email'),
                     ),
                     maxLength: 30,
-                    initialValue: _enteredEmail,
+                    initialValue: widget.email,
                     onSaved: (newValue) {
                       _enteredEmail = newValue!;
                     },
@@ -207,7 +196,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('Contact Number'),
                     ),
                     maxLength: 13,
-                    initialValue: _enteredMobileno,
+                    initialValue: widget.phoneNo,
                     onSaved: (newValue) {
                       _enteredMobileno = newValue!;
                     },
@@ -242,7 +231,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('Country'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredCountry,
+                    initialValue: widget.country,
                     onSaved: (newValue) {
                       _enteredCountry = newValue!;
                     },
@@ -254,7 +243,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('State'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredState,
+                    initialValue: widget.state,
                     onSaved: (newValue) {
                       _enteredState = newValue!;
                     },
@@ -266,7 +255,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('City'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredCity,
+                    initialValue: widget.city,
                     onSaved: (newValue) {
                       _enteredCity = newValue!;
                     },
@@ -278,7 +267,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       label: Text('Pin Code'),
                     ),
                     maxLength: 20,
-                    initialValue: _enteredPincode,
+                    initialValue: widget.pincode,
                     onSaved: (newValue) {
                       _enteredPincode = newValue!;
                     },

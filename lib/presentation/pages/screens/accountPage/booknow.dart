@@ -234,18 +234,20 @@ class _Booknow extends State<Booknow> {
                       padding: EdgeInsets.all(15),
                       height: height * 0.27,
                       width: double.infinity,
-                      child: Column(
-                        children: [
-                          Text(
-                            'Available slots for today',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w800,
-                              fontSize: AppSize.s16,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Text(
+                              'Available slots for today',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: AppSize.s16,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          streamBuilder(),
-                        ],
+                            const SizedBox(height: 5),
+                            streamBuilder(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -296,7 +298,7 @@ class _Booknow extends State<Booknow> {
                           chargerId: widget.chargerId,
                           price: "${widget.costOfFullCharge}",
                           timeSlot: selectedTimeSlot);
-                      // Navigator.pop(context);
+                      Navigator.pop(context);
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,
@@ -433,6 +435,7 @@ class _Booknow extends State<Booknow> {
   int selectedTimeSlot = 0;
   int previousTImeSlot = 0; //previosu value of timeslot fetched from database
   Widget timeSlot(String text, BuildContext context) {
+    bool isClicked = false;
     if (isValidTimeSlot(text)) {
       return GestureDetector(
         onTap: () {
@@ -446,7 +449,10 @@ class _Booknow extends State<Booknow> {
           }
           setState(() {
             selectedTimeSlot = timeExtracted;
+            isClicked = !isClicked;
           });
+          print(
+              "*************************************************************$isClicked");
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
@@ -457,7 +463,7 @@ class _Booknow extends State<Booknow> {
               BoxShadow(blurRadius: 2.0),
             ],
             borderRadius: BorderRadius.circular(40),
-            color: Colors.green,
+            color: isClicked ? Colors.yellow : Colors.green,
           ),
           padding: EdgeInsets.all(5),
           child: Center(child: Text(text)),

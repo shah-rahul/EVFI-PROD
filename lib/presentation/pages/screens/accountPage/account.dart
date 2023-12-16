@@ -1,18 +1,19 @@
+// ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/new_station.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/profilesection.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/settings.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../4accountPage/new_station.dart';
-
-String username = "Mr. evfi";
+String username = "";
 String firstname = "";
 String lastname = "";
 String email = "";
@@ -22,7 +23,6 @@ String country = "";
 String state = "";
 String city = "";
 String pincode = "";
-List<dynamic> user_images = [];
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -43,7 +43,7 @@ class _AccountState extends State<Account> {
       if (user != null) {
         // User is signed in, fetch user data from Firestore
         _fetchUserData(user.uid);
-        setState(() {});
+        //setState(() {});
       }
     });
   }
@@ -56,23 +56,23 @@ class _AccountState extends State<Account> {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
       setState(() {
         _user = auth.currentUser;
-        username = userData['firstName'] + " " + userData['lastName'];
+        username = "${userData['firstName']} ${userData['lastName']}";
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
-        email = userData['email'];
+        // email = userData['email'];
         country = userData['country'];
         state = userData['state'];
         city = userData['city'];
         pincode = userData['pinCode'];
         //clickedImage = userData['userImage'];
-        user_images = userData['userImage'];
       });
     } catch (e) {
       print('Error fetching user data: $e');
     }
   }
 
+//........EDIT PROFILE.....................................................................
   void editProfile() async {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
@@ -93,6 +93,7 @@ class _AccountState extends State<Account> {
     }
     setState(() {
       username = newDetails.name;
+      phoneNo = newDetails.number;
       email = newDetails.email;
       clickedImage = newDetails.image;
     });
@@ -108,54 +109,67 @@ class _AccountState extends State<Account> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Account Section',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          'Profile Section',
+          style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'fonts/Poppins'),
         ),
         backgroundColor: Colors.white,
       ),
       backgroundColor: Colors.white,
       body: Container(
         width: width * 0.96,
-        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * 0.02,
-        ),
+        margin: EdgeInsets.symmetric(
+            horizontal: width * 0.02, vertical: height * 0.02),
+        padding: EdgeInsets.all(width * 0.02),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            //1st column......
-            SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-            GestureDetector(
-              onTap: editProfile,
-              child: Container(
-                child: profileSection(context),
-              ),
-            ),
+            //..............................................................................................
+            //...................EDIT PROFILE...............................................................
+            profileSection(context),
             //2nd column.......
-            SizedBox(height: height * 0.03),
-            //3rd column.......
+            SizedBox(height: height * 0.015),
+            //..............................................................................................
+            //....................BUTTONS IN ROW............................................................
             Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                //3members in this row
-                serviceSection(context, Icons.charging_station, 'Chargers'),
-                SizedBox(width: width * 0.04),
+                serviceSection(context, Icons.lightbulb_outline, 'Chargers'),
                 GestureDetector(
                     onTap: clickPayment,
                     child:
                         serviceSection(context, Icons.credit_card, 'Payments')),
-                SizedBox(width: width * 0.04),
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
             ),
-            //4th column
-            SizedBox(height: height * 0.03),
-            //5th column
+            //..............................................................................................
+            //.............................COLUMN BUTTONS...................................................
+            SizedBox(height: height * 0.015),
+            GestureDetector(
+              onTap: () {
+                editProfile();
+              },
+              child: settingSection(
+                  context, Icons.person_2_outlined, 'Edit Profile'),
+            ),
+            //..............................................................................................
+            SizedBox(height: height * 0.015),
+            GestureDetector(
+                onTap: _addStation,
+                child: settingSection(
+                    context, Icons.location_on_outlined, 'Add Station')),
+            //..............................................................................................
+            SizedBox(height: height * 0.015),
+            settingSection(context, Icons.contact_support_outlined, 'Support'),
+            //..............................................................................................
+            SizedBox(height: height * 0.015),
             GestureDetector(
               child: settingSection(context, Icons.settings, 'Settings'),
               onTap: () {
@@ -164,36 +178,26 @@ class _AccountState extends State<Account> {
                 ));
               },
             ),
-            //6th column
-            SizedBox(height: height * 0.03),
-            //7th column
-            settingSection(context, Icons.question_mark, 'Support'),
-            //8th column
-            SizedBox(height: height * 0.03),
-            //9th column
+            //..............................................................................................
+            SizedBox(height: height * 0.015),
             GestureDetector(
               onTap: () async {
                 await signOut();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) =>  LoginView()),
+                  MaterialPageRoute(builder: (context) => LoginView()),
                 );
               },
               child: settingSection(context, Icons.logout, 'Logout'),
             ),
-            //10th column
-            SizedBox(height: height * 0.03),
-            GestureDetector(
-                onTap: _addStation,
-                child: settingSection(
-                    context, Icons.location_on_outlined, 'Add Station')),
-            const SizedBox(height: 100),
           ],
         ),
       ),
     );
   }
 
+//..............................................................................................
+//..............ADD STATION AND SIGNOUT METHODS.................................................
   void _addStation() {
     showModalBottomSheet(
       context: context,
@@ -211,122 +215,139 @@ class _AccountState extends State<Account> {
     await auth.signOut();
     var sharedPref = await SharedPreferences.getInstance();
     await sharedPref.clear();
-    // Navigator.pushReplacement(
-    //     context, MaterialPageRoute(builder: (context) => RegisterView()));
   }
 }
 
-//////PROFILE SECTION
+//..............................................................................................
+//......PROFILE SECTION.........................................................................
 
 Widget profileSection(BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
+  final height = MediaQuery.of(context).size.height;
+
   Widget content = CircleAvatar(
-    radius: 30,
-    backgroundColor: ColorManager.primary,
-    child: const Icon(
-      Icons.camera_alt_rounded,
-      color: Colors.black,
-      size: 40,
-    ),
+    radius: height * 0.06,
+    backgroundImage: AssetImage('assets/images/map/carphoto.jpeg'),
   );
 
   if (clickedImage != null) {
     content = CircleAvatar(
-      radius: 30,
+      radius: height * 0.06,
       backgroundImage: FileImage(clickedImage!),
     );
   }
 
   return Container(
-    padding: const EdgeInsetsDirectional.all(10),
+    padding: EdgeInsetsDirectional.all(width * 0.02),
+    height: height * 0.13,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(13),
-      border: Border.all(width: 1.5, color: Colors.black),
+      borderRadius: BorderRadius.circular(width * 0.02),
+      border: Border.all(width: 1.5, color: Colors.black26),
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        //1st row.....
+        //1st row.....................................
         content,
-        //2nd row....
-        const SizedBox(width: 70),
-        //3rd row....
+        //2nd row.....................................
+        SizedBox(width: width * 0.05),
+        //3rd row.....................................
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              username,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              phoneNo,
-              style: const TextStyle(
-                fontWeight: FontWeight.w300,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              padding: const EdgeInsets.all(0.5),
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1.5, color: Colors.black),
-              ),
-              child: const Text('edit profile',
-                  style: TextStyle(color: Colors.white)),
-            ),
+            Text(username,
+                style: const TextStyle(
+                    fontSize: AppSize.s20,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: 'fonts/Poppins')),
+            Text('ID: 8989898989',
+                style: const TextStyle(
+                    fontSize: AppSize.s16,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: 'fonts/Poppins')),
           ],
         ),
+        //4th row.....................................
+        Spacer(),
+        //5th row.....................................
+        // Icon(
+        //   Icons.edit,
+        //   color: ColorManager.primary,
+        //   size: height * 0.04,
+        // )
       ],
     ),
   );
 }
 
-//SERVICES SECTION
+//..............................................................................................
+//......SERVICE SECTION.........................................................................
 
 Widget serviceSection(BuildContext context, IconData icon, String str) {
+  final width = MediaQuery.of(context).size.width;
+  final height = MediaQuery.of(context).size.height;
+
   return Container(
-    width: MediaQuery.of(context).size.width * 0.28,
-    height: MediaQuery.of(context).size.height * 0.1,
-    padding: const EdgeInsetsDirectional.all(24),
+    padding: EdgeInsetsDirectional.all(width * 0.03),
+    width: width * 0.28,
+    height: height * 0.11,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(13),
-      border: Border.all(width: 1.5, color: Colors.black),
+      borderRadius: BorderRadius.circular(width * 0.02),
+      border: Border.all(width: 1.5, color: Colors.black26),
     ),
     child: Column(
       children: [
-        Icon(icon),
-        const SizedBox(
-          height: 4,
+        Icon(
+          icon,
+          color: ColorManager.primary,
+          size: height * 0.05,
         ),
-        Text(
-          str,
-          style: const TextStyle(fontSize: 12),
-        ),
+        Spacer(),
+        Text(str,
+            style: const TextStyle(
+                fontSize: AppSize.s14,
+                fontWeight: FontWeight.w800,
+                fontFamily: 'fonts/Poppins')),
       ],
     ),
   );
 }
 
-//SETTINGS SECTION
+//..............................................................................................
+//......SETTING SECTION.........................................................................
 
 Widget settingSection(BuildContext context, IconData icon, String str) {
+  final width = MediaQuery.of(context).size.width;
+  final height = MediaQuery.of(context).size.height;
+
   return Container(
-    padding: const EdgeInsetsDirectional.all(10),
+    padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
+    height: height * 0.06,
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(13),
-      border: Border.all(width: 1.5, color: Colors.black),
+      borderRadius: BorderRadius.circular(width * 0.02),
+      border: Border.all(width: 1.5, color: Colors.black26),
     ),
     child: Row(
       children: [
-        Icon(icon),
-        const SizedBox(width: 10),
-        Text(str, style: const TextStyle(fontWeight: FontWeight.w700)),
+        Icon(
+          icon,
+          color: ColorManager.primary,
+          size: height * 0.04,
+        ),
+        SizedBox(width: width * 0.03),
+        Text(str,
+            style: const TextStyle(
+                fontSize: AppSize.s16,
+                fontWeight: FontWeight.w800,
+                fontFamily: 'fonts/Poppins')),
+        Spacer(),
+        Icon(
+          Icons.arrow_forward_ios,
+          color: ColorManager.primary,
+        ),
       ],
     ),
   );

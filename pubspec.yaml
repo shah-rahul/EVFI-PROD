@@ -58,6 +58,7 @@ dependencies:
   time_interval_picker: ^0.0.2
   carousel_slider: ^4.2.1
   cached_network_image: ^3.3.0
+  pinput: ^3.0.1
 
 analyzer:
   exclude:

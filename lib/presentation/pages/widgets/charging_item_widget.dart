@@ -111,7 +111,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
       height: height * 0.143,
       decoration: BoxDecoration(
         color: statusColor,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(width*0.08),
         boxShadow: [
           BoxShadow(
             offset: Offset(-8, 6),
@@ -127,7 +127,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: width*0.08, vertical: width*0.01),
                 child: Text(
                   widget.chargingItem.stationName,
                   style: TextStyle(
@@ -152,7 +152,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           ),
           // SizedBox(height: 5),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
             child: Text(
               'Time slot- ${widget.chargingItem.slotChosen}',
               style: TextStyle(
@@ -163,7 +163,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           ),
           // SizedBox(height: 5),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
             child: Text(
               widget.chargingItem.phoneNumber,
               style: TextStyle(
@@ -174,7 +174,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           ),
           // SizedBox(height: 0),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
             child: Text(
               '₹ ${widget.chargingItem.amount}',
               style: TextStyle(
