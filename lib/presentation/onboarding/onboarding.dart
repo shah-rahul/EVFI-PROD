@@ -80,7 +80,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         body: Column(
           children: [
             Expanded(
-              flex: 2,
+              flex: 3,
               child: PageView.builder(
                   controller: _pageController,
                   itemCount: sliderViewObject.numOfSlides,
@@ -123,20 +123,21 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                           onPressed: () {
                             // Navigator.of(context)
                             //     .pushReplacementNamed(Routes.mainRoute);
-                             Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                       
-                                        child: VehicleForm()),
-                                  );
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: VehicleForm()),
+                            );
                           },
-                          style: TextButton.styleFrom(
-                            elevation: 0,
-                            textStyle: const TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: AppSize.s18,
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
                             ),
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            textStyle: const TextStyle(fontSize: AppSize.s18),
                           ),
                           child: Text(
                             AppStrings.skip,
@@ -145,25 +146,22 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                          //   int ind = _viewModel.goNext();
-                          //  // print("---------------");
-                          // //  print(ind);
-                          //   ind != sliderViewObject.currentIndex
-                          //       ? _pageController.animateToPage(ind,
-                          //           duration: const Duration(
-                          //               milliseconds: DurationConstant.d300),
-                          //           curve: Curves.bounceInOut)
-                          //       : Navigator.of(context)
-                          //           .pushNamed(Routes.mainRoute);
-                           Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        child: VehicleForm()),
-                                       
-                                       
-                                       
-                                  );
+                            int ind = _viewModel.goNext();
+                            // print("---------------");
+                            //  print(ind);
+                            ind != sliderViewObject.currentIndex
+                                ? _pageController.animateToPage(ind,
+                                    duration: const Duration(
+                                        milliseconds: DurationConstant.d300),
+                                    curve: Curves.bounceInOut)
+                                : Navigator.of(context)
+                                    .pushNamed(Routes.mainRoute);
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: VehicleForm()),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.black,
@@ -228,7 +226,7 @@ class OnBoardingPage extends StatelessWidget {
             style: const TextStyle(
               fontFamily: FontConstants.bodyFontFamily,
               fontWeight: FontWeight.w600,
-              fontSize: AppSize.s20,
+              fontSize: AppSize.s28,
             ),
           ),
           const SizedBox(height: 10),
