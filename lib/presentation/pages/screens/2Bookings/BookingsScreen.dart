@@ -12,6 +12,7 @@ import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({Key? key}) : super(key: key);
@@ -56,7 +57,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget build(BuildContext context) {
     if (_isProvider == null) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: Shimmer.fromColors(
+          baseColor: ColorManager.grey5!,
+          highlightColor: ColorManager.white!,
+          child: Container(
+            height: 20, // Adjust the height as needed
+            width: 150, // Adjust the width as needed
+            color: ColorManager.white,
+          ),
+        ),
+        ),
       );
     } else if (_isProvider == true) {
       return Scaffold(
@@ -123,7 +133,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: const CircularProgressIndicator());
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Column(
+                      children: List.generate(
+                        5,
+                            (index) => shimmerPlaceholder(),
+                      ),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -154,8 +173,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -318,6 +336,20 @@ class _BookingsScreenState extends State<BookingsScreen> {
         ),
         streamBuilder(AppStrings.BookingScreenRecentTab)
       ],
+    );
+  }
+  Widget shimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        height: 100, // Adjust the height as needed
+      ),
     );
   }
 }

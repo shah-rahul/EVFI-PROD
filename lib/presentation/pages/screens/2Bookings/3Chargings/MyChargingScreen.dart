@@ -15,6 +15,7 @@ import '../../../../resources/strings_manager.dart';
 import '../../../../resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../../widgets/charging_item_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class MyChargingScreen extends StatefulWidget {
   const MyChargingScreen({Key? key}) : super(key: key);
@@ -54,6 +55,20 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   // }
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
   bool _fetchingBookings = false;
+  Widget shimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: ColorManager.grey5!,
+      highlightColor: ColorManager.white!,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        height: 100, // Adjust the height as needed
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +122,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 print(snapshot.data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Column(
+                    children: List.generate(
+                      5,
+                          (index) => shimmerPlaceholder(),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -140,8 +160,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
                             return const Center(

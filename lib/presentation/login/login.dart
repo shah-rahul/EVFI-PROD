@@ -73,7 +73,7 @@ class _LoginViewState extends State<LoginView> {
                       primary: ColorManager.appBlack,
                     ),
                     child: Text(
-                      'or SignUp',
+                      AppStrings.orSignUp,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: FontSize.s14,
