@@ -1,4 +1,5 @@
 import 'package:controller/controller.dart';
+import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
@@ -131,7 +132,7 @@ class _NameState extends State<Name> {
                       await userDataProvider.saveUserData();
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Onboarding1()),
+                        MaterialPageRoute(builder: (context) => OnBoardingView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
