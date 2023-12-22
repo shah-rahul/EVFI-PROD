@@ -436,8 +436,8 @@ class _ListChargerFormState extends State<ListChargerForm> {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
 
-      userChargingData.startAvailability = start;
-      userChargingData.endAvailability = end;
+      userChargingData.startAvailability = int.parse(start);
+      userChargingData.endAvailability = int.parse(end);
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
