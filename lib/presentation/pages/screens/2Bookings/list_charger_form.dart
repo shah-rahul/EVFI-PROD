@@ -423,8 +423,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreChargerType(int type) {
-      String chargerType = 'Level $type';
+    void StoreChargerType(List<int> type) {
+      List<String> chargerType = [];
+      chargerType = type.map((t) => 'Level $t').toList();
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
@@ -488,7 +489,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
     void addChargerFunction() async {
       _submitForm;
-      StoreChargerType(++chargerType);
+      StoreChargerType([++chargerType]);
       StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
       Storeg(_position);
       await uploadImages(_imageList!)

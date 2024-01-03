@@ -254,7 +254,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           startTime = startTime as int;
           endTime = endTime as int;
           chargerType = chargerType as List<dynamic>;
-          amenities = amenities as List<dynamic>;
+          amenities = amenities as String;
           hostName = hostName as String;
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),

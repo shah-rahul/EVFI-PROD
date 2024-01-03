@@ -19,7 +19,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final String startTime;
   final String endTime;
   final List<dynamic> chargerType;
-  final List<dynamic> amenities;
+  final String amenities;
   final String hostName;
   final String chargerId;
   final String providerId;

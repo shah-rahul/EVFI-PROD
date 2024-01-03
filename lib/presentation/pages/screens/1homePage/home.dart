@@ -236,7 +236,7 @@ class HomeState extends State<Home> {
           endTime = endTime as int;
           chargerType = chargerType as List<dynamic>;
 
-          amenities = amenities as List<dynamic>;
+          amenities = amenities as String;
 
           hostName = hostName as String;
           print('****');

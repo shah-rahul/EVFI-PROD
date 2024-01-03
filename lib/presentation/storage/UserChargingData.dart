@@ -24,7 +24,7 @@ class UserChargingData {
   int endAvailability;
 
   String price;
-  List<String> amenities;
+  String amenities;
   // image of charger
   List<String> imageUrl, aadharImages;
 

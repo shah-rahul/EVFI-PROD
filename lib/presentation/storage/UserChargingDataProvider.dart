@@ -32,7 +32,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     startAvailability: 0, // DateTime.now(),
     endAvailability: 0, //DateTime.now(),
     price: 'Null',
-    amenities: [],
+    amenities: 'Null',
     aadharImages: [],
     //image of charger
     imageUrl: [],
