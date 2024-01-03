@@ -3,12 +3,13 @@ import 'package:evfi/presentation/login/verify.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/assets_manager.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
-import '../resources/routes_manager.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class LoginView extends StatefulWidget {
   @override
@@ -86,16 +87,15 @@ class _LoginViewState extends State<LoginView> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: SizedBox(
-                    child: TextField(
-                      onChanged: (value) {
-                        setState(() {
-                          phoneController.text = "+91" + value;
-                        });
-                      },
+                    child: IntlPhoneField(
+                      initialCountryCode: 'IN',
+                      cursorColor: ColorManager.primary,
+                      dropdownTextStyle:
+                          TextStyle(color: ColorManager.darkGrey),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorManager.grey4,
-                        hintText: '+91- 7303440170',
+                        hintText: '7303440170',
                         labelText: 'Phone Number',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: screenHeight * 0.02,
@@ -114,8 +114,48 @@ class _LoginViewState extends State<LoginView> {
                           color: ColorManager.appBlack,
                         ),
                       ),
-                      style: TextStyle(color: ColorManager.appBlack),
+                      languageCode: "en",
+                      onChanged: (phone) {
+                        setState(() {
+                          print(phone);
+                          phoneController.text =
+                              phone.completeNumber.toString();
+                        });
+                      },
+                      onCountryChanged: (country) {
+                        print('Country changed to: ' + country.name);
+                      },
                     ),
+                    // TextField(
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       phoneController.text = "+91" + value;
+                    //     });
+                    //   },
+                    //   decoration: InputDecoration(
+                    //     filled: true,
+                    //     fillColor: ColorManager.grey4,
+                    //     hintText: '+91- 7303440170',
+                    //     labelText: 'Phone Number',
+                    //     contentPadding: EdgeInsets.symmetric(
+                    //         vertical: screenHeight * 0.02,
+                    //         horizontal: screenWidth * 0.1),
+                    //     enabledBorder: OutlineInputBorder(
+                    //       borderSide: BorderSide(
+                    //           color: ColorManager.primary.withOpacity(0.5)),
+                    //       borderRadius: BorderRadius.all(
+                    //           Radius.circular(screenWidth * 0.02)),
+                    //     ),
+                    //     labelStyle: TextStyle(
+                    //       color: Colors.white,
+                    //       fontSize: FontSize.s12,
+                    //     ),
+                    //     hintStyle: TextStyle(
+                    //       color: ColorManager.appBlack,
+                    //     ),
+                    //   ),
+                    //   style: TextStyle(color: ColorManager.appBlack),
+                    // ),
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.03),

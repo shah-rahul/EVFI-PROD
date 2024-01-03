@@ -23,6 +23,8 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   final controller1 = TextEditingController();
   final controller2 = TextEditingController();
+  final startFocusNode = FocusNode();
+  final endFocusNode = FocusNode();
   Timer? _debounce;
   List<OSMdata> _options = <OSMdata>[];
   late LatLng start = const LatLng(-51.42, 95.47); //random ocean coordinates
@@ -62,6 +64,10 @@ class SearchPageState extends State<SearchPage> {
             onTap: () {
               setState(() {
                 controller.text = _options[index].displayname;
+                print(controller.text);
+                print(val);
+                print('-------');
+
                 (val)
                     ? {
                         start = LatLng(
@@ -74,36 +80,9 @@ class SearchPageState extends State<SearchPage> {
               });
               _options.clear();
 
-              Future<void> storeStartAndEndLocations(
-                  LatLng startL, LatLng endL) async {
-                try {
-                  final databaseReference =
-                      FirebaseDatabase.instance.reference();
-
-                  final routeMapReference =
-                      databaseReference.child('RouteMap').push();
-
-                  await routeMapReference.update({
-                    'geohash': encodeGeohash(startL.latitude, startL.longitude),
-                    'geopoint': '${startL.latitude}, ${startL.longitude}',
-                  });
-
-                  final routeMapReference2 =
-                      databaseReference.child('RouteMap').push();
-
-                  await routeMapReference2.update({
-                    'geohash': encodeGeohash(endL.latitude, endL.longitude),
-                    'geopoint': '${endL.latitude}, ${endL.longitude}',
-                  });
-                } catch (error) {
-                  debugPrint('Failed to store start and end locations: $error');
-                }
-              }
-
-              storeStartAndEndLocations(start, end);
-
               if (controller1.text.isNotEmpty && controller2.text.isNotEmpty) {
                 if (_checkIfDifferent) {
+                  storeStartAndEndLocations(start, end);
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => RouteMap(startL: start, endL: end),
@@ -122,14 +101,38 @@ class SearchPageState extends State<SearchPage> {
     );
   }
 
+  Future<void> storeStartAndEndLocations(LatLng startL, LatLng endL) async {
+    try {
+      final databaseReference = FirebaseDatabase.instance.reference();
+
+      final routeMapReference = databaseReference.child('RouteMap').push();
+
+      await routeMapReference.update({
+        'geohash': encodeGeohash(startL.latitude, startL.longitude),
+        'geopoint': '${startL.latitude}, ${startL.longitude}',
+      });
+
+      final routeMapReference2 = databaseReference.child('RouteMap').push();
+
+      await routeMapReference2.update({
+        'geohash': encodeGeohash(endL.latitude, endL.longitude),
+        'geopoint': '${endL.latitude}, ${endL.longitude}',
+      });
+    } catch (error) {
+      debugPrint('Failed to store start and end locations: $error');
+    }
+  }
+
   Widget buildTextFormField(
     TextEditingController controller,
     String hint,
     IconData icon,
     Color color,
+    FocusNode fn,
   ) {
     return TextFormField(
         controller: controller,
+        focusNode: fn,
         style: TextStyle(color: ColorManager.appBlack),
         keyboardType: TextInputType.streetAddress,
         decoration: InputDecoration(
@@ -222,11 +225,11 @@ class SearchPageState extends State<SearchPage> {
                   width: double.infinity,
                   child: Column(children: [
                     buildTextFormField(
-                      controller1,
-                      'Start location',
-                      Icons.location_on_outlined,
-                      ColorManager.primary,
-                    ),
+                        controller1,
+                        'Start location',
+                        Icons.location_on_outlined,
+                        ColorManager.primary,
+                        startFocusNode),
                     IconButton(
                       onPressed: () => _swap(controller1, controller2),
                       icon: const Icon(
@@ -236,17 +239,13 @@ class SearchPageState extends State<SearchPage> {
                       splashColor: ColorManager.primary,
                       color: ColorManager.appBlack,
                     ),
-                    buildTextFormField(
-                      controller2,
-                      'Destination location',
-                      Icons.location_on_outlined,
-                      Colors.red,
-                    ),
+                    buildTextFormField(controller2, 'Destination location',
+                        Icons.location_on_outlined, Colors.red, endFocusNode),
                   ])),
             ),
             Expanded(
               child: StatefulBuilder(builder: ((context, setState) {
-                if (controller1.selection.isValid) {
+                if (startFocusNode.hasFocus) {
                   return buildListView(controller1, true);
                 } else {
                   return buildListView(controller2, false);

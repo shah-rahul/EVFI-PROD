@@ -166,7 +166,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
-                          print('hihihihihihihihihihihihihihihihihihihihijui');
+
                           return Column(children: [
                             BookingWidget(
                               bookingItem: Booking(

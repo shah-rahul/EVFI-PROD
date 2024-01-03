@@ -14,7 +14,7 @@ import '../splash/splash.dart';
 import '../pages/screens/1homePage/search_page.dart';
 import '../store_details/store_details.dart';
 import '../register/vehicleform.dart';
-import '../pages/screens/2Bookings/3Chargings/MyChargingScreen.dart';
+import '../pages/screens/3Chargings/MyChargingScreen.dart';
 
 class Routes {
   static const String splashRoute = "/";

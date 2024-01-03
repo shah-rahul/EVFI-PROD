@@ -31,8 +31,8 @@ class Booknow extends StatefulWidget {
   final double costOfFullCharge;
   final String startTime;
   final String endTime;
-  final String chargerType;
-  final String amenities;
+  final List<dynamic> chargerType;
+  final List<dynamic> amenities;
   final String hostName;
   final String chargerId;
   final String providerId;
@@ -173,7 +173,7 @@ class _Booknow extends State<Booknow> {
                   ),
                   Center(
                     child: Text(
-                      widget.amenities,
+                      widget.amenities.toString(),
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
                         fontSize: AppSize.s14,
@@ -331,20 +331,10 @@ class _Booknow extends State<Booknow> {
     );
   }
 
-  bool isValidTimeSlot(String time) {
-    String ampm = time.substring(time.length - 2);
-    int timeExtracted = int.parse(time.substring(0, time.length - 3));
-
-    if (ampm == "am" && timeExtracted == 12) {
-      timeExtracted = 0;
-    }
-    if (ampm == "pm" && timeExtracted != 12) {
-      timeExtracted += 12;
-    }
-
-    return timeExtracted >= int.parse(widget.startTime) &&
-        timeExtracted <= int.parse(widget.endTime) &&
-        !(bookedSlots[timeExtracted] == "1");
+  bool isValidTimeSlot(int time) {
+    return time >= int.parse(widget.startTime) &&
+        time <= int.parse(widget.endTime) &&
+        !(bookedSlots[time] == "1");
   }
 
   void updateFireStoreTimeStamp(int time) async {
@@ -432,27 +422,28 @@ class _Booknow extends State<Booknow> {
         });
   }
 
+  List<bool> isSelected = List.generate(24, (index) => false);
   int selectedTimeSlot = 0;
   int previousTImeSlot = 0; //previosu value of timeslot fetched from database
   Widget timeSlot(String text, BuildContext context) {
-    bool isClicked = false;
-    if (isValidTimeSlot(text)) {
+    String ampm = text.substring(text.length - 2);
+    int timeExtracted = int.parse(text.substring(0, text.length - 3));
+    if (ampm == "am" && timeExtracted == 12) {
+      timeExtracted = 0;
+    }
+    if (ampm == "pm" && timeExtracted != 12) {
+      timeExtracted += 12;
+    }
+    if (isValidTimeSlot(timeExtracted)) {
       return GestureDetector(
         onTap: () {
-          String ampm = text.substring(text.length - 2);
-          int timeExtracted = int.parse(text.substring(0, text.length - 3));
-          if (ampm == "am" && timeExtracted == 12) {
-            timeExtracted = 0;
-          }
-          if (ampm == "pm" && timeExtracted != 12) {
-            timeExtracted += 12;
-          }
           setState(() {
             selectedTimeSlot = timeExtracted;
-            isClicked = !isClicked;
+            bool previousSelection = isSelected[timeExtracted];
+            isSelected = List.generate(24, (index) => false);
+
+            isSelected[timeExtracted] = !previousSelection;
           });
-          print(
-              "*************************************************************$isClicked");
         },
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 2, vertical: 8),
@@ -463,7 +454,7 @@ class _Booknow extends State<Booknow> {
               BoxShadow(blurRadius: 2.0),
             ],
             borderRadius: BorderRadius.circular(40),
-            color: isClicked ? Colors.yellow : Colors.green,
+            color: isSelected[timeExtracted] ? Colors.yellow : Colors.green,
           ),
           padding: EdgeInsets.all(5),
           child: Center(child: Text(text)),

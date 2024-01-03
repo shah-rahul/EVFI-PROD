@@ -193,7 +193,8 @@ class HomeState extends State<Home> {
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
-
+        print(data);
+        print('---');
         if (data == null) {
           continue;
         }
@@ -202,6 +203,7 @@ class HomeState extends State<Home> {
         var stnName = (data['info'] as Map<String, dynamic>)['stationName'];
         var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
         var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
+        print('---');
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
@@ -211,6 +213,7 @@ class HomeState extends State<Home> {
 
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
+        print('---');
         print(data);
         if (geoPoint != null &&
             geohash != null &&
@@ -231,9 +234,9 @@ class HomeState extends State<Home> {
           stateName = stateName as String;
           startTime = startTime as int;
           endTime = endTime as int;
-          chargerType = chargerType as String;
+          chargerType = chargerType as List<dynamic>;
 
-          amenities = amenities as String;
+          amenities = amenities as List<dynamic>;
 
           hostName = hostName as String;
           print('****');
