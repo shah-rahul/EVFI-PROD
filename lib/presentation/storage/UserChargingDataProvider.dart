@@ -29,10 +29,11 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: 'Null',
-    startAvailability: 'Null', // DateTime.now(),
-    endAvailability: 'Null', //DateTime.now(),
+    startAvailability: 0, // DateTime.now(),
+    endAvailability: 0, //DateTime.now(),
     price: 'Null',
     amenities: 'Null',
+    aadharImages: [],
     //image of charger
     imageUrl: [],
   );
@@ -52,7 +53,7 @@ class UserChargingDataProvider extends ChangeNotifier {
       // ignore: unused_local_variable
       User? user = FirebaseAuth.instance.currentUser;
       DocumentReference documentRef = await _chargersCollection.add({
-        'chargerId':_userChargingData.chargerId,
+        'chargerId': _userChargingData.chargerId,
         'uid': user!.uid,
         'g': {
           'geohash': _userChargingData.geohash,
@@ -72,11 +73,12 @@ class UserChargingDataProvider extends ChangeNotifier {
           'imageUrl': _userChargingData.imageUrl,
           'start': _userChargingData.startAvailability,
           'end': _userChargingData.endAvailability,
+          'aadharImages': _userChargingData.aadharImages,
+          'timeSlot': 0,
           //charger image
           // 'isProvider':_userChargingData.isProvider,
         }
-      })
-      .then((docRef) async {
+      }).then((docRef) async {
         // print(docRef.id);
         await _chargersCollection
             .doc(docRef.id)

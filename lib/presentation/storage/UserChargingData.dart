@@ -20,13 +20,13 @@ class UserChargingData {
   String hostName;
   String chargerType;
 
-  String startAvailability;
-  String endAvailability;
+  int startAvailability;
+  int endAvailability;
 
   String price;
   String amenities;
   // image of charger
-  List<String> imageUrl;
+  List<String> imageUrl, aadharImages;
 
   UserChargingData({
     required this.chargerId,
@@ -48,6 +48,7 @@ class UserChargingData {
     required this.amenities,
     //image of charger
     required this.imageUrl,
+    required this.aadharImages
   });
 
   UserChargingData? get userChargingData => null;
