@@ -8,7 +8,7 @@ import '../resources/color_manager.dart';
 import '../pages/screens/1homePage/home.dart';
 import '../pages/screens/4accountPage/account.dart';
 import '../pages/screens/2Bookings/BookingsScreen.dart';
-import '../pages/screens/2Bookings/3Chargings/MyChargingScreen.dart';
+import '../pages/screens/3Chargings/MyChargingScreen.dart';
 
 class MainView extends StatefulWidget {
   @override

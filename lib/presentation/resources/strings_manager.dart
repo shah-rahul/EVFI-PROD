@@ -3,11 +3,11 @@
 class AppStrings {
   static const String noRouteFound = "No Route Found";
 
-  static const onboardingTitle1 = "access to the";
-  static const onboardingTitle2 = "get best path";
-  static const onboardingTitle3 = "lend your Chargers";
-  static const onboardingSubTitle1 = "network of EV Chargers";
-  static const onboardingSubTitle2 = "to your destination";
+  static const onboardingTitle1 = "Access to the network of EV Chargers";
+  static const onboardingTitle2 = "Get best path to your destination";
+  static const onboardingTitle3 = "Lend your Chargers";
+  static const onboardingSubTitle1 = "";
+  static const onboardingSubTitle2 = "";
   static const onboardingSubTitle3 = "some extra cash for you";
   static const skip = "Skip";
   static const next = "Next";

@@ -18,7 +18,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final double costOfFullCharge;
   final String startTime;
   final String endTime;
-  final String chargerType;
+  final List<dynamic> chargerType;
   final String amenities;
   final String hostName;
   final String chargerId;
@@ -202,11 +202,11 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            widget.chargerType,
+                            widget.chargerType.toString(),
                             style: const TextStyle(fontSize: AppSize.s14),
                           ),
                           Text(
-                            widget.amenities,
+                            widget.amenities.toString(),
                             style: const TextStyle(fontSize: AppSize.s14),
                           ),
                           Text(
