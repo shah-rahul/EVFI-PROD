@@ -28,11 +28,11 @@ class UserChargingDataProvider extends ChangeNotifier {
     state: 'Null',
     aadharNumber: 'Null',
     hostName: 'Null',
-    chargerType: 'Null',
+    chargerType: [],
     startAvailability: 0, // DateTime.now(),
     endAvailability: 0, //DateTime.now(),
     price: 'Null',
-    amenities: 'Null',
+    amenities: [],
     aadharImages: [],
     //image of charger
     imageUrl: [],

@@ -18,38 +18,37 @@ class UserChargingData {
 
   String aadharNumber;
   String hostName;
-  String chargerType;
+  List<String> chargerType;
 
   int startAvailability;
   int endAvailability;
 
   String price;
-  String amenities;
+  List<String> amenities;
   // image of charger
   List<String> imageUrl, aadharImages;
 
-  UserChargingData({
-    required this.chargerId,
-    required this.uid,
-    required this.geohash,
-    required this.geopoint,
-    required this.stationName,
-    required this.address,
-    //loacation from marker
-    required this.city,
-    required this.pin,
-    required this.state,
-    required this.aadharNumber,
-    required this.hostName,
-    required this.chargerType,
-    required this.startAvailability,
-    required this.endAvailability,
-    required this.price,
-    required this.amenities,
-    //image of charger
-    required this.imageUrl,
-    required this.aadharImages
-  });
+  UserChargingData(
+      {required this.chargerId,
+      required this.uid,
+      required this.geohash,
+      required this.geopoint,
+      required this.stationName,
+      required this.address,
+      //loacation from marker
+      required this.city,
+      required this.pin,
+      required this.state,
+      required this.aadharNumber,
+      required this.hostName,
+      required this.chargerType,
+      required this.startAvailability,
+      required this.endAvailability,
+      required this.price,
+      required this.amenities,
+      //image of charger
+      required this.imageUrl,
+      required this.aadharImages});
 
   UserChargingData? get userChargingData => null;
 }
