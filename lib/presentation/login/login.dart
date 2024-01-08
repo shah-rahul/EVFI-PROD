@@ -1,6 +1,7 @@
 import 'package:evfi/presentation/login/signUp.dart';
 import 'package:evfi/presentation/login/verify.dart';
 import 'package:evfi/presentation/onboarding/onboarding.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _LoginViewState extends State<LoginView> {
           // FocusScope.of(context).unfocus();
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => OnBoardingView()),
+            MaterialPageRoute(builder: (context) => BookingsScreen()),
           );
         },
         child: SingleChildScrollView(

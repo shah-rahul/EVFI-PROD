@@ -101,9 +101,11 @@ class _BookingWidgetState extends State<BookingWidget> {
         }
         break;
     }
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
     return SizedBox(
-      width: 90,
-      height: 30,
+      width: width * 0.25,
+      height: height * 0.04,
       child: ElevatedButton(
           onPressed: () {},
           child: Text(
@@ -114,7 +116,8 @@ class _BookingWidgetState extends State<BookingWidget> {
             backgroundColor: buttonColor,
             foregroundColor: textColor,
             elevation: 3,
-          )),
+          )
+      ),
     );
   }
 
@@ -143,18 +146,15 @@ class _BookingWidgetState extends State<BookingWidget> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      // width: width*2,
-      height: height * 0.171,
+      width: width * 0.9,
+      height: height * 0.143,
       decoration: BoxDecoration(
-        // color: Colors.white,
         color: statusColor,
-
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(width*0.08),
         boxShadow: [
           BoxShadow(
-            offset: Offset(-8, 6),
-            blurRadius: 50,
-            color: Color.fromRGBO(0, 0, 0, 0.25),
+          blurRadius: width * 0.015,
+            color: Color.fromRGBO(222, 222, 222, 1),
           ),
         ],
       ),
@@ -165,52 +165,46 @@ class _BookingWidgetState extends State<BookingWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: width*0.1,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: width*0.08, vertical: width*0.01),
                 child: Text(
                   widget.bookingItem.customerName,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: width * 0.04,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.01),
+              //SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: width*0.09),
+                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
                 child: Text(
                   'Time slot- ${widget.bookingItem.timeStamp}',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: width * 0.04,
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.01),
+              //SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width*0.08), // Add vertical padding
+                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
                 child: Text(
                   widget.bookingItem.customerMobileNumber,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
-                    // fontWeight: FontWeight.bold,
+                    fontSize: width * 0.04,
                   ),
                 ),
               ),
-              SizedBox(height: height * 0.01),
+              //SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width*0.08), // Add vertical padding
+                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
                 child: Text(
                   '₹ ${widget.bookingItem.amount.toString()}',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: width * 0.06,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -223,12 +217,11 @@ class _BookingWidgetState extends State<BookingWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  if (widget.bookingItem.status != 2 &&
-                      widget.bookingItem.status != -1)
+                   if (widget.bookingItem.status == 1 )
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(width * 0.02),
                       child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: height * 0.01),
+                        //margin: EdgeInsets.symmetric(horizontal: height * 0.01),
                         width: width * 0.4,
                         height: height * 0.03,
                         child: ElevatedButton(
@@ -251,9 +244,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                         ),
                       ),
                     ),
-                  if (widget.bookingItem.status != -1)
+                   if (widget.bookingItem.status == 1)
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(width * 0.02),
                       child: Container(
                         // width: widthInLogicalPixels1,
                         // height: heightInLogicalPixels1,

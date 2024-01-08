@@ -55,20 +55,24 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     if (_isProvider == null) {
       return Scaffold(
-        body: Center(child: Shimmer.fromColors(
-          baseColor: ColorManager.grey5!,
-          highlightColor: ColorManager.white!,
-          child: Container(
-            height: 20, // Adjust the height as needed
-            width: 150, // Adjust the width as needed
-            color: ColorManager.white,
+        body: Center(
+          child: Shimmer.fromColors(
+            baseColor: ColorManager.grey5!,
+            highlightColor: ColorManager.white!,
+            child: Container(
+              height: screenHeight * 0.75, // Adjust the height as needed
+              width: screenWidth * 0.75, // Adjust the width as needed
+              color: ColorManager.white,
+            ),
           ),
         ),
-        ),
       );
-    } else if (_isProvider == true) {
+    }
+    else if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -85,13 +89,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
                 icon: const Icon(
                   Icons.add_business_outlined,
                   color: Colors.black,
-                ))
+                )
+            )
           ],
         ),
         body: Container(
-            child: _currentSelected ? PendingScreen(context) : RecentScreen()),
+            child: _currentSelected ? PendingScreen(context) : RecentScreen()
+        ),
       );
-    } else {
+    }
+    else {
       return ListChargersPage();
     }
   }
@@ -113,13 +120,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Widget streamBuilder(String tab) {
-    final height = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.75,
-      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+      height: screenHeight * 0.75,
+      //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
-            height: height * 0.85,
+            height: screenHeight * 0.85,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
@@ -150,7 +158,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   );
                 }
                 if (snapshot.hasError) {
-                  return const Center(child: Text('Something went wrong'));
+                  return const Center(
+                      child: Text('Something went wrong')
+                  );
                 }
 
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
@@ -167,12 +177,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
                             documents[index].data()!['chargerId']),
-                        builder: ((context,
-                            AsyncSnapshot<
-                                    DocumentSnapshot<Map<String, dynamic>>>
-                                snapshots) {
-                          if (snapshots.connectionState ==
-                              ConnectionState.waiting) {
+                        builder: ((context, AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>snapshots) {
+                          if (snapshots.connectionState == ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
@@ -185,49 +191,61 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
                           print('hihihihihihihihihihihihihihihihihihihihijui');
-                          return Column(children: [
-                            BookingWidget(
-                              bookingItem: Booking(
-                                  amount: documents[index]['price'],
-                                  timeStamp: documents[index]['timeSlot'],
-                                  stationName: stationName,
-                                  customerName: snapshots.data!['name'],
-                                  customerMobileNumber:
-                                      snapshots.data!['phoneNumber'],
-                                  status: documents[index]['status'],
-                                  date: documents[index]['bookingDate'],
-                                  id: documents[index].id,
-                                  ratings: 4),
-                              currentTab: tab,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ]);
-                        }));
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * 0.01
+                                ),
+                                height: screenHeight * 0.22,
+                                child:BookingWidget(
+                                  bookingItem: Booking(
+                                      amount: documents[index]['price'],
+                                      timeStamp: documents[index]['timeSlot'],
+                                      stationName: stationName,
+                                      customerName: snapshots.data!['name'],
+                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      status: documents[index]['status'],
+                                      date: documents[index]['bookingDate'],
+                                      id: documents[index].id,
+                                      ratings: 4
+                                  ),
+                                  currentTab: tab,
+                                ),
+                              ),
+                            // SizedBox(
+                            //   height: screenHeight * 0.01,
+                            // ),
+                            ],
+                          );
+                        }
+                        )
+                    );
                   },
                   itemCount: documents.length,
                 );
               },
-            )),
+            )
+        ),
       ),
     );
   }
 
   Widget PendingScreen(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+          height: screenHeight * 0.08,
+          color: Colors.white,
           child: Row(
             children: [
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -235,15 +253,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenPendingTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
+                            fontSize:  screenWidth * 0.05, fontWeight: FontWeight.w500
+                        ),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: AppPadding.p12 - 2,
-                            vertical: AppMargin.m12 - 8),
+                            horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: 1.8,
-                          width: width * 0.32,
+                          height: screenHeight * 0.003,
+                          width: screenWidth * 0.2,
                           color: ColorManager.primary,
                         ),
                       )
@@ -260,13 +278,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   });
                 },
                 child: Container(
-                    width: width * 0.5,
-                    child: Text(AppStrings.BookingScreenRecentTab,
+                    width: screenWidth * 0.5,
+                    child: Text(AppStrings.ChargingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20,
+                            fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.w500,
-                            color: ColorManager.grey3))),
+                            color: ColorManager.grey3
+                        )
+                    )
+                ),
               )
             ],
           ),
@@ -277,13 +298,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Widget RecentScreen() {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+          height: screenHeight * 0.08,
           child: Row(
             children: [
               GestureDetector(
@@ -295,19 +316,22 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   });
                 },
                 child: Container(
-                  width: width * 0.5,
-                  child: Text(AppStrings.BookingScreenPendingTab,
+                  width: screenWidth * 0.5,
+                  child: Text(
+                      AppStrings.BookingScreenPendingTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: AppSize.s20,
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w500,
-                          color: ColorManager.grey3)),
+                          color: ColorManager.grey3
+                      )
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -315,15 +339,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
+                            fontSize:  screenWidth * 0.05, fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: AppPadding.p12 - 2,
-                            vertical: AppMargin.m12 - 8),
+                            horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: 1.8,
-                          width: width * 0.32,
+                          height: screenHeight * 0.003,
+                          width: screenWidth * 0.2,
                           color: ColorManager.primary,
                         ),
                       )
@@ -343,12 +366,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
       baseColor: Colors.grey[300]!,
       highlightColor: Colors.grey[100]!,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        margin: EdgeInsets.symmetric(vertical: 10 * MediaQuery.textScaleFactorOf(context),
+            horizontal: 16 * MediaQuery.textScaleFactorOf(context)),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        height: 100, // Adjust the height as needed
+        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
       ),
     );
   }

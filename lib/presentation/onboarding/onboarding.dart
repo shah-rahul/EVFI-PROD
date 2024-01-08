@@ -48,13 +48,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   }) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(
           Radius.circular(50),
         ),
-        color: ColorManager.primary,
+        color: Color(0xFF000000),
       ),
-      margin: const EdgeInsets.only(right: 5,top: 60),
+      margin: const EdgeInsets.only(right: 5),
       height: 10,
       curve: Curves.easeIn,
       width: currentIndex == index ? 20 : 10,
@@ -67,7 +67,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
       return Container();
     } else {
       return Scaffold(
-        backgroundColor: ColorManager.appBlack,
+        backgroundColor: Colors.white,
         // appBar: AppBar(
         //   backgroundColor: ColorManager.appBlack,
         //   elevation: AppSize.s4,
@@ -80,7 +80,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         body: Column(
           children: [
             Expanded(
-              flex: 4,
+              flex: 2,
               child: PageView.builder(
                   controller: _pageController,
                   itemCount: sliderViewObject.numOfSlides,
@@ -91,9 +91,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     return OnBoardingPage(sliderViewObject.sliderObject);
                   }),
             ),
-            // SizedBox(
-            //   height: height * 0.02,
-            // ),
+            SizedBox(
+              height: height * 0.02,
+            ),
             Expanded(
               flex: 1,
               child: Column(
@@ -115,7 +115,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                         ]),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(0),
+                    padding: const EdgeInsets.all(AppMargin.m40),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -134,15 +134,13 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                           style: TextButton.styleFrom(
                             elevation: 0,
                             textStyle: const TextStyle(
-                              fontWeight: FontWeight.w300,
+                              fontWeight: FontWeight.w600,
                               fontSize: AppSize.s18,
                             ),
-                              backgroundColor: ColorManager.appBlack
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.chevron_left,size: 30,color: ColorManager.primary),
-                            ],
+                          child: Text(
+                            AppStrings.skip,
+                            style: TextStyle(color: ColorManager.appBlack),
                           ),
                         ),
                         ElevatedButton(
@@ -168,19 +166,18 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                                   );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorManager.appBlack,
+                            backgroundColor: Colors.black,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
+                              borderRadius: BorderRadius.circular(50),
                             ),
                             elevation: 0,
-                            // padding: const EdgeInsets.symmetric(
-                            //     horizontal: 25, vertical: 15),
-                            textStyle: const TextStyle(fontSize: AppSize.s18,fontWeight: FontWeight.w300),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            textStyle: const TextStyle(fontSize: AppSize.s18),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(Icons.chevron_right,size: 30,color: ColorManager.primary),
-                            ],
+                          child: const Text(
+                            AppStrings.next,
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ],
@@ -210,39 +207,37 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(60.0),
+      padding: const EdgeInsets.all(40.0),
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppMargin.m20),
             child: Image.asset(
               _sliderObject.image,
-              width: MediaQuery.of(context).size.width - 80,
-              height: MediaQuery.of(context).size.height - 480,
+              width: MediaQuery.of(context).size.width - 150,
+              height: MediaQuery.of(context).size.height - 520,
               // height: SizeConfig.blockV! * 35,
             ),
           ),
-          // const SizedBox(
-          //   height: 10,
-          // ),
+          const SizedBox(
+            height: 10,
+          ),
           Text(
             _sliderObject.title,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontFamily: FontConstants.bodyFontFamily,
               fontWeight: FontWeight.w600,
-              fontSize: AppSize.s28,
-              color: ColorManager.primary
+              fontSize: AppSize.s20,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             _sliderObject.subTitle,
-            style: TextStyle(
-              fontFamily: FontConstants.appTitleFontFamily,
+            style: const TextStyle(
+              fontFamily: "Mulish",
               fontWeight: FontWeight.w300,
-              fontSize: AppSize.s18,
-              color: ColorManager.primary
+              fontSize: 14,
             ),
             textAlign: TextAlign.center,
           )
