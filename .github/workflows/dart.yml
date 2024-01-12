@@ -40,4 +40,10 @@ jobs:
         with:
           artifacts: 'build/app/outputs/apk/debug/app-debug.apk'
           tag: v0.0.29s
-          token: ${{ secrets.DEPLOY_SECRET}}
+         # token: ${{ secrets.DEPLOY_SECRET}}
+
+
+
+
+
+
