@@ -8,7 +8,6 @@
 // import '../resources/values_manager.dart';
 // import '../resources/routes_manager.dart';
 
-
 // class SignupPage extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
@@ -139,14 +138,13 @@
 //   }
 // }
 
-
-
 import 'package:evfi/presentation/register/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:evfi/presentation/login/login.dart';
 import 'package:evfi/presentation/login/verify.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/assets_manager.dart';
 import '../resources/font_manager.dart';
@@ -227,42 +225,49 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: screenHeight * 0.12),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                  child: SizedBox(
-                    child: TextField(
-                       onChanged: (value) {
-                        setState(() {
-                          phoneController.text = "+91" + value;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: ColorManager.grey4,
-                        hintText: '+91- 7303440170',
-                        labelText: 'Phone Number',
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: screenHeight * 0.02,
-                          horizontal: screenWidth * 0.1,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: ColorManager.primary.withOpacity(0.5)),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(screenWidth * 0.02),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
+                    child: SizedBox(
+                      child: IntlPhoneField(
+                        initialCountryCode: 'IN',
+                        cursorColor: ColorManager.primary,
+                        dropdownTextStyle:
+                            TextStyle(color: ColorManager.darkGrey),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: ColorManager.grey4,
+                          hintText: '7303440170',
+                          labelText: 'Phone Number',
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: screenHeight * 0.02,
+                              horizontal: screenWidth * 0.1),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: ColorManager.primary.withOpacity(0.5)),
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(screenWidth * 0.02)),
+                          ),
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: FontSize.s12,
+                          ),
+                          hintStyle: TextStyle(
+                            color: ColorManager.appBlack,
                           ),
                         ),
-                        labelStyle: TextStyle(
-                          color: Colors.white,
-                          fontSize: FontSize.s12,
-                        ),
-                        hintStyle: TextStyle(
-                          color: ColorManager.appBlack,
-                        ),
+                        languageCode: "en",
+                        onChanged: (phone) {
+                          setState(() {
+                            print(phone);
+                            phoneController.text =
+                                phone.completeNumber.toString();
+                          });
+                        },
+                        onCountryChanged: (country) {
+                          print('Country changed to: ' + country.name);
+                        },
                       ),
-                      style: TextStyle(color: ColorManager.appBlack),
-                    ),
-                  ),
-                ),
+                    )),
                 SizedBox(height: screenHeight * 0.03),
                 SizedBox(
                   height: screenHeight * 0.06,
@@ -279,11 +284,10 @@ class _SignupPageState extends State<SignupPage> {
                       //   ),
                       // );
 
-
-                     //  mobile number verification logic here
+                      //  mobile number verification logic here
                       final String phoneNumber = phoneController.text.trim();
                       //  getPhoneNumber(phoneNumber);
-                     await FirebaseAuth.instance.verifyPhoneNumber(
+                      await FirebaseAuth.instance.verifyPhoneNumber(
                         phoneNumber: phoneNumber,
                         verificationCompleted:
                             (PhoneAuthCredential credential) async {
@@ -297,24 +301,22 @@ class _SignupPageState extends State<SignupPage> {
                           Navigator.push(
                             context,
                             PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              // child: VerificationCodePage(
-                              //   verificationId: verificationId,
-                              //   phoneNumber: phoneNumber,
-                              // ),
-                              // child: Verify(
-                              //   verificationId: verificationId,
-                              //   phoneNumber: phoneNumber,
-                              // ),
-                              child: RegisterView(phoneNumber: phoneNumber)
-                            ),
+                                type: PageTransitionType.rightToLeft,
+                                // child: VerificationCodePage(
+                                //   verificationId: verificationId,
+                                //   phoneNumber: phoneNumber,
+                                // ),
+                                // child: Verify(
+                                //   verificationId: verificationId,
+                                //   phoneNumber: phoneNumber,
+                                // ),
+                                child: RegisterView(phoneNumber: phoneNumber)),
                           );
                         },
                         codeAutoRetrievalTimeout: (String verificationId) {
                           //  Handle code auto retrieval timeout
                         },
                       );
-
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
