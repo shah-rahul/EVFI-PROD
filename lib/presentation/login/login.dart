@@ -28,12 +28,8 @@ class _LoginViewState extends State<LoginView> {
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () {
-          // Close the keyboard when tapped outside the text field
-          // FocusScope.of(context).unfocus();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => BookingsScreen()),
-          );
+          //Close the keyboard when tapped outside the text field
+          FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
           child: Center(
