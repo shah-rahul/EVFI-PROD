@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 // import 'package:evfi/presentation/pages/streams/charging_stream.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
@@ -54,6 +55,20 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   // }
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
   bool _fetchingBookings = false;
+  Widget shimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: ColorManager.grey5!,
+      highlightColor: ColorManager.white!,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +100,16 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
 //your bookings
   Widget streamBuilder(String tab) {
-    final height = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.75,
-      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+      height: screenHeight * 0.75,
+      //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
-            height: height * 0.85,
-            width: 400,
+            height: screenHeight * 0.85,
+            width: screenWidth,
+            color: Colors.white,
             child: StreamBuilder(
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
                   ? FirebaseFirestore.instance
@@ -107,7 +124,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 print(snapshot.data);
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Column(
+                    children: List.generate(
+                      5,
+                          (index) => shimmerPlaceholder(),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -140,8 +162,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                            return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -155,34 +176,40 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           print(documents[index].data());
                           print('----');
                           return Column(children: [
-                            MyChargingWidget(
-                              chargingItem: Charging(
-                                  amount: documents[index]['price'] as String,
-                                  phoneNumber: '788998',
-                                  position: const LatLng(0,
-                                      0), //later to show path till charger we'll use charger coordinates
-                                  slotChosen: documents[index]['timeSlot'],
-                                  stationAddress: snapshots.data!['info']
-                                      ['address'],
-                                  stationName: snapshots.data!['info']
-                                      ['stationName'],
-                                  status: documents[index]['status'],
-                                  date: documents[index]['bookingDate'],
-                                  id: documents[index].id,
-                                  type: 1,
-                                  ratings: 1),
-                              currentTab: tab,
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
+                              height: screenHeight * 0.2,
+                              child:MyChargingWidget(
+                                chargingItem: Charging(
+                                    amount: documents[index]['price'] as String,
+                                    phoneNumber: '788998',
+                                    position: const LatLng(0, 0), //later to show path till charger we'll use charger coordinates
+                                    slotChosen: documents[index]['timeSlot'],
+                                    stationAddress: snapshots.data!['info']['address'],
+                                    stationName: snapshots.data!['info']['stationName'],
+                                    status: documents[index]['status'],
+                                    date: documents[index]['bookingDate'],
+                                    id: documents[index].id,
+                                    type: 1,
+                                    ratings: 1
+                                ),
+                                currentTab: tab,
+                              ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ]);
-                        }));
+                            // SizedBox(
+                            //   height: screenHeight * 0.01,
+                            // ),
+                          ],
+                          );
+                        }
+                        )
+                    );
                   },
                   itemCount: documents.length,
                 );
               },
-            )),
+            )
+        ),
       ),
     );
   }
@@ -288,8 +315,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
   // final currentUid = FirebaseAuth.instance.currentUser?.uid;
   Widget currentScreen(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
     double heightInLogicalPixels =
@@ -302,7 +329,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+          height: screenHeight * 0.08,
+          color: Colors.white,
           child: Row(
             children: [
               GestureDetector(
@@ -311,27 +339,27 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   // print('Called Function');
                 },
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        AppStrings.ChargingScreenCurrentTab,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: AppPadding.p12 - 2,
-                            vertical: AppMargin.m12 - 8),
-                        child: Container(
-                          height: 1.8,
-                          width: width * 0.32,
-                          color: ColorManager.primary,
-                          // color: Color(0xFFFCFCFD),
+                    Text(
+                    AppStrings.ChargingScreenCurrentTab,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize:  screenWidth * 0.05,
+                        fontWeight: FontWeight.w500
+                    ),
                         ),
-                      )
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.012),
+                        child: Container(
+                          height: screenHeight * 0.003,
+                          width: screenWidth * 0.2,
+                          color: ColorManager.primary,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -345,28 +373,28 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   });
                 },
                 child: Container(
-                    width: width * 0.5,
+                    width: screenWidth * 0.5,
                     child: Text(AppStrings.ChargingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20,
+                            fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.w500,
                             color: ColorManager.grey3))),
               )
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
-        ),
+        // SizedBox(
+        //   height: height * 0.05,
+        // ),
         streamBuilder(AppStrings.ChargingScreenCurrentTab)
       ],
     );
   }
 
   Widget RecentScreen() {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     double widthInLogicalPixels = 990 / MediaQuery.of(context).devicePixelRatio;
     double heightInLogicalPixels =
@@ -374,7 +402,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+          height: screenHeight * 0.08,
+          color: Colors.white,
           child: Row(
             children: [
               GestureDetector(
@@ -386,11 +415,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   });
                 },
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Text(AppStrings.ChargingScreenCurrentTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: AppSize.s20,
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.grey3)),
                 ),
@@ -398,24 +427,22 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                    width: width * 0.5,
+                    width: screenWidth * 0.5,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           AppStrings.ChargingScreenRecentTab,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: AppSize.s20,
+                              fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p12 - 2,
-                              vertical: AppMargin.m12 - 8),
+                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.012),
                           child: Container(
-                            height: 1.8,
-                            width: width * 0.32,
+                            height: screenHeight * 0.003,
+                            width: screenWidth * 0.2,
                             color: ColorManager.primary,
                           ),
                         )
@@ -425,7 +452,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        //SizedBox(height: height * 0.1),
         streamBuilder(AppStrings.ChargingScreenRecentTab)
       ],
     );

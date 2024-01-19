@@ -18,6 +18,7 @@ enum typeCharger {
 }
 
 class AppMargin {
+  static const double m2 = 2.0;
   static const double m8 = 8.0;
   static const double m12 = 12.0;
   static const double m14 = 14.0;
