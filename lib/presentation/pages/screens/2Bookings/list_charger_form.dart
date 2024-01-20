@@ -31,7 +31,7 @@ import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/pages/screens/2Bookings/3Chargings/MyChargingScreen.dart';
+import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class ListChargerForm extends StatefulWidget {
@@ -423,8 +423,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreChargerType(int type) {
-      String chargerType = 'Level $type';
+    void StoreChargerType(List<int> type) {
+      List<String> chargerType = [];
+      chargerType = type.map((t) => 'Level $t').toList();
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
@@ -436,8 +437,8 @@ class _ListChargerFormState extends State<ListChargerForm> {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
 
-      userChargingData.startAvailability = start;
-      userChargingData.endAvailability = end;
+      userChargingData.startAvailability = int.parse(start);
+      userChargingData.endAvailability = int.parse(end);
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -488,7 +489,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
     void addChargerFunction() async {
       _submitForm;
-      StoreChargerType(++chargerType);
+      StoreChargerType([++chargerType]);
       StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
       Storeg(_position);
       await uploadImages(_imageList!)
@@ -717,8 +718,8 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                           BorderRadius.all(Radius.circular(8))),
                                   child: DropdownButtonFormField<String>(
                                     value: state,
-                                    borderRadius:
-                                        const BorderRadius.all(Radius.circular(8)),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(8)),
                                     decoration: const InputDecoration(
                                         hintText: 'Select State',
                                         fillColor: Colors.white,
@@ -816,8 +817,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText:
-                                      'Owner\'s Name',
+                                  hintText: 'Owner\'s Name',
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(

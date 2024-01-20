@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
-import '../resources/values_manager.dart';
-import '../resources/routes_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../resources/values_manager.dart';
+import '../resources/routes_manager.dart';
 
 import 'name.dart';
 class ProfileUpload extends StatefulWidget {
@@ -146,6 +146,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
                     ),
                   ),
                 ),
+
                 Positioned(
                   top: screenHeight * 0.85,
                   left: screenWidth * 0.10,
@@ -177,25 +178,6 @@ class _ProfileUploadState extends State<ProfileUpload> {
                     ),
                   ),
                 ),
-                // Positioned(
-                //   top: screenHeight * 0.15,
-                //   left: screenWidth * 0.15,
-                //   child: GestureDetector(
-                //     onTap: _pickImage,
-                //     child: _pickedFile != null
-                //         ? CircleAvatar(
-                //       backgroundImage: FileImage(
-                //         File(_pickedFile!.path),
-                //       ),
-                //       radius: screenWidth * 0.35,
-                //     )
-                //         : Image.asset(
-                //       ImageAssets.circle, // Replace with your default profile image path
-                //       width: screenWidth * 0.7,
-                //       height: screenWidth * 0.7,
-                //     ),
-                //   ),
-                // ),
               ],
             ),
           ),
@@ -219,10 +201,3 @@ class _ProfileUploadState extends State<ProfileUpload> {
     }
   }
 }
-
-
-
-
-
-
-

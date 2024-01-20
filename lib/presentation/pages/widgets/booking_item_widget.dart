@@ -116,8 +116,7 @@ class _BookingWidgetState extends State<BookingWidget> {
             backgroundColor: buttonColor,
             foregroundColor: textColor,
             elevation: 3,
-          )
-      ),
+          )),
     );
   }
 
@@ -149,11 +148,14 @@ class _BookingWidgetState extends State<BookingWidget> {
       width: width * 0.9,
       height: height * 0.143,
       decoration: BoxDecoration(
+        // color: Colors.white,
         color: statusColor,
+
         borderRadius: BorderRadius.circular(width*0.08),
         boxShadow: [
           BoxShadow(
-          blurRadius: width * 0.015,
+            offset: Offset(-8, 6),
+            blurRadius: width * 0.015,
             color: Color.fromRGBO(222, 222, 222, 1),
           ),
         ],
@@ -183,23 +185,25 @@ class _BookingWidgetState extends State<BookingWidget> {
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: width * 0.04,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               //SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
+                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01), // Add vertical padding
                 child: Text(
                   widget.bookingItem.customerMobileNumber,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: width * 0.04,
+                      fontSize: width * 0.04,
+                    // fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               //SizedBox(height: height * 0.01),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
+                padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01), // Add vertical padding
                 child: Text(
                   '₹ ${widget.bookingItem.amount.toString()}',
                   style: TextStyle(
@@ -217,7 +221,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                   if (widget.bookingItem.status == 1 )
+                  if (widget.bookingItem.status == 1 )
                     Padding(
                       padding: EdgeInsets.all(width * 0.02),
                       child: Container(
@@ -244,7 +248,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                         ),
                       ),
                     ),
-                   if (widget.bookingItem.status == 1)
+                  if (widget.bookingItem.status == 1)
                     Padding(
                       padding: EdgeInsets.all(width * 0.02),
                       child: Container(

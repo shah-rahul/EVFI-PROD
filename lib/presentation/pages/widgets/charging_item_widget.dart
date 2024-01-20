@@ -82,8 +82,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           backgroundColor: buttonColor,
           foregroundColor: textColor,
           elevation: 3,
-        )
-    );
+        ));
   }
 
   Color statusColor = Colors.white;
@@ -108,13 +107,14 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      width: width * 0.9,
+        width: width * 0.9,
       height: height * 0.143,
       decoration: BoxDecoration(
         color: statusColor,
         borderRadius: BorderRadius.circular(width*0.08),
         boxShadow: [
           BoxShadow(
+            offset: Offset(-8, 6),
             blurRadius: 15,
             color: Color.fromRGBO(222, 222, 222, 1),
           ),
@@ -123,9 +123,9 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
       child: Stack(
         children: [
         Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Row(
             children: [
               Padding(
@@ -134,12 +134,11 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                   widget.chargingItem.stationName,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: width * 0.04,
+                    fontSize: width * 0.04  ,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              // SizedBox(height: 90),
               // Padding(
               //   padding: EdgeInsets.symmetric(horizontal: 60),
               //   child: Text(
@@ -218,11 +217,11 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           //     widget.chargingItem.status == -1)
 
           //change the color accordingly
-          ],
-        ),
-        Positioned(
-          right: width * 0.02,
-          top: width * 0.13,
+        ],
+      ),
+          Positioned(
+            right: width * 0.02,
+            top: width * 0.13,
             child: GestureDetector(
               onTap: () {
               },
@@ -241,8 +240,8 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                 ),
               ),
             ),
-        ),
-        ]
+          ),
+      ],
       ),
     );
   }

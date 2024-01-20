@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:evfi/presentation/storage/booking_data_provider.dart';
@@ -18,7 +19,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final double costOfFullCharge;
   final String startTime;
   final String endTime;
-  final String chargerType;
+  final List<dynamic> chargerType;
   final String amenities;
   final String hostName;
   final String chargerId;
@@ -202,11 +203,11 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            widget.chargerType,
+                            widget.chargerType.toString(),
                             style: const TextStyle(fontSize: AppSize.s14),
                           ),
                           Text(
-                            widget.amenities,
+                            widget.amenities.toString(),
                             style: const TextStyle(fontSize: AppSize.s14),
                           ),
                           Text(
