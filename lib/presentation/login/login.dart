@@ -1,5 +1,7 @@
 import 'package:evfi/presentation/login/signUp.dart';
 import 'package:evfi/presentation/login/verify.dart';
+import 'package:evfi/presentation/onboarding/onboarding.dart';
+import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
       resizeToAvoidBottomInset: true,
       body: GestureDetector(
         onTap: () {
-          // Close the keyboard when tapped outside the text field
+          //Close the keyboard when tapped outside the text field
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
@@ -74,7 +76,7 @@ class _LoginViewState extends State<LoginView> {
                       primary: ColorManager.appBlack,
                     ),
                     child: Text(
-                      'or SignUp',
+                      AppStrings.orSignUp,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: FontSize.s14,

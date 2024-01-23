@@ -5,10 +5,10 @@ class AppStrings {
 
   static const onboardingTitle1 = "Access to the network of EV Chargers";
   static const onboardingTitle2 = "Get best path to your destination";
-  static const onboardingTitle3 = "Lend your Chargers";
+  static const onboardingTitle3 = "Lend your Chargers, some extra cash for you";
   static const onboardingSubTitle1 = "";
   static const onboardingSubTitle2 = "";
-  static const onboardingSubTitle3 = "some extra cash for you";
+  static const onboardingSubTitle3 = "";
   static const skip = "Skip";
   static const next = "Next";
   static const login = "login";

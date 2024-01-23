@@ -107,7 +107,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-      width: width,
+        width: width * 0.9,
       height: height * 0.143,
       decoration: BoxDecoration(
         color: statusColor,
@@ -115,12 +115,14 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         boxShadow: [
           BoxShadow(
             offset: Offset(-8, 6),
-            blurRadius: 50,
-            color: Color.fromRGBO(0, 0, 0, 0.25),
+            blurRadius: 15,
+            color: Color.fromRGBO(222, 222, 222, 1),
           ),
         ],
       ),
-      child: Column(
+      child: Stack(
+        children: [
+        Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,7 +134,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                   widget.chargingItem.stationName,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: 18,
+                    fontSize: width * 0.04  ,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -157,7 +159,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               'Time slot- ${widget.chargingItem.slotChosen}',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                  fontSize: width * 0.04,
               ),
             ),
           ),
@@ -168,7 +170,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               widget.chargingItem.phoneNumber,
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 18,
+                  fontSize: width * 0.04,
               ),
             ),
           ),
@@ -179,7 +181,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               '₹ ${widget.chargingItem.amount}',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 25,
+                fontSize: width * 0.06,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -216,6 +218,30 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
 
           //change the color accordingly
         ],
+      ),
+          Positioned(
+            right: width * 0.02,
+            top: width * 0.13,
+            child: GestureDetector(
+              onTap: () {
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: width * 0.08,
+                ),
+              ),
+            ),
+          ),
+      ],
       ),
     );
   }

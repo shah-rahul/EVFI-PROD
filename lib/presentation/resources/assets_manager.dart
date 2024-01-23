@@ -30,5 +30,8 @@ class ImageAssets {
   static const String rightArrow = "assets/images/onboarding/right_arrow.png";
   static const String right = "assets/images/onboarding/right.png";
   static const String station = "assets/images/onboarding/sation.png";
+  static const String RedCircle = "assets/images/booking/RedCircle.png";
+  static const String LeftTiltedLine = "assets/images/booking/LeftTiltedLine.png";
+  static const String RightTiltedLine = "assets/images/booking/RightTiltedLine.png";
   // static const String logo1 = "assets/assetss/logo.png";
 }

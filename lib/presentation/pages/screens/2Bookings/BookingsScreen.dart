@@ -12,6 +12,7 @@ import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookingsScreen extends StatefulWidget {
   const BookingsScreen({Key? key}) : super(key: key);
@@ -54,9 +55,20 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     if (_isProvider == null) {
       return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: Shimmer.fromColors(
+          baseColor: ColorManager.grey5!,
+          highlightColor: ColorManager.white!,
+          child: Container(
+            height: screenHeight * 0.75,
+            width: screenWidth * 0.75,
+            color: ColorManager.white,
+          ),
+        ),
+        ),
       );
     } else if (_isProvider == true) {
       return Scaffold(
@@ -103,13 +115,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Widget streamBuilder(String tab) {
-    final height = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.75,
-      padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
+      height: screenHeight * 0.75,
+      //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
-            height: height * 0.85,
+            height: screenHeight * 0.85,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
@@ -123,7 +136,16 @@ class _BookingsScreenState extends State<BookingsScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: const CircularProgressIndicator());
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Column(
+                      children: List.generate(
+                        5,
+                            (index) => shimmerPlaceholder(),
+                      ),
+                    ),
+                  );
                 }
                 if (!snapshot.hasData) {
                   return const Center(
@@ -153,9 +175,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                     DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
                           if (snapshots.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
+                              ConnectionState.waiting){
+                            return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
                             return const Center(
@@ -167,26 +188,36 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
 
-                          return Column(children: [
-                            BookingWidget(
-                              bookingItem: Booking(
-                                  amount: documents[index]['price'],
-                                  timeStamp: documents[index]['timeSlot'],
-                                  stationName: stationName,
-                                  customerName: snapshots.data!['name'],
-                                  customerMobileNumber:
-                                      snapshots.data!['phoneNumber'],
-                                  status: documents[index]['status'],
-                                  date: documents[index]['bookingDate'],
-                                  id: documents[index].id,
-                                  ratings: 4),
-                              currentTab: tab,
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            )
-                          ]);
-                        }));
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * 0.01
+                                ),
+                                height: screenHeight * 0.22,
+                                child:BookingWidget(
+                                  bookingItem: Booking(
+                                      amount: documents[index]['price'],
+                                      timeStamp: documents[index]['timeSlot'],
+                                      stationName: stationName,
+                                      customerName: snapshots.data!['name'],
+                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      status: documents[index]['status'],
+                                      date: documents[index]['bookingDate'],
+                                      id: documents[index].id,
+                                      ratings: 4
+                                  ),
+                                  currentTab: tab,
+                                ),
+                              ),
+                              // SizedBox(
+                              //   height: screenHeight * 0.01,
+                              // ),
+                            ],
+                          );
+                        }
+                        )
+                    );
                   },
                   itemCount: documents.length,
                 );
@@ -197,19 +228,20 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Widget PendingScreen(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+          height: screenHeight * 0.08,
+          color: Colors.white,
           child: Row(
             children: [
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -217,15 +249,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenPendingTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: AppPadding.p12 - 2,
-                            vertical: AppMargin.m12 - 8),
+                            horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: 1.8,
-                          width: width * 0.32,
+                          height: screenHeight * 0.003,
+                          width: screenWidth * 0.2,
                           color: ColorManager.primary,
                         ),
                       )
@@ -242,11 +273,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   });
                 },
                 child: Container(
-                    width: width * 0.5,
+                    width: screenWidth * 0.5,
                     child: Text(AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20,
+                            fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.w500,
                             color: ColorManager.grey3))),
               )
@@ -259,13 +290,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   Widget RecentScreen() {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: [
         Container(
-          height: height * 0.1,
+        height: screenHeight * 0.08,
           child: Row(
             children: [
               GestureDetector(
@@ -277,11 +308,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   });
                 },
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Text(AppStrings.BookingScreenPendingTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: AppSize.s20,
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.grey3)),
                 ),
@@ -289,7 +320,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Container(
-                  width: width * 0.5,
+                  width: screenWidth * 0.5,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -297,15 +328,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: AppSize.s20, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: AppPadding.p12 - 2,
-                            vertical: AppMargin.m12 - 8),
+                            horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: 1.8,
-                          width: width * 0.32,
+                          height: screenHeight * 0.003,
+                          width: screenWidth * 0.2,
                           color: ColorManager.primary,
                         ),
                       )
@@ -320,4 +350,19 @@ class _BookingsScreenState extends State<BookingsScreen> {
       ],
     );
   }
+Widget shimmerPlaceholder() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: Container(
+      margin: EdgeInsets.symmetric(vertical: 10,
+  horizontal: 16 ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
+    ),
+  );
+}
 }
