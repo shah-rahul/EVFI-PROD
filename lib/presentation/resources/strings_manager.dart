@@ -11,10 +11,10 @@ class AppStrings {
   static const onboardingSubTitle3 = "";
   static const skip = "Skip";
   static const next = "Next";
-  static const login = "login";
-  static const orSignUp = "or signUp";
-  static const orLogin = "or login";
-  static const otp = "send otp";
+  static const login = "Login";
+  static const orSignUp = "or SignUp";
+  static const orLogin = "or Login";
+  static const otp = "Send Otp";
   static const almost = "almost";
   static const there = "there";
   static const verify = "verify";

@@ -1,16 +1,12 @@
 import 'package:evfi/presentation/login/signUp.dart';
 import 'package:evfi/presentation/login/verify.dart';
-import 'package:evfi/presentation/onboarding/onboarding.dart';
-import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/country_picker_dialog.dart';
 import 'package:page_transition/page_transition.dart';
 import '../resources/assets_manager.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
-import '../resources/values_manager.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class LoginView extends StatefulWidget {
@@ -37,10 +33,10 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.10),
+                SizedBox(height: screenHeight * 0.23),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenWidth * 0.8,
+                  height: screenWidth * 0.6,
                   width: screenWidth * 0.8,
                 ),
 
@@ -85,7 +81,7 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.12),
+                SizedBox(height: screenHeight * 0.1),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: SizedBox(
@@ -94,6 +90,7 @@ class _LoginViewState extends State<LoginView> {
                       cursorColor: ColorManager.primary,
                       dropdownTextStyle:
                           TextStyle(color: ColorManager.darkGrey),
+                      disableLengthCheck: true,
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorManager.grey4,
