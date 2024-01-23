@@ -176,10 +176,10 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.10),
+                SizedBox(height: screenHeight * 0.23),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenWidth * 0.8,
+                  height: screenWidth * 0.6,
                   width: screenWidth * 0.8,
                 ),
                 SizedBox(height: screenHeight * 0.07),
@@ -223,7 +223,7 @@ class _SignupPageState extends State<SignupPage> {
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.12),
+                SizedBox(height: screenHeight * 0.1),
                 Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
@@ -233,6 +233,7 @@ class _SignupPageState extends State<SignupPage> {
                         cursorColor: ColorManager.primary,
                         dropdownTextStyle:
                             TextStyle(color: ColorManager.darkGrey),
+                        disableLengthCheck: true,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: ColorManager.grey4,
