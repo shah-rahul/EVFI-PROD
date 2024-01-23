@@ -278,27 +278,38 @@ class _Booknow extends State<Booknow> {
                   //..................................................................................
                   //....................Proceed to Pay...............................................
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   PageTransition(
-                      //       type: PageTransitionType.rightToLeft,
-                      //       child: const PaymentScreen()),
-                      // ).then((_) {
+                    onTap: () async {
                       int updatedTimeSlot = binaryToDecimal(
                           newTimeSlots(previousTImeSlot, selectedTimeSlot));
-                      print("--");
-                      print(previousTImeSlot);
-                      print(selectedTimeSlot);
-                      print(updatedTimeSlot);
                       updateFireStoreTimeStamp(updatedTimeSlot);
 
                       BookingDataProvider(
-                          providerId: widget.providerId,
-                          chargerId: widget.chargerId,
-                          price: "${widget.costOfFullCharge}",
-                          timeSlot: selectedTimeSlot);
+                        providerId: widget.providerId,
+                        chargerId: widget.chargerId,
+                        price: "${widget.costOfFullCharge}",
+                        timeSlot: selectedTimeSlot,
+                      );
+
                       Navigator.pop(context);
+
+                      // Show a dialog after successful booking
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Booking Successful'),
+                            content: Text('Your booking has been confirmed.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,

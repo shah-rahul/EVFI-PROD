@@ -7,6 +7,7 @@ import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/custom_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image/image.dart' as img;
 
 import '../../models/pricing_model.dart';
 
@@ -283,22 +284,34 @@ class _ListChargerFormState extends State<ListChargerForm> {
     setState(() {});
   }
 
-  Future<List<String>> uploadImages(List<XFile> imageFiles) async {
-    for (XFile imageFile in imageFiles) {
-      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-          .ref()
-          .child('charger_images')
-          .child('$imageName.jpg');
+Future<List<String>> uploadImages(List<XFile> imageFiles) async {
+  List<String> imageUrls = [];
 
-      await ref.putFile(File(imageFile.path));
-      String imageUrl = await ref.getDownloadURL();
+  for (XFile imageFile in imageFiles) {
+    File file = File(imageFile.path);
+    List<int> imageBytes = await file.readAsBytes();
 
-      imageUrls.add(imageUrl);
-    }
+    img.Image originalImage = img.decodeImage(Uint8List.fromList(imageBytes))!;
+    img.Image resizedImage = img.copyResize(originalImage, width: 800); // width ask rahul sir
 
-    return imageUrls;
+    File resizedFile = File('${file.path}_resized.jpg');
+    resizedFile.writeAsBytesSync(img.encodeJpg(resizedImage));
+
+    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('charger_images')
+        .child('$imageName.jpg');
+        
+    await ref.putFile(resizedFile);
+    String imageUrl = await ref.getDownloadURL();
+
+    imageUrls.add(imageUrl);
+    resizedFile.delete();
   }
+  return imageUrls;
+}
+
 
   Future<void> _showPhotoOptionsDialog() {
     return showDialog(
