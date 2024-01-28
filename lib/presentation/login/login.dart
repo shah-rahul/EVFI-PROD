@@ -90,11 +90,12 @@ class _LoginViewState extends State<LoginView> {
                       cursorColor: ColorManager.primary,
                       dropdownTextStyle:
                           TextStyle(color: ColorManager.darkGrey),
-                      disableLengthCheck: true,
+                      disableLengthCheck: false,
+                      
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorManager.grey4,
-                        hintText: '7303440170',
+                        // hintText: '7303440170',
                         labelText: 'Phone Number',
                         contentPadding: EdgeInsets.symmetric(
                             vertical: screenHeight * 0.02,

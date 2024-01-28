@@ -14,10 +14,10 @@ class AppStrings {
   static const login = "Login";
   static const orSignUp = "or SignUp";
   static const orLogin = "or Login";
-  static const otp = "Send Otp";
-  static const almost = "almost";
-  static const there = "there";
-  static const verify = "verify";
+  static const otp = "SEND OTP";
+  static const almost = "Almost";
+  static const there = "There";
+  static const verify = "VERIFY";
   static const skipForLater = "skip of later";
   static const uploadAnImage = "upload an image";
   static const tap = "tap anywhere to";
