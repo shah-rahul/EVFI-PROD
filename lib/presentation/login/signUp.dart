@@ -138,6 +138,7 @@
 //   }
 // }
 
+import 'package:evfi/presentation/login/name.dart';
 import 'package:evfi/presentation/register/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -184,7 +185,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 SizedBox(height: screenHeight * 0.07),
                 Text(
-                  AppStrings.registerSignup,
+                  AppStrings.SignUp,
                   style: TextStyle(
                     color: ColorManager.primary,
                     fontSize: FontSize.s50,
@@ -203,18 +204,16 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(
                   height: screenWidth * 0.05,
                   width: screenWidth * 0.3,
-                  child: ElevatedButton(
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => LoginView()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
-                    ),
                     child: Text(
-                      AppStrings.orLogin,
+                      AppStrings.Login,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: FontSize.s14,
@@ -233,11 +232,11 @@ class _SignupPageState extends State<SignupPage> {
                         cursorColor: ColorManager.primary,
                         dropdownTextStyle:
                             TextStyle(color: ColorManager.darkGrey),
-                        disableLengthCheck: true,
+                        disableLengthCheck: false,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: ColorManager.grey4,
-                          hintText: '7303440170',
+                          // hintText: '7303440170',
                           labelText: 'Phone Number',
                           contentPadding: EdgeInsets.symmetric(
                               vertical: screenHeight * 0.02,
@@ -311,7 +310,7 @@ class _SignupPageState extends State<SignupPage> {
                                 //   verificationId: verificationId,
                                 //   phoneNumber: phoneNumber,
                                 // ),
-                                child: RegisterView(phoneNumber: phoneNumber)),
+                                child: Name(phoneNumber: phoneNumber)),
                           );
                         },
                         codeAutoRetrievalTimeout: (String verificationId) {

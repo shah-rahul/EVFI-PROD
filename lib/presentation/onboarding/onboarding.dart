@@ -8,8 +8,6 @@ import '../../domain/model.dart';
 import '../onboarding/onboarding_ViewModel.dart';
 import '../register/vehicleform.dart';
 import '../resources/color_manager.dart';
-import '../resources/routes_manager.dart';
-import '../resources/strings_manager.dart';
 import '../resources/values_manager.dart';
 
 class OnBoardingView extends StatefulWidget {
@@ -121,14 +119,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            // Navigator.of(context)
-                            //     .pushReplacementNamed(Routes.mainRoute);
-                            Navigator.push(
-                              context,
-                              PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: VehicleForm()),
-                            );
+                              Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(

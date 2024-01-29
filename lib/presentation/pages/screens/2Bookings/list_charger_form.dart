@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/custom_buttons.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as img;
@@ -13,6 +14,7 @@ import '../../models/pricing_model.dart';
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:provider/provider.dart';
@@ -160,7 +162,8 @@ class _ListChargerFormState extends State<ListChargerForm> {
               tileColor: ColorManager.primaryWithOpacity,
               textColor: Colors.black,
               selectedColor: Colors.green,
-              title: const Text('Select Charger location',
+              title: const Text(
+                  'Select Charger location',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 backgroundColor: ColorManager.grey3,
@@ -192,7 +195,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
             activeColor: Colors.transparent,
             value: typeCharger.Level1,
             groupValue: _type,
-            tileColor: (chargerType == 0) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level1) ? Colors.green[400] : Colors.white,
             onChanged: (val) {
               setState(() {
                 // debugPrint('Selected Charger: \t$val');
@@ -221,7 +224,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
             dense: true,
             value: typeCharger.Level2,
             groupValue: _type,
-            tileColor: (chargerType == 1) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level2) ? Colors.green[400] : Colors.white,
             onChanged: (val) {
               setState(() {
                 debugPrint('Selected Charger: \t$val');
@@ -249,7 +252,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
             activeColor: Colors.transparent,
             value: typeCharger.Level3,
             groupValue: _type,
-            tileColor: (chargerType == 2) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level3) ? Colors.green[400] : Colors.white,
             onChanged: (val) {
               setState(() {
                 debugPrint('Selected Charger: \t$val');
@@ -274,8 +277,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
         _imageList!.addAll(selectedImage);
       }
     } else {
-      final XFile? sekectedImage =
-          await imagePicker.pickImage(source: ImageSource.camera);
+      final XFile? sekectedImage = await imagePicker.pickImage(source: ImageSource.camera);
       if (sekectedImage != null) {
         _imageList!.add(sekectedImage);
       }
@@ -445,13 +447,15 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
-
+    String extractNumericPart(String time) {
+      // Remove non-numeric characters
+      return time.replaceAll(RegExp(r'[^0-9]'), '');
+    }
     void StoreAvailability(String start, String end) {
-      UserChargingData userChargingData =
-          userChargingDataProvider.userChargingData;
+      UserChargingData userChargingData = userChargingDataProvider.userChargingData;
 
-      userChargingData.startAvailability = int.parse(start);
-      userChargingData.endAvailability = int.parse(end);
+      userChargingData.start = int.parse(start);
+      userChargingData.end = int.parse(end);
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -501,7 +505,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
     }
 
     void addChargerFunction() async {
-      _submitForm;
+      _submitForm();
       StoreChargerType([++chargerType]);
       StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
       Storeg(_position);
@@ -537,7 +541,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                 Icons.arrow_back_ios_new,
                 color: Colors.black,
               )),
-          title: const Text('List your Charger',
+          title: const Text(AppStrings.chargerFormTitle,
               style: TextStyle(color: Colors.black)),
           elevation: 0,
         ),
@@ -570,7 +574,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Amog Public Charging Station',
+                                  hintText: 'Please enter a valid station name',
+                                  hintStyle: TextStyle(fontSize: AppSize.s14),
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
@@ -592,6 +597,43 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                           const SizedBox(
                             height: 15,
                           ),
+                          _makeTitle(title: 'Host Names'),
+                          Card(
+                            elevation: 4,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8)),
+                            ),
+                            child: TextFormField(
+                              onChanged: StoreHostName,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Please enter valid names.';
+                                }
+                                return "";
+                              },
+                              style: TextStyle(color: ColorManager.darkGrey),
+                              decoration: const InputDecoration(
+                                  hintText: 'Owner\'s Name',
+                                  hintStyle: TextStyle(fontSize: AppSize.s14),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                                  )),
+                              maxLines: 1,
+                              keyboardType: TextInputType.name,
+                              focusNode: _hostsFocusNode,
+                              textInputAction: TextInputAction.newline,
+                              onSaved: (newValue) {
+                                setState(() {
+                                  hostNames = newValue!;
+                                });
+                              },
+                            ),
+                          ),
                           _makeTitle(title: 'Address'),
                           Card(
                             elevation: 4,
@@ -606,10 +648,10 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                 }
                                 return null;
                               },
-                              style: TextStyle(color: ColorManager.darkGrey),
+                              style: TextStyle(color: ColorManager.darkGrey,fontSize: AppSize.s16),
                               decoration: const InputDecoration(
-                                  hintText:
-                                      '255-A, Himadri Society, Hudson Lane',
+                                  hintText: 'Please enter a valid address',
+                                  hintStyle: TextStyle(fontSize: AppSize.s14),
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
@@ -617,6 +659,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)),
                                   )),
+                              maxLines: 2,
                               keyboardType: TextInputType.streetAddress,
                               textInputAction: TextInputAction.next,
                               focusNode: _addressFocusNode,
@@ -648,7 +691,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Ambala',
+                                  hintText: 'Please enter your city',
+                                  hintStyle: TextStyle(fontSize: AppSize.s14),
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
@@ -701,7 +745,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                     style:
                                         TextStyle(color: ColorManager.darkGrey),
                                     decoration: InputDecoration(
-                                      hintText: '80085',
+                                      hintText: 'Enter Pin',
+                                      hintStyle: TextStyle(fontSize: AppSize.s14),
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
@@ -710,6 +755,10 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                               BorderRadius.circular(8)),
                                     ),
                                     keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly, // Allow only numeric input
+                                      LengthLimitingTextInputFormatter(6), // Limit the length to 6 digits
+                                    ],
                                     focusNode: _pinCodeFocusNode,
                                     onFieldSubmitted: (_) =>
                                         FocusScope.of(context)
@@ -735,6 +784,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                         Radius.circular(8)),
                                     decoration: const InputDecoration(
                                         hintText: 'Select State',
+                                        hintStyle: TextStyle(fontSize: AppSize.s14),
                                         fillColor: Colors.white,
                                         filled: true,
                                         // : ColorManager.primary.withOpacity(0.17),
@@ -792,7 +842,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'XXXX-XXXX-XXXX-XXXX',
+                                  hintText: 'Please enter a valid aadhar number',
+                                  hintStyle: TextStyle(fontSize: AppSize.s14),
                                   fillColor: Colors.white,
                                   filled: true,
                                   enabledBorder: OutlineInputBorder(
@@ -803,6 +854,10 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               focusNode: _aadharFocusNode,
                               keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.next,
+                              inputFormatters: [
+                                //FilteringTextInputFormatter.allow(RegExp(r'^\d{0,12}$')),
+                                AadharNumberFormatter(),
+                              ],
                               onFieldSubmitted: (_) => FocusScope.of(context)
                                   .requestFocus(_hostsFocusNode),
                               onSaved: (newValue) {
@@ -813,42 +868,43 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                           const SizedBox(
                             height: 15,
                           ),
-                          _makeTitle(title: 'Host Names'),
-                          Card(
-                            elevation: 4,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: TextFormField(
-                              onChanged: StoreHostName,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter valid names.';
-                                }
-                                return "";
-                              },
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  hintText: 'Owner\'s Name',
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                  )),
-                              maxLines: 3,
-                              keyboardType: TextInputType.name,
-                              focusNode: _hostsFocusNode,
-                              textInputAction: TextInputAction.newline,
-                              onSaved: (newValue) {
-                                setState(() {
-                                  hostNames = newValue!;
-                                });
-                              },
-                            ),
-                          ),
+                          // _makeTitle(title: 'Host Names'),
+                          // Card(
+                          //   elevation: 4,
+                          //   shape: const RoundedRectangleBorder(
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(8)),
+                          //   ),
+                          //   child: TextFormField(
+                          //     onChanged: StoreHostName,
+                          //     validator: (value) {
+                          //       if (value!.isEmpty) {
+                          //         return 'Please enter valid names.';
+                          //       }
+                          //       return "";
+                          //     },
+                          //     style: TextStyle(color: ColorManager.darkGrey),
+                          //     decoration: const InputDecoration(
+                          //         hintText: 'Owner\'s Name',
+                          //         hintStyle: TextStyle(fontSize: AppSize.s14),
+                          //         fillColor: Colors.white,
+                          //         filled: true,
+                          //         enabledBorder: OutlineInputBorder(
+                          //           borderSide: BorderSide.none,
+                          //           borderRadius:
+                          //               BorderRadius.all(Radius.circular(8)),
+                          //         )),
+                          //     maxLines: 1,
+                          //     keyboardType: TextInputType.name,
+                          //     focusNode: _hostsFocusNode,
+                          //     textInputAction: TextInputAction.newline,
+                          //     onSaved: (newValue) {
+                          //       setState(() {
+                          //         hostNames = newValue!;
+                          //       });
+                          //     },
+                          //   ),
+                          // ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -865,12 +921,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               endLimit: DateTimeExtension.todayMidnight,
                               startLimit: DateTimeExtension.todayStart,
                               onChanged: (start, end, isAllDay) {
-                                _startAvailabilityTime = DateFormat('h:mm a')
-                                    .format(start!)
-                                    .toString();
-                                _endAvailabilityTime = DateFormat('h:mm a')
-                                    .format(end!)
-                                    .toString();
+                                _startAvailabilityTime = DateFormat('H').format(start!).toString();
+                                _endAvailabilityTime = DateFormat('H').format(end!).toString();
                               }),
                           const SizedBox(
                             height: 15,
@@ -896,6 +948,9 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)),
                                   )),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
                               focusNode: _priceFocusNode,
                               onFieldSubmitted: (_) => FocusScope.of(context)
                                   .requestFocus(_amenitiesFocusNode),
@@ -975,5 +1030,30 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                     ),
                   ],
                 )));
+  }
+}
+class AadharNumberFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    String formattedValue = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    if (formattedValue.length > 4 && formattedValue.length <= 8) {
+      formattedValue =
+      '${formattedValue.substring(0, 4)} ${formattedValue.substring(4)}';
+    } else if (formattedValue.length > 8 && formattedValue.length <= 14) {
+      formattedValue =
+      '${formattedValue.substring(0, 4)} ${formattedValue.substring(4,8)} ${formattedValue.substring(8)}';
+    }
+    if (formattedValue.length > 14) {
+      formattedValue = formattedValue.substring(0, 14);
+    }
+
+    return newValue.copyWith(
+      text: formattedValue,
+      selection: TextSelection.collapsed(offset: formattedValue.length),
+    );
   }
 }

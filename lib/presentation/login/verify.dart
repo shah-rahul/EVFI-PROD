@@ -66,7 +66,7 @@ class _VerifyState extends State<Verify> {
                 SizedBox(height: screenHeight * 0.10),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenWidth * 0.8,
+                  height: screenWidth * 0.6,
                   width: screenWidth * 0.8,
                 ),
                 SizedBox(height: screenHeight * 0.07),

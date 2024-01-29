@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_import, prefer_const_constructors_in_immutables, unused_catch_clause, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
 
-import 'dart:convert';
+import  'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -230,6 +230,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
@@ -242,6 +243,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             stateName != null &&
             startTime != null &&
             endTime != null &&
+            timeslot != null &&
             chargerType != null &&
             amenities != null &&
             hostName != null) {
@@ -253,6 +255,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           stateName = stateName as String;
           startTime = startTime as int;
           endTime = endTime as int;
+          timeslot = timeslot as int;
           chargerType = chargerType as List<dynamic>;
           amenities = amenities as String;
           hostName = hostName as String;
@@ -284,6 +287,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                         hostName: hostName,
                         startTime: startTime,
                         endTime: endTime,
+                        timeslot: timeslot,
                         chargerId: ds.id,
                         providerId: data['uid']);
                   },

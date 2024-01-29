@@ -199,9 +199,7 @@ class _RegisterViewState extends State<RegisterView> {
                                   StoreName(nameController.text);
                                   await userDataProvider.saveUserData();
                                  
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
+                                  Navigator.push(context, PageTransition(
                                         type: PageTransitionType.rightToLeft,
                                         
                                        
