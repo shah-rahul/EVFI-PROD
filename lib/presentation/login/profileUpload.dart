@@ -1,4 +1,5 @@
 import 'package:evfi/presentation/login/profileImage.dart';
+import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
@@ -6,8 +7,7 @@ import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../resources/values_manager.dart';
-import '../resources/routes_manager.dart';
+
 
 import 'name.dart';
 class ProfileUpload extends StatefulWidget {
@@ -127,13 +127,13 @@ class _ProfileUploadState extends State<ProfileUpload> {
                 //   ),
                 // ),
                 Positioned(
-                  top: screenHeight * 0.59,
-                  left: screenWidth * 0.23,
+                  top: screenHeight * 0.62,
+                  left: screenWidth * 0.18,
                   child: Text(
                     AppStrings.lookingClean,
                     style: TextStyle(
                       color: ColorManager.primary,
-                      fontSize: FontSize.s35,
+                      fontSize: FontSize.s32,
                       fontFamily: 'fonts/Poppins',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
@@ -157,7 +157,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => Name()),
+                          MaterialPageRoute(builder: (context) => OnBoardingView()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

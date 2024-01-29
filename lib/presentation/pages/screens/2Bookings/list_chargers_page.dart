@@ -3,6 +3,7 @@ import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/routes_manager.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -28,23 +29,23 @@ class ListChargersPage extends StatelessWidget {
                     ),
                 child: Image.asset(
                   ImageAssets.listCharger,
-                  scale: 4.8,
+                  scale: height * 0.006,
                 ),
               ),
-              const SizedBox(
-                height: 28,
+              SizedBox(
+                height: height * 0.05,
               ),
               Text(
-                'rent with\n us',
+                AppStrings.chargerTitle,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: 27,
+                    fontSize: FontSize.s28,
                     fontWeight: FontWeight.bold,
                     wordSpacing: 5),
               ),
-              const SizedBox(
-                height: 25,
+              SizedBox(
+                height: height * 0.07,
               ),
               SizedBox(
                 width: double.infinity,
@@ -55,7 +56,7 @@ class ListChargersPage extends StatelessWidget {
                 },
                     style: Theme.of(context).elevatedButtonTheme.style,
                     child: const Text(
-                      'proceed to list',
+                      AppStrings.chargerButton,
                       style: TextStyle(
                           fontSize: FontSize.s14, fontWeight: FontWeight.w600),
                     )),

@@ -1,13 +1,10 @@
 import 'package:evfi/presentation/login/profileUpload.dart';
-import 'package:evfi/presentation/login/verify.dart';
+import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
-import '../resources/values_manager.dart';
-import '../resources/routes_manager.dart';
 
 import 'name.dart';
 class ProfileImage extends StatelessWidget {
@@ -36,21 +33,7 @@ class ProfileImage extends StatelessWidget {
                   child: SingleChildScrollView(
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                        PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                // child: VerificationCodePage(
-                                //   verificationId: verificationId,
-                                //   phoneNumber: phoneNumber,
-                                // ),
-                              child: Verify(phoneNumber: '', verificationId: '',
-                              
-                              ),
-
-
-                              ),
-                        );
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         primary: ColorManager.primary,
@@ -83,13 +66,13 @@ class ProfileImage extends StatelessWidget {
                 ),
               ),
                 Positioned(
-                  top: screenHeight * 0.59,
-                  left: screenWidth * 0.17,
+                  top: screenHeight * 0.62,
+                  left: screenWidth * 0.15,
                   child: Text(
                     AppStrings.tap,
                     style: TextStyle(
                       color: ColorManager.primary,
-                      fontSize: FontSize.s35,
+                      fontSize: FontSize.s28,
                       fontFamily: 'fonts/Poppins',
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
@@ -103,13 +86,13 @@ class ProfileImage extends StatelessWidget {
                   ),
                 ),
               Positioned(
-                top: screenHeight * 0.63,
-                left: screenWidth * 0.17,
+                top: screenHeight * 0.66,
+                left: screenWidth * 0.15,
                 child: Text(
                   AppStrings.uploadAnImage,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s35,
+                    fontSize: FontSize.s28,
                     fontFamily: 'fonts/Poppins',
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
@@ -132,7 +115,7 @@ class ProfileImage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Name()),
+                        MaterialPageRoute(builder: (context) => OnBoardingView()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

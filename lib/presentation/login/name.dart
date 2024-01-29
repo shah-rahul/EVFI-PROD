@@ -1,19 +1,26 @@
-import 'package:controller/controller.dart';
-import 'package:evfi/presentation/onboarding/onboarding.dart';
+import 'package:evfi/presentation/login/profileImage.dart';
+
+import '../resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:evfi/presentation/resources/color_manager.dart';
-import '../onboarding/onboarding1.dart';
-import '../storage/UserData.dart';
 import '../storage/UserDataProvider.dart';
-import 'package:evfi/presentation/resources/assets_manager.dart';
+import 'package:page_transition/page_transition.dart';
+import '../resources/color_manager.dart';
+import '../resources/assets_manager.dart';
+import '../login/signup_controller.dart';
+import 'package:get/get.dart';
+import '../storage/UserData.dart';
 import '../resources/font_manager.dart';
-import '../resources/strings_manager.dart';
-import '../resources/values_manager.dart';
-import '../resources/routes_manager.dart';
+
 
 
 class Name extends StatefulWidget {
+
+  final String phoneNumber;
+  Name({
+    required this.phoneNumber,
+  });
+
   @override
   _NameState createState() => _NameState();
 }
@@ -24,6 +31,7 @@ class _NameState extends State<Name> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignUpController());
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     final userDataProvider = Provider.of<UserDataProvider>(context);
@@ -63,12 +71,12 @@ class _NameState extends State<Name> {
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.10),
+                SizedBox(height: screenHeight * 0.18),
                 Text(
                   AppStrings.whatShould,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s35,
+                    fontSize: FontSize.s28,
                     fontFamily: 'fonts/Poppins',
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
@@ -84,7 +92,7 @@ class _NameState extends State<Name> {
                   AppStrings.weCallYou,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s35,
+                    fontSize: FontSize.s28,
                     fontFamily: 'fonts/Poppins',
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
@@ -96,15 +104,20 @@ class _NameState extends State<Name> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.18),
+                SizedBox(height: screenHeight * 0.13),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
+                    onChanged: (value) async {
+                    // Store the entered name in the provider
+                    setState(() {
+                      nameController.text = value;
+                    });
+                  },
+                      decoration: InputDecoration(
                       filled: true,
                       fillColor: ColorManager.grey4,
-                      hintText: 'abc',
+                      hintText: 'Enter your name',
                       labelText: 'Name',
                       contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.10),
                       enabledBorder: OutlineInputBorder(
@@ -130,9 +143,14 @@ class _NameState extends State<Name> {
                     onPressed: () async {
                       StoreName(nameController.text);
                       await userDataProvider.saveUserData();
+
                       Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => OnBoardingView()),
+                        context, PageTransition(
+                            type: PageTransitionType.rightToLeft,
+
+
+                            // child: OnBoardingView()),
+                            child: ProfileImage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

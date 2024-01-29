@@ -12,25 +12,27 @@ class AppStrings {
   static const skip = "Skip";
   static const next = "Next";
   static const login = "Login";
-  static const orSignUp = "or SignUp";
-  static const orLogin = "or Login";
-  static const otp = "SEND OTP";
-  static const almost = "Almost";
-  static const there = "There";
-  static const verify = "VERIFY";
-  static const skipForLater = "skip of later";
-  static const uploadAnImage = "upload an image";
-  static const tap = "tap anywhere to";
-  static const upload = "upload";
-  static const lookingClean = "looking clean";
-  static const weCallYou = "we call you";
-  static const whatShould = "what should";
+  static const SignUp = "Sign Up";
+  static const Login = "Login";
+  static const otp = "Send Otp";
+  static const almost = "almost";
+  static const there = "there";
+  static const verify = "verify";
+  static const skipForLater = "Skip for Later";
+  static const uploadAnImage = "Upload An Image";
+  static const tap = "Tap Anywhere To";
+  static const upload = "Upload";
+  static const lookingClean = "Looking Clean";
+  static const weCallYou = "We Call You";
+  static const whatShould = "What Should";
   static const registerSignup = "Sign-Up";
   static const registercancel = "Cancel";
   static const registertitle = "Let's Get Started";
   static const registertitle2 = "Create your Account";
-
+  static const chargerTitle = "Rent With \nUs";
+  static const chargerButton = "Proceed To List";
   static const vehicleformTitle = "Vehicle Info";
+  static const chargerFormTitle = "List your Charger";
 
   static const chargerformtitle = "Charger Info";
 

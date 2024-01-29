@@ -29,8 +29,9 @@ class UserChargingDataProvider extends ChangeNotifier {
     aadharNumber: 'Null',
     hostName: 'Null',
     chargerType: [],
-    startAvailability: 0, // DateTime.now(),
-    endAvailability: 0, //DateTime.now(),
+    start: 0, // DateTime.now(),
+    end: 0, //DateTime.now(),
+    timeslot: 0,
     price: 'Null',
     amenities: 'Null',
     aadharImages: [],
@@ -38,8 +39,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     imageUrl: [],
   );
   // ignore: prefer_final_fields
-  CollectionReference _chargersCollection =
-      FirebaseFirestore.instance.collection('chargers');
+  CollectionReference _chargersCollection = FirebaseFirestore.instance.collection('chargers');
 
   UserChargingData get userChargingData => _userChargingData;
   void setUserChargingData(UserChargingData data) {
@@ -71,10 +71,11 @@ class UserChargingDataProvider extends ChangeNotifier {
           'price': _userChargingData.price,
           'amenities': _userChargingData.amenities,
           'imageUrl': _userChargingData.imageUrl,
-          'start': _userChargingData.startAvailability,
-          'end': _userChargingData.endAvailability,
+          'start': _userChargingData.start,
+          'end': _userChargingData.end,
+          'timeslot': 0,
           'aadharImages': _userChargingData.aadharImages,
-          'timeSlot': 0,
+          //'timeSlot': 0,
           //charger image
           // 'isProvider':_userChargingData.isProvider,
         }

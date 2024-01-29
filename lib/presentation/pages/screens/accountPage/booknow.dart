@@ -21,6 +21,7 @@ class Booknow extends StatefulWidget {
       required this.amenities,
       required this.startTime,
       required this.endTime,
+        required this.timeslot,
       required this.hostName,
       required this.chargerId,
       required this.providerId});
@@ -31,6 +32,7 @@ class Booknow extends StatefulWidget {
   final double costOfFullCharge;
   final String startTime;
   final String endTime;
+  final int timeslot;
   final List<dynamic> chargerType;
   final String amenities;
   final String hostName;
@@ -203,7 +205,7 @@ class _Booknow extends State<Booknow> {
                   Row(children: [
                     const Icon(Icons.access_time),
                     Text(
-                      '\t ${widget.startTime}-${widget.endTime}',
+                      '\t ${widget.startTime}:00-${widget.endTime}:00',
                       style: TextStyle(
                           fontSize: AppSize.s14, fontWeight: FontWeight.w600),
                     ),
@@ -218,7 +220,7 @@ class _Booknow extends State<Booknow> {
                     style: TextStyle(
                         fontSize: AppSize.s14, fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 1),
 
                   //..................................................................................
                   //.....................Available slots for today..............................................
@@ -274,13 +276,12 @@ class _Booknow extends State<Booknow> {
                       )),
                     ),
                   ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 1),
                   //..................................................................................
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () async {
-                      int updatedTimeSlot = binaryToDecimal(
-                          newTimeSlots(previousTImeSlot, selectedTimeSlot));
+                      int updatedTimeSlot = binaryToDecimal(newTimeSlots(previousTImeSlot, selectedTimeSlot));
                       updateFireStoreTimeStamp(updatedTimeSlot);
 
                       BookingDataProvider(
@@ -320,13 +321,13 @@ class _Booknow extends State<Booknow> {
                       elevation: 4,
                       color: ColorManager.primary,
                       child: Container(
-                        height: height * 0.07,
+                        height: height * 0.05,
                         width: double.infinity,
                         child: const Center(
                             child: Text(
                           'Proceed to Pay',
                           style: TextStyle(
-                            fontSize: 25,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -343,17 +344,14 @@ class _Booknow extends State<Booknow> {
   }
 
   bool isValidTimeSlot(int time) {
-    return time >= int.parse(widget.startTime) &&
-        time <= int.parse(widget.endTime) &&
-        !(bookedSlots[time] == "1");
+    return time >= int.parse(widget.startTime) && time <= int.parse(widget.endTime) && !(bookedSlots[time] == "1");
   }
 
   void updateFireStoreTimeStamp(int time) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('chargers');
+    CollectionReference users = FirebaseFirestore.instance.collection('chargers');
     DocumentReference docRef = users.doc(widget.chargerId);
     await docRef.update({
-      'timeSlot': time,
+      'info.timeslot': time,
     });
   }
 
@@ -422,11 +420,15 @@ class _Booknow extends State<Booknow> {
           }
 
           // if (snapshot.data!.docChanges.isNotEmpty) {
-          print(snapshot.data?['timeSlot'].runtimeType);
-          previousTImeSlot = snapshot.data?['timeSlot'];
-          bookedSlots = timeToBinary((snapshot.data?['timeSlot']));
+          //print(snapshot.data?['timeslot'].runtimeType);
+          previousTImeSlot = snapshot.data!['info']['timeslot'];
+          print("previousTImeSlot");
+          print(previousTImeSlot);
+          bookedSlots = timeToBinary((snapshot.data!['info']['timeslot']));
           for (int i = bookedSlots.length; i < 24; i++)
             bookedSlots = "0" + bookedSlots;
+          print("bookedSlots");
+          print(bookedSlots);
           return containersTable(context);
           // }
           // return Container();
