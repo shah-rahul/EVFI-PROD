@@ -107,11 +107,11 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     final width = MediaQuery.of(context).size.width;
 
     return Container(
-        width: width * 0.9,
+      width: width * 0.9,
       height: height * 0.143,
       decoration: BoxDecoration(
         color: statusColor,
-        borderRadius: BorderRadius.circular(width*0.08),
+        borderRadius: BorderRadius.circular(width * 0.08),
         boxShadow: [
           BoxShadow(
             offset: Offset(-8, 6),
@@ -122,108 +122,118 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
       ),
       child: Stack(
         children: [
-        Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
+                    child: Text(
+                      widget.chargingItem.stationName,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: width * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(horizontal: 60),
+                  //   child: Text(
+                  //     '₹ ${widget.chargingItem.amount.toString()}',
+                  //     style: TextStyle(
+                  //       color: Colors.black,
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
+                ],
+              ),
+              // SizedBox(height: 5),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: width*0.08, vertical: width*0.01),
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.08, vertical: width * 0.01),
                 child: Text(
-                  widget.chargingItem.stationName,
+                  'Time slot- ${widget.chargingItem.slotChosen}',
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: width * 0.04  ,
+                    fontSize: width * 0.04,
+                  ),
+                ),
+              ),
+              // SizedBox(height: 5),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.08, vertical: width * 0.01),
+                child: Text(
+                  widget.chargingItem.phoneNumber,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: width * 0.04,
+                  ),
+                ),
+              ),
+              // SizedBox(height: 0),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.08, vertical: width * 0.01),
+                child: Text(
+                  '₹ ${widget.chargingItem.amount}',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: width * 0.06,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(horizontal: 60),
-              //   child: Text(
-              //     '₹ ${widget.chargingItem.amount.toString()}',
-              //     style: TextStyle(
-              //       color: Colors.black,
-              //       fontSize: 18,
-              //       fontWeight: FontWeight.bold,
+
+              // Row(
+              //   children: [
+              //     Padding(
+              //       padding: EdgeInsets.all(40),
               //     ),
-              //   ),
+              //     if (widget.chargingItem.status == 1)
+              //       GestureDetector(
+              //         onTap: () async {
+              //           CollectionReference users =
+              //               FirebaseFirestore.instance.collection('booking');
+              //           DocumentReference docRef =
+              //               users.doc(widget.chargingItem.id);
+              //           await docRef.update({
+              //             'status': -1,
+              //           });
+              //         },
+              //         child: ClipOval(
+              //           child: Icon(
+              //             Icons.close,
+              //             color: Colors.red,
+              //             size: 60,
+              //           ),
+              //         ),
+              //       ),
+              //   ],
               // ),
+              // if (widget.chargingItem.status == 2 ||
+              //     widget.chargingItem.status == -1)
+
+              //change the color accordingly
             ],
           ),
-          // SizedBox(height: 5),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
-            child: Text(
-              'Time slot- ${widget.chargingItem.slotChosen}',
-              style: TextStyle(
-                color: Colors.black,
-                  fontSize: width * 0.04,
-              ),
-            ),
-          ),
-          // SizedBox(height: 5),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
-            child: Text(
-              widget.chargingItem.phoneNumber,
-              style: TextStyle(
-                color: Colors.black,
-                  fontSize: width * 0.04,
-              ),
-            ),
-          ),
-          // SizedBox(height: 0),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
-            child: Text(
-              '₹ ${widget.chargingItem.amount}',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: width * 0.06,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-
-          // Row(
-          //   children: [
-          //     Padding(
-          //       padding: EdgeInsets.all(40),
-          //     ),
-          //     if (widget.chargingItem.status == 1)
-          //       GestureDetector(
-          //         onTap: () async {
-          //           CollectionReference users =
-          //               FirebaseFirestore.instance.collection('booking');
-          //           DocumentReference docRef =
-          //               users.doc(widget.chargingItem.id);
-          //           await docRef.update({
-          //             'status': -1,
-          //           });
-          //         },
-          //         child: ClipOval(
-          //           child: Icon(
-          //             Icons.close,
-          //             color: Colors.red,
-          //             size: 60,
-          //           ),
-          //         ),
-          //       ),
-          //   ],
-          // ),
-          // if (widget.chargingItem.status == 2 ||
-          //     widget.chargingItem.status == -1)
-
-          //change the color accordingly
-        ],
-      ),
           Positioned(
             right: width * 0.02,
             top: width * 0.13,
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
+                CollectionReference users =
+                    FirebaseFirestore.instance.collection('booking');
+                DocumentReference docRef = users.doc(widget.chargingItem.id);
+                await docRef.update({
+                  'status': -1,
+                });
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -241,7 +251,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
               ),
             ),
           ),
-      ],
+        ],
       ),
     );
   }
