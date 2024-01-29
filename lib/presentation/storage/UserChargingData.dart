@@ -20,8 +20,9 @@ class UserChargingData {
   String hostName;
   List<String> chargerType;
 
-  int startAvailability;
-  int endAvailability;
+  int start;
+  int end;
+  int timeslot;
 
   String price;
   String amenities;
@@ -42,8 +43,9 @@ class UserChargingData {
       required this.aadharNumber,
       required this.hostName,
       required this.chargerType,
-      required this.startAvailability,
-      required this.endAvailability,
+      required this.start,
+      required this.end,
+        required this.timeslot,
       required this.price,
       required this.amenities,
       //image of charger

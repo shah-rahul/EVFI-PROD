@@ -11,8 +11,7 @@ class BookingDataProvider {
   final int timeSlot;
   final String providerId;
 
-  final CollectionReference _booking =
-      FirebaseFirestore.instance.collection('booking');
+  final CollectionReference _booking = FirebaseFirestore.instance.collection('booking');
   final _userId = FirebaseAuth.instance.currentUser!.uid;
 
   BookingDataProvider(

@@ -61,18 +61,16 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(
                   height: screenWidth * 0.05,
                   width: screenWidth * 0.3,
-                  child: ElevatedButton(
-                    onPressed: () {
+                  child: GestureDetector(
+                    onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => SignupPage()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
-                    ),
                     child: Text(
-                      AppStrings.orSignUp,
+                      AppStrings.SignUp,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: FontSize.s14,
