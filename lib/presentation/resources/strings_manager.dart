@@ -12,8 +12,8 @@ class AppStrings {
   static const skip = "Skip";
   static const next = "Next";
   static const login = "Login";
-  static const orSignUp = "or SignUp";
-  static const orLogin = "or Login";
+  static const orSignUp = "Sign Up";
+  static const orLogin = "Login";
   static const otp = "SEND OTP";
   static const almost = "Almost";
   static const there = "There";
