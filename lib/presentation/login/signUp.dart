@@ -234,6 +234,7 @@ class _SignupPageState extends State<SignupPage> {
                             TextStyle(color: ColorManager.darkGrey),
                         disableLengthCheck: false,
                         decoration: InputDecoration(
+                            counterText: '',
                           filled: true,
                           fillColor: ColorManager.grey4,
                           // hintText: '7303440170',
