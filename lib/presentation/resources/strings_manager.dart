@@ -13,8 +13,8 @@ class AppStrings {
   static const next = "Next";
   static const login = "Login";
 
-  static const orSignUp = "Sign Up";
-  static const orLogin = "Login";
+  static const SignUp = "Sign Up";
+  static const Login = "Login";
   static const otp = "SEND OTP";
   static const almost = "Almost";
   static const there = "There";
