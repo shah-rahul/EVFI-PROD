@@ -59,9 +59,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     if (_isProvider == null) {
       return Scaffold(
-        body: Center(child: Shimmer.fromColors(
-          baseColor: ColorManager.grey5!,
-          highlightColor: ColorManager.white!,
+        body: 
+        // Center(child: CircularProgressIndicator()),
+        Center(child: Shimmer.fromColors(
+          baseColor: ColorManager.grey5,
+          highlightColor: ColorManager.white,
           child: Container(
             height: screenHeight * 0.75,
             width: screenWidth * 0.75,
