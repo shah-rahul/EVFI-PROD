@@ -12,6 +12,7 @@ class AppStrings {
   static const skip = "Skip";
   static const next = "Next";
   static const login = "Login";
+
   static const orSignUp = "Sign Up";
   static const orLogin = "Login";
   static const otp = "SEND OTP";
@@ -25,12 +26,15 @@ class AppStrings {
   static const lookingClean = "looking clean";
   static const weCallYou = "we call you";
   static const whatShould = "what should";
+
   static const registerSignup = "Sign-Up";
   static const registercancel = "Cancel";
   static const registertitle = "Let's Get Started";
   static const registertitle2 = "Create your Account";
-
+  static const chargerTitle = "Rent With \nUs";
+  static const chargerButton = "Proceed To List";
   static const vehicleformTitle = "Vehicle Info";
+  static const chargerFormTitle = "List your Charger";
 
   static const chargerformtitle = "Charger Info";
 

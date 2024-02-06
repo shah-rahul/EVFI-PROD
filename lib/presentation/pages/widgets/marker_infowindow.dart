@@ -20,6 +20,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final double costOfFullCharge;
   final String startTime;
   final String endTime;
+  final int timeslot;
   final List<dynamic> chargerType;
   final String amenities;
   final String hostName;
@@ -39,6 +40,7 @@ class CustomMarkerPopup extends StatefulWidget {
     required this.hostName,
     required this.startTime,
     required this.endTime,
+    required this.timeslot,
     required this.chargerId,
     required this.providerId,
   });
@@ -86,7 +88,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     Container(
                       //color: Colors.amber,
                       height: MediaQuery.of(context).size.height * 0.2,
-                      width: MediaQuery.of(context).size.width * 0.55,
+                      width: MediaQuery.of(context).size.width * 0.50,
                       margin: const EdgeInsets.all(0.1),
                       child: Stack(
                         fit: StackFit.passthrough,
@@ -216,6 +218,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                               hostName: widget.hostName,
                               startTime: widget.startTime,
                               endTime: widget.endTime,
+                              timeslot: widget.timeslot,
                               chargerId: widget.chargerId,
                               providerId: widget.providerId,
                             )));

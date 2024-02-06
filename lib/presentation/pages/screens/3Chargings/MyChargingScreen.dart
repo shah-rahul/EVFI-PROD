@@ -65,7 +65,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
+        height: 100 *
+            MediaQuery.textScaleFactorOf(
+                context), // Adjust the height as needed
       ),
     );
   }
@@ -98,6 +100,21 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     return chargerDetails;
   }
 
+  CollectionReference users = FirebaseFirestore.instance.collection('user');
+  String phoneNumber = '';
+  Future<void> getPhoneNumber(uid) async {
+    final doc = await users.doc(uid).get();
+
+    if (doc.exists && doc.data() != null) {
+      print(doc.data());
+      print(uid);
+      print(';;;;;;;;;;;');
+      phoneNumber = (doc.data() as Map<String, dynamic>)['phoneNumber'];
+      print(phoneNumber);
+    } else {}
+  }
+
+  // DocumentReference docRef =
 //your bookings
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -127,7 +144,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   return Column(
                     children: List.generate(
                       5,
-                          (index) => shimmerPlaceholder(),
+                      (index) => shimmerPlaceholder(),
                     ),
                   );
                 }
@@ -174,42 +191,46 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 child: Text('Something went wrong'));
                           }
                           print(documents[index].data());
+
                           print('----');
-                          return Column(children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(vertical: screenHeight * 0.01),
-                              height: screenHeight * 0.2,
-                              child:MyChargingWidget(
-                                chargingItem: Charging(
-                                    amount: documents[index]['price'] as String,
-                                    phoneNumber: '788998',
-                                    position: const LatLng(0, 0), //later to show path till charger we'll use charger coordinates
-                                    slotChosen: documents[index]['timeSlot'],
-                                    stationAddress: snapshots.data!['info']['address'],
-                                    stationName: snapshots.data!['info']['stationName'],
-                                    status: documents[index]['status'],
-                                    date: documents[index]['bookingDate'],
-                                    id: documents[index].id,
-                                    type: 1,
-                                    ratings: 1
+                          getPhoneNumber(snapshots.data!['uid']);
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * 0.01),
+                                height: screenHeight * 0.2,
+                                child: MyChargingWidget(
+                                  chargingItem: Charging(
+                                      amount:
+                                          documents[index]['price'] as String,
+                                      phoneNumber: phoneNumber,
+                                      position: const LatLng(0,
+                                          0), //later to show path till charger we'll use charger coordinates
+                                      slotChosen: documents[index]['timeSlot'],
+                                      stationAddress: snapshots.data!['info']
+                                          ['address'],
+                                      stationName: snapshots.data!['info']
+                                          ['stationName'],
+                                      status: documents[index]['status'],
+                                      date: documents[index]['bookingDate'],
+                                      id: documents[index].id,
+                                      type: 1,
+                                      ratings: 1),
+                                  currentTab: tab,
                                 ),
-                                currentTab: tab,
                               ),
-                            ),
-                            // SizedBox(
-                            //   height: screenHeight * 0.01,
-                            // ),
-                          ],
+                              // SizedBox(
+                              //   height: screenHeight * 0.01,
+                              // ),
+                            ],
                           );
-                        }
-                        )
-                    );
+                        }));
                   },
                   itemCount: documents.length,
                 );
               },
-            )
-        ),
+            )),
       ),
     );
   }
@@ -343,14 +364,13 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                    Text(
-                    AppStrings.ChargingScreenCurrentTab,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize:  screenWidth * 0.05,
-                        fontWeight: FontWeight.w500
-                    ),
-                        ),
+                      Text(
+                        AppStrings.ChargingScreenCurrentTab,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: screenWidth * 0.05,
+                            fontWeight: FontWeight.w500),
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
@@ -439,7 +459,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                               fontWeight: FontWeight.w500),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.012),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: screenWidth * 0.012),
                           child: Container(
                             height: screenHeight * 0.003,
                             width: screenWidth * 0.2,

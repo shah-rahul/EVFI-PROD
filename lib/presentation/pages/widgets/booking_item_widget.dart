@@ -205,7 +205,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01), // Add vertical padding
                 child: Text(
-                  '₹ ${widget.bookingItem.amount.toString()}',
+                  '₹ ${widget.bookingItem.amount}',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: width * 0.06,

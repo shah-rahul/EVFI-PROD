@@ -1,4 +1,5 @@
 // import 'package:evfi/presentation/login/login1.dart';
+import 'package:evfi/presentation/login/profileImage.dart';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:evfi/presentation/register/UserChargingRegister.dart';
@@ -18,7 +19,7 @@ import '../pages/screens/3Chargings/MyChargingScreen.dart';
 
 class Routes {
   static const String splashRoute = "/";
-  static const String onBoardingRoute = "/onBoarding";
+  static const String onBoardingRoute = "/profileImage";
   static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String mainRoute = "/main";
@@ -41,7 +42,7 @@ class RouteGenerator {
       case Routes.loginRoute:
         return MaterialPageRoute(builder: (_) => LoginView());
       case Routes.onBoardingRoute:
-        return MaterialPageRoute(builder: (_) => const OnBoardingView());
+        return MaterialPageRoute(builder: (_) => ProfileImage());
       case Routes.registerRoute:
         return MaterialPageRoute(
             builder: (_) => RegisterView(

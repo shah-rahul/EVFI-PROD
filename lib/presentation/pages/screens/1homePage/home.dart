@@ -207,6 +207,7 @@ class HomeState extends State<Home> {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
+        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
@@ -223,6 +224,7 @@ class HomeState extends State<Home> {
             stateName != null &&
             startTime != null &&
             endTime != null &&
+            timeslot != null &&
             chargerType != null &&
             amenities != null &&
             hostName != null) {
@@ -234,6 +236,7 @@ class HomeState extends State<Home> {
           stateName = stateName as String;
           startTime = startTime as int;
           endTime = endTime as int;
+          timeslot = timeslot as int;
           chargerType = chargerType as List<dynamic>;
 
           amenities = amenities as String;
@@ -269,6 +272,7 @@ class HomeState extends State<Home> {
                         hostName: hostName,
                         startTime: startTime.toString(),
                         endTime: endTime.toString(),
+                        timeslot: timeslot,
                         chargerId: ds.id,
                         providerId: data['uid']);
                   },

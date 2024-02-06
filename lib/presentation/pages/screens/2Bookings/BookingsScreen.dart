@@ -171,8 +171,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             documents[index].data()!['uId'],
                             documents[index].data()!['chargerId']),
                         builder: ((context,
-                            AsyncSnapshot<
-                                    DocumentSnapshot<Map<String, dynamic>>>
+                            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting){
@@ -187,6 +186,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
+
 
                           return Column(
                             children: [
@@ -297,6 +297,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       children: [
         Container(
         height: screenHeight * 0.08,
+          color: Colors.white,
           child: Row(
             children: [
               GestureDetector(
