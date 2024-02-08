@@ -195,6 +195,9 @@ class _ChargerFormState extends State<ChargerForm> {
                               TextButton(
                                 onPressed: () {
                                   int count = 0;
+                                  UserData? userData =
+                                      userDataProvider.userData;
+                                  userDataProvider.setUserData(userData);
                                   // Navigator.of(context)
                                   //     .popUntil((_) => count++ > 3);
                                   Navigator.push(

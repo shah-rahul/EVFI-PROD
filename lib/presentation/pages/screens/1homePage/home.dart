@@ -207,7 +207,7 @@ class HomeState extends State<Home> {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
+        var timeslot = (data as Map<String, dynamic>)['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];

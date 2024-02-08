@@ -445,10 +445,10 @@ class _Booknow extends State<Booknow> {
 
           // if (snapshot.data!.docChanges.isNotEmpty) {
           //print(snapshot.data?['timeslot'].runtimeType);
-          previousTImeSlot = snapshot.data!['info']['timeslot'];
+          previousTImeSlot = snapshot.data!['timeSlot'];
           print("previousTImeSlot");
           print(previousTImeSlot);
-          bookedSlots = timeToBinary((snapshot.data!['info']['timeslot']));
+          bookedSlots = timeToBinary((snapshot.data!['timeSlot']));
           for (int i = bookedSlots.length; i < 24; i++)
             bookedSlots = "0" + bookedSlots;
           print("bookedSlots");
