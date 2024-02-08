@@ -84,6 +84,7 @@ class _LoginViewState extends State<LoginView> {
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: SizedBox(
                     child: IntlPhoneField(
+                    
                       initialCountryCode: 'IN',
                       cursorColor: ColorManager.primary,
                       dropdownTextStyle:
@@ -91,6 +92,7 @@ class _LoginViewState extends State<LoginView> {
                       disableLengthCheck: false,
                       
                       decoration: InputDecoration(
+                          counterText: '',
                         filled: true,
                         fillColor: ColorManager.grey4,
                         // hintText: '7303440170',

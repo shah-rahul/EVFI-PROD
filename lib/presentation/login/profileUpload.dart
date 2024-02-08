@@ -187,6 +187,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
     try {
       final pickedFile = await _imagePicker.getImage(
         source: ImageSource.gallery,
+        imageQuality: 50
       );
 
       if (pickedFile != null) {
