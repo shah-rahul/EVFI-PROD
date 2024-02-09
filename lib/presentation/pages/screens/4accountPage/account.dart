@@ -251,6 +251,35 @@ Widget profileSection(BuildContext context) {
           errorWidget: (context, url, error) => Icon(Icons.error),
         );
 
+    Future<void> _showPhotoOptionsDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Pick station images using'),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    // await _takeChargerImages(ImageSource.camera)
+                    //     .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.camera_alt_outlined,
+                      color: ColorManager.primary),
+                  label: const Text('Camera'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    // await _takeChargerImages(ImageSource.gallery)
+                    //     .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.image_outlined, color: ColorManager.primary),
+                  label: const Text('Gallery'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+              ],
+            ));
+  }
+
   // CircleAvatar(
   //     radius: height * 0.06,
   //     backgroundImage: NetworkImage(imageurl),
@@ -280,20 +309,23 @@ Widget profileSection(BuildContext context) {
               Positioned(
                 bottom: height * 0.01,
                 left: width * 0.2,
-                child: Container(
-                  padding: EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: ColorManager.primary,
-                    shape: BoxShape.circle,
-                    // border: Border.all(
-                    //   color: Colors.black,
-                    //   width: 2,
-                    // )
-                  ),
-                  child: Icon(
-                    Icons.add,
-                    size: 20,
-                    color: Colors.black,
+                child: GestureDetector(
+                  onTap: _showPhotoOptionsDialog,
+                  child: Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: ColorManager.primary,
+                      shape: BoxShape.circle,
+                      // border: Border.all(
+                      //   color: Colors.black,
+                      //   width: 2,
+                      // )
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
