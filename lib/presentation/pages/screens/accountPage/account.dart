@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/new_station.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/profilesection.dart';
@@ -12,6 +12,7 @@ import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'new_station.dart';
 
 String username = "";
 String firstname = "";
@@ -23,6 +24,7 @@ String country = "";
 String state = "";
 String city = "";
 String pincode = "";
+String imageurl = "";
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -43,7 +45,8 @@ class _AccountState extends State<Account> {
       if (user != null) {
         // User is signed in, fetch user data from Firestore
         _fetchUserData(user.uid);
-        //setState(() {});
+        print("I am fetching data");
+        setState(() {});
       }
     });
   }
@@ -56,19 +59,28 @@ class _AccountState extends State<Account> {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
       setState(() {
         _user = auth.currentUser;
-        username = "${userData['firstName']} ${userData['lastName']}";
+        //username = "${userData['firstName']} ${userData['lastName']}";
+        username = userData['firstName'];
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
-        // email = userData['email'];
+        email = userData['email'];
         country = userData['country'];
         state = userData['state'];
         city = userData['city'];
         pincode = userData['pinCode'];
+        imageurl = userData["userImage"];
         //clickedImage = userData['userImage'];
+        print("In fetching block");
+        print('username is : ${username}');
+        print('image url is : ${imageurl}');
+        print(phoneNo);
       });
     } catch (e) {
       print('Error fetching user data: $e');
+      print("In error block");
+      print(username);
+      print(phoneNo);
     }
   }
 
@@ -77,7 +89,6 @@ class _AccountState extends State<Account> {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
       builder: (context) => EditProfileScreen(
-        name: username,
         email: email,
         phoneNo: phoneNo,
         firstname: firstname,
@@ -94,8 +105,6 @@ class _AccountState extends State<Account> {
     setState(() {
       username = newDetails.name;
       phoneNo = newDetails.number;
-      email = newDetails.email;
-      clickedImage = newDetails.image;
     });
   }
 
@@ -162,7 +171,6 @@ class _AccountState extends State<Account> {
             //..............................................................................................
             SizedBox(height: height * 0.015),
             GestureDetector(
-                onTap: _addStation,
                 child: settingSection(
                     context, Icons.location_on_outlined, 'Add Station')),
             //..............................................................................................
@@ -198,18 +206,6 @@ class _AccountState extends State<Account> {
 
 //..............................................................................................
 //..............ADD STATION AND SIGNOUT METHODS.................................................
-  void _addStation() {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.amberAccent[80],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      builder: (_) => GestureDetector(
-        onTap: null,
-        behavior: HitTestBehavior.opaque,
-        child: const NewStation(),
-      ),
-    );
-  }
 
   signOut() async {
     await auth.signOut();
@@ -225,17 +221,25 @@ Widget profileSection(BuildContext context) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  Widget content = CircleAvatar(
-    radius: height * 0.06,
-    backgroundImage: AssetImage('assets/images/map/carphoto.jpeg'),
-  );
+  Widget content = (imageurl == "")
+      ? CircleAvatar(
+          radius: height * 0.06,
+          backgroundImage: AssetImage('assets/images/map/carphoto.jpeg'),
+        )
+      : CachedNetworkImage(
+          imageUrl: imageurl,
+          imageBuilder: (context, imageProvider) => CircleAvatar(
+            radius: height * 0.06,
+            backgroundImage: imageProvider,
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
 
-  if (clickedImage != null) {
-    content = CircleAvatar(
-      radius: height * 0.06,
-      backgroundImage: FileImage(clickedImage!),
-    );
-  }
+  // CircleAvatar(
+  //     radius: height * 0.06,
+  //     backgroundImage: NetworkImage(imageurl),
+  //   );
 
   return Container(
     padding: EdgeInsetsDirectional.all(width * 0.02),
@@ -249,7 +253,32 @@ Widget profileSection(BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         //1st row.....................................
-        content,
+        Stack(
+          children: [
+            content,
+            Positioned(
+              bottom: 4,
+              right: 6,
+              child: Container(
+                padding: EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: ColorManager.primary,
+                  shape: BoxShape.circle,
+                  // border: Border.all(
+                  //   color: Colors.black,
+                  //   width: 2,
+                  // )
+                ),
+                child: Icon(
+                  Icons.add,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ],
+        ),
+        //content,
         //2nd row.....................................
         SizedBox(width: width * 0.05),
         //3rd row.....................................
@@ -258,12 +287,12 @@ Widget profileSection(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(username,
+            Text("Hey ${username}!",
                 style: const TextStyle(
                     fontSize: AppSize.s20,
                     fontWeight: FontWeight.w900,
                     fontFamily: 'fonts/Poppins')),
-            Text('ID: 8989898989',
+            Text('ID: ${phoneNo}',
                 style: const TextStyle(
                     fontSize: AppSize.s16,
                     fontWeight: FontWeight.w300,
@@ -272,12 +301,6 @@ Widget profileSection(BuildContext context) {
         ),
         //4th row.....................................
         Spacer(),
-        //5th row.....................................
-        // Icon(
-        //   Icons.edit,
-        //   color: ColorManager.primary,
-        //   size: height * 0.04,
-        // )
       ],
     ),
   );
