@@ -256,69 +256,74 @@ Widget profileSection(BuildContext context) {
   //     backgroundImage: NetworkImage(imageurl),
   //   );
 
-  return Container(
-    padding: EdgeInsetsDirectional.all(width * 0.02),
-    height: height * 0.13,
-    decoration: BoxDecoration(
-      // color: Colors.black,
-      // boxShadow: [BoxShadow(blurRadius: 5,spreadRadius: 5,color: ColorManager.primary, offset: Offset(2, 2))],
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        //1st row.....................................
-        Stack(
-          children: [
-            content,
-            Positioned(
-              bottom: height*0.01,
-              left: width*0.2,
-              child: Container(
-                padding: EdgeInsets.all(3),
-                decoration: BoxDecoration(
-                  color: ColorManager.primary,
-                  shape: BoxShape.circle,
-                  // border: Border.all(
-                  //   color: Colors.black,
-                  //   width: 2,
-                  // )
-                ),
-                child: Icon(
-                  Icons.add,
-                  size: 20,
-                  color: Colors.black,
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.all(width * 0.02),
+      height: height * 0.13,
+      decoration: BoxDecoration(
+        // color: Colors.black,
+        // boxShadow: [BoxShadow(blurRadius: 5,spreadRadius: 5,color: ColorManager.primary, offset: Offset(2, 2))],
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          //1st row.....................................
+          Stack(
+            children: [
+              content,
+              Positioned(
+                bottom: height * 0.01,
+                left: width * 0.2,
+                child: Container(
+                  padding: EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: ColorManager.primary,
+                    shape: BoxShape.circle,
+                    // border: Border.all(
+                    //   color: Colors.black,
+                    //   width: 2,
+                    // )
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    size: 20,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-        //content,
-        //2nd row.....................................
-        SizedBox(width: width * 0.05),
-        //3rd row.....................................
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("Hey ${username}!",
-                style: const TextStyle(
-                    fontSize: AppSize.s20,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'fonts/Poppins')),
-            Text('ID: ${phoneNo}',
-                style: const TextStyle(
-                    fontSize: AppSize.s16,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: 'fonts/Poppins')),
-          ],
-        ),
-        //4th row.....................................
-        Spacer(),
-      ],
+            ],
+          ),
+          //content,
+          //2nd row.....................................
+          SizedBox(width: width * 0.05),
+          //3rd row.....................................
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Hey ${username}!",
+                  style: const TextStyle(
+                      fontSize: AppSize.s20,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'fonts/Poppins')),
+              Text('ID: ${phoneNo}',
+                  style: const TextStyle(
+                      fontSize: AppSize.s16,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'fonts/Poppins')),
+            ],
+          ),
+          //4th row.....................................
+          Spacer(),
+        ],
+      ),
     ),
   );
 }
@@ -330,28 +335,33 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return Container(
-    padding: EdgeInsetsDirectional.all(width * 0.03),
-    width: width * 0.28,
-    height: height * 0.11,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Column(
-      children: [
-        Icon(
-          icon,
-          color: ColorManager.primary,
-          size: height * 0.05,
-        ),
-        Spacer(),
-        Text(str,
-            style: const TextStyle(
-                fontSize: AppSize.s14,
-                fontWeight: FontWeight.w800,
-                fontFamily: 'fonts/Poppins')),
-      ],
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.all(width * 0.03),
+      width: width * 0.28,
+      height: height * 0.11,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: ColorManager.primary,
+            size: height * 0.05,
+          ),
+          Spacer(),
+          Text(str,
+              style: const TextStyle(
+                  fontSize: AppSize.s14,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'fonts/Poppins')),
+        ],
+      ),
     ),
   );
 }
@@ -363,32 +373,37 @@ Widget settingSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return Container(
-    padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
-    height: height * 0.06,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Row(
-      children: [
-        Icon(
-          icon,
-          color: ColorManager.primary,
-          size: height * 0.04,
-        ),
-        SizedBox(width: width * 0.03),
-        Text(str,
-            style: const TextStyle(
-                fontSize: AppSize.s16,
-                fontWeight: FontWeight.w800,
-                fontFamily: 'fonts/Poppins')),
-        Spacer(),
-        Icon(
-          Icons.arrow_forward_ios,
-          color: ColorManager.primary,
-        ),
-      ],
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
+      height: height * 0.06,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: ColorManager.primary,
+            size: height * 0.04,
+          ),
+          SizedBox(width: width * 0.03),
+          Text(str,
+              style: const TextStyle(
+                  fontSize: AppSize.s16,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'fonts/Poppins')),
+          Spacer(),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: ColorManager.primary,
+          ),
+        ],
+      ),
     ),
   );
 }
