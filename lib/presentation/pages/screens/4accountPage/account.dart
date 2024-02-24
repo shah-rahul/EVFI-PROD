@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, prefer_const_constructors
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
@@ -23,6 +24,7 @@ String country = "";
 String state = "";
 String city = "";
 String pincode = "";
+String imageurl = "";
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -40,9 +42,11 @@ class _AccountState extends State<Account> {
   void initState() {
     super.initState();
     auth.authStateChanges().listen((User? user) {
+      _user = user;
       if (user != null) {
         // User is signed in, fetch user data from Firestore
         _fetchUserData(user.uid);
+        print("I am fetching data");
         setState(() {});
       }
     });
@@ -54,9 +58,10 @@ class _AccountState extends State<Account> {
           await _firestore.collection('user').doc(userId).get();
 
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-      setState(() {
+      setState((){
         _user = auth.currentUser;
-        username = "${userData['firstName']} ${userData['lastName']}";
+        //username = "${userData['firstName']} ${userData['lastName']}";
+        username = userData['firstName'];
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
@@ -65,10 +70,19 @@ class _AccountState extends State<Account> {
         state = userData['state'];
         city = userData['city'];
         pincode = userData['pinCode'];
-        clickedImage = userData['userImage'];
+        imageurl = userData["userImage"];
+        //clickedImage = userData['userImage'];
+        print("In fetching block");
+        print('username is : ${username}');
+        print('image url is : ${imageurl}');
+        print('phone number is :${phoneNo}');
+
       });
     } catch (e) {
       print('Error fetching user data: $e');
+      print("In error block");
+      print(username);
+      print(phoneNo);
     }
   }
 
@@ -77,7 +91,6 @@ class _AccountState extends State<Account> {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
       builder: (context) => EditProfileScreen(
-        name: username,
         email: email,
         phoneNo: phoneNo,
         firstname: firstname,
@@ -94,8 +107,6 @@ class _AccountState extends State<Account> {
     setState(() {
       username = newDetails.name;
       phoneNo = newDetails.number;
-      email = newDetails.email;
-      clickedImage = newDetails.image;
     });
   }
 
@@ -225,60 +236,126 @@ Widget profileSection(BuildContext context) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  Widget content = CircleAvatar(
-    radius: height * 0.06,
-    backgroundImage: AssetImage('assets/images/map/carphoto.jpeg'),
-  );
+  Widget content = (imageurl == "")
+      ? CircleAvatar(
+          radius: height * 0.06,
+          backgroundImage: AssetImage('assets/images/map/carphoto.jpeg'),
+        )
+      : CachedNetworkImage(
+          imageUrl: imageurl,
+          imageBuilder: (context, imageProvider) => CircleAvatar(
+            radius: height * 0.06,
+            backgroundImage: imageProvider,
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => Icon(Icons.error),
+        );
 
-  if (clickedImage != null) {
-    content = CircleAvatar(
-      radius: height * 0.06,
-      backgroundImage: FileImage(clickedImage!),
-    );
+    Future<void> _showPhotoOptionsDialog() {
+    return showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Pick station images using'),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    // await _takeChargerImages(ImageSource.camera)
+                    //     .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.camera_alt_outlined,
+                      color: ColorManager.primary),
+                  label: const Text('Camera'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    // await _takeChargerImages(ImageSource.gallery)
+                    //     .then((value) => Navigator.of(context).pop());
+                  },
+                  icon: Icon(Icons.image_outlined, color: ColorManager.primary),
+                  label: const Text('Gallery'),
+                  style: Theme.of(context).elevatedButtonTheme.style,
+                ),
+              ],
+            ));
   }
 
-  return Container(
-    padding: EdgeInsetsDirectional.all(width * 0.02),
-    height: height * 0.13,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        //1st row.....................................
-        content,
-        //2nd row.....................................
-        SizedBox(width: width * 0.05),
-        //3rd row.....................................
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(username,
-                style: const TextStyle(
-                    fontSize: AppSize.s20,
-                    fontWeight: FontWeight.w900,
-                    fontFamily: 'fonts/Poppins')),
-            Text('ID: 8989898989',
-                style: const TextStyle(
-                    fontSize: AppSize.s16,
-                    fontWeight: FontWeight.w300,
-                    fontFamily: 'fonts/Poppins')),
-          ],
-        ),
-        //4th row.....................................
-        Spacer(),
-        //5th row.....................................
-        // Icon(
-        //   Icons.edit,
-        //   color: ColorManager.primary,
-        //   size: height * 0.04,
-        // )
-      ],
+  // CircleAvatar(
+  //     radius: height * 0.06,
+  //     backgroundImage: NetworkImage(imageurl),
+  //   );
+
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.all(width * 0.02),
+      height: height * 0.13,
+      decoration: BoxDecoration(
+        // color: Colors.black,
+        // boxShadow: [BoxShadow(blurRadius: 5,spreadRadius: 5,color: ColorManager.primary, offset: Offset(2, 2))],
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          //1st row.....................................
+          Stack(
+            children: [
+              content,
+              Positioned(
+                bottom: height * 0.01,
+                left: width * 0.2,
+                child: GestureDetector(
+                  onTap: _showPhotoOptionsDialog,
+                  child: Container(
+                    padding: EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: ColorManager.primary,
+                      shape: BoxShape.circle,
+                      // border: Border.all(
+                      //   color: Colors.black,
+                      //   width: 2,
+                      // )
+                    ),
+                    child: Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          //content,
+          //2nd row.....................................
+          SizedBox(width: width * 0.05),
+          //3rd row.....................................
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Hey ${username}!",
+                  style: const TextStyle(
+                      fontSize: AppSize.s20,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: 'fonts/Poppins')),
+              Text('ID: ${phoneNo}',
+                  style: const TextStyle(
+                      fontSize: AppSize.s16,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'fonts/Poppins')),
+            ],
+          ),
+          //4th row.....................................
+          Spacer(),
+        ],
+      ),
     ),
   );
 }
@@ -290,28 +367,33 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return Container(
-    padding: EdgeInsetsDirectional.all(width * 0.03),
-    width: width * 0.28,
-    height: height * 0.11,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Column(
-      children: [
-        Icon(
-          icon,
-          color: ColorManager.primary,
-          size: height * 0.05,
-        ),
-        Spacer(),
-        Text(str,
-            style: const TextStyle(
-                fontSize: AppSize.s14,
-                fontWeight: FontWeight.w800,
-                fontFamily: 'fonts/Poppins')),
-      ],
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.all(width * 0.03),
+      width: width * 0.28,
+      height: height * 0.11,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: ColorManager.primary,
+            size: height * 0.05,
+          ),
+          Spacer(),
+          Text(str,
+              style: const TextStyle(
+                  fontSize: AppSize.s14,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'fonts/Poppins')),
+        ],
+      ),
     ),
   );
 }
@@ -323,32 +405,37 @@ Widget settingSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return Container(
-    padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
-    height: height * 0.06,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(width * 0.02),
-      border: Border.all(width: 1.5, color: Colors.black26),
-    ),
-    child: Row(
-      children: [
-        Icon(
-          icon,
-          color: ColorManager.primary,
-          size: height * 0.04,
-        ),
-        SizedBox(width: width * 0.03),
-        Text(str,
-            style: const TextStyle(
-                fontSize: AppSize.s16,
-                fontWeight: FontWeight.w800,
-                fontFamily: 'fonts/Poppins')),
-        Spacer(),
-        Icon(
-          Icons.arrow_forward_ios,
-          color: ColorManager.primary,
-        ),
-      ],
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
+      height: height * 0.06,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: ColorManager.primary,
+            size: height * 0.04,
+          ),
+          SizedBox(width: width * 0.03),
+          Text(str,
+              style: const TextStyle(
+                  fontSize: AppSize.s16,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'fonts/Poppins')),
+          Spacer(),
+          Icon(
+            Icons.arrow_forward_ios,
+            color: ColorManager.primary,
+          ),
+        ],
+      ),
     ),
   );
 }
