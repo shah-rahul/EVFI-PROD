@@ -82,13 +82,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         'pinCode': _enteredPincode,
       });
       print('Profile updated successfully');
+      //updating variables locally :-
+      firstname = _enteredFName;
+      lastname = _enteredLName;
+      email = _enteredEmail;
+      phoneNo = _enteredMobileno;
+      country = _enteredCountry;
+      state = _enteredState;
+      city = _enteredCity;
+      pincode = _enteredPincode;
     } catch (error) {
       print('Error updating profile: $error');
     }
   }
 
 ////////////////////////////////////////////////////////////////////////////////
-  void _submit(){
+  void _submit() {
     _formkey.currentState!.save();
     updateProfile();
     Navigator.of(context).pop(UserProfile(
