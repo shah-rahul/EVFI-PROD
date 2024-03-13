@@ -531,6 +531,15 @@ class HomeState extends State<Home> {
                               top: MediaQuery.of(context).size.height * 0.065),
                           child: SearchWidget(updatePlaceCamera),
                         ),
+                        Positioned(
+                          bottom: MediaQuery.of(context).size.height * 0.14,
+                          right: MediaQuery.of(context).size.height * 0.040,
+                          child: FloatingActionButton(
+                            onPressed: _getCurrentLocation,
+                            backgroundColor: ColorManager.appBlack,
+                            child: Icon(Icons.my_location,color: ColorManager.primary,),
+                          ),
+                        ),
                       ],
                     ),
                   ));
