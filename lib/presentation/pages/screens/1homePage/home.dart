@@ -4,6 +4,8 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'package:evfi/domain/cachedChargers.dart';
+import 'package:evfi/domain/chargers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -203,18 +205,17 @@ class HomeState extends State<Home> {
         var stnName = (data['info'] as Map<String, dynamic>)['stationName'];
         var stnAddress = (data['info'] as Map<String, dynamic>)['address'];
         var stnImgUrl = (data['info'] as Map<String, dynamic>)['imageUrl'];
-        print('---');
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
+        var timeslot = (data as Map<String, dynamic>)['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
 
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
-        print('---');
+        print('-----');
         print(data);
         if (geoPoint != null &&
             geohash != null &&
@@ -244,7 +245,10 @@ class HomeState extends State<Home> {
           hostName = hostName as String;
           print('****');
           print(data);
-          print('------');
+          final charger = ChargerModel(data: data);
+          print(
+              '------Charger cachedpppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+          cachedChargersBox.add(charger);
           _markers.add(Marker(
               markerId: MarkerId(geohash),
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
@@ -308,11 +312,92 @@ class HomeState extends State<Home> {
         .asUint8List();
   }
 
+  void addCachedChargersToMarkers() async {
+    final Uint8List GreenmarkerIcon =
+        await getBytesFromAsset(ImageAssets.greenMarker);
+    _markers.clear(); // Clear existing markers if needed
+
+    for (var chargerModel in cachedChargersBox.values) {
+      // Extract relevant data from ChargerModel
+
+      var geoPoint =
+          (chargerModel.data['g'] as Map<String, dynamic>)['geopoint'];
+      var geohash = (chargerModel.data['g'] as Map<String, dynamic>)['geohash'];
+      var stnName =
+          (chargerModel.data['info'] as Map<String, dynamic>)['stationName'];
+      var stnAddress =
+          (chargerModel.data['info'] as Map<String, dynamic>)['address'];
+      var stnImgUrl =
+          (chargerModel.data['info'] as Map<String, dynamic>)['imageUrl'];
+      var stateName =
+          (chargerModel.data['info'] as Map<String, dynamic>)['state'];
+      var startTime =
+          (chargerModel.data['info'] as Map<String, dynamic>)['start'];
+      var endTime = (chargerModel.data['info'] as Map<String, dynamic>)['end'];
+      var timeslot = (chargerModel.data as Map<String, dynamic>)['timeSlot'];
+      var chargerType =
+          (chargerModel.data['info'] as Map<String, dynamic>)['chargerType'];
+      var amenities =
+          (chargerModel.data['info'] as Map<String, dynamic>)['amenities'];
+      var hostName =
+          (chargerModel.data['info'] as Map<String, dynamic>)['hostName'];
+      String chargerId = chargerModel.data['chargerId'];
+      String userId = chargerModel.data['uid'];
+
+      // Create a Marker instance and add it to the _markers list
+      Marker marker = Marker(
+          markerId: MarkerId(geohash),
+          position: LatLng(geoPoint.latitude, geoPoint.longitude),
+          onTap: () {
+            _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                CameraPosition(
+                    target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                    zoom: 16)));
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              backgroundColor: Colors.amber.withOpacity(0.0),
+              builder: (context) {
+                double price = mypricing.fullChargeCost(batteryCap, stateName);
+                return CustomMarkerPopup(
+                    stationName: stnName,
+                    address: stnAddress,
+                    imageUrl: stnImgUrl,
+                    geopoint: geoPoint,
+                    geohash: geohash,
+                    costOfFullCharge: price,
+                    chargerType: chargerType,
+                    amenities: amenities,
+                    hostName: hostName,
+                    startTime: startTime.toString(),
+                    endTime: endTime.toString(),
+                    timeslot: timeslot,
+                    chargerId: chargerId,
+                    providerId: userId);
+              },
+            );
+          },
+          icon: BitmapDescriptor.fromBytes(GreenmarkerIcon));
+
+      setState(() {});
+
+      _markers.add(marker);
+    }
+  }
+
   void updatePlaceCamera(Position currentPosition) {
     _markers.clear();
     if (_mapController != null) {
-      setIntialMarkers(
-          4, LatLng(currentPosition.latitude, currentPosition.longitude));
+      if (cachedChargersBox.isNotEmpty) {
+        debugPrint(
+            '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Already cached chargers available-------');
+        addCachedChargersToMarkers();
+      } else {
+        debugPrint(
+            '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@No cached chargers currently-------');
+        setIntialMarkers(
+            10, LatLng(currentPosition.latitude, currentPosition.longitude));
+      }
       setState(() {
         _mapController.animateCamera(CameraUpdate.newCameraPosition(
             CameraPosition(

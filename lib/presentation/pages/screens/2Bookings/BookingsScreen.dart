@@ -31,7 +31,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   void initState() {
     super.initState();
-    checkIfProvider();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      checkIfProvider();
+    });
+    // checkIfProvider();
   }
 
   Future<void> checkIfProvider() async {
@@ -55,50 +58,62 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-    if (_isProvider == null) {
-      return Scaffold(
-        body: 
-        // Center(child: CircularProgressIndicator()),
-        Center(child: Shimmer.fromColors(
-          baseColor: ColorManager.grey5,
-          highlightColor: ColorManager.white,
-          child: Container(
-            height: screenHeight * 0.75,
-            width: screenWidth * 0.75,
-            color: ColorManager.white,
-          ),
-        ),
-        ),
-      );
-    } else if (_isProvider == true) {
-      return Scaffold(
+    return Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             AppStrings.BookingTitle,
             textAlign: TextAlign.start,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.white,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
-                },
-                icon: const Icon(
-                  Icons.add_business_outlined,
-                  color: Colors.black,
-                ))
-          ],
         ),
         body: Container(
-            child: _currentSelected ? PendingScreen(context) : RecentScreen()),
-      );
-    } else {
-      return ListChargersPage();
-    }
+          child: _currentSelected ? PendingScreen(context) : RecentScreen(),
+        ));
   }
+  // Widget build(BuildContext context) {
+  //   final screenHeight = MediaQuery.of(context).size.height;
+  //   final screenWidth = MediaQuery.of(context).size.width;
+  //   if (_isProvider == null) {
+  //     return Scaffold(
+  //       body: Center(child: Shimmer.fromColors(
+  //         baseColor: ColorManager.grey5!,
+  //         highlightColor: ColorManager.white!,
+  //         child: Container(
+  //           height: screenHeight * 0.75,
+  //           width: screenWidth * 0.75,
+  //           color: ColorManager.white,
+  //         ),
+  //       ),
+  //       ),
+  //     );
+  //   } else if (_isProvider == true) {
+  //     return Scaffold(
+  //       appBar: AppBar(
+  //         title: Text(
+  //           AppStrings.BookingTitle,
+  //           textAlign: TextAlign.start,
+  //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  //         ),
+  //         backgroundColor: Colors.white,
+  //         actions: [
+  //           IconButton(
+  //               onPressed: () {
+  //                 Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
+  //               },
+  //               icon: const Icon(
+  //                 Icons.add_business_outlined,
+  //                 color: Colors.black,
+  //               ))
+  //         ],
+  //       ),
+  //       body: Container(
+  //           child: _currentSelected ? PendingScreen(context) : RecentScreen()),
+  //     );
+  //   } else {
+  //     return ListChargersPage();
+  //   }
+  // }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
       String customerId, String chargerId) async {

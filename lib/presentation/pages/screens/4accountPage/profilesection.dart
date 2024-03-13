@@ -1,8 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/image_input.dart';
-import 'package:evfi/presentation/pages/screens/accountPage/account.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -11,8 +11,7 @@ import 'dart:io';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen(
-      {required this.name,
-      required this.email,
+      {required this.email,
       required this.firstname,
       required this.lastname,
       required this.country,
@@ -20,7 +19,6 @@ class EditProfileScreen extends StatefulWidget {
       required this.city,
       required this.pincode,
       required this.phoneNo});
-  final String name;
   final String firstname;
   final String lastname;
   final String email;
@@ -39,7 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   var _enteredFName = firstname;
   var _enteredLName = lastname;
   var _enteredEmail = email;
-  File? _selectedImage;
+  //File? _selectedImage;
   var _enteredMobileno = phoneNo;
   var _enteredCountry = country;
   var _enteredState = state;
@@ -51,13 +49,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     fetchUserDataAndInitializeFields();
     super.initState();
   }
-////////////////////////////////////////////////////////////////////////////////
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  //final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage storage = FirebaseStorage.instance;
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('user');
   String userId = '';
 
   void fetchUserDataAndInitializeFields() async {
@@ -66,7 +62,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (user != null) {
         userId = user.uid;
         print(userId);
-        DocumentSnapshot userDoc = await usersCollection.doc(userId).get();
       }
     } catch (error) {
       print('Error fetching user data: $error');
@@ -74,39 +69,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> updateProfile() async {
+    print('updating profile started');
     try {
-      if (_selectedImage != null) {
-        String imagePath = 'images/$userId.jpg';
-        Reference storageReference = storage.ref().child(imagePath);
-
-        UploadTask uploadTask = storageReference.putFile(_selectedImage!);
-        await uploadTask.whenComplete(() async {
-          String imageUrl = await storageReference.getDownloadURL();
-          await usersCollection.doc(userId).update({
-            'firstName': _enteredFName,
-            'lastName': _enteredLName,
-            'phoneNumber': _enteredMobileno,
-            'email': _enteredEmail,
-            'country': _enteredCountry,
-            'city': _enteredCity,
-            'state': _enteredState,
-            'pinCode': _enteredPincode,
-            'image': imageUrl,
-          });
-        });
-      } else {
-        await usersCollection.doc(userId).update({
-          'firstName': _enteredFName,
-          'lastName': _enteredLName,
-          'phoneNumber': _enteredMobileno,
-          'email': _enteredEmail,
-          'country': _enteredCountry,
-          'city': _enteredCity,
-          'state': _enteredState,
-          'pinCode': _enteredPincode,
-        });
-      }
-
+      await usersCollection.doc(userId).update({
+        'firstName': _enteredFName,
+        'lastName': _enteredLName,
+        'phoneNumber': _enteredMobileno,
+        'email': _enteredEmail,
+        'country': _enteredCountry,
+        'city': _enteredCity,
+        'state': _enteredState,
+        'pinCode': _enteredPincode,
+      });
       print('Profile updated successfully');
     } catch (error) {
       print('Error updating profile: $error');
@@ -114,14 +88,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
 ////////////////////////////////////////////////////////////////////////////////
-  void _submit() {
+  void _submit(){
     _formkey.currentState!.save();
     updateProfile();
     Navigator.of(context).pop(UserProfile(
-      name: "$_enteredFName $_enteredLName",
-      email: _enteredEmail,
+      name: _enteredFName,
       number: _enteredMobileno,
-      image: _selectedImage!,
     ));
   }
 
@@ -144,12 +116,33 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Column(
                 children: [
                   //0th column
-                  ImageInput(
-                    onPickImage: (image) {
-                      _selectedImage = image;
-                    },
+                  // ImageInput(
+                  //   onPickImage: (image) {
+                  //     _selectedImage = image;
+                  //   },
+                  // ),
+                  const SizedBox(height: 8),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        color: Colors.green,
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        'Personal Details',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 15),
+                  const Divider(
+                    height: 15,
+                    thickness: 2,
+                  ),
+                  const SizedBox(height: 10),
                   //1st column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),

@@ -31,7 +31,6 @@ class ListChargersPage extends StatelessWidget {
                   ImageAssets.listCharger,
                   // scale: height * 0.006,
                   height: height*0.42,
-                  fit: BoxFit.fill,
                 ),
               ),
               SizedBox(

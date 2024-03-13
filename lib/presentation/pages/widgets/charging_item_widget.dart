@@ -19,21 +19,21 @@ class MyChargingWidget extends StatefulWidget {
 }
 
 class _MyChargingWidgetState extends State<MyChargingWidget> {
-  Widget statusButton(int status) {
-    Color? buttonColor, textColor;
-    String? statusText = 'Status';
+  Color? buttonColor, textColor ;
+  String statusText = 'Status';
+  void statusButton(int status) {
     switch (status) {
       case -2: //canceled
         {
-          buttonColor = ColorManager.error;
-          textColor = Colors.white;
-          statusText = 'Canceled';
+          buttonColor = ColorManager.statusCancelled;
+          textColor = ColorManager.appBlack;
+          statusText = 'Cancelled';
         }
         break;
       case -1: //declined
         {
-          buttonColor = ColorManager.error;
-          textColor = Colors.white;
+          buttonColor = ColorManager.statusDeclined;
+          textColor = ColorManager.appBlack;
           statusText = 'Declined';
         }
         break;
@@ -42,15 +42,15 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         break;
       case 1: //requested
         {
-          buttonColor = Colors.green[500]!;
-          textColor = Colors.white;
+          buttonColor = ColorManager.statusRequested;
+          textColor = ColorManager.appBlack;
           statusText = 'Requested';
         }
         break;
       case 2:
         {
-          buttonColor = ColorManager.grey3;
-          textColor = Colors.white;
+          buttonColor = ColorManager.statusAccepted;
+          textColor = ColorManager.appBlack;
           statusText = 'Accepted';
         }
         break;
@@ -72,45 +72,41 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     //         status == LendingStatus.requested ||
     //         status == LendingStatus.charging)) return Container();
 
-    return ElevatedButton(
-        onPressed: () {},
-        child: Text(
-          statusText,
-          // style: TextStyle(color: textColor),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: buttonColor,
-          foregroundColor: textColor,
-          elevation: 3,
-        ));
+    // return ElevatedButton(
+    //     onPressed: () {},
+    //     child: Text(
+    //       statusText,
+    //       // style: TextStyle(color: textColor),
+    //     ),
+    //     style: ElevatedButton.styleFrom(
+    //       backgroundColor: buttonColor,
+    //       foregroundColor: textColor,
+    //       elevation: 3,
+    //     ));
   }
-
-  Color statusColor = Colors.white;
   @override
   void initState() {
-    getStatusColor();
+    //getStatusColor();
     super.initState();
   }
-
-  void getStatusColor() {
-    if (widget.chargingItem.status == 2)
-      // statusColor =Color(0xFFF6D4D5);
-      statusColor = Colors.white;
-    else if (widget.chargingItem.status == -1) statusColor = Color(0xFFD0F4D5);
-    ;
-  }
+  // void getStatusColor() {
+  //   if (widget.chargingItem.status == 2)
+  //     // statusColor =Color(0xFFF6D4D5);
+  //     statusColor = Colors.red;
+  //   else if (widget.chargingItem.status == -1) statusColor = Colors.purpleAccent;
+  //   ;
+  // }
 
   Widget build(BuildContext context) {
-    getStatusColor();
-
+    // getStatusColor();
+    statusButton(widget.chargingItem.status);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
     return Container(
       width: width * 0.9,
       height: height * 0.143,
       decoration: BoxDecoration(
-        color: statusColor,
+        color: buttonColor,
         borderRadius: BorderRadius.circular(width * 0.08),
         boxShadow: [
           BoxShadow(
@@ -120,140 +116,265 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
           ),
         ],
       ),
-      child: Stack(
+      child: Padding(
+      padding: EdgeInsets.all(width*0.02),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.08, vertical: width * 0.01),
-                    child: Text(
-                      widget.chargingItem.stationName,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: width * 0.04,
-                        fontWeight: FontWeight.bold,
-                      ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
+                  child:Text(
+                    widget.chargingItem.stationName,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: width * 0.04,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 60),
-                  //   child: Text(
-                  //     '₹ ${widget.chargingItem.amount.toString()}',
-                  //     style: TextStyle(
-                  //       color: Colors.black,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-              // SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.08, vertical: width * 0.01),
-                child: Text(
-                  'Time slot- ${widget.chargingItem.slotChosen}',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: width * 0.04,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
+                  child: Text(
+                    'Time slot- ${widget.chargingItem.slotChosen}',
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: width * 0.04,
+                    ),
                   ),
                 ),
-              ),
-              // SizedBox(height: 5),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.08, vertical: width * 0.01),
-                child: Text(
-                  widget.chargingItem.phoneNumber,
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: width * 0.04,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
+                  child: Text(
+                    '+'+widget.chargingItem.phoneNumber,
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: width * 0.04,
+                    ),
                   ),
                 ),
-              ),
-              // SizedBox(height: 0),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.08, vertical: width * 0.01),
-                child: Text(
-                  '₹ ${widget.chargingItem.amount}',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: width * 0.06,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
+                  child: Text(
+                    '₹ ${widget.chargingItem.amount}',
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: width * 0.06,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-
-              // Row(
-              //   children: [
-              //     Padding(
-              //       padding: EdgeInsets.all(40),
-              //     ),
-              //     if (widget.chargingItem.status == 1)
-              //       GestureDetector(
-              //         onTap: () async {
-              //           CollectionReference users =
-              //               FirebaseFirestore.instance.collection('booking');
-              //           DocumentReference docRef =
-              //               users.doc(widget.chargingItem.id);
-              //           await docRef.update({
-              //             'status': -1,
-              //           });
-              //         },
-              //         child: ClipOval(
-              //           child: Icon(
-              //             Icons.close,
-              //             color: Colors.red,
-              //             size: 60,
-              //           ),
-              //         ),
-              //       ),
-              //   ],
-              // ),
-              // if (widget.chargingItem.status == 2 ||
-              //     widget.chargingItem.status == -1)
-
-              //change the color accordingly
-            ],
+              ],
+            ),
           ),
-          Positioned(
-            right: width * 0.02,
-            top: width * 0.13,
-            child: GestureDetector(
-              onTap: () async {
-                CollectionReference users =
-                    FirebaseFirestore.instance.collection('booking');
-                DocumentReference docRef = users.doc(widget.chargingItem.id);
-                await docRef.update({
-                  'status': -1,
-                });
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                  ],
+          if (widget.chargingItem.status == 1)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.13),
+              child: GestureDetector(
+                onTap: () async {
+                  CollectionReference users =
+                  FirebaseFirestore.instance.collection('booking');
+                  DocumentReference docRef = users.doc(widget.chargingItem.id);
+                  await docRef.update({
+                    'status': -2,
+                  });
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.red,
+                    size: width * 0.08,
+                  ),
                 ),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.red,
-                  size: width * 0.08,
-                ),
+              ),
+            ),
+          if (widget.chargingItem.status == -1 ||
+              widget.chargingItem.status == -2)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: width * 0.045),
+            child:Text(
+              statusText,
+              style: TextStyle(
+                color: textColor,
+                fontSize: width * 0.035,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
         ],
       ),
+    ),
     );
+
+    // return Container(
+    //   width: width * 0.9,
+    //   height: height * 0.143,
+    //   decoration: BoxDecoration(
+    //     color: buttonColor,
+    //     borderRadius: BorderRadius.circular(width * 0.08),
+    //     boxShadow: [
+    //       BoxShadow(
+    //         offset: Offset(-8, 6),
+    //         blurRadius: 15,
+    //         color: Color.fromRGBO(222, 222, 222, 1),
+    //       ),
+    //     ],
+    //   ),
+    //   child: Stack(
+    //     children: [
+    //       Column(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           Row(
+    //             children: [
+    //               Padding(
+    //                 padding: EdgeInsets.symmetric(
+    //                     horizontal: width * 0.08, vertical: width * 0.01),
+    //                 child: Text(
+    //                   widget.chargingItem.stationName,
+    //                   style: TextStyle(
+    //                     color: textColor,
+    //                     fontSize: width * 0.04,
+    //                     fontWeight: FontWeight.bold,
+    //                   ),
+    //                 ),
+    //               ),
+    //               // Padding(
+    //               //   padding: EdgeInsets.symmetric(horizontal: 60),
+    //               //   child: Text(
+    //               //     '₹ ${widget.chargingItem.amount.toString()}',
+    //               //     style: TextStyle(
+    //               //       color: Colors.black,
+    //               //       fontSize: 18,
+    //               //       fontWeight: FontWeight.bold,
+    //               //     ),
+    //               //   ),
+    //               // ),
+    //             ],
+    //           ),
+    //           // SizedBox(height: 5),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(
+    //                 horizontal: width * 0.08, vertical: width * 0.01),
+    //             child: Text(
+    //               'Time slot- ${widget.chargingItem.slotChosen}',
+    //               style: TextStyle(
+    //                 color: textColor,
+    //                 fontSize: width * 0.04,
+    //               ),
+    //             ),
+    //           ),
+    //           // SizedBox(height: 5),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(
+    //                 horizontal: width * 0.08, vertical: width * 0.01),
+    //             child: Text(
+    //               widget.chargingItem.phoneNumber,
+    //               style: TextStyle(
+    //                 color: textColor,
+    //                 fontSize: width * 0.04,
+    //               ),
+    //             ),
+    //           ),
+    //           // SizedBox(height: 0),
+    //           Padding(
+    //             padding: EdgeInsets.symmetric(
+    //                 horizontal: width * 0.08, vertical: width * 0.01),
+    //             child: Text(
+    //               '₹ ${widget.chargingItem.amount}',
+    //               style: TextStyle(
+    //                 color: textColor,
+    //                 fontSize: width * 0.06,
+    //                 fontWeight: FontWeight.bold,
+    //               ),
+    //             ),
+    //           ),
+    //
+    //           // Row(
+    //           //   children: [
+    //           //     Padding(
+    //           //       padding: EdgeInsets.all(40),
+    //           //     ),
+    //           //     if (widget.chargingItem.status == 1)
+    //           //       GestureDetector(
+    //           //         onTap: () async {
+    //           //           CollectionReference users =
+    //           //               FirebaseFirestore.instance.collection('booking');
+    //           //           DocumentReference docRef =
+    //           //               users.doc(widget.chargingItem.id);
+    //           //           await docRef.update({
+    //           //             'status': -1,
+    //           //           });
+    //           //         },
+    //           //         child: ClipOval(
+    //           //           child: Icon(
+    //           //             Icons.close,
+    //           //             color: Colors.red,
+    //           //             size: 60,
+    //           //           ),
+    //           //         ),
+    //           //       ),
+    //           //   ],
+    //           // ),
+    //           // if (widget.chargingItem.status == 2 ||
+    //           //     widget.chargingItem.status == -1)
+    //
+    //           //change the color accordingly
+    //         ],
+    //       ),
+    //       if (widget.chargingItem.status == 1)
+    //       Positioned(
+    //         right: width * 0.02,
+    //         top: width * 0.13,
+    //         child: GestureDetector(
+    //           onTap: () async {
+    //             CollectionReference users =
+    //             FirebaseFirestore.instance.collection('booking');
+    //             DocumentReference docRef = users.doc(widget.chargingItem.id);
+    //             await docRef.update({
+    //               'status': -1,
+    //             });
+    //           },
+    //           child: Container(
+    //             decoration: BoxDecoration(
+    //               boxShadow: [
+    //                 BoxShadow(
+    //                   color: Colors.grey.withOpacity(0.1),
+    //                 ),
+    //               ],
+    //             ),
+    //             child: Icon(
+    //               Icons.close,
+    //               color: Colors.red,
+    //               size: width * 0.08,
+    //             ),
+    //           ),
+    //         ),
+    //       ),
+    //       if (widget.chargingItem.status == -1 || widget.chargingItem.status == -2 )
+    //         Text(
+    //             statusText,
+    //             style: TextStyle(
+    //               color: textColor,
+    //               fontSize: width * 0.035,
+    //               fontWeight: FontWeight.bold,
+    //             ),
+    //           ),
+    //     ],
+    //   ),
+    // );
   }
 
   // @override

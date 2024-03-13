@@ -33,14 +33,14 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.23),
+                SizedBox(height: screenHeight * 0.10),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenWidth * 0.6,
+                  height: screenHeight * 0.36,
                   width: screenWidth * 0.8,
                 ),
 
-                SizedBox(height: screenHeight * 0.07),
+                SizedBox(height: screenHeight * 0.08),
                 Text(
                   AppStrings.login,
                   style: TextStyle(
@@ -59,7 +59,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
                 SizedBox(height: screenHeight * 0.02),
                 SizedBox(
-                  height: screenWidth * 0.05,
+                  height: screenHeight * 0.03,
                   width: screenWidth * 0.3,
                   child: GestureDetector(
                     onTap: () {
@@ -84,6 +84,7 @@ class _LoginViewState extends State<LoginView> {
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                   child: SizedBox(
                     child: IntlPhoneField(
+                    
                       initialCountryCode: 'IN',
                       cursorColor: ColorManager.primary,
                       dropdownTextStyle:
@@ -91,6 +92,7 @@ class _LoginViewState extends State<LoginView> {
                       disableLengthCheck: false,
                       
                       decoration: InputDecoration(
+                          counterText: '',
                         filled: true,
                         fillColor: ColorManager.grey4,
                         // hintText: '7303440170',
@@ -224,6 +226,6 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
       ),
-    );
+     );
   }
 }

@@ -21,7 +21,7 @@ class Booknow extends StatefulWidget {
       required this.amenities,
       required this.startTime,
       required this.endTime,
-        required this.timeslot,
+      required this.timeslot,
       required this.hostName,
       required this.chargerId,
       required this.providerId});
@@ -281,8 +281,10 @@ class _Booknow extends State<Booknow> {
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () async {
-                      int updatedTimeSlot = binaryToDecimal(newTimeSlots(previousTImeSlot, selectedTimeSlot));
+                      int updatedTimeSlot = binaryToDecimal(
+                          newTimeSlots(previousTImeSlot, selectedTimeSlot));
                       updateFireStoreTimeStamp(updatedTimeSlot);
+                      print(updatedTimeSlot);
 
                       BookingDataProvider(
                         providerId: widget.providerId,
@@ -292,25 +294,44 @@ class _Booknow extends State<Booknow> {
                       );
 
                       Navigator.pop(context);
-
-                      // Show a dialog after successful booking
-                      await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Booking Successful'),
-                            content: Text('Your booking has been confirmed.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                      if (selectedTimeSlot != 0) {
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Booking Successful'),
+                              content: Text('Your booking has been confirmed.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      } else {
+                        await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Booking unsuccessful'),
+                              content:
+                                  Text('Please select available timeslot.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('OK'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
                     child: Card(
                       shadowColor: ColorManager.CardshadowBottomRight,
@@ -344,11 +365,14 @@ class _Booknow extends State<Booknow> {
   }
 
   bool isValidTimeSlot(int time) {
-    return time >= int.parse(widget.startTime) && time <= int.parse(widget.endTime) && !(bookedSlots[time] == "1");
+    return time >= int.parse(widget.startTime) &&
+        time <= int.parse(widget.endTime) &&
+        !(bookedSlots[time] == "1");
   }
 
   void updateFireStoreTimeStamp(int time) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('chargers');
+    CollectionReference users =
+        FirebaseFirestore.instance.collection('chargers');
     DocumentReference docRef = users.doc(widget.chargerId);
     await docRef.update({
       'info.timeslot': time,
@@ -421,10 +445,10 @@ class _Booknow extends State<Booknow> {
 
           // if (snapshot.data!.docChanges.isNotEmpty) {
           //print(snapshot.data?['timeslot'].runtimeType);
-          previousTImeSlot = snapshot.data!['info']['timeslot'];
+          previousTImeSlot = snapshot.data!['timeSlot'];
           print("previousTImeSlot");
           print(previousTImeSlot);
-          bookedSlots = timeToBinary((snapshot.data!['info']['timeslot']));
+          bookedSlots = timeToBinary((snapshot.data!['timeSlot']));
           for (int i = bookedSlots.length; i < 24; i++)
             bookedSlots = "0" + bookedSlots;
           print("bookedSlots");

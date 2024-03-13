@@ -11,6 +11,10 @@ class ColorManager {
   static Color darkGreyOpacity40 = HexColor.fromHex("#313131");
   static Color grey = HexColor.fromHex("#737477");
   static Color dullYellow = HexColor.fromHex("#443F16");
+  static Color statusAccepted = HexColor.fromHex("#C3FFC4");
+  static Color statusRequested = Colors.white;
+  static Color statusCancelled = HexColor.fromHex("#FFB9C2");
+  static Color statusDeclined = HexColor.fromHex("#FFB9C2");
 
   //gradients
   static Color gradTopLeft = HexColor.fromHex("#f0f0f0");

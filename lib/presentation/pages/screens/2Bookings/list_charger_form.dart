@@ -277,7 +277,10 @@ class _ListChargerFormState extends State<ListChargerForm> {
         _imageList!.addAll(selectedImage);
       }
     } else {
-      final XFile? sekectedImage = await imagePicker.pickImage(source: ImageSource.camera);
+
+      final XFile? sekectedImage =
+          await imagePicker.pickImage(source: ImageSource.camera ,imageQuality: 50);
+
       if (sekectedImage != null) {
         _imageList!.add(sekectedImage);
       }
