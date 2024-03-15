@@ -207,10 +207,10 @@ class _VerifyState extends State<Verify> {
                         var sharedPref = await SharedPreferences.getInstance();
                         sharedPref.setBool(SplashViewState.keyLogin, true);
 
-                        Future<bool> check =
-                            checkNumberIsRegistered(number: widget.phoneNumber);
+                        bool check =
+                           await checkNumberIsRegistered(number: widget.phoneNumber);
 
-                        if (await check) {
+                        if ( check) {
                           // ignore: use_build_context_synchronously
                           Navigator.push(
                             context,

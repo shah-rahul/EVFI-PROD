@@ -90,7 +90,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
       String chargerId) async {
-    print("88");
+   
     print(chargerId);
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
@@ -108,7 +108,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     if (doc.exists && doc.data() != null) {
       print(doc.data());
       print(uid);
-      print(';;;;;;;;;;;');
+    
       phoneNumber = (doc.data() as Map<String, dynamic>)['phoneNumber'];
       print(phoneNumber);
     } else {}
