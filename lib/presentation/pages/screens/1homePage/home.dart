@@ -6,6 +6,8 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:evfi/domain/cachedChargers.dart';
 import 'package:evfi/domain/chargers.dart';
+import 'package:evfi/presentation/pages/widgets/ProgressWidget.dart';
+import 'package:evfi/presentation/resources/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -42,6 +44,7 @@ class HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
   final List<Marker> _markers = <Marker>[];
+  List<dynamic> _userBookings = [];
   late GoogleMapController _mapController;
   MyPricing mypricing = MyPricing();
   Position _currentPosition = Position(
@@ -61,6 +64,7 @@ class HomeState extends State<Home> {
   void initState() {
     super.initState();
     _getCurrentLocation();
+    getUserBookings();
     getBatteryCap().then((value) => batteryCap = value);
   }
 
@@ -70,30 +74,81 @@ class HomeState extends State<Home> {
     tilt: 15,
   );
 
+  final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
   Future<Map<String, dynamic>> getUserSnapShot() async {
-    QuerySnapshot querySnapshot = await UserChargingReference.get();
+    DocumentReference querySnapshot =
+        await UserChargingReference.doc(currentUserUID);
+    DocumentSnapshot documentSnapshot = await querySnapshot.get();
     Map<String, dynamic> detailsMap = {};
-    final allData = querySnapshot.docs.map((doc) => doc.data());
-    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-
-    if (querySnapshot.docs.isNotEmpty) {
-      // Loop through the documents in the collection
-      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-        detailsMap = documentSnapshot.data() as Map<String, dynamic>;
-
-        if (detailsMap != null) {
-          print(currentUserUID);
-          print(detailsMap['uid']);
-
-          // print(detailsMap['pinCode']);
-          if (currentUserUID == detailsMap['uid']) {
-            return detailsMap;
-          }
-        }
-      }
+    if (documentSnapshot.exists && documentSnapshot != null) {
+      // Access the value of the "level2" field
+      dynamic level2Value = documentSnapshot.data();
+      level2Value = level2Value['level2'];
+      detailsMap = level2Value as Map<String, dynamic>;
+      print("Value of level2 field: $level2Value");
+    } else {
+      print("Document does not exist or does not contain the 'level2' field.");
     }
+    // final allData = querySnapshot.docs.map((doc) => doc.data());
+
+    // if (querySnapshot.docs.isNotEmpty) {
+    //   // Loop through the documents in the collection
+    //   for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+    //     detailsMap = documentSnapshot.data() as Map<String, dynamic>;
+
+    //     if (detailsMap != null) {
+    //       // print(detailsMap['pinCode']);
+    //       if (currentUserUID == detailsMap['uid']) {
+    //         return detailsMap;
+    //       }
+    //     }
+    //   }
+    // }
     return detailsMap;
   }
+
+  Future<String> getTimeSlotByBookingId(String bookingId, String chargerId) async {
+    DocumentReference<Map<String, dynamic>>? bookingData =
+        FirebaseFirestore.instance.collection('booking').doc(bookingId);
+    DocumentSnapshot snapshot = await bookingData.get();
+    if (snapshot.exists && snapshot != null) {
+      dynamic data = snapshot.data();
+      if (chargerId == data['chargerId']) {
+        return data['timeSlot'];
+      }
+    }
+    return "";
+  }
+
+  Future<void> getUserBookings() async {
+    DocumentReference<Map<String, dynamic>>? userbookings =
+        FirebaseFirestore.instance.collection('user').doc(currentUserUID);
+    DocumentSnapshot snapshot = await userbookings.get();
+    dynamic bookings;
+    Map<String, dynamic> detailsMap = {};
+    if (snapshot.exists && snapshot != null) {
+      bookings = snapshot.data();
+      bookings = bookings['bookings'];
+    }
+    _userBookings = bookings;
+  }
+
+  Future<List<String>> ifChargerBookingInProgress(String chargerId) async {
+    List<String> timeSlots = [];
+    for (int i = 0; i < _userBookings.length; i++) {
+      String res = await getTimeSlotByBookingId(_userBookings[i], chargerId);
+      if (res != "") timeSlots.add(res);
+    }
+    return timeSlots;
+  }
+
+  // bool ifTimeSlotInProgress(String timeSlot,String){
+
+
+  // }
+
+
+
 
   Future<double> getBatteryCap() async {
     Map<String, dynamic> detailsMap = await getUserSnapShot();
@@ -147,6 +202,8 @@ class HomeState extends State<Home> {
         // print('Error getting current location: $e');
       }
     } else {
+      await Geolocator.requestPermission();
+      await prefs.setBool('location_permission_requested', true);
       Future.error('Location services  denied.');
     }
     // Ask permission from device
@@ -246,8 +303,7 @@ class HomeState extends State<Home> {
           print('****');
           print(data);
           final charger = ChargerModel(data: data);
-          print(
-              '------Charger cachedpppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp');
+
           cachedChargersBox.add(charger);
           _markers.add(Marker(
               markerId: MarkerId(geohash),
@@ -260,25 +316,30 @@ class HomeState extends State<Home> {
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
-                  backgroundColor: Colors.amber.withOpacity(0.0),
+                  backgroundColor:
+                      const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
                   builder: (context) {
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
-                    return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime.toString(),
-                        endTime: endTime.toString(),
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid']);
+
+                    return ProgressWidget(
+                        startTime: parseTime(startTime),
+                        endTime: parseTime(endTime));
+                    //  CustomMarkerPopup(
+                    //     stationName: stnName,
+                    //     address: stnAddress,
+                    //     imageUrl: stnImgUrl,
+                    //     geopoint: geoPoint,
+                    //     geohash: geohash,
+                    //     costOfFullCharge: price,
+                    //     chargerType: chargerType,
+                    //     amenities: amenities,
+                    //     hostName: hostName,
+                    //     startTime: startTime.toString(),
+                    //     endTime: endTime.toString(),
+                    //     timeslot: timeslot,
+                    //     chargerId: ds.id,
+                    //     providerId: data['uid']);
                   },
                 );
               },
@@ -537,7 +598,10 @@ class HomeState extends State<Home> {
                           child: FloatingActionButton(
                             onPressed: _getCurrentLocation,
                             backgroundColor: ColorManager.appBlack,
-                            child: Icon(Icons.my_location,color: ColorManager.primary,),
+                            child: Icon(
+                              Icons.my_location,
+                              color: ColorManager.primary,
+                            ),
                           ),
                         ),
                       ],
