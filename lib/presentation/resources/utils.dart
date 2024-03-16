@@ -75,7 +75,12 @@ int binaryToDecimal(String n) {
 
   return dec_value;
 }
-
+  DateTime parseTime(String timeString) {
+    List<String> parts = timeString.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    return DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, hours, minutes);
+  }
 //Firabase functions
 void changeBookingStatus(int status, String bookingId) async {
   CollectionReference users = FirebaseFirestore.instance.collection('booking');

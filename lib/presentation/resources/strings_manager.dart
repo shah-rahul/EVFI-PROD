@@ -55,4 +55,7 @@ class AppStrings {
 
   static const AcceptButton = "Accept";
   static const DeclineButton = "Decline";
+
+  static const topLabel = "Time  left";
+
 }
