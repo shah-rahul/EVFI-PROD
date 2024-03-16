@@ -147,6 +147,8 @@ class HomeState extends State<Home> {
         // print('Error getting current location: $e');
       }
     } else {
+        await Geolocator.requestPermission();
+      await prefs.setBool('location_permission_requested', true);
       Future.error('Location services  denied.');
     }
     // Ask permission from device

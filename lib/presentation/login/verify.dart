@@ -198,19 +198,23 @@ class _VerifyState extends State<Verify> {
                         verificationId: widget.verificationId,
                         smsCode: code,
                       );
+                      print(credential);
+
                       try {
                         // ignore: unused_local_variable
                         UserCredential userCredential = await FirebaseAuth
                             .instance
                             .signInWithCredential(credential);
-
+                       
                         var sharedPref = await SharedPreferences.getInstance();
                         sharedPref.setBool(SplashViewState.keyLogin, true);
+                     
 
-                        bool check =
-                           await checkNumberIsRegistered(number: widget.phoneNumber);
-
-                        if ( check) {
+                        bool check = await checkNumberIsRegistered(
+                            number: widget.phoneNumber);
+                        print(check);
+                        print('-----');
+                        if (check) {
                           // ignore: use_build_context_synchronously
                           Navigator.push(
                             context,
@@ -306,12 +310,14 @@ Future<bool> checkNumberIsRegistered({required String number}) async {
   final collectionRef = firestore.collection('user');
   bool isNumberRegistered = false;
   // storePhoneNumber(number);
-
+  
+  number = number.substring(1);
   try {
     final querySnapshot = await collectionRef.get();
 
     for (var doc in querySnapshot.docs) {
       final phoneNumber = doc.data()['phoneNumber'].toString();
+    
 
       if (number == phoneNumber) {
         isNumberRegistered = true;

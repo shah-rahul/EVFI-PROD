@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/resources/utils.dart';
 import 'package:flutter/material.dart';
 import '../models/vehicle_chargings.dart';
 import '../../resources/color_manager.dart';
@@ -19,7 +20,7 @@ class MyChargingWidget extends StatefulWidget {
 }
 
 class _MyChargingWidgetState extends State<MyChargingWidget> {
-  Color? buttonColor, textColor ;
+  Color? buttonColor, textColor;
   String statusText = 'Status';
   void statusButton(int status) {
     switch (status) {
@@ -84,6 +85,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     //       elevation: 3,
     //     ));
   }
+
   @override
   void initState() {
     //getStatusColor();
@@ -117,104 +119,111 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
         ],
       ),
       child: Padding(
-      padding: EdgeInsets.all(width*0.02),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
-                  child:Text(
-                    widget.chargingItem.stationName,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: width * 0.04,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
-                  child: Text(
-                    'Time slot- ${widget.chargingItem.slotChosen}',
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: width * 0.04,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
-                  child: Text(
-                    '+'+widget.chargingItem.phoneNumber,
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: width * 0.04,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
-                  child: Text(
-                    '₹ ${widget.chargingItem.amount}',
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: width * 0.06,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          if (widget.chargingItem.status == 1)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.13),
-              child: GestureDetector(
-                onTap: () async {
-                  CollectionReference users =
-                  FirebaseFirestore.instance.collection('booking');
-                  DocumentReference docRef = users.doc(widget.chargingItem.id);
-                  await docRef.update({
-                    'status': -2,
-                  });
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
+        padding: EdgeInsets.all(width * 0.02),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
+                    child: Text(
+                      widget.chargingItem.stationName,
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: width * 0.04,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ],
+                    ),
                   ),
-                  child: Icon(
-                    Icons.close,
-                    color: Colors.red,
-                    size: width * 0.08,
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
+                    child: Text(
+                      'Slot- ${convertTime(widget.chargingItem.slotChosen)}',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: width * 0.04,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
+                    child: Text(
+                      '+' + widget.chargingItem.phoneNumber,
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: width * 0.04,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
+                    child: Text(
+                      '₹ ${widget.chargingItem.amount}',
+                      style: TextStyle(
+                        color: textColor,
+                        fontSize: width * 0.06,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (widget.chargingItem.status == 1)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.08, vertical: width * 0.13),
+                child: GestureDetector(
+                  onTap: () async {
+                    CollectionReference users =
+                        FirebaseFirestore.instance.collection('booking');
+                    DocumentReference docRef =
+                        users.doc(widget.chargingItem.id);
+                    await docRef.update({
+                      'status': -2,
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.1),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.red,
+                      size: width * 0.08,
+                    ),
                   ),
                 ),
               ),
-            ),
-          if (widget.chargingItem.status == -1 ||
-              widget.chargingItem.status == -2)
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: width * 0.045),
-            child:Text(
-              statusText,
-              style: TextStyle(
-                color: textColor,
-                fontSize: width * 0.035,
-                fontWeight: FontWeight.bold,
+            if (widget.chargingItem.status == -1 ||
+                widget.chargingItem.status == -2)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.03, vertical: width * 0.045),
+                child: Text(
+                  statusText,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: width * 0.035,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
     );
 
     // return Container(
