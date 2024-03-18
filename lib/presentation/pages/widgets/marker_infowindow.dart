@@ -21,7 +21,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final String startTime;
   final String endTime;
   final int timeslot;
-  final List<dynamic> chargerType;
+  final String chargerType;
   final String amenities;
   final String hostName;
   final String chargerId;
@@ -94,41 +94,42 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         fit: StackFit.passthrough,
                         alignment: Alignment.bottomCenter,
                         children: [
-                            CarouselSlider(
-                              items: widget.imageUrl.map((imageUrl) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
-                                      child: CachedNetworkImage(
-                                        imageUrl: imageUrl,
-                                        fit: BoxFit.cover,
-                                        height: double.infinity,
-                                        width: double.infinity,
-                                        placeholder: (context, url) => Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                        errorWidget: (context, url, error) => Icon(Icons.error),
+                          CarouselSlider(
+                            items: widget.imageUrl.map((imageUrl) {
+                              return Builder(
+                                builder: (BuildContext context) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: CachedNetworkImage(
+                                      imageUrl: imageUrl,
+                                      fit: BoxFit.cover,
+                                      height: double.infinity,
+                                      width: double.infinity,
+                                      placeholder: (context, url) => Center(
+                                        child: CircularProgressIndicator(),
                                       ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                              carouselController: carouselController,
-                              options: CarouselOptions(
-                                  scrollDirection: Axis.vertical,
-                                  scrollPhysics: const BouncingScrollPhysics(),
-                                  aspectRatio: 2,
-                                  viewportFraction: 1,
-                                  autoPlay: true,
-                                  autoPlayInterval: Duration(seconds: 2),
-                                  enlargeCenterPage: true,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      _currentIndex = index;
-                                    });
-                                  }),
-                            ),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                            carouselController: carouselController,
+                            options: CarouselOptions(
+                                scrollDirection: Axis.vertical,
+                                scrollPhysics: const BouncingScrollPhysics(),
+                                aspectRatio: 2,
+                                viewportFraction: 1,
+                                autoPlay: true,
+                                autoPlayInterval: Duration(seconds: 2),
+                                enlargeCenterPage: true,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    _currentIndex = index;
+                                  });
+                                }),
+                          ),
                           Positioned(
                             top: 0,
                             bottom: 0,

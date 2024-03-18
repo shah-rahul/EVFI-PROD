@@ -48,7 +48,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           .get();
       if (_userCollection!.docs.isNotEmpty) {
         var doc = _userCollection!.docs[0];
-        provider = doc.data()['isProvider'];
+        provider = doc.data()['level3'];
         prefs.setBool('isProvider', provider!);
       }
     }

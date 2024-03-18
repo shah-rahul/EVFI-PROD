@@ -48,6 +48,7 @@ class _VerifyState extends State<Verify> {
       userData.phoneNumber = phoneNumber;
 
       userDataProvider.setUserData(userData);
+      userDataProvider.saveUserData();
     }
 
     return Scaffold(
@@ -205,10 +206,9 @@ class _VerifyState extends State<Verify> {
                         UserCredential userCredential = await FirebaseAuth
                             .instance
                             .signInWithCredential(credential);
-                       
+
                         var sharedPref = await SharedPreferences.getInstance();
                         sharedPref.setBool(SplashViewState.keyLogin, true);
-                     
 
                         bool check = await checkNumberIsRegistered(
                             number: widget.phoneNumber);
@@ -310,14 +310,13 @@ Future<bool> checkNumberIsRegistered({required String number}) async {
   final collectionRef = firestore.collection('user');
   bool isNumberRegistered = false;
   // storePhoneNumber(number);
-  
+
   number = number.substring(1);
   try {
     final querySnapshot = await collectionRef.get();
 
     for (var doc in querySnapshot.docs) {
       final phoneNumber = doc.data()['phoneNumber'].toString();
-    
 
       if (number == phoneNumber) {
         isNumberRegistered = true;

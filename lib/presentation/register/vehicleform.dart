@@ -26,10 +26,13 @@ class _VehicleFormState extends State<VehicleForm> {
   TextEditingController vehicleregistrationController = TextEditingController();
   TextEditingController vehicleBatteryCapController = TextEditingController();
   TextEditingController vehicleMileageController = TextEditingController();
+  String chargingRequirement = '';
+
   final FocusNode vehicleManfFocus = new FocusNode();
   final FocusNode vehicleregisFocus = new FocusNode();
   final FocusNode vehicleBatteryFocus = new FocusNode();
   final FocusNode vehicleMileageFocus = new FocusNode();
+  final FocusNode chargingRequirementFocus = new FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
 
   TextInputType getKeyboard(FocusNode fn) {
@@ -77,18 +80,15 @@ class _VehicleFormState extends State<VehicleForm> {
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
-    void updateVehicleData(
-      String manufacturer,
-      String number,
-      String batteryCapacity,
-      String range,
-    ) {
+    void updateVehicleData(String manufacturer, String number,
+        String batteryCapacity, String mileage, String chargingRequirements) {
       UserData userData = userDataProvider.userData;
       userData.vehicleManufacturer = manufacturer;
       userData.vehicleRegistrationNumber = number;
       userData.batteryCapacity = batteryCapacity;
-      userData.range = range;
+      userData.mileage = mileage;
       userData.level2 = true;
+      userDataProvider.setLevel2();
       userDataProvider.setUserData(userData);
     }
 
@@ -182,6 +182,28 @@ class _VehicleFormState extends State<VehicleForm> {
                                   vehicleMileageController,
                                   vehicleMileageFocus,
                                   vehicleMileageFocus)),
+                          // Container(
+                          //   padding: const EdgeInsets.symmetric(
+                          //       horizontal: AppPadding.p8,
+                          //       vertical: AppPadding.p8),
+                          //   child: DropdownButton<String>(
+                          //     hint: Text('Charging Requirement'),
+                          //     value: chargingRequirement,
+                          //     onChanged: (value) => setState(() {
+                          //       chargingRequirement = value!;
+                          //     }),
+                          //     items: <String>[
+                          //       'Level 1',
+                          //       'Level 2',
+                          //       'Level 3'
+                          //     ].map<DropdownMenuItem<String>>((String value) {
+                          //       return DropdownMenuItem<String>(
+                          //         value: value,
+                          //         child: Text(value),
+                          //       );
+                          //     }).toList(),
+                          //   ),
+                          // ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -190,9 +212,12 @@ class _VehicleFormState extends State<VehicleForm> {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  UserData? userData =
-                                      userDataProvider.userData;
-                                  userDataProvider.setUserData(userData);
+                                  updateVehicleData(
+                                      vehicleManufacturerController.text,
+                                      vehicleregistrationController.text,
+                                      vehicleBatteryCapController.text,
+                                      vehicleMileageController.text,
+                                      chargingRequirement);
                                   //skip button section
 
                                   Navigator.push(
@@ -220,9 +245,8 @@ class _VehicleFormState extends State<VehicleForm> {
                                       vehicleManufacturerController.text,
                                       vehicleregistrationController.text,
                                       vehicleBatteryCapController.text,
-                                      vehicleMileageController.text);
-
-                                  userDataProvider.saveUserData();
+                                      vehicleMileageController.text,
+                                      chargingRequirement);
 
                                   Navigator.push(
                                     context,

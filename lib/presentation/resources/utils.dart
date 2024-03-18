@@ -75,12 +75,13 @@ int binaryToDecimal(String n) {
 
   return dec_value;
 }
-  DateTime parseTime(String timeString) {
-    List<String> parts = timeString.split(':');
-    int hours = int.parse(parts[0]);
-    int minutes = int.parse(parts[1]);
-    return DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, hours, minutes);
-  }
+
+DateTime parseTime(String timeString) {
+ 
+  return DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+      int.parse(timeString), 0);
+}
+
 //Firabase functions
 void changeBookingStatus(int status, String bookingId) async {
   CollectionReference users = FirebaseFirestore.instance.collection('booking');
@@ -111,3 +112,5 @@ Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
       await FirebaseFirestore.instance.collection('user').doc(customerId).get();
   return customerDetails;
 }
+
+
