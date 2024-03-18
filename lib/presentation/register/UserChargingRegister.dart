@@ -150,7 +150,7 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
             const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: getImage,
-              style: ElevatedButton.styleFrom(primary: Colors.white),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
               child: const Text('Select ID Proof Image',
                   style: TextStyle(color: Colors.black)),
             ),
@@ -170,7 +170,7 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
                       child: MainView()),
                 );
               },
-              style: ElevatedButton.styleFrom(primary: Colors.white),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
               child: const Text('Save Details',
                   style: TextStyle(color: Colors.black)),
             ),

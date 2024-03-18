@@ -45,7 +45,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: ColorManager.primary,
+                          backgroundColor: ColorManager.primary,
                         ),
                         child: Row(
                           children: <Widget>[
@@ -160,11 +160,11 @@ class _ProfileUploadState extends State<ProfileUpload> {
                           MaterialPageRoute(builder: (context) => OnBoardingView()),
                         );
                       },
-                      style: ElevatedButton.styleFrom(
+                      style: ElevatedButton.styleFrom(backgroundColor: ColorManager.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(screenWidth * 0.02),
                         ),
-                        primary: ColorManager.primary,
+                        // primary: ColorManager.primary,
                       ),
                       child: Text(
                         AppStrings.upload,

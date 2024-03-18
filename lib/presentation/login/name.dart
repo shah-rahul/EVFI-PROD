@@ -153,11 +153,11 @@ class _NameState extends State<Name> {
                             child: ProfileImage()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
+                    style: ElevatedButton.styleFrom(backgroundColor:  ColorManager.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),
-                      primary: ColorManager.primary,
+                      // primary: ColorManager.primary,
                     ),
                     child: Text(
                       AppStrings.next,

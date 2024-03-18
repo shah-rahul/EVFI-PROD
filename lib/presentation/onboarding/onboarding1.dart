@@ -79,7 +79,7 @@ class Onboarding1 extends StatelessWidget {
                     onPressed: () {
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -114,7 +114,7 @@ class Onboarding1 extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -207,7 +207,7 @@ class Onboarding2 extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -242,7 +242,7 @@ class Onboarding2 extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -330,7 +330,7 @@ class Onboarding3 extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
@@ -371,7 +371,7 @@ class Onboarding3 extends StatelessWidget {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: ColorManager.appBlack,
+                      backgroundColor: ColorManager.appBlack,
                     ),
                     child: Row(
                       children: <Widget>[
