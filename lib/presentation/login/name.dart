@@ -38,7 +38,7 @@ class _NameState extends State<Name> {
     //  Storing user's name  using provider
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;
-      userData.name = name;
+      userData.firstName = name;
       userData.level1 = true;
       userDataProvider.setUserData(userData);
     }

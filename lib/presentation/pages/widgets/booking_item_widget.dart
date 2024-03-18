@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_final_fields, file_names, use_key_in_widget_constructors, sort_child_properties_last, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/resources/utils.dart';
 import 'package:flutter/material.dart';
 import '../models/charger_bookings.dart';
 
@@ -51,7 +52,7 @@ class _BookingWidgetState extends State<BookingWidget> {
   //         )),
   //   );
   // }
-  Color? buttonColor, textColor ;
+  Color? buttonColor, textColor;
   String statusText = 'Status';
   void statusButton(int status) {
     switch (status) {
@@ -120,6 +121,8 @@ class _BookingWidgetState extends State<BookingWidget> {
     super.initState();
   }
 
+ 
+
   // void getStatusColor() {
   //   if (widget.bookingItem.status == 2)
   //     // statusColor =;
@@ -132,6 +135,7 @@ class _BookingWidgetState extends State<BookingWidget> {
   //   // statusColor = Colors.white;
   //   ;
   // }
+ 
 
   Widget build(BuildContext context) {
     statusButton(widget.bookingItem.status);
@@ -145,7 +149,7 @@ class _BookingWidgetState extends State<BookingWidget> {
         // color: Colors.white,
         color: buttonColor,
 
-        borderRadius: BorderRadius.circular(width*0.08),
+        borderRadius: BorderRadius.circular(width * 0.08),
         boxShadow: [
           BoxShadow(
             offset: Offset(-8, 6),
@@ -155,17 +159,18 @@ class _BookingWidgetState extends State<BookingWidget> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(width*0.02),
+        padding: EdgeInsets.all(width * 0.02),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-                child:Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: width*0.08, vertical: width*0.008),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.008),
                     child: Text(
                       widget.bookingItem.customerName,
                       style: TextStyle(
@@ -175,33 +180,38 @@ class _BookingWidgetState extends State<BookingWidget> {
                       ),
                     ),
                   ),
-                //SizedBox(height: height * 0.01),
+                  //SizedBox(height: height * 0.01),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08, vertical: width * 0.01),
                     child: Text(
-                      'Time slot- ${widget.bookingItem.timeStamp}',
+                      'Time slot- ${convertTime(widget.bookingItem.timeStamp)}',
                       style: TextStyle(
                         color: textColor,
                         fontSize: width * 0.04,
-                      // fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                //SizedBox(height: height * 0.01),
+                  //SizedBox(height: height * 0.01),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01), // Add vertical padding
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08,
+                        vertical: width * 0.01), // Add vertical padding
                     child: Text(
-                      '+'+widget.bookingItem.customerMobileNumber,
+                      '+' + widget.bookingItem.customerMobileNumber,
                       style: TextStyle(
                         color: textColor,
                         fontSize: width * 0.04,
-                    // fontWeight: FontWeight.bold,
+                        // fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                //SizedBox(height: height * 0.01),
+                  //SizedBox(height: height * 0.01),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal:width*0.08, vertical: width*0.01), // Add vertical padding
+                    padding: EdgeInsets.symmetric(
+                        horizontal: width * 0.08,
+                        vertical: width * 0.01), // Add vertical padding
                     child: Text(
                       '₹ ${widget.bookingItem.amount}',
                       style: TextStyle(
@@ -211,90 +221,81 @@ class _BookingWidgetState extends State<BookingWidget> {
                       ),
                     ),
                   ),
-                // if (widget.bookingItem.status == 2 ||
-                //     widget.bookingItem.status == -1)
-                //    getStatusColor(widget.bookingItem.status),
-                // statusButton(widget.bookingItem.status),
+                  // if (widget.bookingItem.status == 2 ||
+                  //     widget.bookingItem.status == -1)
+                  //    getStatusColor(widget.bookingItem.status),
+                  // statusButton(widget.bookingItem.status),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                        if (widget.bookingItem.status == 1 )
+                      if (widget.bookingItem.status == 1)
                         Padding(
                           padding: EdgeInsets.all(width * 0.02),
                           child: Container(
-                          //margin: EdgeInsets.symmetric(horizontal: height * 0.01),
+                            //margin: EdgeInsets.symmetric(horizontal: height * 0.01),
                             width: width * 0.3,
                             height: height * 0.03,
                             child: ElevatedButton(
-                              onPressed: () async {
-                                CollectionReference users = FirebaseFirestore
-                                .instance
-                                .collection('booking');
-                                DocumentReference docRef =
-                                users.doc(widget.bookingItem.id);
-                                await docRef.update({
-                                  'status': 2,
-                                });
+                              onPressed: () {
+                                changeBookingStatus(2,widget.bookingItem.id);
                               },
                               style: ButtonStyle(
                                 backgroundColor:
-                                  MaterialStateProperty.all<Color>(Colors.green),
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.green),
                               ),
                               child: const Text(AppStrings.AcceptButton,
-                                style: TextStyle(color: Colors.black)),
+                                  style: TextStyle(color: Colors.black)),
                             ),
                           ),
                         ),
                       if (widget.bookingItem.status == 1)
-                      Padding(
-                        padding: EdgeInsets.all(width * 0.02),
-                        child: Container(
-                        // width: widthInLogicalPixels1,
-                        // height: heightInLogicalPixels1,
-                          width: width * 0.3,
-                          height: height * 0.03,
+                        Padding(
+                          padding: EdgeInsets.all(width * 0.02),
+                          child: Container(
+                            // width: widthInLogicalPixels1,
+                            // height: heightInLogicalPixels1,
+                            width: width * 0.3,
+                            height: height * 0.03,
 
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              CollectionReference users = FirebaseFirestore
-                                .instance
-                                .collection('booking');
-                              DocumentReference docRef =
-                                users.doc(widget.bookingItem.id);
-                              await docRef.update({
-                                'status': -1,
-                              });
-                            },
-                            style: ButtonStyle(
-                              backgroundColor:MaterialStateProperty.all<Color>(Colors.red),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                changeBookingStatus(-1,widget.bookingItem.id);
+                              },
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.red),
+                              ),
+                              child: const Text(AppStrings.DeclineButton,
+                                  style: TextStyle(color: Colors.black)),
                             ),
-                            child: const Text(AppStrings.DeclineButton,
-                                style: TextStyle(color: Colors.black)),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ],
               ),
-                ),
-              if (widget.bookingItem.status == -1 || widget.bookingItem.status == -2 )
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: width * 0.045),
-              child:Text(
-                statusText,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: width * 0.035,
-                  fontWeight: FontWeight.bold,
+            ),
+            if (widget.bookingItem.status == -1 ||
+                widget.bookingItem.status == -2)
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 0.03, vertical: width * 0.045),
+                child: Text(
+                  statusText,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: width * 0.035,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
+        // SizedBox(height: 100,),
       ),
-      // SizedBox(height: 100,),
-    ),
     );
   }
 

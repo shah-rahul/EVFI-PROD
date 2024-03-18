@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/routes_manager.dart';
+import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,7 +48,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           .get();
       if (_userCollection!.docs.isNotEmpty) {
         var doc = _userCollection!.docs[0];
-        provider = doc.data()['isProvider'];
+        provider = doc.data()['level3'];
         prefs.setBool('isProvider', provider!);
       }
     }
@@ -115,21 +116,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   //   }
   // }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
-      String customerId, String chargerId) async {
-    final chargerDetails = await FirebaseFirestore.instance
-        .collection('chargers')
-        .doc(chargerId)
-        .get();
-    stationName = chargerDetails['info']['stationName'];
-    print(stationName);
-    print(customerId);
-    final customerDetails = await FirebaseFirestore.instance
-        .collection('user')
-        .doc(customerId)
-        .get();
-    return customerDetails;
-  }
+
 
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -186,7 +173,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
-                            documents[index].data()!['chargerId']),
+                            documents[index].data()!['chargerId'],stationName),
                         builder: ((context,
                             AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {

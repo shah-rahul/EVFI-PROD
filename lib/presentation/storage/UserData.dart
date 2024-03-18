@@ -2,29 +2,38 @@
 
 class UserData {
   String uid;
-  String name;
+
   String phoneNumber;
 
   bool level1;
   String vehicleManufacturer;
   String vehicleRegistrationNumber;
   String batteryCapacity;
-  String range;
-  String chargerInfo;
-  bool level2;
+  String mileage;
+  String chargingRequirements;
 
-  bool isProvider;
+  dynamic level2;
+  List chargers;
+  List bookings;
+  String imageUrl;
+  String firstName;
+  String lastName;
+  bool level3;
 
   UserData({
     required this.uid,
-    required this.name,
+    required this.firstName,
+    required this.lastName,
     required this.phoneNumber,
     required this.level1,
+    required this.imageUrl,
     required this.vehicleManufacturer,
     required this.vehicleRegistrationNumber,
     required this.batteryCapacity,
-    required this.range,
-    required this.chargerInfo,
+    required this.chargingRequirements,
+    required this.mileage,
+    required this.bookings,
+    required this.chargers,
     required this.level2,
     // required this.stationName,
     // required this.address,
@@ -33,6 +42,6 @@ class UserData {
     // required this.chargerType,
     // required this.price,
     // required this.amenities,
-    required this.isProvider,
+    required this.level3,
   });
 }

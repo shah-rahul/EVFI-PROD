@@ -57,11 +57,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         .asUint8List();
   }
 
-  double batCap = 0;
+  double batteryCap = 0;
 
   @override
   void initState() {
-    myKey.getBatteryCap().then((value) => batCap = value);
+    batteryCap=myKey.batteryCap;
     super.initState();
   }
 
@@ -256,7 +256,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           startTime = startTime as int;
           endTime = endTime as int;
           timeslot = timeslot as int;
-          chargerType = chargerType as List<dynamic>;
+          chargerType = chargerType as String;
           amenities = amenities as String;
           hostName = hostName as String;
           _newMarkers.add(Marker(

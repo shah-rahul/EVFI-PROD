@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
+import 'package:evfi/presentation/resources/utils.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class Booknow extends StatefulWidget {
   final String startTime;
   final String endTime;
   final int timeslot;
-  final List<dynamic> chargerType;
+  final String chargerType;
   final String amenities;
   final String hostName;
   final String chargerId;
@@ -283,8 +284,11 @@ class _Booknow extends State<Booknow> {
                     onTap: () async {
                       int updatedTimeSlot = binaryToDecimal(
                           newTimeSlots(previousTImeSlot, selectedTimeSlot));
-                      updateFireStoreTimeStamp(updatedTimeSlot);
+                      updateFireStoreTimeStamp(
+                          updatedTimeSlot, widget.chargerId);
                       print(updatedTimeSlot);
+                      // updateUserData();
+                      // UserData userData=Provider<UserBook>
 
                       BookingDataProvider(
                         providerId: widget.providerId,
@@ -368,62 +372,6 @@ class _Booknow extends State<Booknow> {
     return time >= int.parse(widget.startTime) &&
         time <= int.parse(widget.endTime) &&
         !(bookedSlots[time] == "1");
-  }
-
-  void updateFireStoreTimeStamp(int time) async {
-    CollectionReference users =
-        FirebaseFirestore.instance.collection('chargers');
-    DocumentReference docRef = users.doc(widget.chargerId);
-    await docRef.update({
-      'info.timeslot': time,
-    });
-  }
-
-  int binaryToDecimal(String n) {
-    String num = n;
-    int dec_value = 0;
-
-    // Initializing base value to 1, i.e 2^0
-    int base = 1;
-
-    int len = num.length;
-    for (int i = len - 1; i >= 0; i--) {
-      if (num[i] == '1') dec_value += base;
-      base = base * 2;
-    }
-
-    return dec_value;
-  }
-
-  String newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
-    String prevBin = timeToBinary(prevTimeSlot);
-    for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
-    String newTimeSlot = "";
-    for (int i = 0; i < 24; i++) {
-      if (i == bookedTimeSlot) {
-        newTimeSlot += "1";
-      } else
-        newTimeSlot += prevBin[i];
-    }
-    return newTimeSlot;
-  }
-
-  String bookedSlots = "";
-  String timeToBinary(int time) {
-    String binaryTime = "";
-    print(time);
-    print(time.runtimeType);
-    // counter for binary array
-    int n = time;
-    while (n > 0) {
-      // storing remainder in binary array
-      binaryTime = (n % 2).toString() + binaryTime;
-      n = (n / 2).toInt();
-    }
-    print(binaryTime);
-    return binaryTime;
-
-    // printing binary array in reverse order
   }
 
   Widget streamBuilder() {

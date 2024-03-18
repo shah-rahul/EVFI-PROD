@@ -48,7 +48,7 @@ class _RegisterViewState extends State<RegisterView> {
       
     void StoreName(String name) {
       UserData userData = userDataProvider.userData;
-      userData.name = name;
+      userData.firstName = name;
       userData.level1 = true;
       
       userDataProvider.setUserData(userData);
