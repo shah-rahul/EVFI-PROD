@@ -8,8 +8,11 @@ import 'package:evfi/domain/cachedChargers.dart';
 import 'package:evfi/domain/chargers.dart';
 import 'package:evfi/presentation/pages/widgets/ProgressWidget.dart';
 import 'package:evfi/presentation/resources/utils.dart';
+import 'package:evfi/presentation/storage/UserData.dart';
+import 'package:evfi/presentation/storage/UserDataProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -32,13 +35,11 @@ void main() async {
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home();
 
   @override
   State<Home> createState() => HomeState();
 }
-
-double batteryCap = 0;
 
 class HomeState extends State<Home> {
   final Completer<GoogleMapController> _controller =
@@ -59,13 +60,35 @@ class HomeState extends State<Home> {
     speed: 0,
     speedAccuracy: 0,
   );
+  var userData;
+  double batteryCap = 0;
+  CollectionReference _usersCollection =
+      FirebaseFirestore.instance.collection('user');
+  User? user = FirebaseAuth.instance.currentUser;
+  void getUserData() async {
+    Provider.of<UserDataProvider>(context, listen: false)
+        .intialiseUserDataFromFireBase();
 
+    print(userData);
+  }
+
+  // void getBatteryCap()async{
+  //   CollectionReference _usersCollection =
+  //     FirebaseFirestore.instance.collection('user');
+  //    User? user = FirebaseAuth.instance.currentUser;
+  //     DocumentSnapshot<Object?> snapshot =
+  //         await _usersCollection.doc(user?.uid).get();
+  //     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+
+  // }
   @override
   void initState() {
     super.initState();
     _getCurrentLocation();
+    getUserData();
+    getBatteryCap().then((val) => batteryCap = val);
+    print(userData);
     getUserBookings();
-    getBatteryCap().then((value) => batteryCap = value);
   }
 
   late CameraPosition _kGooglePlex = const CameraPosition(
@@ -75,85 +98,129 @@ class HomeState extends State<Home> {
   );
 
   final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-  Future<Map<String, dynamic>> getUserSnapShot() async {
-    DocumentReference querySnapshot =
-        await UserChargingReference.doc(currentUserUID);
-    DocumentSnapshot documentSnapshot = await querySnapshot.get();
-    Map<String, dynamic> detailsMap = {};
-    if (documentSnapshot.exists && documentSnapshot != null) {
-      // Access the value of the "level2" field
-      dynamic level2Value = documentSnapshot.data();
-      level2Value = level2Value['level2'];
-      detailsMap = level2Value as Map<String, dynamic>;
-      print("Value of level2 field: $level2Value");
-    } else {
-      print("Document does not exist or does not contain the 'level2' field.");
+  // Future<Map<String, dynamic>> getUserSnapShot() async {
+  //   DocumentReference querySnapshot =
+  //       await UserChargingReference.doc(currentUserUID);
+  //   DocumentSnapshot documentSnapshot = await querySnapshot.get();
+  //   Map<String, dynamic> detailsMap = {};
+  //   if (documentSnapshot.exists && documentSnapshot != null) {
+  //     // Access the value of the "level2" field
+  //     dynamic level2Value = documentSnapshot.data();
+  //     level2Value = level2Value['level2'];
+  //     detailsMap = level2Value as Map<String, dynamic>;
+  //     print("Value of level2 field: $level2Value");
+  //   } else {
+  //     print("Document does not exist or does not contain the 'level2' field.");
+  //   }
+  //   // final allData = querySnapshot.docs.map((doc) => doc.data());
+
+  //   // if (querySnapshot.docs.isNotEmpty) {
+  //   //   // Loop through the documents in the collection
+  //   //   for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+  //   //     detailsMap = documentSnapshot.data() as Map<String, dynamic>;
+
+  //   //     if (detailsMap != null) {
+  //   //       // print(detailsMap['pinCode']);
+  //   //       if (currentUserUID == detailsMap['uid']) {
+  //   //         return detailsMap;
+  //   //       }
+  //   //     }
+  //   //   }
+  //   // }
+  //   return detailsMap;
+  // }
+
+  void checkIfAnyBookingCompleted() async {
+    List<int> timeSlots = [];
+    for (int i = 0; i < _userBookings.length; i++) {
+      DocumentSnapshot snapshot = await getBookingById(_userBookings[i]);
+
+      if (snapshot.exists && snapshot.data() != null) {
+        dynamic data = snapshot.data();
+        int res =
+            await getTimeSlotByBookingId(_userBookings[i], data['chargerId']);
+        print('first________________');
+        print(res);
+        if (res != 0) timeSlots.add(res);
+      }
     }
-    // final allData = querySnapshot.docs.map((doc) => doc.data());
-
-    // if (querySnapshot.docs.isNotEmpty) {
-    //   // Loop through the documents in the collection
-    //   for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
-    //     detailsMap = documentSnapshot.data() as Map<String, dynamic>;
-
-    //     if (detailsMap != null) {
-    //       // print(detailsMap['pinCode']);
-    //       if (currentUserUID == detailsMap['uid']) {
-    //         return detailsMap;
-    //       }
-    //     }
-    //   }
-    // }
-    return detailsMap;
+    dynamic res = ifTimeSlotsValid(timeSlots);
+    if (res) {
+      print('trigger form');
+    } else {
+      print('no booking complete yet');
+    }
   }
 
-  Future<String> getTimeSlotByBookingId(String bookingId, String chargerId) async {
+  Future<DocumentSnapshot<Object?>> getBookingById(String bookingId) async {
     DocumentReference<Map<String, dynamic>>? bookingData =
         FirebaseFirestore.instance.collection('booking').doc(bookingId);
     DocumentSnapshot snapshot = await bookingData.get();
+    return snapshot;
+  }
+
+  Future<int> getTimeSlotByBookingId(String bookingId, String chargerId) async {
+    DocumentSnapshot snapshot = await getBookingById(bookingId);
     if (snapshot.exists && snapshot != null) {
       dynamic data = snapshot.data();
+      print(data);
+      print(chargerId);
+      print('******');
       if (chargerId == data['chargerId']) {
         return data['timeSlot'];
       }
     }
-    return "";
+    return 0;
   }
 
-  Future<void> getUserBookings() async {
-    DocumentReference<Map<String, dynamic>>? userbookings =
-        FirebaseFirestore.instance.collection('user').doc(currentUserUID);
-    DocumentSnapshot snapshot = await userbookings.get();
-    dynamic bookings;
-    Map<String, dynamic> detailsMap = {};
-    if (snapshot.exists && snapshot != null) {
-      bookings = snapshot.data();
-      bookings = bookings['bookings'];
+  void getUserBookings() async {
+    DocumentSnapshot<Object?> snapshot =
+        await _usersCollection.doc(user?.uid).get();
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+
+    dynamic _bookings = snapshot['bookings'];
+    print(_bookings);
+    _userBookings = _bookings;
+  }
+
+  Future<dynamic> ifChargerBookingInProgress(String chargerId,List<dynamic>userBookings) async {
+    List<int> timeSlots = [];
+    print(userBookings);
+    for (int i = 0; i < userBookings.length; i++) {
+      int res = await getTimeSlotByBookingId(userBookings[i], chargerId);
+      
+      print(res);
+      if (res != 0) timeSlots.add(res);
     }
-    _userBookings = bookings;
+
+    return ifTimeSlotsValid(timeSlots);
   }
 
-  Future<List<String>> ifChargerBookingInProgress(String chargerId) async {
-    List<String> timeSlots = [];
-    for (int i = 0; i < _userBookings.length; i++) {
-      String res = await getTimeSlotByBookingId(_userBookings[i], chargerId);
-      if (res != "") timeSlots.add(res);
+  dynamic ifTimeSlotsValid(List<int> timeSlots) {
+    for (int i = 0; i < timeSlots.length; i++) {
+      DateTime now = DateTime.now();
+
+      int hour = now.hour;
+      int minute = now.minute;
+      DateTime startTime =
+          DateTime(now.year, now.month, now.day, timeSlots[i], 0);
+      DateTime endTime = startTime.add(Duration(hours: 1));
+      print(startTime);
+      print(endTime);
+      // Check if current time is between start and end times
+      if (now.isAfter(startTime) && now.isBefore(endTime)) {
+        return [startTime, endTime];
+      }
     }
-    return timeSlots;
+    return false;
   }
-
-  // bool ifTimeSlotInProgress(String timeSlot,String){
-
-
-  // }
-
-
-
 
   Future<double> getBatteryCap() async {
-    Map<String, dynamic> detailsMap = await getUserSnapShot();
+    DocumentSnapshot<Object?> snapshot =
+        await _usersCollection.doc(user?.uid).get();
+    Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
-    dynamic level2 = detailsMap['level2'];
+    dynamic level2 = snapshot['level2'];
     print(level2);
     if (level2 != null && level2 != false) {
       String batteryCapacity = level2['batteryCapacity'];
@@ -227,7 +294,8 @@ class HomeState extends State<Home> {
         ImageAssets.greenMarker);
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
-
+//get user bookings
+    getUserBookings();
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
 
@@ -295,7 +363,7 @@ class HomeState extends State<Home> {
           startTime = startTime as int;
           endTime = endTime as int;
           timeslot = timeslot as int;
-          chargerType = chargerType as List<dynamic>;
+          chargerType = chargerType as String;
 
           amenities = amenities as String;
 
@@ -308,38 +376,43 @@ class HomeState extends State<Home> {
           _markers.add(Marker(
               markerId: MarkerId(geohash),
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
-              onTap: () {
+              onTap: () async {
                 _mapController.animateCamera(CameraUpdate.newCameraPosition(
                     CameraPosition(
                         target: LatLng(geoPoint.latitude, geoPoint.longitude),
                         zoom: 16)));
+                dynamic res =
+                    await ifChargerBookingInProgress(data['chargerId'],_userBookings);
+
                 showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
                   backgroundColor:
                       const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
                   builder: (context) {
+                    print(batteryCap);
+                    print('0000');
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
-
-                    return ProgressWidget(
-                        startTime: parseTime(startTime),
-                        endTime: parseTime(endTime));
-                    //  CustomMarkerPopup(
-                    //     stationName: stnName,
-                    //     address: stnAddress,
-                    //     imageUrl: stnImgUrl,
-                    //     geopoint: geoPoint,
-                    //     geohash: geohash,
-                    //     costOfFullCharge: price,
-                    //     chargerType: chargerType,
-                    //     amenities: amenities,
-                    //     hostName: hostName,
-                    //     startTime: startTime.toString(),
-                    //     endTime: endTime.toString(),
-                    //     timeslot: timeslot,
-                    //     chargerId: ds.id,
-                    //     providerId: data['uid']);
+                    if (res != false) {
+                      print(res);
+                      return ProgressWidget(res[0], res[1]);
+                    }
+                    return CustomMarkerPopup(
+                        stationName: stnName,
+                        address: stnAddress,
+                        imageUrl: stnImgUrl,
+                        geopoint: geoPoint,
+                        geohash: geohash,
+                        costOfFullCharge: price,
+                        chargerType: chargerType,
+                        amenities: amenities,
+                        hostName: hostName,
+                        startTime: startTime.toString(),
+                        endTime: endTime.toString(),
+                        timeslot: timeslot,
+                        chargerId: ds.id,
+                        providerId: data['uid']);
                   },
                 );
               },

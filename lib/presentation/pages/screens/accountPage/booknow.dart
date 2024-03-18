@@ -34,7 +34,7 @@ class Booknow extends StatefulWidget {
   final String startTime;
   final String endTime;
   final int timeslot;
-  final List<dynamic> chargerType;
+  final String chargerType;
   final String amenities;
   final String hostName;
   final String chargerId;
@@ -284,8 +284,11 @@ class _Booknow extends State<Booknow> {
                     onTap: () async {
                       int updatedTimeSlot = binaryToDecimal(
                           newTimeSlots(previousTImeSlot, selectedTimeSlot));
-                      updateFireStoreTimeStamp(updatedTimeSlot,widget.chargerId);
+                      updateFireStoreTimeStamp(
+                          updatedTimeSlot, widget.chargerId);
                       print(updatedTimeSlot);
+                      // updateUserData();
+                      // UserData userData=Provider<UserBook>
 
                       BookingDataProvider(
                         providerId: widget.providerId,
@@ -370,12 +373,6 @@ class _Booknow extends State<Booknow> {
         time <= int.parse(widget.endTime) &&
         !(bookedSlots[time] == "1");
   }
-
- 
-
-
-
-  
 
   Widget streamBuilder() {
     return StreamBuilder<DocumentSnapshot>(
