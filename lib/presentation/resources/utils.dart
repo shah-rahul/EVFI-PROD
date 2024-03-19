@@ -77,7 +77,6 @@ int binaryToDecimal(String n) {
 }
 
 DateTime parseTime(String timeString) {
- 
   return DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
       int.parse(timeString), 0);
 }
@@ -100,17 +99,21 @@ void updateFireStoreTimeStamp(int time, String chargerId) async {
 }
 
 Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
-    String customerId, String chargerId, String stationName) async {
+    String customerId, String chargerId, List<String> stationName) async {
+  print(chargerId);
   final chargerDetails = await FirebaseFirestore.instance
       .collection('chargers')
       .doc(chargerId)
       .get();
-  stationName = chargerDetails['info']['stationName'];
 
-  print(customerId);
+  // Update stationName
+  stationName[0] = chargerDetails['info']['stationName'];
+
+  print(stationName[0]);
+
   final customerDetails =
       await FirebaseFirestore.instance.collection('user').doc(customerId).get();
+  print('customer id::');
+  print(customerDetails);
   return customerDetails;
 }
-
-

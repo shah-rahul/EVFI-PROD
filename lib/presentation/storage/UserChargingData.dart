@@ -18,7 +18,7 @@ class UserChargingData {
 
   String aadharNumber;
   String hostName;
-  List<String> chargerType;
+  String chargerType;
 
   int start;
   int end;

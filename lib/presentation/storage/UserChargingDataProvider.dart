@@ -28,7 +28,7 @@ class UserChargingDataProvider extends ChangeNotifier {
     state: 'Null',
     aadharNumber: 'Null',
     hostName: 'Null',
-    chargerType: [],
+    chargerType: 'NUll',
     start: 0, // DateTime.now(),
     end: 0, //DateTime.now(),
     timeslot: 0,
@@ -39,11 +39,13 @@ class UserChargingDataProvider extends ChangeNotifier {
     imageUrl: [],
   );
   // ignore: prefer_final_fields
-  CollectionReference _chargersCollection = FirebaseFirestore.instance.collection('chargers');
+  CollectionReference _chargersCollection =
+      FirebaseFirestore.instance.collection('chargers');
 
   UserChargingData get userChargingData => _userChargingData;
   void setUserChargingData(UserChargingData data) {
     _userChargingData = data;
+    saveUserChargingData();
     notifyListeners();
   }
 
@@ -59,6 +61,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'geohash': _userChargingData.geohash,
           'geopoint': _userChargingData.geopoint,
         },
+        'timeSlot': 0,
         'info': {
           'stationName': _userChargingData.stationName,
           'address': _userChargingData.address,
@@ -73,7 +76,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'imageUrl': _userChargingData.imageUrl,
           'start': _userChargingData.start,
           'end': _userChargingData.end,
-          'timeslot': 0,
+
           'aadharImages': _userChargingData.aadharImages,
           //'timeSlot': 0,
           //charger image
