@@ -251,8 +251,10 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              Complaint(chargerId: "charger9999"),
+                          builder: (context) => Complaint(
+                            chargerId: widget.chargerId,
+                            chargerName: widget.stationName,
+                          ),
                         ));
                       },
                       child: Container(
