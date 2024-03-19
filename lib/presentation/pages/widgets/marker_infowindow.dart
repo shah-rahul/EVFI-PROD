@@ -3,9 +3,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
+import 'package:evfi/presentation/pages/widgets/complaint.dart';
+import 'package:evfi/presentation/pages/widgets/review.dart';
 import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../resources/values_manager.dart';
@@ -240,6 +244,62 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     ),
                   ),
                 ),
+                SizedBox(height: 6),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              Complaint(chargerId: "charger9999"),
+                        ));
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: ColorManager.darkPrimary,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Complaint',
+                            style: TextStyle(
+                                fontSize: AppSize.s18,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => Review(
+                            chargerId: widget.chargerId,
+                            chargerName: widget.stationName,
+                          ),
+                        ));
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: ColorManager.darkPrimary,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Review',
+                            style: TextStyle(
+                                fontSize: AppSize.s18,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               ],
             ),
           ),
