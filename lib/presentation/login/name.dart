@@ -71,19 +71,19 @@ class _NameState extends State<Name> {
                     fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.18),
+                SizedBox(height: screenHeight * 0.15),
                 Text(
                   AppStrings.whatShould,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s28,
-                    fontFamily: 'fonts/Poppins',
+                    fontSize: FontSize.s32,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(-5.0, 4.0),
-                        color: ColorManager.dullYellow,
+                        offset: Offset(3.0, 2.0),
+                        color: ColorManager.primary20,
                       ),
                     ],
                   ),
@@ -92,53 +92,51 @@ class _NameState extends State<Name> {
                   AppStrings.weCallYou,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s28,
-                    fontFamily: 'fonts/Poppins',
+                    fontSize: FontSize.s32,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
-                    shadows: <Shadow>[
-                      Shadow(
-                        offset: Offset(-5.0, 4.0),
-                        color: ColorManager.dullYellow,
-                      ),
-                    ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.13),
+                SizedBox(height: screenHeight * 0.12),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
-                  child: TextField(
-                    onChanged: (value) async {
-                    // Store the entered name in the provider
-                    setState(() {
-                      nameController.text = value;
-                    });
-                  },
-                      decoration: InputDecoration(
-                      filled: true,
-                      fillColor: ColorManager.grey4,
-                      hintText: 'Enter your name',
-                      labelText: 'Name',
-                      contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.10),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: ColorManager.primary.withOpacity(0.5)),
-                        borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+                  child: SizedBox(
+                    height: screenHeight * 0.07,
+                    width: screenWidth * 0.77,
+                    child: TextField(
+                      onChanged: (value) async {
+                      // Store the entered name in the provider
+                      setState(() {
+                        nameController.text = value;
+                      });
+                    },
+                        decoration: InputDecoration(
+                        filled: true,
+                        fillColor: ColorManager.grey4,
+                        hintText: 'Enter your name',
+                        labelText: 'Name',
+                        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.10),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: ColorManager.primary.withOpacity(0.5)),
+                          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+                        ),
+                        labelStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: FontSize.s12,
+                        ),
+                        hintStyle: TextStyle(
+                          color: ColorManager.appBlack,
+                        ),
                       ),
-                      labelStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: FontSize.s12,
-                      ),
-                      hintStyle: TextStyle(
-                        color: ColorManager.appBlack,
-                      ),
+                      style: TextStyle(color: ColorManager.appBlack),
                     ),
-                    style: TextStyle(color: ColorManager.appBlack),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.025),
                 SizedBox(
-                  height: screenHeight * 0.06,
-                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.065,
+                  width: screenWidth * 0.77,
                   child: ElevatedButton(
                     onPressed: () async {
                       StoreName(nameController.text);
@@ -163,9 +161,9 @@ class _NameState extends State<Name> {
                       AppStrings.next,
                       style: TextStyle(
                         color: ColorManager.appBlack,
-                        fontFamily: 'Poppins',
+                        fontFamily: FontConstants.appTitleFontFamily,
                         fontWeight: FontWeight.bold,
-                        fontSize: FontSize.s20,
+                        fontSize: FontSize.s26,
                       ),
                     ),
                   ),

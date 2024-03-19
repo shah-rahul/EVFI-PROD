@@ -3,23 +3,24 @@
 class AppStrings {
   static const String noRouteFound = "No Route Found";
 
-  static const onboardingTitle1 = "Access to the network of EV Chargers";
-  static const onboardingTitle2 = "Get best path to your destination";
-  static const onboardingTitle3 = "Lend your Chargers, some extra cash for you";
+  static const onboardingTitle1 = "access to the\nnetwork of EV chargers";
+  static const onboardingTitle3 = "get best path\nto your destination";
+  static const onboardingTitle2 = "lend your chargers\nsome extra cash for you";
   static const onboardingSubTitle1 = "";
   static const onboardingSubTitle2 = "";
   static const onboardingSubTitle3 = "";
   static const skip = "Skip";
-  static const next = "Next";
-  static const login = "Login";
+  static const next = "next";
+  static const login = "login";
 
-  static const SignUp = "Sign Up";
+  static const SignUp = "sign-up";
+  static const signUp = "signUp";
   static const Login = "Login";
-  static const otp = "SEND OTP";
-  static const almost = "Almost";
-  static const there = "There";
-  static const verify = "VERIFY";
-  static const skipForLater = "skip of later";
+  static const otp = "send otp";
+  static const almost = "almost";
+  static const there = "there";
+  static const verify = "verify";
+  static const skipForLater = "skip for later";
   static const uploadAnImage = "upload an image";
   static const tap = "tap anywhere to";
   static const upload = "upload";

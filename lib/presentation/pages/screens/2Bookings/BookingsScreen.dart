@@ -8,6 +8,7 @@ import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../resources/font_manager.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -61,12 +62,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             AppStrings.BookingTitle,
             textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: FontSize.s20,color: ColorManager.appBlack),
           ),
-          backgroundColor: Colors.white,
+          elevation: 0,
+          backgroundColor: ColorManager.white,
         ),
         body: Container(
           child: _currentSelected ? PendingScreen(context) : RecentScreen(),
@@ -127,6 +129,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
       child: SingleChildScrollView(
         child: Container(
             height: screenHeight * 0.85,
+            width: screenWidth,
+            color: ColorManager.white,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
@@ -196,9 +200,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.01
-                                ),
-                                height: screenHeight * 0.22,
+                                    vertical: screenHeight * 0.01),
+                                height: screenHeight * 0.2,
                                 child:BookingWidget(
                                   bookingItem: Booking(
                                       amount: documents[index]['price'],
@@ -239,7 +242,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       children: [
         Container(
           height: screenHeight * 0.08,
-          color: Colors.white,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -259,9 +262,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: screenHeight * 0.003,
+                          height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.primary,
+                          color: ColorManager.appBlack,
                         ),
                       )
                     ],
@@ -288,6 +291,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
+        ),
         streamBuilder(AppStrings.BookingScreenPendingTab)
       ],
     );
@@ -301,7 +308,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       children: [
         Container(
         height: screenHeight * 0.08,
-          color: Colors.white,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -339,9 +346,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: screenHeight * 0.003,
+                          height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.primary,
+                          color: ColorManager.appBlack,
                         ),
                       )
                     ],
@@ -350,6 +357,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
               )
             ],
           ),
+        ),
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
         ),
         streamBuilder(AppStrings.BookingScreenRecentTab)
       ],

@@ -67,22 +67,22 @@ class _VerifyState extends State<Verify> {
                 SizedBox(height: screenHeight * 0.10),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenWidth * 0.6,
-                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.32,
+                  width: screenWidth * 0.31,
                 ),
-                SizedBox(height: screenHeight * 0.07),
+                SizedBox(height: screenHeight * 0.08),
                 Text(
                   AppStrings.almost,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s35,
-                    fontFamily: 'fonts/Poppins',
+                    fontSize: FontSize.s66,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(-5.0, 4.0),
-                        color: ColorManager.dullYellow,
+                        offset: Offset(3.0, 2.0),
+                        color: ColorManager.primary20,
                       ),
                     ],
                   ),
@@ -91,14 +91,14 @@ class _VerifyState extends State<Verify> {
                   AppStrings.there,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s35,
-                    fontFamily: 'fonts/Poppins',
+                    fontSize: FontSize.s66,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(-5.0, 4.0),
-                        color: ColorManager.dullYellow,
+                        offset: Offset(3.0, 2.0),
+                        color: ColorManager.primary20,
                       ),
                     ],
                   ),
@@ -121,12 +121,12 @@ class _VerifyState extends State<Verify> {
                       },
                       defaultPinTheme: PinTheme(
                           height: screenHeight * 0.06,
-                          width: screenWidth * 0.8 / 6,
+                          width: screenWidth * 0.65 / 6,
                           textStyle: TextStyle(
                             fontSize: FontSize.s35,
                             color: ColorManager.primary,
                             fontWeight: FontWeight.w400,
-                            fontFamily: 'fonts/Poppins',
+                            fontFamily: FontConstants.appTitleFontFamily,
                           ),
                           decoration: BoxDecoration(
                             border: Border.all(color: Colors.white38),
@@ -140,7 +140,7 @@ class _VerifyState extends State<Verify> {
                             fontSize: FontSize.s35,
                             color: ColorManager.primary,
                             fontWeight: FontWeight.w400,
-                            fontFamily: 'fonts/Poppins',
+                            fontFamily: FontConstants.appTitleFontFamily,
                           ),
                           decoration: BoxDecoration(
                             color: Colors.white12,
@@ -181,10 +181,10 @@ class _VerifyState extends State<Verify> {
                 //    ),
                 //  ),
                 //Textfield of OTP ends here..........................................
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: screenHeight * 0.025),
                 SizedBox(
-                  height: screenHeight * 0.06,
-                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.065,
+                  width: screenWidth * 0.77,
                   child: ElevatedButton(
                     onPressed: () async {
                       // Navigator.push(
@@ -289,9 +289,9 @@ class _VerifyState extends State<Verify> {
                       AppStrings.verify,
                       style: TextStyle(
                         color: ColorManager.appBlack,
-                        fontFamily: 'Poppins',
+                        fontFamily: FontConstants.appTitleFontFamily,
                         fontWeight: FontWeight.bold,
-                        fontSize: FontSize.s20,
+                        fontSize: FontSize.s26,
                       ),
                     ),
                   ),

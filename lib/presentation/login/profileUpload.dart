@@ -13,14 +13,17 @@ import 'name.dart';
 class ProfileUpload extends StatefulWidget {
   @override
   State<ProfileUpload> createState() => _ProfileUploadState();
+  final String imagePath;
+
+  const ProfileUpload({required this.imagePath});
 }
 
 class _ProfileUploadState extends State<ProfileUpload> {
-  ImagePicker _imagePicker = ImagePicker();
-  PickedFile? _pickedFile;
-  double _scale = 1.0;
-  double _previousScale = 1.0;
-  Offset _offset = Offset.zero;
+  // ImagePicker _imagePicker = ImagePicker();
+  // PickedFile? _pickedFile;
+  // double _scale = 1.0;
+  // double _previousScale = 1.0;
+  // Offset _offset = Offset.zero;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -58,37 +61,54 @@ class _ProfileUploadState extends State<ProfileUpload> {
                 ),
                 Positioned(
                   top: screenHeight * 0.15,
-                  left: screenWidth * 0.15,
-                  child: GestureDetector(
-                    onScaleStart: (ScaleStartDetails details) {
-                      _previousScale = _scale;
-                    },
-                    onScaleUpdate: (ScaleUpdateDetails details) {
-                      setState(() {
-                        _scale = (_previousScale * details.scale).clamp(1.0, 3.0);
-                        _offset = details.focalPoint - Offset(screenWidth * 0.15, screenHeight * 0.15);
-                      });
-                    },
-                    onTap: _pickImage,
-                    child: ClipOval(
-                      child: Transform.scale(
-                        scale: _scale,
-                        child: _pickedFile != null
-                            ? CircleAvatar(
-                          backgroundImage: FileImage(
-                            File(_pickedFile!.path),
-                          ),
-                          radius: screenWidth * 0.35,
-                        )
-                            : Image.asset(
-                          ImageAssets.circle, // Replace with your default profile image path
-                          width: screenWidth * 0.7,
-                          height: screenWidth * 0.7,
-                        ),
-                      ),
+                  left: screenWidth * 0.16,
+                  child: Image.asset(
+                    ImageAssets.circle,
+                    width: screenWidth * 0.7,
+                    height: screenWidth * 0.7,
+                  ),
+                ),
+                Positioned(
+                  top: screenHeight * 0.185,
+                  left: screenWidth * 0.235,
+                  child: ClipOval(
+                    child: Image.file(
+                      File(widget.imagePath),
+                      width: screenWidth * 0.55,
+                      height: screenWidth * 0.55,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
+                  // child: GestureDetector(
+                  //   onScaleStart: (ScaleStartDetails details) {
+                  //     _previousScale = _scale;
+                  //   },
+                  //   onScaleUpdate: (ScaleUpdateDetails details) {
+                  //     setState(() {
+                  //       _scale = (_previousScale * details.scale).clamp(1.0, 3.0);
+                  //       _offset = details.focalPoint - Offset(screenWidth * 0.15, screenHeight * 0.15);
+                  //     });
+                  //   },
+                  //   onTap: _pickImage,
+                  //   child: ClipOval(
+                  //     child: Transform.scale(
+                  //       scale: _scale,
+                  //       child: _pickedFile != null
+                  //           ? CircleAvatar(
+                  //         backgroundImage: FileImage(
+                  //           File(_pickedFile!.path),
+                  //         ),
+                  //         radius: screenWidth * 0.35,
+                  //       )
+                  //           : Image.asset(
+                  //         ImageAssets.circle, // Replace with your default profile image path
+                  //         width: screenWidth * 0.7,
+                  //         height: screenWidth * 0.7,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                 // Positioned(
                 //   top: screenHeight * 0.15,
@@ -134,25 +154,19 @@ class _ProfileUploadState extends State<ProfileUpload> {
                     style: TextStyle(
                       color: ColorManager.primary,
                       fontSize: FontSize.s32,
-                      fontFamily: 'fonts/Poppins',
+                      fontFamily: FontConstants.appTitleFontFamily,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
-                      shadows: <Shadow>[
-                        Shadow(
-                            offset: Offset(-4.0, 3.0),
-                            color: ColorManager.dullYellow
-                        ),
-                      ],
                     ),
                   ),
                 ),
 
                 Positioned(
                   top: screenHeight * 0.85,
-                  left: screenWidth * 0.10,
+                  left: screenWidth * 0.11,
                   child: SizedBox(
-                    height: screenHeight * 0.06,
-                    width: screenWidth * 0.8,
+                    height: screenHeight * 0.065,
+                    width: screenWidth * 0.77,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
@@ -170,9 +184,9 @@ class _ProfileUploadState extends State<ProfileUpload> {
                         AppStrings.upload,
                         style: TextStyle(
                             color: ColorManager.appBlack,
-                            fontFamily: 'Poppins',
+                            fontFamily: FontConstants.appTitleFontFamily,
                             fontWeight: FontWeight.bold,
-                            fontSize: FontSize.s20
+                            fontSize: FontSize.s26
                         ),
                       ),
                     ),
@@ -183,22 +197,22 @@ class _ProfileUploadState extends State<ProfileUpload> {
           ),
         );
   }
-  Future<void> _pickImage() async {
-    try {
-      final pickedFile = await _imagePicker.getImage(
-        source: ImageSource.gallery,
-        imageQuality: 50
-      );
-
-      if (pickedFile != null) {
-        setState(() {
-          _pickedFile = pickedFile;
-          _scale = 1.0; // Reset scale when a new image is picked
-          _offset = Offset.zero; // Reset offset when a new image is picked
-        });
-      }
-    } catch (e) {
-      print('Error picking image: $e');
-    }
-  }
+  // Future<void> _pickImage() async {
+  //   try {
+  //     final pickedFile = await _imagePicker.getImage(
+  //       source: ImageSource.gallery,
+  //       imageQuality: 50
+  //     );
+  //
+  //     if (pickedFile != null) {
+  //       setState(() {
+  //         _pickedFile = pickedFile;
+  //         _scale = 1.0; // Reset scale when a new image is picked
+  //         _offset = Offset.zero; // Reset offset when a new image is picked
+  //       });
+  //     }
+  //   } catch (e) {
+  //     print('Error picking image: $e');
+  //   }
+  // }
 }

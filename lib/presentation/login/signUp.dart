@@ -180,27 +180,27 @@ class _SignupPageState extends State<SignupPage> {
                 SizedBox(height: screenHeight * 0.10),
                 Image.asset(
                   ImageAssets.logo3D,
-                  height: screenHeight * 0.36,
-                  width: screenWidth * 0.8,
+                    height: screenHeight * 0.32,
+                    width: screenWidth * 0.31
                 ),
                 SizedBox(height: screenHeight * 0.08),
                 Text(
                   AppStrings.SignUp,
                   style: TextStyle(
                     color: ColorManager.primary,
-                    fontSize: FontSize.s50,
-                    fontFamily: 'fonts/Poppins',
+                    fontSize: FontSize.s66,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 2.0,
+                    letterSpacing: 3.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(-5.0, 4.0),
-                        color: ColorManager.dullYellow,
+                        offset: Offset(3.0, 2.0),
+                        color: ColorManager.primary20,
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.02),
+                SizedBox(height: screenHeight * 0.021),
                 SizedBox(
                   height: screenHeight * 0.03,
                   width: screenWidth * 0.3,
@@ -212,21 +212,24 @@ class _SignupPageState extends State<SignupPage> {
                       );
                     },
                     child: Text(
-                      AppStrings.Login,
+                      AppStrings.login,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: FontSize.s14,
-                        fontFamily: 'Poppins',
+                        letterSpacing: 1,
+                        fontFamily: FontConstants.appTitleFontFamily,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.1),
+                SizedBox(height: screenHeight * 0.14),
                 Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
                     child: SizedBox(
+                      height: screenHeight * 0.07,
+                      width: screenWidth * 0.77,
                       child: IntlPhoneField(
                         initialCountryCode: 'IN',
                         cursorColor: ColorManager.primary,
@@ -269,10 +272,10 @@ class _SignupPageState extends State<SignupPage> {
                         },
                       ),
                     )),
-                SizedBox(height: screenHeight * 0.03),
+                SizedBox(height: screenHeight * 0.025),
                 SizedBox(
-                  height: screenHeight * 0.06,
-                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.065,
+                  width: screenWidth * 0.77,
                   child: ElevatedButton(
                     onPressed: () async {
                       // Navigator.push(
@@ -329,9 +332,9 @@ class _SignupPageState extends State<SignupPage> {
                       AppStrings.otp,
                       style: TextStyle(
                         color: ColorManager.appBlack,
-                        fontFamily: 'Poppins',
+                        fontFamily: FontConstants.appTitleFontFamily,
                         fontWeight: FontWeight.bold,
-                        fontSize: FontSize.s20,
+                        fontSize: FontSize.s26,
                       ),
                     ),
                   ),
