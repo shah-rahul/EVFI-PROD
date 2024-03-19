@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,10 @@ import 'package:flutter/material.dart';
 class Complaint extends StatefulWidget {
   const Complaint({
     required this.chargerId,
+    required this.chargerName,
   });
   final String chargerId;
+  final String chargerName;
 
   @override
   State<Complaint> createState() => _ComplaintState();
@@ -16,6 +19,22 @@ class _ComplaintState extends State<Complaint> {
   bool _isWorking = true;
   final commentFocusNode = FocusNode();
   TextEditingController commentController = TextEditingController();
+  final CollectionReference reviewCollection =
+      FirebaseFirestore.instance.collection('complaints');
+
+  void submit() {
+    print("charger status is : ${_isWorking}");
+    print("The complaint is : ${commentController.text}");
+
+    reviewCollection.add({
+      'chargerId': widget.chargerId,
+      'description': commentController.text,
+    }).then((value) {
+      print('Data stored successfully in Firestore');
+    }).catchError((error) {
+      print('Failed to store data in Firestore: $error');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +57,7 @@ class _ComplaintState extends State<Complaint> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //Images of charger.................................................
+            //CHARGER IMAGES...........................................................
             const Text(
               "Add Photo",
               style: TextStyle(
@@ -114,7 +133,7 @@ class _ComplaintState extends State<Complaint> {
             const Text(
                 "Upload photos related to the chargers like its working, usage,etc."),
             const SizedBox(height: AppMargin.m40),
-            //Radiobuttons......................................................
+            //RADIO-BUTTONS..........................................................
             const Text(
               "Charger Status",
               style: TextStyle(
@@ -170,7 +189,7 @@ class _ComplaintState extends State<Complaint> {
               ],
             ),
             const SizedBox(height: AppMargin.m20),
-            //textarea..........................................................
+            //TEXTAREA................................................................
             const Text(
               "Complaint Description",
               style: TextStyle(
@@ -203,11 +222,9 @@ class _ComplaintState extends State<Complaint> {
               ),
             ),
             const SizedBox(height: AppMargin.m20),
-            //submit............................................................
+            //SUBMIT BUTTON............................................................
             GestureDetector(
-              onTap: () {
-                
-              },
+              onTap: submit,
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.065,
                 width: MediaQuery.of(context).size.width * 1,
