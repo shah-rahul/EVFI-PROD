@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
-import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -58,8 +57,25 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text(
+  //           AppStrings.BookingTitle,
+  //           textAlign: TextAlign.start,
+  //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  //         ),
+  //         backgroundColor: Colors.white,
+  //       ),
+  //       body: Container(
+  //         child: _currentSelected ? PendingScreen(context) : RecentScreen(),
+  //       ));
+  // }
   Widget build(BuildContext context) {
-    return Scaffold(
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    if (_isProvider == true) {
+      return Scaffold(
         appBar: AppBar(
           title: const Text(
             AppStrings.BookingTitle,
@@ -67,56 +83,24 @@ class _BookingsScreenState extends State<BookingsScreen> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
+                },
+                icon: const Icon(
+                  Icons.add_business_outlined,
+                  color: Colors.black,
+                ))
+          ],
         ),
         body: Container(
-          child: _currentSelected ? PendingScreen(context) : RecentScreen(),
-        ));
+            child: _currentSelected ? PendingScreen(context) : RecentScreen()),
+      );
+    } else {
+      return ListChargersPage();
+    }
   }
-  // Widget build(BuildContext context) {
-  //   final screenHeight = MediaQuery.of(context).size.height;
-  //   final screenWidth = MediaQuery.of(context).size.width;
-  //   if (_isProvider == null) {
-  //     return Scaffold(
-  //       body: Center(child: Shimmer.fromColors(
-  //         baseColor: ColorManager.grey5!,
-  //         highlightColor: ColorManager.white!,
-  //         child: Container(
-  //           height: screenHeight * 0.75,
-  //           width: screenWidth * 0.75,
-  //           color: ColorManager.white,
-  //         ),
-  //       ),
-  //       ),
-  //     );
-  //   } else if (_isProvider == true) {
-  //     return Scaffold(
-  //       appBar: AppBar(
-  //         title: Text(
-  //           AppStrings.BookingTitle,
-  //           textAlign: TextAlign.start,
-  //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-  //         ),
-  //         backgroundColor: Colors.white,
-  //         actions: [
-  //           IconButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
-  //               },
-  //               icon: const Icon(
-  //                 Icons.add_business_outlined,
-  //                 color: Colors.black,
-  //               ))
-  //         ],
-  //       ),
-  //       body: Container(
-  //           child: _currentSelected ? PendingScreen(context) : RecentScreen()),
-  //     );
-  //   } else {
-  //     return ListChargersPage();
-  //   }
-  // }
-
-
 
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -146,7 +130,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Column(
                       children: List.generate(
                         5,
-                            (index) => shimmerPlaceholder(),
+                        (index) => shimmerPlaceholder(),
                       ),
                     ),
                   );
@@ -173,12 +157,15 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
-                            documents[index].data()!['chargerId'],stationName),
+                            documents[index].data()!['chargerId'],
+                            // (documents[index].data()!['info'] as Map<String, dynamic>)['stationName']
+                            stationName),
                         builder: ((context,
-                            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
                           if (snapshots.connectionState ==
-                              ConnectionState.waiting){
+                              ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
                           if (!snapshots.hasData) {
@@ -191,26 +178,24 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
 
-
                           return Column(
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: screenHeight * 0.01
-                                ),
+                                    vertical: screenHeight * 0.01),
                                 height: screenHeight * 0.22,
-                                child:BookingWidget(
+                                child: BookingWidget(
                                   bookingItem: Booking(
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
                                       customerName: snapshots.data!['name'],
-                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      customerMobileNumber:
+                                          snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index].id,
-                                      ratings: 4
-                                  ),
+                                      ratings: 4),
                                   currentTab: tab,
                                 ),
                               ),
@@ -219,9 +204,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                               // ),
                             ],
                           );
-                        }
-                        )
-                    );
+                        }));
                   },
                   itemCount: documents.length,
                 );
@@ -253,7 +236,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenPendingTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05,
+                            fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -300,7 +284,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Column(
       children: [
         Container(
-        height: screenHeight * 0.08,
+          height: screenHeight * 0.08,
           color: Colors.white,
           child: Row(
             children: [
@@ -333,7 +317,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05,
+                            fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -355,19 +340,21 @@ class _BookingsScreenState extends State<BookingsScreen> {
       ],
     );
   }
-Widget shimmerPlaceholder() {
-  return Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Container(
-      margin: EdgeInsets.symmetric(vertical: 10,
-  horizontal: 16 ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+
+  Widget shimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        height: 100 *
+            MediaQuery.textScaleFactorOf(
+                context), // Adjust the height as needed
       ),
-        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
-    ),
-  );
-}
+    );
+  }
 }

@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_import, prefer_const_constructors_in_immutables, unused_catch_clause, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
 
-import  'dart:convert';
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -61,7 +61,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    batteryCap=myKey.batteryCap;
+    batteryCap = myKey.batteryCap;
     super.initState();
   }
 
@@ -192,9 +192,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     }
   }
 
-  void setRouteMarker(double radius, LatLng position) {
+  void setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
+    final Uint8List BlackMarkerIcon =
+        await getBytesFromAsset(ImageAssets.oldBlackMarker);
 
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
@@ -230,10 +232,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
+        var timeslot = data['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
+        var status = (data['info'] as Map<String, dynamic>)['status'];
 
         if (geoPoint != null &&
             geohash != null &&
@@ -246,7 +249,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             timeslot != null &&
             chargerType != null &&
             amenities != null &&
-            hostName != null) {
+            hostName != null &&
+            status != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -259,6 +263,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           chargerType = chargerType as String;
           amenities = amenities as String;
           hostName = hostName as String;
+          status = status as num;
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
@@ -276,25 +281,27 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime,
-                        endTime: endTime,
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid']);
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                      chargerType: chargerType,
+                      amenities: amenities,
+                      hostName: hostName,
+                      startTime: startTime,
+                      endTime: endTime,
+                      timeslot: timeslot,
+                      chargerId: ds.id,
+                      providerId: data['uid'],
+                      status: status,
+                    );
                   },
-                );
+                  );
               },
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
-              icon: BitmapDescriptor.fromBytes(stationMarker)));
+              icon: BitmapDescriptor.fromBytes((status==1)? stationMarker : BlackMarkerIcon)));
         }
         setState(() {
           updateMarkers(_newMarkers);

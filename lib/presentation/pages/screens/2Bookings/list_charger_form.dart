@@ -441,9 +441,9 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
-    void StoreChargerType(List<int> type) {
-      List<String> chargerType = [];
-      chargerType = type.map((t) => 'Level $t').toList();
+    void StoreChargerType(int type) {
+      String chargerType;
+      chargerType = 'Level $type';
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
@@ -509,7 +509,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
 
     void addChargerFunction() async {
       _submitForm();
-      StoreChargerType([++chargerType]);
+      StoreChargerType(++chargerType);
       StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
       Storeg(_position);
       await uploadImages(_imageList!)
@@ -522,7 +522,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
           .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           var doc = querySnapshot.docs[0];
-          doc.reference.update({'isProvider': true});
+          doc.reference.update({'level3': true});
         }
       });
       final prefs = await SharedPreferences.getInstance();

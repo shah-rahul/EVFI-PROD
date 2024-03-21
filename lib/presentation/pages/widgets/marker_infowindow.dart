@@ -26,24 +26,25 @@ class CustomMarkerPopup extends StatefulWidget {
   final String hostName;
   final String chargerId;
   final String providerId;
+  final num status;
   //final url = "https://firebasestorage.googleapis.com/v0/b/evfi-prod.appspot.com/o/charger_images%2F1696013568164.jpg?alt=media&token=18a573b1-9806-4c65-a82d-d948f8d72100";
 
-  const CustomMarkerPopup({
-    required this.stationName,
-    required this.address,
-    required this.imageUrl,
-    required this.geopoint,
-    required this.geohash,
-    required this.costOfFullCharge,
-    required this.chargerType,
-    required this.amenities,
-    required this.hostName,
-    required this.startTime,
-    required this.endTime,
-    required this.timeslot,
-    required this.chargerId,
-    required this.providerId,
-  });
+  const CustomMarkerPopup(
+      {required this.stationName,
+      required this.address,
+      required this.imageUrl,
+      required this.geopoint,
+      required this.geohash,
+      required this.costOfFullCharge,
+      required this.chargerType,
+      required this.amenities,
+      required this.hostName,
+      required this.startTime,
+      required this.endTime,
+      required this.timeslot,
+      required this.chargerId,
+      required this.providerId,
+      required this.status});
 
   @override
   State<CustomMarkerPopup> createState() => _CustomMarkerPopupState();
@@ -167,6 +168,10 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
+                          Text(
+                            (widget.status==0)? 'Not Available' :  'Available',
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: AppSize.s14, color: (widget.status==0)? ColorManager.error : Colors.green),
+                          ),
                           Text(
                             widget.chargerType.toString(),
                             style: const TextStyle(fontSize: AppSize.s14),

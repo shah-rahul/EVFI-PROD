@@ -183,12 +183,13 @@ class HomeState extends State<Home> {
     _userBookings = _bookings;
   }
 
-  Future<dynamic> ifChargerBookingInProgress(String chargerId,List<dynamic>userBookings) async {
+  Future<dynamic> ifChargerBookingInProgress(
+      String chargerId, List<dynamic> userBookings) async {
     List<int> timeSlots = [];
     print(userBookings);
     for (int i = 0; i < userBookings.length; i++) {
       int res = await getTimeSlotByBookingId(userBookings[i], chargerId);
-      
+
       print(res);
       if (res != 0) timeSlots.add(res);
     }
@@ -289,6 +290,8 @@ class HomeState extends State<Home> {
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
+    final Uint8List BlackMarkerIcon =
+        await getBytesFromAsset(ImageAssets.oldBlackMarker);
     BitmapDescriptor nearbyMarker = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
         ImageAssets.greenMarker);
@@ -333,14 +336,15 @@ class HomeState extends State<Home> {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data as Map<String, dynamic>)['timeSlot'];
+        var timeslot = data['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
-
+        var status = (data['info'] as Map<String, dynamic>)['status'];
+        print(hostName);
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
-        print('-----');
+        print('-----@@');
         print(data);
         if (geoPoint != null &&
             geohash != null &&
@@ -353,7 +357,9 @@ class HomeState extends State<Home> {
             timeslot != null &&
             chargerType != null &&
             amenities != null &&
-            hostName != null) {
+            hostName != null &&
+            status != null) {
+          print('Inside---------------');
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -364,12 +370,10 @@ class HomeState extends State<Home> {
           endTime = endTime as int;
           timeslot = timeslot as int;
           chargerType = chargerType as String;
-
           amenities = amenities as String;
-
+          status = status as num;
           hostName = hostName as String;
-          print('****');
-          print(data);
+
           final charger = ChargerModel(data: data);
 
           cachedChargersBox.add(charger);
@@ -381,8 +385,8 @@ class HomeState extends State<Home> {
                     CameraPosition(
                         target: LatLng(geoPoint.latitude, geoPoint.longitude),
                         zoom: 16)));
-                dynamic res =
-                    await ifChargerBookingInProgress(data['chargerId'],_userBookings);
+                dynamic res = await ifChargerBookingInProgress(
+                    data['chargerId'], _userBookings);
 
                 showModalBottomSheet(
                   context: context,
@@ -412,11 +416,12 @@ class HomeState extends State<Home> {
                         endTime: endTime.toString(),
                         timeslot: timeslot,
                         chargerId: ds.id,
-                        providerId: data['uid']);
+                        providerId: data['uid'],
+                        status: status,);
                   },
                 );
               },
-              icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
+              icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon)));
 
           setState(() {});
         }
@@ -431,7 +436,7 @@ class HomeState extends State<Home> {
   //       return addState;
   //     }
   //     addState = address[i] + addState;
-  //   }
+    //   }
   //   return addState;
   // }
 
@@ -449,6 +454,8 @@ class HomeState extends State<Home> {
   void addCachedChargersToMarkers() async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
+    final Uint8List BlackMarkerIcon =
+        await getBytesFromAsset(ImageAssets.oldBlackMarker);
     _markers.clear(); // Clear existing markers if needed
 
     for (var chargerModel in cachedChargersBox.values) {
@@ -468,13 +475,14 @@ class HomeState extends State<Home> {
       var startTime =
           (chargerModel.data['info'] as Map<String, dynamic>)['start'];
       var endTime = (chargerModel.data['info'] as Map<String, dynamic>)['end'];
-      var timeslot = (chargerModel.data as Map<String, dynamic>)['timeSlot'];
+      var timeslot = chargerModel.data['timeSlot'];
       var chargerType =
           (chargerModel.data['info'] as Map<String, dynamic>)['chargerType'];
       var amenities =
           (chargerModel.data['info'] as Map<String, dynamic>)['amenities'];
       var hostName =
           (chargerModel.data['info'] as Map<String, dynamic>)['hostName'];
+      num status = (chargerModel.data['info'] as Map<String, dynamic>)['status'];
       String chargerId = chargerModel.data['chargerId'];
       String userId = chargerModel.data['uid'];
 
@@ -507,11 +515,12 @@ class HomeState extends State<Home> {
                     endTime: endTime.toString(),
                     timeslot: timeslot,
                     chargerId: chargerId,
-                    providerId: userId);
+                    providerId: userId,
+                    status: status);
               },
             );
           },
-          icon: BitmapDescriptor.fromBytes(GreenmarkerIcon));
+          icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon));
 
       setState(() {});
 
@@ -579,7 +588,6 @@ class HomeState extends State<Home> {
           position:
               LatLng(_currentPosition.latitude, _currentPosition.longitude),
           icon: BitmapDescriptor.fromBytes(markerIcon)));
-
       _mapController
           .animateCamera(CameraUpdate.newCameraPosition(_kGooglePlex));
     });

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/login/login.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/my_chargers.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/profilesection.dart';
@@ -25,6 +26,8 @@ String state = "";
 String city = "";
 String pincode = "";
 String imageurl = "";
+bool isProvider = false;
+List<dynamic> chargers = [];
 
 class Account extends StatefulWidget {
   const Account({Key? key}) : super(key: key);
@@ -58,31 +61,30 @@ class _AccountState extends State<Account> {
           await _firestore.collection('user').doc(userId).get();
 
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-      setState((){
+      setState(() {
         _user = auth.currentUser;
         //username = "${userData['firstName']} ${userData['lastName']}";
         username = userData['firstName'];
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
-        email = userData['email'];
-        country = userData['country'];
-        state = userData['state'];
-        city = userData['city'];
-        pincode = userData['pinCode'];
-        imageurl = userData["userImage"];
+        // email = userData['email'];
+        // country = userData['country'];
+        // state = userData['state'];
+        // city = userData['city'];
+        // pincode = userData['pinCode'];
+        // imageurl = userData["userImage"];
+        isProvider = userData["level3"];
+        chargers = userData["chargers"];
         //clickedImage = userData['userImage'];
         print("In fetching block");
         print('username is : ${username}');
-        print('image url is : ${imageurl}');
         print('phone number is :${phoneNo}');
-
       });
     } catch (e) {
       print('Error fetching user data: $e');
       print("In error block");
-      print(username);
-      print(phoneNo);
+      print(e);
     }
   }
 
@@ -251,7 +253,7 @@ Widget profileSection(BuildContext context) {
           errorWidget: (context, url, error) => Icon(Icons.error),
         );
 
-    Future<void> _showPhotoOptionsDialog() {
+  Future<void> _showPhotoOptionsDialog() {
     return showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -367,32 +369,43 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return Card(
-    elevation: 4,
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8))),
-    child: Container(
-      padding: EdgeInsetsDirectional.all(width * 0.03),
-      width: width * 0.28,
-      height: height * 0.11,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(width * 0.02),
-        border: Border.all(width: 1.5, color: Colors.black26),
-      ),
-      child: Column(
-        children: [
-          Icon(
-            icon,
-            color: ColorManager.primary,
-            size: height * 0.05,
+  return GestureDetector(
+    onTap: () {
+      if (str == "Chargers") {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MyChargersScreen(
+            chargers: chargers,
           ),
-          Spacer(),
-          Text(str,
-              style: const TextStyle(
-                  fontSize: AppSize.s14,
-                  fontWeight: FontWeight.w800,
-                  fontFamily: 'fonts/Poppins')),
-        ],
+        ));
+      }
+    },
+    child: Card(
+      elevation: 4,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      child: Container(
+        padding: EdgeInsetsDirectional.all(width * 0.03),
+        width: width * 0.28,
+        height: height * 0.11,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(width * 0.02),
+          border: Border.all(width: 1.5, color: Colors.black26),
+        ),
+        child: Column(
+          children: [
+            Icon(
+              icon,
+              color: ColorManager.primary,
+              size: height * 0.05,
+            ),
+            Spacer(),
+            Text(str,
+                style: const TextStyle(
+                    fontSize: AppSize.s14,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'fonts/Poppins')),
+          ],
+        ),
       ),
     ),
   );
@@ -408,7 +421,7 @@ Widget settingSection(BuildContext context, IconData icon, String str) {
   return Card(
     elevation: 4,
     shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(Radius.circular(8))),
+        borderRadius: BorderRadius.all(Radius.circular(8))),
     child: Container(
       padding: EdgeInsetsDirectional.symmetric(horizontal: width * 0.05),
       height: height * 0.06,
