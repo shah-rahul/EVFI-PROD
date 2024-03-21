@@ -45,9 +45,10 @@ class _ComplaintState extends State<Complaint> {
     reviewCollection.add({
       'chargerId': widget.chargerId,
       'description': commentController.text,
-      'userId' : _user!.uid,
+      'userId': _user!.uid,
     }).then((value) {
       print('Data stored successfully in Firestore');
+      Navigator.pop(context);
     }).catchError((error) {
       print('Failed to store data in Firestore: $error');
     });

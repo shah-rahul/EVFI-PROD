@@ -35,6 +35,7 @@ class _ReviewState extends State<Review> {
       'suggestion': commentController.text,
     }).then((value) {
       print('Data stored successfully in Firestore');
+      Navigator.pop(context);
     }).catchError((error) {
       print('Failed to store data in Firestore: $error');
     });
