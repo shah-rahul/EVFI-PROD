@@ -63,17 +63,16 @@ class _AccountState extends State<Account> {
       Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
       setState(() {
         _user = auth.currentUser;
-        //username = "${userData['firstName']} ${userData['lastName']}";
         username = userData['firstName'];
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
-        // email = userData['email'];
-        // country = userData['country'];
-        // state = userData['state'];
-        // city = userData['city'];
-        // pincode = userData['pinCode'];
-        // imageurl = userData["userImage"];
+        email = userData['email'];
+        country = userData['country'];
+        state = userData['state'];
+        city = userData['city'];
+        pincode = userData['pinCode'];
+        imageurl = userData["imageUrl"];
         isProvider = userData["level3"];
         chargers = userData["chargers"];
         //clickedImage = userData['userImage'];
@@ -108,7 +107,6 @@ class _AccountState extends State<Account> {
     }
     setState(() {
       username = newDetails.name;
-      phoneNo = newDetails.number;
     });
   }
 
@@ -144,12 +142,9 @@ class _AccountState extends State<Account> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            //..............................................................................................
-            //...................EDIT PROFILE...............................................................
+            //...................PROFILE....................................................................
             profileSection(context),
-            //2nd column.......
             SizedBox(height: height * 0.015),
-            //..............................................................................................
             //....................BUTTONS IN ROW............................................................
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,7 +157,6 @@ class _AccountState extends State<Account> {
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
             ),
-            //..............................................................................................
             //.............................COLUMN BUTTONS...................................................
             SizedBox(height: height * 0.015),
             GestureDetector(
@@ -209,7 +203,6 @@ class _AccountState extends State<Account> {
     );
   }
 
-//..............................................................................................
 //..............ADD STATION AND SIGNOUT METHODS.................................................
   void _addStation() {
     showModalBottomSheet(
@@ -281,11 +274,6 @@ Widget profileSection(BuildContext context) {
               ],
             ));
   }
-
-  // CircleAvatar(
-  //     radius: height * 0.06,
-  //     backgroundImage: NetworkImage(imageurl),
-  //   );
 
   return Card(
     elevation: 4,
