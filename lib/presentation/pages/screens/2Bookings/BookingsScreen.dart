@@ -26,7 +26,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   QuerySnapshot<Map<String, dynamic>>? _userCollection;
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
-  late String stationName;
+  String stationName = '';
 
   @override
   void initState() {
@@ -158,8 +158,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
                             documents[index].data()!['chargerId'],
-                            // (documents[index].data()!['info'] as Map<String, dynamic>)['stationName']
-                            stationName),
+                            [stationName]),
                         builder: ((context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -168,6 +167,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                               ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
+                          print('snapshot data');
+                          print(snapshots.data.toString());
                           if (!snapshots.hasData) {
                             return const Center(
                               child: Text('No Bookings yet..'),
@@ -189,7 +190,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName: snapshots.data!['name'],
+                                      customerName:
+                                          snapshots.data!['firstName'],
                                       customerMobileNumber:
                                           snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],

@@ -162,8 +162,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
               tileColor: ColorManager.primaryWithOpacity,
               textColor: Colors.black,
               selectedColor: Colors.green,
-              title: const Text(
-                  'Select Charger location',
+              title: const Text('Select Charger location',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               leading: CircleAvatar(
                 backgroundColor: ColorManager.grey3,
@@ -195,7 +194,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
             activeColor: Colors.transparent,
             value: typeCharger.Level1,
             groupValue: _type,
-            tileColor: (_type == typeCharger.Level1) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level1)
+                ? Colors.green[400]
+                : Colors.white,
             onChanged: (val) {
               setState(() {
                 // debugPrint('Selected Charger: \t$val');
@@ -224,7 +225,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
             dense: true,
             value: typeCharger.Level2,
             groupValue: _type,
-            tileColor: (_type == typeCharger.Level2) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level2)
+                ? Colors.green[400]
+                : Colors.white,
             onChanged: (val) {
               setState(() {
                 debugPrint('Selected Charger: \t$val');
@@ -252,7 +255,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
             activeColor: Colors.transparent,
             value: typeCharger.Level3,
             groupValue: _type,
-            tileColor: (_type == typeCharger.Level3) ? Colors.green[400] : Colors.white,
+            tileColor: (_type == typeCharger.Level3)
+                ? Colors.green[400]
+                : Colors.white,
             onChanged: (val) {
               setState(() {
                 debugPrint('Selected Charger: \t$val');
@@ -277,9 +282,8 @@ class _ListChargerFormState extends State<ListChargerForm> {
         _imageList!.addAll(selectedImage);
       }
     } else {
-
-      final XFile? sekectedImage =
-          await imagePicker.pickImage(source: ImageSource.camera ,imageQuality: 50);
+      final XFile? sekectedImage = await imagePicker.pickImage(
+          source: ImageSource.camera, imageQuality: 50);
 
       if (sekectedImage != null) {
         _imageList!.add(sekectedImage);
@@ -289,34 +293,35 @@ class _ListChargerFormState extends State<ListChargerForm> {
     setState(() {});
   }
 
-Future<List<String>> uploadImages(List<XFile> imageFiles) async {
-  List<String> imageUrls = [];
+  Future<List<String>> uploadImages(List<XFile> imageFiles) async {
+    List<String> imageUrls = [];
 
-  for (XFile imageFile in imageFiles) {
-    File file = File(imageFile.path);
-    List<int> imageBytes = await file.readAsBytes();
+    for (XFile imageFile in imageFiles) {
+      File file = File(imageFile.path);
+      List<int> imageBytes = await file.readAsBytes();
 
-    img.Image originalImage = img.decodeImage(Uint8List.fromList(imageBytes))!;
-    img.Image resizedImage = img.copyResize(originalImage, width: 800); // width ask rahul sir
+      img.Image originalImage =
+          img.decodeImage(Uint8List.fromList(imageBytes))!;
+      img.Image resizedImage =
+          img.copyResize(originalImage, width: 800); // width ask rahul sir
 
-    File resizedFile = File('${file.path}_resized.jpg');
-    resizedFile.writeAsBytesSync(img.encodeJpg(resizedImage));
+      File resizedFile = File('${file.path}_resized.jpg');
+      resizedFile.writeAsBytesSync(img.encodeJpg(resizedImage));
 
-    String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-    firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
-        .ref()
-        .child('charger_images')
-        .child('$imageName.jpg');
-        
-    await ref.putFile(resizedFile);
-    String imageUrl = await ref.getDownloadURL();
+      String imageName = DateTime.now().millisecondsSinceEpoch.toString();
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('charger_images')
+          .child('$imageName.jpg');
 
-    imageUrls.add(imageUrl);
-    resizedFile.delete();
+      await ref.putFile(resizedFile);
+      String imageUrl = await ref.getDownloadURL();
+
+      imageUrls.add(imageUrl);
+      resizedFile.delete();
+    }
+    return imageUrls;
   }
-  return imageUrls;
-}
-
 
   Future<void> _showPhotoOptionsDialog() {
     return showDialog(
@@ -442,20 +447,23 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
     }
 
     void StoreChargerType(int type) {
-      String chargerType;
-      chargerType = 'Level $type';
+      String chargerType = '';
+      chargerType =  'Level $type';
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
     }
+
     String extractNumericPart(String time) {
       // Remove non-numeric characters
       return time.replaceAll(RegExp(r'[^0-9]'), '');
     }
+
     void StoreAvailability(String start, String end) {
-      UserChargingData userChargingData = userChargingDataProvider.userChargingData;
+      UserChargingData userChargingData =
+          userChargingDataProvider.userChargingData;
 
       userChargingData.start = int.parse(start);
       userChargingData.end = int.parse(end);
@@ -477,6 +485,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
       userChargingData.amenities = amenities;
 
       userChargingDataProvider.setUserChargingData(userChargingData);
+      
     }
 
     void StoreImageurl(List<String> imageUrls) {
@@ -605,7 +614,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                             elevation: 4,
                             shape: const RoundedRectangleBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(8)),
+                                  BorderRadius.all(Radius.circular(8)),
                             ),
                             child: TextFormField(
                               onChanged: StoreHostName,
@@ -624,7 +633,7 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide.none,
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
+                                        BorderRadius.all(Radius.circular(8)),
                                   )),
                               maxLines: 1,
                               keyboardType: TextInputType.name,
@@ -651,7 +660,9 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                 }
                                 return null;
                               },
-                              style: TextStyle(color: ColorManager.darkGrey,fontSize: AppSize.s16),
+                              style: TextStyle(
+                                  color: ColorManager.darkGrey,
+                                  fontSize: AppSize.s16),
                               decoration: const InputDecoration(
                                   hintText: 'Please enter a valid address',
                                   hintStyle: TextStyle(fontSize: AppSize.s14),
@@ -749,7 +760,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                         TextStyle(color: ColorManager.darkGrey),
                                     decoration: InputDecoration(
                                       hintText: 'Enter Pin',
-                                      hintStyle: TextStyle(fontSize: AppSize.s14),
+                                      hintStyle:
+                                          TextStyle(fontSize: AppSize.s14),
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
@@ -759,8 +771,10 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                     ),
                                     keyboardType: TextInputType.number,
                                     inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly, // Allow only numeric input
-                                      LengthLimitingTextInputFormatter(6), // Limit the length to 6 digits
+                                      FilteringTextInputFormatter
+                                          .digitsOnly, // Allow only numeric input
+                                      LengthLimitingTextInputFormatter(
+                                          6), // Limit the length to 6 digits
                                     ],
                                     focusNode: _pinCodeFocusNode,
                                     onFieldSubmitted: (_) =>
@@ -787,7 +801,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                                         Radius.circular(8)),
                                     decoration: const InputDecoration(
                                         hintText: 'Select State',
-                                        hintStyle: TextStyle(fontSize: AppSize.s14),
+                                        hintStyle:
+                                            TextStyle(fontSize: AppSize.s14),
                                         fillColor: Colors.white,
                                         filled: true,
                                         // : ColorManager.primary.withOpacity(0.17),
@@ -845,7 +860,8 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
-                                  hintText: 'Please enter a valid aadhar number',
+                                  hintText:
+                                      'Please enter a valid aadhar number',
                                   hintStyle: TextStyle(fontSize: AppSize.s14),
                                   fillColor: Colors.white,
                                   filled: true,
@@ -924,8 +940,10 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                               endLimit: DateTimeExtension.todayMidnight,
                               startLimit: DateTimeExtension.todayStart,
                               onChanged: (start, end, isAllDay) {
-                                _startAvailabilityTime = DateFormat('H').format(start!).toString();
-                                _endAvailabilityTime = DateFormat('H').format(end!).toString();
+                                _startAvailabilityTime =
+                                    DateFormat('H').format(start!).toString();
+                                _endAvailabilityTime =
+                                    DateFormat('H').format(end!).toString();
                               }),
                           const SizedBox(
                             height: 15,
@@ -1035,20 +1053,21 @@ Future<List<String>> uploadImages(List<XFile> imageFiles) async {
                 )));
   }
 }
+
 class AadharNumberFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String formattedValue = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
     if (formattedValue.length > 4 && formattedValue.length <= 8) {
       formattedValue =
-      '${formattedValue.substring(0, 4)} ${formattedValue.substring(4)}';
+          '${formattedValue.substring(0, 4)} ${formattedValue.substring(4)}';
     } else if (formattedValue.length > 8 && formattedValue.length <= 14) {
       formattedValue =
-      '${formattedValue.substring(0, 4)} ${formattedValue.substring(4,8)} ${formattedValue.substring(8)}';
+          '${formattedValue.substring(0, 4)} ${formattedValue.substring(4, 8)} ${formattedValue.substring(8)}';
     }
     if (formattedValue.length > 14) {
       formattedValue = formattedValue.substring(0, 14);

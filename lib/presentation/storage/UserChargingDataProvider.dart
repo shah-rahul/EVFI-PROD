@@ -41,11 +41,13 @@ class UserChargingDataProvider extends ChangeNotifier {
     imageUrl: [],
   );
   // ignore: prefer_final_fields
-  CollectionReference _chargersCollection = FirebaseFirestore.instance.collection('chargers');
+  CollectionReference _chargersCollection =
+      FirebaseFirestore.instance.collection('chargers');
 
   UserChargingData get userChargingData => _userChargingData;
   void setUserChargingData(UserChargingData data) {
     _userChargingData = data;
+    saveUserChargingData();
     notifyListeners();
   }
 
