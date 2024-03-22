@@ -12,7 +12,6 @@ import '../../../resources/font_manager.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
-import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -59,64 +58,50 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            AppStrings.BookingTitle,
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: FontSize.s20,color: ColorManager.appBlack),
-          ),
-          elevation: 0,
-          backgroundColor: ColorManager.white,
-        ),
-        body: Container(
-          child: _currentSelected ? PendingScreen(context) : RecentScreen(),
-        ));
-  }
   // Widget build(BuildContext context) {
-  //   final screenHeight = MediaQuery.of(context).size.height;
-  //   final screenWidth = MediaQuery.of(context).size.width;
-  //   if (_isProvider == null) {
-  //     return Scaffold(
-  //       body: Center(child: Shimmer.fromColors(
-  //         baseColor: ColorManager.grey5!,
-  //         highlightColor: ColorManager.white!,
-  //         child: Container(
-  //           height: screenHeight * 0.75,
-  //           width: screenWidth * 0.75,
-  //           color: ColorManager.white,
-  //         ),
-  //       ),
-  //       ),
-  //     );
-  //   } else if (_isProvider == true) {
-  //     return Scaffold(
+  //   return Scaffold(
   //       appBar: AppBar(
-  //         title: Text(
+  //         title: const Text(
   //           AppStrings.BookingTitle,
   //           textAlign: TextAlign.start,
   //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
   //         ),
   //         backgroundColor: Colors.white,
-  //         actions: [
-  //           IconButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
-  //               },
-  //               icon: const Icon(
-  //                 Icons.add_business_outlined,
-  //                 color: Colors.black,
-  //               ))
-  //         ],
   //       ),
   //       body: Container(
-  //           child: _currentSelected ? PendingScreen(context) : RecentScreen()),
-  //     );
-  //   } else {
-  //     return ListChargersPage();
-  //   }
+  //         child: _currentSelected ? PendingScreen(context) : RecentScreen(),
+  //       ));
   // }
+  Widget build(BuildContext context) {
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
+    if (_isProvider == true) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            AppStrings.BookingTitle,
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.white,
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Routes.listChargerFormRoute);
+                },
+                icon: const Icon(
+                  Icons.add_business_outlined,
+                  color: Colors.black,
+                ))
+          ],
+        ),
+        body: Container(
+            child: _currentSelected ? PendingScreen(context) : RecentScreen()),
+      );
+    } else {
+      return ListChargersPage();
+    }
+  }
 
 
 

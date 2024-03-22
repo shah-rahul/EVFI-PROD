@@ -58,5 +58,6 @@ class AppStrings {
   static const DeclineButton = "Decline";
 
   static const topLabel = "Time  left";
+  static const myChargers = "My Chargers";
 
 }

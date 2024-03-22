@@ -3,6 +3,7 @@
 // ignore_for_file: file_names, duplicate_ignore
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -28,13 +29,14 @@ class UserChargingDataProvider extends ChangeNotifier {
     state: 'Null',
     aadharNumber: 'Null',
     hostName: 'Null',
-    chargerType: 'NUll',
+    chargerType: 'Null',
     start: 0, // DateTime.now(),
     end: 0, //DateTime.now(),
     timeslot: 0,
     price: 'Null',
     amenities: 'Null',
     aadharImages: [],
+    status: ChargerStatus.available.index,
     //image of charger
     imageUrl: [],
   );
@@ -66,7 +68,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'stationName': _userChargingData.stationName,
           'address': _userChargingData.address,
           'city': _userChargingData.city,
-          'pin': _userChargingData.pin,
+          'pinCode': _userChargingData.pin,
           'state': _userChargingData.state,
           'aadharNumber': _userChargingData.aadharNumber,
           'hostName': _userChargingData.hostName,
@@ -76,8 +78,8 @@ class UserChargingDataProvider extends ChangeNotifier {
           'imageUrl': _userChargingData.imageUrl,
           'start': _userChargingData.start,
           'end': _userChargingData.end,
-
           'aadharImages': _userChargingData.aadharImages,
+          'status': ChargerStatus.available.index,
           //'timeSlot': 0,
           //charger image
           // 'isProvider':_userChargingData.isProvider,

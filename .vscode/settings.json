@@ -1,4 +1,5 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
-    "cmake.sourceDirectory": "C:/Softwares/Flutter/PROJECTS/EVFI-PROD/windows"
+    "cmake.sourceDirectory": "C:/Softwares/Flutter/PROJECTS/EVFI-PROD/windows",
+    "editor.minimap.autohide": true
 }

@@ -23,7 +23,7 @@ class UserChargingData {
   int start;
   int end;
   int timeslot;
-
+  num status;
   String price;
   String amenities;
   // image of charger
@@ -45,9 +45,10 @@ class UserChargingData {
       required this.chargerType,
       required this.start,
       required this.end,
-        required this.timeslot,
+      required this.timeslot,
       required this.price,
       required this.amenities,
+      required this.status,
       //image of charger
       required this.imageUrl,
       required this.aadharImages});

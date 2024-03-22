@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Complaint extends StatefulWidget {
@@ -21,16 +22,33 @@ class _ComplaintState extends State<Complaint> {
   TextEditingController commentController = TextEditingController();
   final CollectionReference reviewCollection =
       FirebaseFirestore.instance.collection('complaints');
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.authStateChanges().listen((User? user) {
+      _user = user;
+      if (user != null) {
+        setState(() {});
+      }
+    });
+  }
 
   void submit() {
     print("charger status is : ${_isWorking}");
     print("The complaint is : ${commentController.text}");
+    print("The user id is : ${_user!.uid}");
 
     reviewCollection.add({
       'chargerId': widget.chargerId,
       'description': commentController.text,
+      'userId': _user!.uid,
     }).then((value) {
       print('Data stored successfully in Firestore');
+      Navigator.pop(context);
     }).catchError((error) {
       print('Failed to store data in Firestore: $error');
     });

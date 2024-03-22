@@ -4,10 +4,12 @@ import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/image_input.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/widgets.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen(
@@ -69,12 +71,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> updateProfile() async {
-    print('updating profile started');
+    print('updating profile started.......');
     try {
       await usersCollection.doc(userId).update({
         'firstName': _enteredFName,
         'lastName': _enteredLName,
-        'phoneNumber': _enteredMobileno,
+        //'phoneNumber': _enteredMobileno,
         'email': _enteredEmail,
         'country': _enteredCountry,
         'city': _enteredCity,
@@ -98,12 +100,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 ////////////////////////////////////////////////////////////////////////////////
   void _submit() {
-    _formkey.currentState!.save();
-    updateProfile();
-    Navigator.of(context).pop(UserProfile(
-      name: _enteredFName,
-      number: _enteredMobileno,
-    ));
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      updateProfile();
+      Navigator.of(context).pop(UserProfile(
+        name: _enteredFName,
+        //number: _enteredMobileno,
+      ));
+    }
   }
 
   @override
@@ -124,13 +128,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               key: _formkey,
               child: Column(
                 children: [
-                  //0th column
-                  // ImageInput(
-                  //   onPickImage: (image) {
-                  //     _selectedImage = image;
-                  //   },
-                  // ),
-                  const SizedBox(height: 8),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                  //1st column...
                   const Row(
                     children: [
                       Icon(
@@ -151,60 +150,75 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: 15,
                     thickness: 2,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //1st column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('First Name'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 10,
                     initialValue: widget.firstname,
                     onSaved: (newValue) {
                       _enteredFName = newValue!;
                     },
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('Last Name'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 10,
                     initialValue: widget.lastname,
                     onSaved: (newValue) {
                       _enteredLName = newValue!;
                     },
                   ),
-                  //2nd column
-                  const SizedBox(height: 1),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //3rd column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
-                      label: Text('User email'),
+                      labelText: 'User email',
+                      counterText: '',
                     ),
                     maxLength: 30,
                     initialValue: widget.email,
                     onSaved: (newValue) {
                       _enteredEmail = newValue!;
                     },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Email is required';
+                      }
+                      final emailRegex =
+                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Enter a valid email address';
+                      }
+                      return null;
+                    },
                   ),
-                  //4th column
-                  const SizedBox(height: 1),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //5th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
-                      label: Text('Contact Number'),
-                    ),
+                        label: Text('Contact Number'),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide(width: 2))),
                     maxLength: 13,
                     initialValue: widget.phoneNo,
+                    enabled: false,
                     onSaved: (newValue) {
                       _enteredMobileno = newValue!;
                     },
                   ),
                   //6th column
-                  const SizedBox(height: 5),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.01),
                   const Row(
                     children: [
                       Icon(
@@ -225,68 +239,95 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: 15,
                     thickness: 2,
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //7th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('Country'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 15,
                     initialValue: widget.country,
                     onSaved: (newValue) {
                       _enteredCountry = newValue!;
                     },
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //8th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('State'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 15,
                     initialValue: widget.state,
                     onSaved: (newValue) {
                       _enteredState = newValue!;
                     },
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //9th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('City'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 15,
                     initialValue: widget.city,
                     onSaved: (newValue) {
                       _enteredCity = newValue!;
                     },
                   ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //10th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
                     decoration: const InputDecoration(
                       label: Text('Pin Code'),
+                      counterText: '',
                     ),
-                    maxLength: 20,
+                    maxLength: 6,
                     initialValue: widget.pincode,
                     onSaved: (newValue) {
                       _enteredPincode = newValue!;
                     },
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Pin code is required';
+                      }
+                      if (value.length != 6) {
+                        return 'Pin code must be exactly 6 digits long';
+                      }
+                      return null;
+                    },
                   ),
                   //11th column
-                  const SizedBox(height: 2),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   //12th column
-                  ElevatedButton.icon(
-                    onPressed: _submit,
-                    icon: const Icon(Icons.add),
-                    style: ButtonStyle(
-                      foregroundColor:
-                          const MaterialStatePropertyAll(Colors.black),
-                      backgroundColor:
-                          MaterialStatePropertyAll(ColorManager.primary),
+                  GestureDetector(
+                    onTap: _submit,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height * 0.060,
+                      width: MediaQuery.of(context).size.width * 1,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: ColorManager.primary,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: AppSize.s20,
+                            fontWeight: FontWeight.w800,
+                            fontFamily: 'fonts/Poppins',
+                          ),
+                        ),
+                      ),
                     ),
-                    label: const Text('Submit'),
                   ),
                 ],
               ),
