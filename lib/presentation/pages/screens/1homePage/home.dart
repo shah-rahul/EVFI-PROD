@@ -403,25 +403,27 @@ class HomeState extends State<Home> {
                       return ProgressWidget(res[0], res[1]);
                     }
                     return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime.toString(),
-                        endTime: endTime.toString(),
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid'],
-                        status: status,);
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                      chargerType: chargerType,
+                      amenities: amenities,
+                      hostName: hostName,
+                      startTime: startTime.toString(),
+                      endTime: endTime.toString(),
+                      timeslot: timeslot,
+                      chargerId: ds.id,
+                      providerId: data['uid'],
+                      status: status,
+                    );
                   },
                 );
               },
-              icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon)));
+              icon: BitmapDescriptor.fromBytes(
+                  (status == 1) ? GreenmarkerIcon : BlackMarkerIcon)));
 
           setState(() {});
         }
@@ -436,7 +438,7 @@ class HomeState extends State<Home> {
   //       return addState;
   //     }
   //     addState = address[i] + addState;
-    //   }
+  //   }
   //   return addState;
   // }
 
@@ -482,7 +484,8 @@ class HomeState extends State<Home> {
           (chargerModel.data['info'] as Map<String, dynamic>)['amenities'];
       var hostName =
           (chargerModel.data['info'] as Map<String, dynamic>)['hostName'];
-      num status = (chargerModel.data['info'] as Map<String, dynamic>)['status'];
+      num status =
+          (chargerModel.data['info'] as Map<String, dynamic>)['status'];
       String chargerId = chargerModel.data['chargerId'];
       String userId = chargerModel.data['uid'];
 
@@ -520,7 +523,8 @@ class HomeState extends State<Home> {
               },
             );
           },
-          icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon));
+          icon: BitmapDescriptor.fromBytes(
+              (status == 1) ? GreenmarkerIcon : BlackMarkerIcon));
 
       setState(() {});
 

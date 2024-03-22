@@ -85,17 +85,17 @@ class _MainViewState extends State<MainView> {
             ),
           ],
         ),
-        // body: IndexedStack(
-        //   index: _currentScreen,
-        //   children: screens
-        // const [
-        //   Home(),
-        //   BookingsScreen(),
-        //   MyChargingScreen(),
-        //   Account(),
-        // ],
-        // ),
-        body: screens.elementAt(_currentScreen),
+        body: IndexedStack(
+          index: _currentScreen,
+          children: 
+         [
+          Home(),
+          BookingsScreen(),
+          MyChargingScreen(),
+          Account(),
+        ],
+        ),
+        // body: screens.elementAt(_currentScreen),
       );
     
   }

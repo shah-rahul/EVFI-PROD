@@ -77,7 +77,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             AppStrings.BookingTitle,
             textAlign: TextAlign.start,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
