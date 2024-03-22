@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../resources/font_manager.dart';
+import '../../../storage/UserData.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -196,10 +197,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName:
-                                          snapshots.data!['firstName'],
-                                      customerMobileNumber:
-                                          snapshots.data!['phoneNumber'],
+                                      customerName: snapshots.data!['firstName'],
+                                      customerMobileNumber: snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index].id,
