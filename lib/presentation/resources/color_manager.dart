@@ -14,7 +14,7 @@ class ColorManager {
   static Color dullYellow = HexColor.fromHex("#443F16");
   static Color statusAccepted = HexColor.fromHex("D0F4D5");
   static Color statusRequested = Colors.white;
-  static Color statusCancelled = HexColor.fromHex("#FFB9C2");
+  static Color statusCancelled = HexColor.fromHex("#F6D4D5");
   static Color statusDeclined = HexColor.fromHex("#F6D4D5");
 
   //gradients

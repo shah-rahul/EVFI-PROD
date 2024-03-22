@@ -28,7 +28,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
   QuerySnapshot<Map<String, dynamic>>? _userCollection;
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
-  late String stationName;
+  String stationName = '';
 
   @override
   void initState() {
@@ -150,7 +150,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Column(
                       children: List.generate(
                         5,
-                            (index) => shimmerPlaceholder(),
+                        (index) => shimmerPlaceholder(),
                       ),
                     ),
                   );
@@ -177,14 +177,18 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
-                            documents[index].data()!['chargerId'],stationName),
+                            documents[index].data()!['chargerId'],
+                            [stationName]),
                         builder: ((context,
-                            AsyncSnapshot<DocumentSnapshot<Map<String, dynamic>>>
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
                           if (snapshots.connectionState ==
-                              ConnectionState.waiting){
+                              ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
+                          print('snapshot data');
+                          print(snapshots.data.toString());
                           if (!snapshots.hasData) {
                             return const Center(
                               child: Text('No Bookings yet..'),
@@ -207,13 +211,14 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName: snapshots.data!['name'],
-                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      customerName:
+                                          snapshots.data!['firstName'],
+                                      customerMobileNumber:
+                                          snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index].id,
-                                      ratings: 4
-                                  ),
+                                      ratings: 4),
                                   currentTab: tab,
                                 ),
                               ),
@@ -222,9 +227,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                               // ),
                             ],
                           );
-                        }
-                        )
-                    );
+                        }));
                   },
                   itemCount: documents.length,
                 );
@@ -256,7 +259,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenPendingTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05,
+                            fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -340,7 +344,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         AppStrings.BookingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontSize: screenWidth * 0.05, fontWeight: FontWeight.w500),
+                            fontSize: screenWidth * 0.05,
+                            fontWeight: FontWeight.w500),
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -366,19 +371,21 @@ class _BookingsScreenState extends State<BookingsScreen> {
       ],
     );
   }
-Widget shimmerPlaceholder() {
-  return Shimmer.fromColors(
-    baseColor: Colors.grey[300]!,
-    highlightColor: Colors.grey[100]!,
-    child: Container(
-      margin: EdgeInsets.symmetric(vertical: 10,
-  horizontal: 16 ),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+
+  Widget shimmerPlaceholder() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        height: 100 *
+            MediaQuery.textScaleFactorOf(
+                context), // Adjust the height as needed
       ),
-        height: 100 * MediaQuery.textScaleFactorOf(context), // Adjust the height as needed
-    ),
-  );
-}
+    );
+  }
 }

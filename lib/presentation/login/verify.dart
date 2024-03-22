@@ -45,7 +45,7 @@ class _VerifyState extends State<Verify> {
     // ignore: non_constant_identifier_names
     void StorePhoneNumber(String phoneNumber) {
       UserData userData = userDataProvider.userData;
-      userData.phoneNumber = phoneNumber;
+      userData.phoneNumber = phoneNumber.substring(1);
 
       userDataProvider.setUserData(userData);
       userDataProvider.saveUserData();
@@ -279,7 +279,8 @@ class _VerifyState extends State<Verify> {
                         }
                       }
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor:  ColorManager.primary,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorManager.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),
@@ -310,6 +311,7 @@ Future<bool> checkNumberIsRegistered({required String number}) async {
   final collectionRef = firestore.collection('user');
   bool isNumberRegistered = false;
   // storePhoneNumber(number);
+  print(number);
 
   number = number.substring(1);
   try {
