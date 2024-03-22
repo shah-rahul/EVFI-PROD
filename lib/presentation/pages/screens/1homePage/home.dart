@@ -183,12 +183,13 @@ class HomeState extends State<Home> {
     _userBookings = _bookings;
   }
 
-  Future<dynamic> ifChargerBookingInProgress(String chargerId,List<dynamic>userBookings) async {
+  Future<dynamic> ifChargerBookingInProgress(
+      String chargerId, List<dynamic> userBookings) async {
     List<int> timeSlots = [];
     print(userBookings);
     for (int i = 0; i < userBookings.length; i++) {
       int res = await getTimeSlotByBookingId(userBookings[i], chargerId);
-      
+
       print(res);
       if (res != 0) timeSlots.add(res);
     }
@@ -377,44 +378,44 @@ class HomeState extends State<Home> {
               markerId: MarkerId(geohash),
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
               onTap: () async {
-                _mapController.animateCamera(CameraUpdate.newCameraPosition(
-                    CameraPosition(
-                        target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                        zoom: 16)));
-                dynamic res =
-                    await ifChargerBookingInProgress(data['chargerId'],_userBookings);
+                // _mapController.animateCamera(CameraUpdate.newCameraPosition(
+                //     CameraPosition(
+                //         target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                //         zoom: 16)));
+                // dynamic res =
+                //     await ifChargerBookingInProgress(data['chargerId'],_userBookings);
 
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor:
-                      const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
-                  builder: (context) {
-                    print(batteryCap);
-                    print('0000');
-                    double price =
-                        mypricing.fullChargeCost(batteryCap, stateName);
-                    if (res != false) {
-                      print(res);
-                      return ProgressWidget(res[0], res[1]);
-                    }
-                    return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime.toString(),
-                        endTime: endTime.toString(),
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid']);
-                  },
-                );
+                // showModalBottomSheet(
+                //   context: context,
+                //   isScrollControlled: true,
+                //   backgroundColor:
+                //       const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
+                //   builder: (context) {
+                //     print(batteryCap);
+                //     print('0000');
+                //     double price =
+                //         mypricing.fullChargeCost(batteryCap, stateName);
+                //     if (res != false) {
+                //       print(res);
+                //       return ProgressWidget(res[0], res[1]);
+                //     }
+                //     return CustomMarkerPopup(
+                //         stationName: stnName,
+                //         address: stnAddress,
+                //         imageUrl: stnImgUrl,
+                //         geopoint: geoPoint,
+                //         geohash: geohash,
+                //         costOfFullCharge: price,
+                //         chargerType: chargerType,
+                //         amenities: amenities,
+                //         hostName: hostName,
+                //         startTime: startTime.toString(),
+                //         endTime: endTime.toString(),
+                //         timeslot: timeslot,
+                //         chargerId: ds.id,
+                //         providerId: data['uid']);
+                //   },
+                // );
               },
               icon: BitmapDescriptor.fromBytes(GreenmarkerIcon)));
 

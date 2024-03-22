@@ -1,6 +1,6 @@
 // ignore_for_file: unnecessary_import, prefer_const_constructors_in_immutables, unused_catch_clause, no_leading_underscores_for_local_identifiers, avoid_function_literals_in_foreach_calls
 
-import  'dart:convert';
+import 'dart:convert';
 import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -61,7 +61,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    batteryCap=myKey.batteryCap;
+    batteryCap = myKey.batteryCap;
     super.initState();
   }
 
@@ -230,7 +230,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data['info'] as Map<String, dynamic>)['timeslot'];
+        var timeslot = (data as Map<String, dynamic>)['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
@@ -262,36 +262,36 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
-                _googleMapController.animateCamera(
-                    CameraUpdate.newCameraPosition(CameraPosition(
-                        target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                        zoom: 16)));
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  transitionAnimationController: AnimationController(
-                      vsync: this, duration: const Duration(milliseconds: 400)),
-                  backgroundColor: Colors.amber.withOpacity(0.0),
-                  builder: (context) {
-                    double price =
-                        mypricing.fullChargeCost(batteryCap, stateName);
-                    return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime,
-                        endTime: endTime,
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid']);
-                  },
-                );
+                // _googleMapController.animateCamera(
+                //     CameraUpdate.newCameraPosition(CameraPosition(
+                //         target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                //         zoom: 16)));
+                // showModalBottomSheet(
+                //   context: context,
+                //   isScrollControlled: true,
+                //   transitionAnimationController: AnimationController(
+                //       vsync: this, duration: const Duration(milliseconds: 400)),
+                //   backgroundColor: Colors.amber.withOpacity(0.0),
+                //   builder: (context) {
+                //     double price =
+                //         mypricing.fullChargeCost(batteryCap, stateName);
+                //     return CustomMarkerPopup(
+                //         stationName: stnName,
+                //         address: stnAddress,
+                //         imageUrl: stnImgUrl,
+                //         geopoint: geoPoint,
+                //         geohash: geohash,
+                //         costOfFullCharge: price,
+                //         chargerType: chargerType,
+                //         amenities: amenities,
+                //         hostName: hostName,
+                //         startTime: startTime,
+                //         endTime: endTime,
+                //         timeslot: timeslot,
+                //         chargerId: ds.id,
+                //         providerId: data['uid']);
+                //   },
+                // );
               },
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
               icon: BitmapDescriptor.fromBytes(stationMarker)));

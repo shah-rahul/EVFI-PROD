@@ -66,7 +66,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'stationName': _userChargingData.stationName,
           'address': _userChargingData.address,
           'city': _userChargingData.city,
-          'pin': _userChargingData.pin,
+          'pinCode': _userChargingData.pin,
           'state': _userChargingData.state,
           'aadharNumber': _userChargingData.aadharNumber,
           'hostName': _userChargingData.hostName,
