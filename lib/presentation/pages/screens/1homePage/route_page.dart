@@ -192,9 +192,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
     }
   }
 
-  void setRouteMarker(double radius, LatLng position) {
+  void setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
+    final Uint8List BlackMarkerIcon =
+        await getBytesFromAsset(ImageAssets.oldBlackMarker);
 
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
@@ -230,10 +232,11 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
         var stateName = (data['info'] as Map<String, dynamic>)['state'];
         var startTime = (data['info'] as Map<String, dynamic>)['start'];
         var endTime = (data['info'] as Map<String, dynamic>)['end'];
-        var timeslot = (data as Map<String, dynamic>)['timeSlot'];
+        var timeslot = data['timeSlot'];
         var chargerType = (data['info'] as Map<String, dynamic>)['chargerType'];
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
+        var status = (data['info'] as Map<String, dynamic>)['status'];
 
         if (geoPoint != null &&
             geohash != null &&
@@ -246,7 +249,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
             timeslot != null &&
             chargerType != null &&
             amenities != null &&
-            hostName != null) {
+            hostName != null &&
+            status != null) {
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -259,42 +263,45 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           chargerType = chargerType as String;
           amenities = amenities as String;
           hostName = hostName as String;
+          status = status as num;
           _newMarkers.add(Marker(
               markerId: MarkerId(geohash),
               onTap: () {
-                // _googleMapController.animateCamera(
-                //     CameraUpdate.newCameraPosition(CameraPosition(
-                //         target: LatLng(geoPoint.latitude, geoPoint.longitude),
-                //         zoom: 16)));
-                // showModalBottomSheet(
-                //   context: context,
-                //   isScrollControlled: true,
-                //   transitionAnimationController: AnimationController(
-                //       vsync: this, duration: const Duration(milliseconds: 400)),
-                //   backgroundColor: Colors.amber.withOpacity(0.0),
-                //   builder: (context) {
-                //     double price =
-                //         mypricing.fullChargeCost(batteryCap, stateName);
-                //     return CustomMarkerPopup(
-                //         stationName: stnName,
-                //         address: stnAddress,
-                //         imageUrl: stnImgUrl,
-                //         geopoint: geoPoint,
-                //         geohash: geohash,
-                //         costOfFullCharge: price,
-                //         chargerType: chargerType,
-                //         amenities: amenities,
-                //         hostName: hostName,
-                //         startTime: startTime,
-                //         endTime: endTime,
-                //         timeslot: timeslot,
-                //         chargerId: ds.id,
-                //         providerId: data['uid']);
-                //   },
-                // );
+                _googleMapController.animateCamera(
+                    CameraUpdate.newCameraPosition(CameraPosition(
+                        target: LatLng(geoPoint.latitude, geoPoint.longitude),
+                        zoom: 16)));
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  transitionAnimationController: AnimationController(
+                      vsync: this, duration: const Duration(milliseconds: 400)),
+                  backgroundColor: Colors.amber.withOpacity(0.0),
+                  builder: (context) {
+                    double price =
+                        mypricing.fullChargeCost(batteryCap, stateName);
+                    return CustomMarkerPopup(
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                      chargerType: chargerType,
+                      amenities: amenities,
+                      hostName: hostName,
+                      startTime: startTime,
+                      endTime: endTime,
+                      timeslot: timeslot,
+                      chargerId: ds.id,
+                      providerId: data['uid'],
+                      status: status,
+                    );
+                  },
+                  );
               },
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
-              icon: BitmapDescriptor.fromBytes(stationMarker)));
+              icon: BitmapDescriptor.fromBytes((status==1)? stationMarker : BlackMarkerIcon)));
         }
         setState(() {
           updateMarkers(_newMarkers);

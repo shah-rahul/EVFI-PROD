@@ -11,7 +11,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
-import '../../../resources/values_manager.dart';
 import '../../widgets/booking_item_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -73,8 +72,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
   //       ));
   // }
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    // final screenHeight = MediaQuery.of(context).size.height;
+    // final screenWidth = MediaQuery.of(context).size.width;
     if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(

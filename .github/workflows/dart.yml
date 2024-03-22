@@ -40,6 +40,6 @@ jobs:
         with:
           artifacts: 'build/app/outputs/apk/release/*'
 
-          tag: v0.0.39s
+          tag: v0.0.40s
 
           token: ${{ secrets.DEPLOY_KEY}}
