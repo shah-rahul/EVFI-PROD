@@ -290,8 +290,8 @@ class HomeState extends State<Home> {
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
-    final Uint8List BlackMarkerIcon =
-        await getBytesFromAsset(ImageAssets.oldBlackMarker);
+    final Uint8List RedDisabledChargerMarker =
+        await getBytesFromAsset(ImageAssets.redDisabledChargerMarker);
     BitmapDescriptor nearbyMarker = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
         ImageAssets.greenMarker);
@@ -423,7 +423,7 @@ class HomeState extends State<Home> {
                 );
               },
               icon: BitmapDescriptor.fromBytes(
-                  (status == 1) ? GreenmarkerIcon : BlackMarkerIcon)));
+                  (status == 1) ? GreenmarkerIcon : RedDisabledChargerMarker)));
 
           setState(() {});
         }
@@ -456,8 +456,8 @@ class HomeState extends State<Home> {
   void addCachedChargersToMarkers() async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
-    final Uint8List BlackMarkerIcon =
-        await getBytesFromAsset(ImageAssets.oldBlackMarker);
+    final Uint8List RedDisabledChargerMarker =
+        await getBytesFromAsset(ImageAssets.redDisabledChargerMarker);
     _markers.clear(); // Clear existing markers if needed
 
     for (var chargerModel in cachedChargersBox.values) {
@@ -524,7 +524,7 @@ class HomeState extends State<Home> {
             );
           },
           icon: BitmapDescriptor.fromBytes(
-              (status == 1) ? GreenmarkerIcon : BlackMarkerIcon));
+              (status == 1) ? GreenmarkerIcon : RedDisabledChargerMarker));
 
       setState(() {});
 

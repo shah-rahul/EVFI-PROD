@@ -9,9 +9,12 @@ class ImageAssets {
   static const String chargerform = "assets/images/RegisterScreen/charger.jpg";
   static const String vehicleForm = "assets/images/RegisterScreen/vehicle.jpg";
   static const String loginBackground = "assets/images/login/BACK.jpg";
-  static const String mapSourceMarker = "assets/images/map/source_map_marker.png";
-  static const String mapDestinationMarker = "assets/images/map/destination_map_marker.png";
-  static const String currentLocationMarker = "assets/images/map/current_location_markers.png";
+  static const String mapSourceMarker =
+      "assets/images/map/source_map_marker.png";
+  static const String mapDestinationMarker =
+      "assets/images/map/destination_map_marker.png";
+  static const String currentLocationMarker =
+      "assets/images/map/current_location_markers.png";
   static const String oldBlackMarker = "assets/images/map/blackMarker.png";
   static const String blackMarker = "assets/images/map/currentBlackMarker.png";
   static const String greenMarker = "assets/images/map/GreenMarker.png";
@@ -31,7 +34,11 @@ class ImageAssets {
   static const String right = "assets/images/onboarding/right.png";
   static const String station = "assets/images/onboarding/sation.png";
   static const String RedCircle = "assets/images/booking/RedCircle.png";
-  static const String LeftTiltedLine = "assets/images/booking/LeftTiltedLine.png";
-  static const String RightTiltedLine = "assets/images/booking/RightTiltedLine.png";
+  static const String LeftTiltedLine =
+      "assets/images/booking/LeftTiltedLine.png";
+  static const String RightTiltedLine =
+      "assets/images/booking/RightTiltedLine.png";
+  static const String redDisabledChargerMarker =
+      "assets/images/map/redMarker.png";
   // static const String logo1 = "assets/assetss/logo.png";
 }

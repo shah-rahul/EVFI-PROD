@@ -195,8 +195,8 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
   void setRouteMarker(double radius, LatLng position) async {
     final GeoPoint intialPostion =
         GeoPoint(position.latitude, position.longitude);
-    final Uint8List BlackMarkerIcon =
-        await getBytesFromAsset(ImageAssets.oldBlackMarker);
+    final Uint8List RedDisabledChargerMarkerIcon =
+        await getBytesFromAsset(ImageAssets.redDisabledChargerMarker);
 
 // Center of the geo query.
     late final GeoFirePoint center = GeoFirePoint(intialPostion);
@@ -301,7 +301,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                   );
               },
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
-              icon: BitmapDescriptor.fromBytes((status==1)? stationMarker : BlackMarkerIcon)));
+              icon: BitmapDescriptor.fromBytes((status==1)? stationMarker : RedDisabledChargerMarkerIcon)));
         }
         setState(() {
           updateMarkers(_newMarkers);
