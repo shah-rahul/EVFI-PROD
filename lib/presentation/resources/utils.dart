@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 String convertTime(int startHour) {
   // Calculate the ending time
@@ -101,6 +102,11 @@ void updateFireStoreTimeStamp(int time, String chargerId) async {
 Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
     String customerId, String chargerId, List<String> stationName) async {
   print(chargerId);
+  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
+  try {} catch (err) {
+    print('Errrorrrrrrrrrrrrrrrrrrrrrrrr');
+    debugPrint('------$err');
+  }
   final chargerDetails = await FirebaseFirestore.instance
       .collection('chargers')
       .doc(chargerId)
@@ -113,7 +119,7 @@ Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
 
   final customerDetails =
       await FirebaseFirestore.instance.collection('user').doc(customerId).get();
-  print('customer id::');
+  print('customer id: ');
   print(customerDetails);
   return customerDetails;
 }

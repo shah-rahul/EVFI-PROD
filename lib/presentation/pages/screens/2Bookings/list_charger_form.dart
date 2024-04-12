@@ -403,7 +403,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.stationName = StationName;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreStationAddress(String StationAddress) {
@@ -411,7 +411,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.address = StationAddress;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void Storeg(LatLng position) {
@@ -427,7 +427,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingData.geohash = geohash;
       userChargingData.geopoint = gpoint as GeoPoint;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreAadharNumber(String aadharNumber) {
@@ -435,7 +435,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.aadharNumber = aadharNumber;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreHostName(String hostName) {
@@ -443,7 +443,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.hostName = hostName;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreChargerType(int type) {
@@ -453,7 +453,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     String extractNumericPart(String time) {
@@ -468,7 +468,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingData.start = int.parse(start);
       userChargingData.end = int.parse(end);
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StorePrice(String Price) {
@@ -476,7 +476,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.price = Price;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void Storeamenities(String amenities) {
@@ -484,7 +484,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
           userChargingDataProvider.userChargingData;
       userChargingData.amenities = amenities;
 
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
       
     }
 
@@ -492,28 +492,28 @@ class _ListChargerFormState extends State<ListChargerForm> {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.imageUrl = imageUrls;
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreCity(String city) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.city = city;
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StorePin(String pin) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.pin = pin;
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void StoreState(String state) {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.state = state;
-      userChargingDataProvider.setUserChargingData(userChargingData);
+      // userChargingDataProvider.setUserChargingData(userChargingData);
     }
 
     void addChargerFunction() async {

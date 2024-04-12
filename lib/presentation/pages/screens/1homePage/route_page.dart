@@ -257,9 +257,9 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
           stnAddress = stnAddress as String;
           stnImgUrl = stnImgUrl as List<dynamic>;
           stateName = stateName as String;
-          startTime = startTime as int;
-          endTime = endTime as int;
-          timeslot = timeslot as int;
+          startTime = startTime as num;
+          endTime = endTime as num;
+          timeslot = timeslot as num;
           chargerType = chargerType as String;
           amenities = amenities as String;
           hostName = hostName as String;

@@ -192,7 +192,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           print(documents[index].data());
 
                           print('----');
-                          getPhoneNumber(snapshots.data!['uid']);
+                          getPhoneNumber(snapshots.data!['uId']);
                           return Column(
                             children: [
                               Container(
@@ -213,7 +213,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                           ['stationName'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
-                                      id: documents[index].id,
+                                      id: documents[index]['bookingId'],
                                       type: 1,
                                       ratings: 1),
                                   currentTab: tab,

@@ -31,8 +31,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      checkIfProvider();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // checkIfProvider();
     });
     // checkIfProvider();
   }
@@ -74,6 +74,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   Widget build(BuildContext context) {
     // final screenHeight = MediaQuery.of(context).size.height;
     // final screenWidth = MediaQuery.of(context).size.width;
+    checkIfProvider();
     if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
@@ -123,6 +124,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                print(1);
+                print(snapshot);
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
@@ -135,15 +138,17 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     ),
                   );
                 }
+                print(2);
                 if (!snapshot.hasData) {
                   return const Center(
                     child: Text('No Bookings yet..'),
                   );
                 }
+                print(3);
                 if (snapshot.hasError) {
                   return const Center(child: Text('Something went wrong'));
                 }
-
+                print(4);
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -151,7 +156,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Text('No Bookings yet...'),
                   );
                 }
-
+                print(5);
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     return FutureBuilder(
@@ -163,6 +168,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
+                          print(6);
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
                             return shimmerPlaceholder();
@@ -196,7 +202,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                           snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
-                                      id: documents[index].id,
+                                      id: documents[index]['bookingId'],
                                       ratings: 4),
                                   currentTab: tab,
                                 ),
