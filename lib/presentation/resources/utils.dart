@@ -29,17 +29,18 @@ String convertTime(int startHour) {
   return '$displayStartTime to $displayEndTime';
 }
 
-String newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
-  String prevBin = timeToBinary(prevTimeSlot);
-  for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
-  String newTimeSlot = "";
-  for (int i = 0; i < 24; i++) {
-    if (i == bookedTimeSlot) {
-      newTimeSlot += "1";
-    } else
-      newTimeSlot += prevBin[i];
-  }
-  return newTimeSlot;
+int newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
+  return (prevTimeSlot | (1 << bookedTimeSlot));
+  // String prevBin = timeToBinary(prevTimeSlot);
+  // for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
+  // String newTimeSlot = "";
+  // for (int i = 0; i < 24; i++) {
+  //   if (i == bookedTimeSlot) {
+  //     newTimeSlot += "1";
+  //   } else
+  //     newTimeSlot += prevBin[i];
+  // }
+  // return newTimeSlot;
 }
 
 String bookedSlots = "";

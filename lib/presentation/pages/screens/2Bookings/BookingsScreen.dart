@@ -196,7 +196,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                           snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
-                                      id: documents[index].id,
+                                      id: documents[index]['bookingId'],
                                       ratings: 4),
                                   currentTab: tab,
                                 ),

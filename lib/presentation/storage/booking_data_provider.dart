@@ -34,5 +34,26 @@ class BookingDataProvider {
     }
   }
 
-  // Future<void> addBooking() async {}
+  Future<void> addBooking(String providerId,
+      String chargerId,
+      String price,
+      int timeSlot) async {
+   _booking.add({
+        'status': LendingStatus.requested.code,
+        'uId': _userId,
+        'chargerId': chargerId,
+        'price': price,
+        'timeSlot': timeSlot,
+        'providerId': providerId,
+        'bookingDate': DateFormat('d MMMM yyyy').format(DateTime.now())
+      }).then((docRef) async {
+        // print(docRef.id);
+        await _booking
+            .doc(docRef.id)
+            .update({'chargerId': docRef.id});
+        return docRef;
+      });
+    
+
+  }
 }

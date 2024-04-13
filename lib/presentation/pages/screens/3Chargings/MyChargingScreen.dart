@@ -101,9 +101,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
 
   CollectionReference users = FirebaseFirestore.instance.collection('user');
   String phoneNumber = '';
-  Future<void> getPhoneNumber(uid) async {
+  Future<void> getPhoneNumber(String uid, String phoneNumber) async {
     final doc = await users.doc(uid).get();
-
+    print(doc?.data());
     if (doc.exists && doc.data() != null) {
       print(doc.data());
       print(uid);
@@ -189,10 +189,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
-                          print(documents[index].data());
-
-                          print('----');
-                          getPhoneNumber(snapshots.data!['uid']);
+                          print('ppppp');
+                          getPhoneNumber(documents[index].data()!['providerId'],
+                              phoneNumber);
+                         
                           return Column(
                             children: [
                               Container(
@@ -213,7 +213,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                           ['stationName'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
-                                      id: documents[index].id,
+                                      id: documents[index]['bookingId'],
                                       type: 1,
                                       ratings: 1),
                                   currentTab: tab,
