@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +23,7 @@ class BookingsScreen extends StatefulWidget {
 
 class _BookingsScreenState extends State<BookingsScreen> {
   bool _currentSelected = true;
-  bool? _isProvider;
+  bool? _isProvider = false;
   final userId = FirebaseAuth.instance.currentUser!.uid;
   QuerySnapshot<Map<String, dynamic>>? _userCollection;
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
@@ -49,11 +50,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
         var doc = _userCollection!.docs[0];
         provider = doc.data()['level3'];
         prefs.setBool('isProvider', provider!);
+        setState(() {
+          _isProvider = provider!;
+        });
       }
     }
-    setState(() {
-      _isProvider = provider!;
-    });
   }
 
   @override
@@ -124,8 +125,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                print(1);
-                print(snapshot);
+                
+             
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
@@ -138,17 +139,17 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     ),
                   );
                 }
-                print(2);
+               
                 if (!snapshot.hasData) {
                   return const Center(
                     child: Text('No Bookings yet..'),
                   );
                 }
-                print(3);
+                
                 if (snapshot.hasError) {
                   return const Center(child: Text('Something went wrong'));
                 }
-                print(4);
+                
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -156,7 +157,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Text('No Bookings yet...'),
                   );
                 }
-                print(5);
+              
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     return FutureBuilder(
@@ -168,13 +169,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
                                 snapshots) {
-                          print(6);
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
-                          print('snapshot data');
-                          print(snapshots.data.toString());
+                         
                           if (!snapshots.hasData) {
                             return const Center(
                               child: Text('No Bookings yet..'),

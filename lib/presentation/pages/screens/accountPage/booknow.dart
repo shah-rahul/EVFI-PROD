@@ -282,7 +282,7 @@ class _Booknow extends State<Booknow> {
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () async {
-                      int updatedTimeSlot = 
+                      int updatedTimeSlot =
                           newTimeSlots(previousTImeSlot, selectedTimeSlot);
                       updateFireStoreTimeStamp(
                           updatedTimeSlot, widget.chargerId);
@@ -374,9 +374,9 @@ class _Booknow extends State<Booknow> {
   }
 
   bool isValidTimeSlot(int time) {
-    return time >=  widget.startTime &&
+    return time >= widget.startTime &&
         time <= widget.endTime &&
-        !(bookedSlots[24-time] == "1");
+        !(bookedSlots[24 - time - 1] == "1");
   }
 
   Widget streamBuilder() {

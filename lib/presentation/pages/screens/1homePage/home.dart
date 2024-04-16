@@ -87,7 +87,7 @@ class HomeState extends State<Home> {
     _getCurrentLocation();
     getUserData();
     getBatteryCap().then((val) => batteryCap = val);
-    print(userData);
+   
     getUserBookings();
   }
 
@@ -222,7 +222,7 @@ class HomeState extends State<Home> {
     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
     dynamic level2 = snapshot['level2'];
-    print(level2);
+    
     if (level2 != null && level2 != false) {
       String batteryCapacity = level2['batteryCapacity'];
       return (double.parse(batteryCapacity));
@@ -232,7 +232,7 @@ class HomeState extends State<Home> {
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-    print(isLocationServiceEnabled);
+   
     if (!isLocationServiceEnabled) {
       bool serviceEnabled = await Geolocator.openLocationSettings();
 
@@ -323,8 +323,7 @@ class HomeState extends State<Home> {
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
-        print(data);
-        print('---');
+     
         if (data == null) {
           continue;
         }
@@ -341,11 +340,10 @@ class HomeState extends State<Home> {
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
         var status = (data['info'] as Map<String, dynamic>)['status'];
-        print(hostName);
+     
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
-        print('-----@@');
-        print(data);
+    
         if (geoPoint != null &&
             geohash != null &&
             stnName != null &&
@@ -359,7 +357,7 @@ class HomeState extends State<Home> {
             amenities != null &&
             hostName != null &&
             status != null) {
-          print('Inside---------------');
+         
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -395,7 +393,7 @@ class HomeState extends State<Home> {
                       const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
                   builder: (context) {
                     print(batteryCap);
-                    print('0000');
+                   
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     if (res != false) {
@@ -537,11 +535,11 @@ class HomeState extends State<Home> {
     if (_mapController != null) {
       if (cachedChargersBox.isNotEmpty) {
         debugPrint(
-            '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@Already cached chargers available-------');
+            '@@@@@Already cached chargers available-------');
         addCachedChargersToMarkers();
       } else {
         debugPrint(
-            '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@No cached chargers currently-------');
+            '@@@@@No cached chargers currently-------');
         setIntialMarkers(
             10, LatLng(currentPosition.latitude, currentPosition.longitude));
       }

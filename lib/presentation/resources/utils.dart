@@ -103,11 +103,7 @@ void updateFireStoreTimeStamp(int time, String chargerId) async {
 Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
     String customerId, String chargerId, List<String> stationName) async {
   print(chargerId);
-  print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@');
-  try {} catch (err) {
-    print('Errrorrrrrrrrrrrrrrrrrrrrrrrr');
-    debugPrint('------$err');
-  }
+
   final chargerDetails = await FirebaseFirestore.instance
       .collection('chargers')
       .doc(chargerId)
@@ -116,11 +112,9 @@ Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
   // Update stationName
   stationName[0] = chargerDetails['info']['stationName'];
 
-  print(stationName[0]);
-
+ 
   final customerDetails =
       await FirebaseFirestore.instance.collection('user').doc(customerId).get();
-  print('customer id: ');
-  print(customerDetails);
+
   return customerDetails;
 }
