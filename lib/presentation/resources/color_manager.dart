@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 
 class ColorManager {
-  static Color primary = HexColor.fromHex("#ffd80f"); //app yellow
+  static Color primary = HexColor.fromHex("#ffd80f");//app yellow
+  static Color primary20 = HexColor.fromHex("#32FFD80F");
   static Color appBlack = HexColor.fromHex("#111111"); //app black shade
   static Color lightGrey = HexColor.fromHex("#F0F0F0"); //app grey for unselected navbar icons
   static Color white = HexColor.fromHex("#FFFFFF");
@@ -11,9 +12,9 @@ class ColorManager {
   static Color darkGreyOpacity40 = HexColor.fromHex("#313131");
   static Color grey = HexColor.fromHex("#737477");
   static Color dullYellow = HexColor.fromHex("#443F16");
-  static Color statusAccepted = HexColor.fromHex("#BBF0C2");
+  static Color statusAccepted = HexColor.fromHex("D0F4D5");
   static Color statusRequested = Colors.white;
-  static Color statusCancelled = HexColor.fromHex("#FFB9C2");
+  static Color statusCancelled = HexColor.fromHex("#F6D4D5");
   static Color statusDeclined = HexColor.fromHex("#F6D4D5");
 
   //gradients
