@@ -290,8 +290,8 @@ class HomeState extends State<Home> {
   void setIntialMarkers(double radius, LatLng position) async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
-    final Uint8List BlackMarkerIcon =
-        await getBytesFromAsset(ImageAssets.oldBlackMarker);
+    final Uint8List RedDisabledChargerMarker =
+        await getBytesFromAsset(ImageAssets.redDisabledChargerMarker);
     BitmapDescriptor nearbyMarker = await BitmapDescriptor.fromAssetImage(
         const ImageConfiguration(devicePixelRatio: 1.5), // size: Size(25, 25)),
         ImageAssets.greenMarker);
@@ -403,25 +403,27 @@ class HomeState extends State<Home> {
                       return ProgressWidget(res[0], res[1]);
                     }
                     return CustomMarkerPopup(
-                        stationName: stnName,
-                        address: stnAddress,
-                        imageUrl: stnImgUrl,
-                        geopoint: geoPoint,
-                        geohash: geohash,
-                        costOfFullCharge: price,
-                        chargerType: chargerType,
-                        amenities: amenities,
-                        hostName: hostName,
-                        startTime: startTime.toString(),
-                        endTime: endTime.toString(),
-                        timeslot: timeslot,
-                        chargerId: ds.id,
-                        providerId: data['uid'],
-                        status: status,);
+                      stationName: stnName,
+                      address: stnAddress,
+                      imageUrl: stnImgUrl,
+                      geopoint: geoPoint,
+                      geohash: geohash,
+                      costOfFullCharge: price,
+                      chargerType: chargerType,
+                      amenities: amenities,
+                      hostName: hostName,
+                      startTime: startTime.toString(),
+                      endTime: endTime.toString(),
+                      timeslot: timeslot,
+                      chargerId: ds.id,
+                      providerId: data['uid'],
+                      status: status,
+                    );
                   },
                 );
               },
-              icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon)));
+              icon: BitmapDescriptor.fromBytes(
+                  (status == 1) ? GreenmarkerIcon : RedDisabledChargerMarker)));
 
           setState(() {});
         }
@@ -436,7 +438,7 @@ class HomeState extends State<Home> {
   //       return addState;
   //     }
   //     addState = address[i] + addState;
-    //   }
+  //   }
   //   return addState;
   // }
 
@@ -454,8 +456,8 @@ class HomeState extends State<Home> {
   void addCachedChargersToMarkers() async {
     final Uint8List GreenmarkerIcon =
         await getBytesFromAsset(ImageAssets.greenMarker);
-    final Uint8List BlackMarkerIcon =
-        await getBytesFromAsset(ImageAssets.oldBlackMarker);
+    final Uint8List RedDisabledChargerMarker =
+        await getBytesFromAsset(ImageAssets.redDisabledChargerMarker);
     _markers.clear(); // Clear existing markers if needed
 
     for (var chargerModel in cachedChargersBox.values) {
@@ -482,7 +484,8 @@ class HomeState extends State<Home> {
           (chargerModel.data['info'] as Map<String, dynamic>)['amenities'];
       var hostName =
           (chargerModel.data['info'] as Map<String, dynamic>)['hostName'];
-      num status = (chargerModel.data['info'] as Map<String, dynamic>)['status'];
+      num status =
+          (chargerModel.data['info'] as Map<String, dynamic>)['status'];
       String chargerId = chargerModel.data['chargerId'];
       String userId = chargerModel.data['uid'];
 
@@ -520,7 +523,8 @@ class HomeState extends State<Home> {
               },
             );
           },
-          icon: BitmapDescriptor.fromBytes((status==1)? GreenmarkerIcon : BlackMarkerIcon));
+          icon: BitmapDescriptor.fromBytes(
+              (status == 1) ? GreenmarkerIcon : RedDisabledChargerMarker));
 
       setState(() {});
 

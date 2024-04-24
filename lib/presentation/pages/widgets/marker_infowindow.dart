@@ -216,7 +216,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 //..................................................................................
                 //.......................BOOK NOW BUTTON............................................
                 GestureDetector(
-                  onTap: () {
+                  onTap: widget.status == 0? null :  () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => Booknow(
                               stationName: widget.stationName,
@@ -238,7 +238,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     width: MediaQuery.of(context).size.width * 0.45,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(40),
-                      color: ColorManager.primary,
+                      color: widget.status == 0? Color.fromARGB(255, 214, 205, 205) : ColorManager.primary,
                     ),
                     child: Center(
                       child: Text(
