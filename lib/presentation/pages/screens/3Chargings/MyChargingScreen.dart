@@ -33,7 +33,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   //       .collection('booking')
   //       .snapshots()
   //       .map((QuerySnapshot querySnapshot) {
-  //  
+  //
   //     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
 
   //     for (QueryDocumentSnapshot bookingSnapshot in querySnapshot.docs) {
@@ -42,14 +42,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   //           (bookingSnapshot.data() as Map<String, dynamic>)['uid'];
 
   //       if ("LUE2zApEe9RA58RybIQswHvR2h03" == bookingUid) {
-  //      
+  //
   //       }
-  //      
+  //
   //     }
-  //   
+  //
   //   });
 
-  //  
+  //
   // }
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
   bool _fetchingBookings = false;
@@ -87,13 +87,12 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
-      String chargerId) async {
-    
+      String chargerId, String providerId, List<String> phoneNumber) async {
     final chargerDetails = await FirebaseFirestore.instance
         .collection('chargers')
         .doc(chargerId)
         .get();
-   
+    getPhoneNumber(providerId, phoneNumber);
     return chargerDetails;
   }
 
@@ -101,10 +100,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   String phoneNumber = '';
   Future<void> getPhoneNumber(String uid, List<String> phoneNumber) async {
     final doc = await users.doc(uid).get();
-    
-    if (doc.exists && doc.data() != null) {
-    
 
+    if (doc.exists && doc.data() != null) {
       phoneNumber[0] = (doc.data() as Map<String, dynamic>)['phoneNumber'];
     } else {}
   }
@@ -134,7 +131,6 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-              
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Column(
                     children: List.generate(
@@ -165,7 +161,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getChargerDetailsByChargerId(
-                            documents[index].data()!['chargerId']),
+                            documents[index].data()!['chargerId'],
+                            documents[index].data()!['providerId'],
+                            [phoneNumber]),
                         builder: ((context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -183,9 +181,6 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
-
-                          getPhoneNumber(documents[index].data()!['providerId'],
-                              [phoneNumber]);
 
                           return Column(
                             children: [
