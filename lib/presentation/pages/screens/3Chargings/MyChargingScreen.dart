@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,12 +75,16 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
+          title: Text(
             AppStrings.MyChargingTitle,
             textAlign: TextAlign.start,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontFamily: FontConstants.appTitleFontFamily,
+                fontSize: FontSize.s20,
+                color: ColorManager.appBlack),
           ),
-          backgroundColor: Colors.white,
+          elevation: 0,
+          backgroundColor: ColorManager.white,
         ),
         body: Container(
           child: _currentSelected ? currentScreen(context) : RecentScreen(),
@@ -92,17 +97,19 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         .collection('chargers')
         .doc(chargerId)
         .get();
-    getPhoneNumber(providerId, phoneNumber);
+
+    await getPhoneNumber(providerId, phoneNumber);
+    print(phoneNumber);
     return chargerDetails;
   }
 
   CollectionReference users = FirebaseFirestore.instance.collection('user');
-  String phoneNumber = '';
+
   Future<void> getPhoneNumber(String uid, List<String> phoneNumber) async {
     final doc = await users.doc(uid).get();
 
     if (doc.exists && doc.data() != null) {
-      phoneNumber[0] = (doc.data() as Map<String, dynamic>)['phoneNumber'];
+      phoneNumber.add((doc.data() as Map<String, dynamic>)['phoneNumber']);
     } else {}
   }
 
@@ -118,7 +125,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
         child: Container(
             height: screenHeight * 0.85,
             width: screenWidth,
-            color: Colors.white,
+            color: ColorManager.white,
             child: StreamBuilder(
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
                   ? FirebaseFirestore.instance
@@ -156,14 +163,14 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   return Center(
                     child: Text('No Chargings yet..'),
                   );
-
+                List<String> phoneNumber = [];
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getChargerDetailsByChargerId(
                             documents[index].data()!['chargerId'],
                             documents[index].data()!['providerId'],
-                            [phoneNumber]),
+                            phoneNumber),
                         builder: ((context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -192,7 +199,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                   chargingItem: Charging(
                                       amount:
                                           documents[index]['price'] as String,
-                                      phoneNumber: phoneNumber,
+                                      phoneNumber: phoneNumber.length > 0
+                                          ? phoneNumber[phoneNumber.length - 1]
+                                          : "",
                                       position: const LatLng(0,
                                           0), //later to show path till charger we'll use charger coordinates
                                       slotChosen: documents[index]['timeSlot'],
@@ -207,7 +216,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                       ratings: 1),
                                   currentTab: tab,
                                 ),
-                              ),
+                              )
                               // SizedBox(
                               //   height: screenHeight * 0.01,
                               // ),
@@ -339,7 +348,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
       children: [
         Container(
           height: screenHeight * 0.08,
-          color: Colors.white,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -356,6 +365,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                         AppStrings.ChargingScreenCurrentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: FontConstants.appTitleFontFamily,
                             fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.w500),
                       ),
@@ -363,9 +373,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: screenHeight * 0.003,
+                          height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.primary,
+                          color: ColorManager.appBlack,
                         ),
                       ),
                     ],
@@ -385,6 +395,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                     child: Text(AppStrings.ChargingScreenRecentTab,
                         textAlign: TextAlign.center,
                         style: TextStyle(
+                            fontFamily: FontConstants.appTitleFontFamily,
                             fontSize: screenWidth * 0.05,
                             fontWeight: FontWeight.w500,
                             color: ColorManager.grey3))),
@@ -392,10 +403,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        // SizedBox(
-        //   height: height * 0.05,
-        // ),
-        streamBuilder(AppStrings.ChargingScreenCurrentTab)
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
+        ),
+        streamBuilder(AppStrings.ChargingScreenCurrentTab),
       ],
     );
   }
@@ -411,7 +423,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
       children: [
         Container(
           height: screenHeight * 0.08,
-          color: Colors.white,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -427,6 +439,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   child: Text(AppStrings.ChargingScreenCurrentTab,
                       textAlign: TextAlign.center,
                       style: TextStyle(
+                          fontFamily: FontConstants.appTitleFontFamily,
                           fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w500,
                           color: ColorManager.grey3)),
@@ -443,6 +456,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           AppStrings.ChargingScreenRecentTab,
                           textAlign: TextAlign.center,
                           style: TextStyle(
+                              fontFamily: FontConstants.appTitleFontFamily,
                               fontSize: screenWidth * 0.05,
                               fontWeight: FontWeight.w500),
                         ),
@@ -450,9 +464,9 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: screenWidth * 0.012),
                           child: Container(
-                            height: screenHeight * 0.003,
+                            height: screenHeight * 0.005,
                             width: screenWidth * 0.2,
-                            color: ColorManager.primary,
+                            color: ColorManager.appBlack,
                           ),
                         )
                       ],
@@ -461,8 +475,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        //SizedBox(height: height * 0.1),
-        streamBuilder(AppStrings.ChargingScreenRecentTab)
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
+        ),
+        streamBuilder(AppStrings.ChargingScreenRecentTab),
       ],
     );
   }

@@ -201,22 +201,27 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.all(60.0),
+      padding: EdgeInsets.all(screenWidth * 0.05),
       child: Column(
         children: [
+          SizedBox(
+            height: screenHeight * 0.1,
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppMargin.m20),
             child: Image.asset(
               _sliderObject.image,
-              width: MediaQuery.of(context).size.width - 80,
-              height: MediaQuery.of(context).size.height - 480,
+              width: screenWidth - (screenWidth * 0.1),
+              height: screenHeight - (screenHeight * 0.7),
               // height: SizeConfig.blockV! * 35,
             ),
           ),
-          // const SizedBox(
-          //   height: 10,
-          // ),
+          SizedBox(
+          height: screenHeight * 0.08,
+          ),
           Text(
             _sliderObject.title,
             textAlign: TextAlign.center,
@@ -227,17 +232,17 @@ class OnBoardingPage extends StatelessWidget {
                 color: ColorManager.primary
             ),
           ),
-          const SizedBox(height: 10),
-          Text(
-            _sliderObject.subTitle,
-            style: TextStyle(
-              fontFamily: FontConstants.appTitleFontFamily,
-              fontWeight: FontWeight.w300,
-              fontSize: AppSize.s28,
-                color: ColorManager.primary
-            ),
-            textAlign: TextAlign.center,
-          )
+          // SizedBox(height: screenHeight * 0.01),
+          // Text(
+          //   _sliderObject.subTitle,
+          //   style: TextStyle(
+          //     fontFamily: FontConstants.appTitleFontFamily,
+          //     fontWeight: FontWeight.w300,
+          //     fontSize: AppSize.s28,
+          //       color: ColorManager.primary
+          //   ),
+          //   textAlign: TextAlign.center,
+          // )
         ],
       ),
     );

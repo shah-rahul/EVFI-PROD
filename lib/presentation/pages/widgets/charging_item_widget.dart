@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/utils.dart';
 import 'package:flutter/material.dart';
+import '../../resources/font_manager.dart';
 import '../models/vehicle_chargings.dart';
 import '../../resources/color_manager.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -106,13 +107,13 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     final width = MediaQuery.of(context).size.width;
     return Container(
       width: width * 0.9,
-      height: height * 0.143,
+      height: height * 0.0,
       decoration: BoxDecoration(
         color: buttonColor,
         borderRadius: BorderRadius.circular(width * 0.08),
         boxShadow: [
           BoxShadow(
-            offset: Offset(-8, 6),
+            offset: Offset(4, 4),
             blurRadius: 15,
             color: Color.fromRGBO(222, 222, 222, 1),
           ),
@@ -134,6 +135,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                     child: Text(
                       widget.chargingItem.stationName,
                       style: TextStyle(
+                        fontFamily: FontConstants.appTitleFontFamily,
                         color: textColor,
                         fontSize: width * 0.04,
                         fontWeight: FontWeight.bold,
@@ -146,17 +148,19 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                     child: Text(
                       'Slot- ${convertTime(widget.chargingItem.slotChosen)}',
                       style: TextStyle(
+                        fontFamily: FontConstants.appTitleFontFamily,
                         color: textColor,
                         fontSize: width * 0.04,
                       ),
                     ),
                   ),
+                  if (widget.chargingItem.status != -1)
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.08, vertical: width * 0.01),
+                    padding: EdgeInsets.symmetric(horizontal: width * 0.08, vertical: width * 0.01),
                     child: Text(
                       '+' + widget.chargingItem.phoneNumber,
                       style: TextStyle(
+                        fontFamily: FontConstants.appTitleFontFamily,
                         color: textColor,
                         fontSize: width * 0.04,
                       ),
@@ -169,6 +173,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                       '₹ ${widget.chargingItem.amount}',
                       style: TextStyle(
                         color: textColor,
+                        fontFamily: FontConstants.appTitleFontFamily,
                         fontSize: width * 0.06,
                         fontWeight: FontWeight.bold,
                       ),
@@ -180,7 +185,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
             if (widget.chargingItem.status == 1)
               Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.08, vertical: width * 0.13),
+                    horizontal: width * 0.07, vertical: width * 0.025),
                 child: GestureDetector(
                   onTap: () async {
                     CollectionReference users =
@@ -193,29 +198,107 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.1),
-                        ),
-                      ],
                     ),
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.red,
-                      size: width * 0.08,
+                    child: Column(
+                      children:[
+                        Container(
+                          width: width * 0.06, // Adjust the width of the container
+                          height: width * 0.06, // Adjust the height of the container
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white, // Set the background color of the container
+                            border: Border.all(
+                              color: Colors.black, // Set the border color
+                              width: 2.0, // Adjust the border width
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.black,
+                              size: width * 0.04,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height*0.025),
+                        Container(
+                          width: width * 0.06, // Adjust the width of the container
+                          height: width * 0.06, // Adjust the height of the container
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white, // Set the background color of the container
+                            border: Border.all(
+                              color: Colors.black, // Set the border color
+                              width: 2.0, // Adjust the border width
+                            ),
+                          ),
+                          child: Center(
+                            child: Icon(
+                              Icons.phone,
+                              color: Colors.black,
+                              size: width * 0.04,
+                            ),
+                          ),
+                        ),
+                      SizedBox(height: height*0.025),
+                      Icon(
+                        Icons.assistant_direction,
+                        color: Colors.black,
+                        size: width * 0.07
+                      ),
+                    ]
                     ),
                   ),
                 ),
               ),
+            if (widget.chargingItem.status == 2)
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.07, vertical: width * 0.025),
+                  child: Container(
+                    decoration: BoxDecoration(
+                    ),
+                    child: Column(
+                        children:[
+                          SizedBox(height: height*0.025),
+                          Container(
+                            width: width * 0.06, // Adjust the width of the container
+                            height: width * 0.06, // Adjust the height of the container
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: ColorManager.statusAccepted, // Set the background color of the container
+                              border: Border.all(
+                                color: Colors.black, // Set the border color
+                                width: 2.0, // Adjust the border width
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.phone,
+                                color: Colors.black,
+                                size: width * 0.04,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: height*0.025),
+                          Icon(
+                              Icons.assistant_direction,
+                              color: Colors.black,
+                              size: width * 0.07
+                          ),
+                        ]
+                    ),
+                  ),
+              ),
             if (widget.chargingItem.status == -1 ||
                 widget.chargingItem.status == -2)
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: width * 0.03, vertical: width * 0.045),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: width * 0.045),
                 child: Text(
                   statusText,
                   style: TextStyle(
                     color: textColor,
+                    fontFamily: FontConstants.appTitleFontFamily,
                     fontSize: width * 0.035,
                     fontWeight: FontWeight.bold,
                   ),

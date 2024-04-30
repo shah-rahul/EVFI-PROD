@@ -9,6 +9,8 @@ import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../resources/font_manager.dart';
+import '../../../storage/UserData.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -104,6 +106,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
     }
   }
 
+
+
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -113,6 +117,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
       child: SingleChildScrollView(
         child: Container(
             height: screenHeight * 0.85,
+            width: screenWidth,
+            color: ColorManager.white,
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
@@ -184,21 +190,20 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
 
+
                           return Column(
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     vertical: screenHeight * 0.01),
-                                height: screenHeight * 0.22,
-                                child: BookingWidget(
+                                height: screenHeight * 0.2,
+                                child:BookingWidget(
                                   bookingItem: Booking(
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName:
-                                          snapshots.data!['firstName'],
-                                      customerMobileNumber:
-                                          snapshots.data!['phoneNumber'],
+                                      customerName: snapshots.data!['firstName'],
+                                      customerMobileNumber: snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index]['bookingId'],
@@ -229,7 +234,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
       children: [
         Container(
           height: screenHeight * 0.08,
-          color: Colors.white,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -250,9 +255,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: screenHeight * 0.003,
+                          height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.primary,
+                          color: ColorManager.appBlack,
                         ),
                       )
                     ],
@@ -279,6 +284,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
             ],
           ),
         ),
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
+        ),
         streamBuilder(AppStrings.BookingScreenPendingTab)
       ],
     );
@@ -291,8 +300,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Column(
       children: [
         Container(
-          height: screenHeight * 0.08,
-          color: Colors.white,
+        height: screenHeight * 0.08,
+          color: ColorManager.white,
           child: Row(
             children: [
               GestureDetector(
@@ -331,9 +340,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.012),
                         child: Container(
-                          height: screenHeight * 0.003,
+                          height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.primary,
+                          color: ColorManager.appBlack,
                         ),
                       )
                     ],
@@ -342,6 +351,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
               )
             ],
           ),
+        ),
+        Container(
+          color: ColorManager.white,
+          height: screenHeight * 0.05,
         ),
         streamBuilder(AppStrings.BookingScreenRecentTab)
       ],
