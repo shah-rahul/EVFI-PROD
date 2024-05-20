@@ -81,9 +81,8 @@ class UserDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       if (user != null) {
-        DocumentReference documentRef = _usersCollection
-            .doc(user.uid); // Replace 'documentId' with the desired document ID
-
+        DocumentReference documentRef = _usersCollection.doc(user.uid);
+        print('data saved');
         await documentRef.set({
           'uid': user.uid,
           'firstName': _userData.firstName,
@@ -97,8 +96,7 @@ class UserDataProvider extends ChangeNotifier {
           'imageUrl': _userData.imageUrl,
         });
         notifyListeners();
-        // Log the ID of the newly created document
-        // print('User document ID: ${documentRef.id}');
+    
       }
     } catch (e) {
       debugPrint('Error saving user data: $e');
@@ -152,7 +150,6 @@ class UserDataProvider extends ChangeNotifier {
       }
       print(userD);
       setUserData(userD);
-    
     } catch (e) {}
   }
 
