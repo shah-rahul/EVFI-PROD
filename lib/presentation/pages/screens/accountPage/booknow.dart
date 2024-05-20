@@ -31,8 +31,8 @@ class Booknow extends StatefulWidget {
   final String address;
   final List<dynamic> imageUrl;
   final double costOfFullCharge;
-  final String startTime;
-  final String endTime;
+  final num startTime;
+  final num endTime;
   final int timeslot;
   final String chargerType;
   final String amenities;
@@ -282,20 +282,25 @@ class _Booknow extends State<Booknow> {
                   //....................Proceed to Pay...............................................
                   GestureDetector(
                     onTap: () async {
-                      int updatedTimeSlot = binaryToDecimal(
-                          newTimeSlots(previousTImeSlot, selectedTimeSlot));
+                      int updatedTimeSlot =
+                          newTimeSlots(previousTImeSlot, selectedTimeSlot);
                       updateFireStoreTimeStamp(
                           updatedTimeSlot, widget.chargerId);
                       print(updatedTimeSlot);
                       // updateUserData();
                       // UserData userData=Provider<UserBook>
-
-                      BookingDataProvider(
-                        providerId: widget.providerId,
-                        chargerId: widget.chargerId,
-                        price: "${widget.costOfFullCharge}",
-                        timeSlot: selectedTimeSlot,
+                      BookingDataProvider().addBooking(
+                        widget.providerId,
+                        widget.chargerId,
+                        "${widget.costOfFullCharge}",
+                        selectedTimeSlot,
                       );
+                      // BookingDataProvider(
+                      //   providerId: widget.providerId,
+                      //   chargerId: widget.chargerId,
+                      //   price: "${widget.costOfFullCharge}",
+                      //   timeSlot: selectedTimeSlot,
+                      // );
 
                       Navigator.pop(context);
                       if (selectedTimeSlot != 0) {
@@ -369,9 +374,9 @@ class _Booknow extends State<Booknow> {
   }
 
   bool isValidTimeSlot(int time) {
-    return time >= int.parse(widget.startTime) &&
-        time <= int.parse(widget.endTime) &&
-        !(bookedSlots[time] == "1");
+    return time >= widget.startTime &&
+        time <= widget.endTime &&
+        !(bookedSlots[24 - time - 1] == "1");
   }
 
   Widget streamBuilder() {

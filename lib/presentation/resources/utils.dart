@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 String convertTime(int startHour) {
   // Calculate the ending time
@@ -29,17 +30,18 @@ String convertTime(int startHour) {
   return '$displayStartTime to $displayEndTime';
 }
 
-String newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
-  String prevBin = timeToBinary(prevTimeSlot);
-  for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
-  String newTimeSlot = "";
-  for (int i = 0; i < 24; i++) {
-    if (i == bookedTimeSlot) {
-      newTimeSlot += "1";
-    } else
-      newTimeSlot += prevBin[i];
-  }
-  return newTimeSlot;
+int newTimeSlots(int prevTimeSlot, int bookedTimeSlot) {
+  return (prevTimeSlot | (1 << bookedTimeSlot));
+  // String prevBin = timeToBinary(prevTimeSlot);
+  // for (int i = prevBin.length; i < 24; i++) prevBin = "0" + prevBin;
+  // String newTimeSlot = "";
+  // for (int i = 0; i < 24; i++) {
+  //   if (i == bookedTimeSlot) {
+  //     newTimeSlot += "1";
+  //   } else
+  //     newTimeSlot += prevBin[i];
+  // }
+  // return newTimeSlot;
 }
 
 String bookedSlots = "";
@@ -101,6 +103,7 @@ void updateFireStoreTimeStamp(int time, String chargerId) async {
 Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
     String customerId, String chargerId, List<String> stationName) async {
   print(chargerId);
+
   final chargerDetails = await FirebaseFirestore.instance
       .collection('chargers')
       .doc(chargerId)
@@ -109,11 +112,9 @@ Future<DocumentSnapshot<Map<String, dynamic>>> getCustomerDetailsByUserId(
   // Update stationName
   stationName[0] = chargerDetails['info']['stationName'];
 
-  print(stationName[0]);
-
+ 
   final customerDetails =
       await FirebaseFirestore.instance.collection('user').doc(customerId).get();
-  print('customer id::');
-  print(customerDetails);
+
   return customerDetails;
 }
