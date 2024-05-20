@@ -8,8 +8,6 @@ import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../resources/font_manager.dart';
-import '../../../storage/UserData.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
@@ -36,7 +34,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
     WidgetsBinding.instance?.addPostFrameCallback((_) {
       checkIfProvider();
     });
-    // checkIfProvider();
   }
 
   Future<void> checkIfProvider() async {
@@ -59,23 +56,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
   }
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text(
-  //           AppStrings.BookingTitle,
-  //           textAlign: TextAlign.start,
-  //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-  //         ),
-  //         backgroundColor: Colors.white,
-  //       ),
-  //       body: Container(
-  //         child: _currentSelected ? PendingScreen(context) : RecentScreen(),
-  //       ));
-  // }
   Widget build(BuildContext context) {
-    // final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
     if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
@@ -104,14 +85,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
     }
   }
 
-
-
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       height: screenHeight * 0.75,
-      //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
             height: screenHeight * 0.85,
@@ -162,8 +140,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                   itemBuilder: (context, index) {
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
-                            documents[index].data()!['uId'],
-                            documents[index].data()!['chargerId'],
+                            documents[index].data()!['uId'].toString(),
+                            documents[index].data()!['chargerId'].toString(),
                             [stationName]),
                         builder: ((context,
                             AsyncSnapshot<
@@ -185,20 +163,22 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
 
-
                           return Column(
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     vertical: screenHeight * 0.01),
                                 height: screenHeight * 0.2,
-                                child:BookingWidget(
+                                child: BookingWidget(
                                   bookingItem: Booking(
-                                      amount: documents[index]['price'],
+                                      amount:
+                                          documents[index]['price'].toString(),
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName: snapshots.data!['firstName'],
-                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      customerName:
+                                          snapshots.data!['firstName'],
+                                      customerMobileNumber:
+                                          snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index].id,
@@ -206,12 +186,10 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                   currentTab: tab,
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: screenHeight * 0.01,
-                              // ),
                             ],
                           );
-                        }));
+                        })
+                    );
                   },
                   itemCount: documents.length,
                 );
@@ -295,7 +273,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Column(
       children: [
         Container(
-        height: screenHeight * 0.08,
+          height: screenHeight * 0.08,
           color: ColorManager.white,
           child: Row(
             children: [
@@ -366,9 +344,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        height: 100 *
-            MediaQuery.textScaleFactorOf(
-                context), // Adjust the height as needed
+        height: 100 * MediaQuery.textScaleFactorOf(context),
       ),
     );
   }

@@ -5,17 +5,12 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-
-// import 'package:evfi/presentation/pages/streams/charging_stream.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
-import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../widgets/charging_item_widget.dart';
 
 class MyChargingScreen extends StatefulWidget {
@@ -26,34 +21,6 @@ class MyChargingScreen extends StatefulWidget {
 
 class _MyChargingScreenState extends State<MyChargingScreen> {
   bool _currentSelected = true;
-  // List<Charging> _streamData = [];
-  // late Stream bookingReference;
-
-  // void function() {
-  //   bookingReference = FirebaseFirestore.instance
-  //       .collection('booking')
-  //       .snapshots()
-  //       .map((QuerySnapshot querySnapshot) {
-  //     // print(querySnapshot);
-  //     print('000000000000');
-  //     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-
-  //     for (QueryDocumentSnapshot bookingSnapshot in querySnapshot.docs) {
-  //       // Assuming your Charging class has a constructor that takes a Map<String, dynamic>
-  //       Charging bookingUid =
-  //           (bookingSnapshot.data() as Map<String, dynamic>)['uid'];
-
-  //       if ("LUE2zApEe9RA58RybIQswHvR2h03" == bookingUid) {
-  //         print(bookingSnapshot.data());
-  //         print("------------");
-  //       }
-  //       print('11111111');
-  //     }
-  //     print('2222222');
-  //   });
-
-  //   print('33333333333');
-  // }
   final currentUid = FirebaseAuth.instance.currentUser?.uid;
   bool _fetchingBookings = false;
   Widget shimmerPlaceholder() {
@@ -66,9 +33,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
         ),
-        height: 100 *
-            MediaQuery.textScaleFactorOf(
-                context), // Adjust the height as needed
+        height: 100 * MediaQuery.textScaleFactorOf(context),
       ),
     );
   }
@@ -77,10 +42,13 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title:Text(
+          title: Text(
             AppStrings.MyChargingTitle,
             textAlign: TextAlign.start,
-            style: TextStyle(fontFamily: FontConstants.appTitleFontFamily,fontSize: FontSize.s20,color: ColorManager.appBlack),
+            style: TextStyle(
+                fontFamily: FontConstants.appTitleFontFamily,
+                fontSize: FontSize.s20,
+                color: ColorManager.appBlack),
           ),
           elevation: 0,
           backgroundColor: ColorManager.white,
@@ -115,14 +83,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
     } else {}
   }
 
-  // DocumentReference docRef =
-//your bookings
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       height: screenHeight * 0.75,
-      //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
             height: screenHeight * 0.85,
@@ -158,185 +123,82 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                   return const Center(child: Text('Something went wrong'));
                 }
 
-                // final listOfChargings = snapshot.data!;
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
-                // print(documents[0]);
                 if (documents.length == 0)
                   return Center(
                     child: Text('No Chargings yet..'),
                   );
 
                 return ListView.builder(
-                    itemBuilder: (context, index) {
-                      print('****');
-                      print(documents[index].data());
-                      return FutureBuilder(
-                          future: getChargerDetailsByChargerId(
-                              documents[index].data()!['chargerId']),
-                          builder: ((context,
-                              AsyncSnapshot<
-                                      DocumentSnapshot<Map<String, dynamic>>>
-                                  snapshots) {
-                            if (snapshots.connectionState ==
-                                ConnectionState.waiting) {
-                              return shimmerPlaceholder();
-                            }
-                            if (!snapshots.hasData) {
-                              return const Center(
-                                child: Text('No Bookings yet..'),
-                              );
-                            }
-                            if (snapshots.hasError) {
-                              return const Center(
-                                  child: Text('Something went wrong'));
-                            }
-                            print(documents[index].data());
-
-                            print('----');
-                            getPhoneNumber(snapshots.data!['uid']);
-                            return Column(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: screenHeight * 0.01),
-                                  height: screenHeight * 0.2,
-                                  child: MyChargingWidget(
-                                    chargingItem: Charging(
-                                        amount:
-                                            documents[index]['price'] as String,
-                                        phoneNumber: phoneNumber,
-                                        position: const LatLng(0,
-                                            0), //later to show path till charger we'll use charger coordinates
-                                        slotChosen: documents[index]['timeSlot'],
-                                        stationAddress: snapshots.data!['info']
-                                            ['address'],
-                                        stationName: snapshots.data!['info']
-                                            ['stationName'],
-                                        status: documents[index]['status'],
-                                        date: documents[index]['bookingDate'],
-                                        id: documents[index].id,
-                                        type: 1,
-                                        ratings: 1),
-                                    currentTab: tab,
-                                  ),
-                                ),
-                                // SizedBox(
-                                //   height: screenHeight * 0.01,
-                                // ),
-                              ],
+                  itemBuilder: (context, index) {
+                    print('****');
+                    print(documents[index].data());
+                    return FutureBuilder(
+                        future: getChargerDetailsByChargerId(
+                            documents[index].data()!['chargerId']),
+                        builder: ((context,
+                            AsyncSnapshot<
+                                    DocumentSnapshot<Map<String, dynamic>>>
+                                snapshots) {
+                          if (snapshots.connectionState ==
+                              ConnectionState.waiting) {
+                            return shimmerPlaceholder();
+                          }
+                          if (!snapshots.hasData) {
+                            return const Center(
+                              child: Text('No Bookings yet..'),
                             );
-                          }));
-                    },
-                    itemCount: documents.length,
-                  );
+                          }
+                          if (snapshots.hasError) {
+                            return const Center(
+                                child: Text('Something went wrong'));
+                          }
+                          print(documents[index].data());
+
+                          print('----');
+                          getPhoneNumber(snapshots.data!['uid']);
+                          return Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: screenHeight * 0.01),
+                                height: screenHeight * 0.2,
+                                child: MyChargingWidget(
+                                  chargingItem: Charging(
+                                      amount:
+                                          documents[index]['price'] as String,
+                                      phoneNumber: phoneNumber,
+                                      position: const LatLng(0,
+                                          0), //later to show path till charger we'll use charger coordinates
+                                      slotChosen: documents[index]['timeSlot'],
+                                      stationAddress: snapshots.data!['info']
+                                          ['address'],
+                                      stationName: snapshots.data!['info']
+                                          ['stationName'],
+                                      status: documents[index]['status'],
+                                      date: documents[index]['bookingDate'],
+                                      id: documents[index].id,
+                                      type: 1,
+                                      ratings: 1),
+                                  currentTab: tab,
+                                ),
+                              ),
+                              // SizedBox(
+                              //   height: screenHeight * 0.01,
+                              // ),
+                            ],
+                          );
+                        }));
+                  },
+                  itemCount: documents.length,
+                );
               },
-            )
-        ),
+            )),
       ),
     );
   }
 
-  // Widget streamBuilder(String tab) {
-  //   final height = MediaQuery.of(context).size.height;
-  //   return Container(
-  //     height: height * 0.75,
-  //     padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
-  //     child: SingleChildScrollView(
-  //       child: Container(
-  //           height: height * 0.85,
-  //           child: StreamBuilder(
-  //             stream: (tab == AppStrings.ChargingScreenCurrentTab)
-  //                 ? FirebaseFirestore.instance
-  //                     .collection('booking')
-  //                     .where('userId', isEqualTo: currentUid)
-  //                     .where('status', whereIn: [0, 1, 2]).snapshots()
-  //                 : FirebaseFirestore.instance
-  //                     .collection('booking')
-  //                     .where('userId', isEqualTo: currentUid)
-  //                     .where('status', whereIn: [-1, -2, 3]).snapshots(),
-  //             builder: (context,
-  //                 AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-  //               if (snapshot.connectionState == ConnectionState.waiting) {
-  //                 return const CircularProgressIndicator();
-  //               }
-  //               if (!snapshot.hasData) {
-  //                 return const Center(
-  //                   child: Text('No Chargings yet..'),
-  //                 );
-  //               }
-  //               if (snapshot.hasError) {
-  //                 return const Center(child: Text('Something went wrong'));
-  //               }
-
-  //               // final listOfChargings = snapshot.data!;
-  //               List<DocumentSnapshot<Map<String, dynamic>>> documents =
-  //                   snapshot.data!.docs;
-  //               // print(documents[0]);
-
-  //               return ListView.builder(
-  //                 itemBuilder: (context, index) {
-  //                   return FutureBuilder(
-  //                       future: getChargerDetailsByChargerId(
-  //                           documents[index].data()!['chargerId']),
-  //                       builder: ((context,
-  //                           AsyncSnapshot<
-  //                                   DocumentSnapshot<Map<String, dynamic>>>
-  //                               snapshots) {
-  //                         if (snapshots.connectionState ==
-  //                             ConnectionState.waiting) {
-  //                           return const CircularProgressIndicator();
-  //                         }
-  //                         if (!snapshots.hasData) {
-  //                           return const Center(
-  //                             child: Text('No Bookings yet..'),
-  //                           );
-  //                         }
-  //                         if (snapshots.hasError) {
-  //                           return const Center(
-  //                               child: Text('Something went wrong'));
-  //                         }
-  //                         return Column(children: [
-  //                           MyChargingWidget(
-  //                               chargingItem: Charging(
-  //                                   amount: documents[index]['price'],
-  //                                   position: const LatLng(0,
-  //                                       0), //later to show path till charger we'll use charger coordinates
-  //                                   slotChosen: documents[index]['timeSlot'],
-  //                                   stationAddress: snapshots.data!['info']
-  //                                       ['address'],
-  //                                   stationName: snapshots.data!['info']
-  //                                       ['stationName'],
-  //                                   status: documents[index]['status'],
-  //                                   type: 1,
-  //                                   ratings: 1),
-  //                               currentTab: tab,
-  //                               bookingId: documents[index].id),
-  //                           const SizedBox(
-  //                             height: 5,
-  //                           )
-  //                         ]);
-  //                       }));
-  //                 },
-  //                 itemCount: documents.length,
-  //               );
-  //             },
-  //           )),
-  //     ),
-  //   );
-  // }
-
-  // Future<DocumentSnapshot<Map<String, dynamic>>> getChargerDetailsByChargerId(
-  //     String chargerId) async {
-  //   print("88");
-  //   final chargerDetails = await FirebaseFirestore.instance
-  //       .collection('chargers')
-  //       .doc(chargerId)
-  //       .get();
-  //   return chargerDetails;
-  // }
-
-  // final currentUid = FirebaseAuth.instance.currentUser?.uid;
   Widget currentScreen(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -357,10 +219,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           child: Row(
             children: [
               GestureDetector(
-                onTap: () {
-                  // function();
-                  // print('Called Function');
-                },
+                onTap: () {},
                 child: Container(
                   width: screenWidth * 0.5,
                   child: Column(
@@ -408,7 +267,6 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
             ],
           ),
         ),
-        
         Container(
           color: ColorManager.white,
           height: screenHeight * 0.05,
@@ -485,7 +343,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
           color: ColorManager.white,
           height: screenHeight * 0.05,
         ),
-       streamBuilder(AppStrings.ChargingScreenRecentTab),
+        streamBuilder(AppStrings.ChargingScreenRecentTab),
       ],
     );
   }

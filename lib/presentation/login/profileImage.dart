@@ -6,23 +6,42 @@ import 'package:flutter/material.dart';
 import '../resources/font_manager.dart';
 import '../resources/strings_manager.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'name.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class ProfileImage extends StatelessWidget {
   Future<void> _getImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
+    XFile? imageFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (imageFile != null) {
+      File compressedImage = await compressImage(File(imageFile.path));
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ProfileUpload(imagePath: pickedFile.path),
+          builder: (context) => ProfileUpload(imagePath: compressedImage.path),
         ),
       );
     }
   }
+
+  Future<File> compressImage(File imageFile) async {
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    int rand = DateTime.now().millisecondsSinceEpoch;
+
+    Uint8List? result = await FlutterImageCompress.compressWithFile(
+      imageFile.path,
+      minWidth: 1024,
+      minHeight: 1024,
+      quality: 85,
+      format: CompressFormat.jpeg
+    );
+    File compressedImage = File('$path/img_$rand.jpg')..writeAsBytesSync(result!);
+    return compressedImage;
+  }
+
+  const ProfileImage({Key? key}) : super(key: key);
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -37,9 +56,8 @@ class ProfileImage extends StatelessWidget {
                   top: screenHeight * 0.08,
                   left: screenWidth * 0.05,
                   child: SizedBox(
-                    height: screenHeight * 0.12,
-                    width: screenWidth * 0.12,
-                    child: SingleChildScrollView(
+                    height: screenHeight * 0.064,
+                    width: screenHeight * 0.064,
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -51,13 +69,12 @@ class ProfileImage extends StatelessWidget {
                           children: <Widget>[
                             Icon(
                               Icons.chevron_left,
-                              size: screenWidth * 0.03,
+                              size: screenWidth * 0.05,
                               color: ColorManager.appBlack,
                             ),
                           ],
                         ),
                       ),
-                    ),
                   ),
                 ),
                 Positioned(
@@ -89,6 +106,11 @@ class ProfileImage extends StatelessWidget {
                       fontFamily: FontConstants.appTitleFontFamily,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2.0,
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(2.0, 2.0),
+                            color: ColorManager.primary20),
+                      ],
                     ),
                   ),
                 ),
@@ -147,6 +169,7 @@ class ProfileImage extends StatelessWidget {
               ],
             ),
           ),
-        ));
+        )
+    );
   }
 }
