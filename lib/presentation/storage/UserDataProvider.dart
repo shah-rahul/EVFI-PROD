@@ -82,21 +82,25 @@ class UserDataProvider extends ChangeNotifier {
       // ignore: unused_local_variable
       if (user != null) {
         DocumentReference documentRef = _usersCollection.doc(user.uid);
-        print('data saved');
-        await documentRef.set({
-          'uid': user.uid,
-          'firstName': _userData.firstName,
-          'phoneNumber': _userData.phoneNumber,
-          'lastName': _userData.lastName,
-          'level1': _userData.level1,
-          'level2': _userData.level2,
-          'level3': _userData.level3,
-          'chargers': _userData.chargers,
-          'bookings': _userData.bookings,
-          'imageUrl': _userData.imageUrl,
-        });
-        notifyListeners();
-    
+        DocumentSnapshot docSnapshot = await documentRef.get();
+
+        if (!docSnapshot.exists) {
+          // User document does not exist, create a new one
+          print('Creating new user document');
+          await documentRef.set({
+            'uid': user.uid,
+            'firstName': _userData.firstName,
+            'phoneNumber': _userData.phoneNumber,
+            'lastName': _userData.lastName,
+            'level1': _userData.level1,
+            'level2': _userData.level2,
+            'level3': _userData.level3,
+            'chargers': _userData.chargers,
+            'bookings': _userData.bookings,
+            'imageUrl': _userData.imageUrl,
+          });
+          notifyListeners();
+        }
       }
     } catch (e) {
       debugPrint('Error saving user data: $e');

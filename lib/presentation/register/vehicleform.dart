@@ -3,6 +3,7 @@
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import '../storage/UserData.dart';
@@ -26,13 +27,13 @@ class _VehicleFormState extends State<VehicleForm> {
   TextEditingController vehicleregistrationController = TextEditingController();
   TextEditingController vehicleBatteryCapController = TextEditingController();
   TextEditingController vehicleMileageController = TextEditingController();
-  String chargingRequirement = '';
+  // String chargingRequirement = '';
 
   final FocusNode vehicleManfFocus = new FocusNode();
   final FocusNode vehicleregisFocus = new FocusNode();
   final FocusNode vehicleBatteryFocus = new FocusNode();
   final FocusNode vehicleMileageFocus = new FocusNode();
-  final FocusNode chargingRequirementFocus = new FocusNode();
+  // final FocusNode chargingRequirementFocus = new FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
 
   TextInputType getKeyboard(FocusNode fn) {
@@ -79,9 +80,19 @@ class _VehicleFormState extends State<VehicleForm> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
+    bool isDataFilled = false;
+
+    void checkDataFields() {
+      setState(() {
+        isDataFilled = !(vehicleManufacturerController.text.trim().isEmpty ||
+            vehicleregistrationController.text.trim().isEmpty ||
+            vehicleBatteryCapController.text.trim().isEmpty ||
+            vehicleMileageController.text.trim().isEmpty);
+      });
+    }
 
     void updateVehicleData(String manufacturer, String number,
-        String batteryCapacity, String mileage, String chargingRequirements) {
+        String batteryCapacity, String mileage) {
       UserData userData = userDataProvider.userData;
       userData.vehicleManufacturer = manufacturer;
       userData.vehicleRegistrationNumber = number;
@@ -212,12 +223,11 @@ class _VehicleFormState extends State<VehicleForm> {
                             children: [
                               TextButton(
                                 onPressed: () async {
-                                  updateVehicleData(
-                                      vehicleManufacturerController.text,
-                                      vehicleregistrationController.text,
-                                      vehicleBatteryCapController.text,
-                                      vehicleMileageController.text,
-                                      chargingRequirement);
+                                  // updateVehicleData(
+                                  //     vehicleManufacturerController.text,
+                                  //     vehicleregistrationController.text,
+                                  //     vehicleBatteryCapController.text,
+                                  //     vehicleMileageController.text);
                                   //skip button section
 
                                   Navigator.push(
@@ -241,20 +251,23 @@ class _VehicleFormState extends State<VehicleForm> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  updateVehicleData(
+                                  checkDataFields();
+                                  if (isDataFilled) {
+                                    updateVehicleData(
                                       vehicleManufacturerController.text,
                                       vehicleregistrationController.text,
                                       vehicleBatteryCapController.text,
                                       vehicleMileageController.text,
-                                      chargingRequirement);
+                                    );
 
-                                  Navigator.push(
-                                    context,
-                                    PageTransition(
-                                        type: PageTransitionType.rightToLeft,
-                                        ctx: context,
-                                        child: const ChargerForm()),
-                                  );
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          type: PageTransitionType.rightToLeft,
+                                          ctx: context,
+                                          child: const ChargerForm()),
+                                    );
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.white,
