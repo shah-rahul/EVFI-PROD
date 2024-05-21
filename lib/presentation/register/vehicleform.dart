@@ -23,21 +23,29 @@ class VehicleForm extends StatefulWidget {
 }
 
 class _VehicleFormState extends State<VehicleForm> {
-  TextEditingController vehicleManufacturerController = TextEditingController();
   TextEditingController vehicleregistrationController = TextEditingController();
   TextEditingController vehicleBatteryCapController = TextEditingController();
   TextEditingController vehicleMileageController = TextEditingController();
   // String chargingRequirement = '';
 
-  final FocusNode vehicleManfFocus = new FocusNode();
   final FocusNode vehicleregisFocus = new FocusNode();
   final FocusNode vehicleBatteryFocus = new FocusNode();
   final FocusNode vehicleMileageFocus = new FocusNode();
   // final FocusNode chargingRequirementFocus = new FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
 
+  String? selectedVehicleManufacturer;
+  List<String> vehicleManufacturers = [
+    'Tesla',
+    'Toyota',
+    'Ford',
+    'Chevrolet',
+    'Nissan',
+    // Add more manufacturers as needed
+  ];
+
   TextInputType getKeyboard(FocusNode fn) {
-    if (fn == vehicleManfFocus || fn == vehicleregisFocus) {
+    if (fn == vehicleregisFocus) {
       return TextInputType.emailAddress;
     }
     return TextInputType.number;
@@ -84,7 +92,7 @@ class _VehicleFormState extends State<VehicleForm> {
 
     void checkDataFields() {
       setState(() {
-        isDataFilled = !(vehicleManufacturerController.text.trim().isEmpty ||
+        isDataFilled = !(selectedVehicleManufacturer == null ||
             vehicleregistrationController.text.trim().isEmpty ||
             vehicleBatteryCapController.text.trim().isEmpty ||
             vehicleMileageController.text.trim().isEmpty);
@@ -157,12 +165,30 @@ class _VehicleFormState extends State<VehicleForm> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: AppPadding.p8,
                                   vertical: AppPadding.p8),
-                              child: constructTextField(
-                                  "Vehicle Manufacturer",
-                                  (val) {},
-                                  vehicleManufacturerController,
-                                  vehicleManfFocus,
-                                  vehicleregisFocus)),
+                              child: DropdownButtonFormField<String>(
+                                value: selectedVehicleManufacturer,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedVehicleManufacturer = value;
+                                  });
+                                },
+                                items: vehicleManufacturers.map((manufacturer) {
+                                  return DropdownMenuItem<String>(
+                                    value: manufacturer,
+                                    child: Text(manufacturer),
+                                  );
+                                }).toList(),
+                                decoration: InputDecoration(
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: ColorManager.darkGrey,
+                                    ),
+                                  ),
+                                  labelText: "Vehicle Manufacturer",
+                                  labelStyle: const TextStyle(fontSize: AppSize.s14),
+                                ),
+                              )),
                           Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: AppPadding.p8,
@@ -193,28 +219,6 @@ class _VehicleFormState extends State<VehicleForm> {
                                   vehicleMileageController,
                                   vehicleMileageFocus,
                                   vehicleMileageFocus)),
-                          // Container(
-                          //   padding: const EdgeInsets.symmetric(
-                          //       horizontal: AppPadding.p8,
-                          //       vertical: AppPadding.p8),
-                          //   child: DropdownButton<String>(
-                          //     hint: Text('Charging Requirement'),
-                          //     value: chargingRequirement,
-                          //     onChanged: (value) => setState(() {
-                          //       chargingRequirement = value!;
-                          //     }),
-                          //     items: <String>[
-                          //       'Level 1',
-                          //       'Level 2',
-                          //       'Level 3'
-                          //     ].map<DropdownMenuItem<String>>((String value) {
-                          //       return DropdownMenuItem<String>(
-                          //         value: value,
-                          //         child: Text(value),
-                          //       );
-                          //     }).toList(),
-                          //   ),
-                          // ),
                           const SizedBox(
                             height: 20,
                           ),
@@ -224,7 +228,7 @@ class _VehicleFormState extends State<VehicleForm> {
                               TextButton(
                                 onPressed: () async {
                                   // updateVehicleData(
-                                  //     vehicleManufacturerController.text,
+                                  //     selectedVehicleManufacturer!,
                                   //     vehicleregistrationController.text,
                                   //     vehicleBatteryCapController.text,
                                   //     vehicleMileageController.text);
@@ -254,7 +258,7 @@ class _VehicleFormState extends State<VehicleForm> {
                                   checkDataFields();
                                   if (isDataFilled) {
                                     updateVehicleData(
-                                      vehicleManufacturerController.text,
+                                      selectedVehicleManufacturer!,
                                       vehicleregistrationController.text,
                                       vehicleBatteryCapController.text,
                                       vehicleMileageController.text,
@@ -295,3 +299,4 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 }
+
