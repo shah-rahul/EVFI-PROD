@@ -81,24 +81,26 @@ class UserDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       if (user != null) {
-        DocumentReference documentRef = _usersCollection
-            .doc(user.uid); // Replace 'documentId' with the desired document ID
+        DocumentReference documentRef = _usersCollection.doc(user.uid);
+        DocumentSnapshot docSnapshot = await documentRef.get();
 
-        await documentRef.set({
-          'uid': user.uid,
-          'firstName': _userData.firstName,
-          'phoneNumber': _userData.phoneNumber,
-          'lastName': _userData.lastName,
-          'level1': _userData.level1,
-          'level2': _userData.level2,
-          'level3': _userData.level3,
-          'chargers': _userData.chargers,
-          'bookings': _userData.bookings,
-          'imageUrl': _userData.imageUrl,
-        });
-        notifyListeners();
-        // Log the ID of the newly created document
-        // print('User document ID: ${documentRef.id}');
+        if (!docSnapshot.exists) {
+          // User document does not exist, create a new one
+          print('Creating new user document');
+          await documentRef.set({
+            'uid': user.uid,
+            'firstName': _userData.firstName,
+            'phoneNumber': _userData.phoneNumber,
+            'lastName': _userData.lastName,
+            'level1': _userData.level1,
+            'level2': _userData.level2,
+            'level3': _userData.level3,
+            'chargers': _userData.chargers,
+            'bookings': _userData.bookings,
+            'imageUrl': _userData.imageUrl,
+          });
+          notifyListeners();
+        }
       }
     } catch (e) {
       debugPrint('Error saving user data: $e');
@@ -152,7 +154,6 @@ class UserDataProvider extends ChangeNotifier {
       }
       print(userD);
       setUserData(userD);
-    
     } catch (e) {}
   }
 

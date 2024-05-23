@@ -12,21 +12,12 @@ import 'package:get/get.dart';
 import '../storage/UserData.dart';
 import '../resources/font_manager.dart';
 
-
-
 class Name extends StatefulWidget {
-
-  final String phoneNumber;
-  Name({
-    required this.phoneNumber,
-  });
-
   @override
   _NameState createState() => _NameState();
 }
 
 class _NameState extends State<Name> {
-
   TextEditingController nameController = TextEditingController();
 
   @override
@@ -41,6 +32,7 @@ class _NameState extends State<Name> {
       userData.firstName = name;
       userData.level1 = true;
       userDataProvider.setUserData(userData);
+      userDataProvider.saveUserData();
     }
 
     return Scaffold(
@@ -106,20 +98,24 @@ class _NameState extends State<Name> {
                     width: screenWidth * 0.77,
                     child: TextField(
                       onChanged: (value) async {
-                      // Store the entered name in the provider
-                      setState(() {
-                        nameController.text = value;
-                      });
-                    },
-                        decoration: InputDecoration(
+                        // Store the entered name in the provider
+                        setState(() {
+                          nameController.text = value;
+                        });
+                      },
+                      decoration: InputDecoration(
                         filled: true,
                         fillColor: ColorManager.grey4,
                         hintText: 'Enter your name',
                         labelText: 'Name',
-                        contentPadding: EdgeInsets.symmetric(vertical: screenHeight * 0.015, horizontal: screenWidth * 0.10),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.015,
+                            horizontal: screenWidth * 0.10),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: ColorManager.primary.withOpacity(0.5)),
-                          borderRadius: BorderRadius.all(Radius.circular(screenWidth * 0.02)),
+                          borderSide: BorderSide(
+                              color: ColorManager.primary.withOpacity(0.5)),
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(screenWidth * 0.02)),
                         ),
                         labelStyle: TextStyle(
                           color: Colors.white,
@@ -143,15 +139,16 @@ class _NameState extends State<Name> {
                       await userDataProvider.saveUserData();
 
                       Navigator.push(
-                        context, PageTransition(
+                        context,
+                        PageTransition(
                             type: PageTransitionType.rightToLeft,
-
 
                             // child: OnBoardingView()),
                             child: ProfileImage()),
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor:  ColorManager.primary,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorManager.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),
