@@ -1,4 +1,7 @@
 import 'package:evfi/presentation/login/profileImage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart' as Path;
 import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +22,33 @@ class _ProfileUploadState extends State<ProfileUpload> {
   double _scale = 1.0;
   double _previousScale = 1.0;
   Offset _offset = Offset.zero;
+  Future<void> uploadImage(BuildContext context) async {
+    print("here");
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        print('No user signed in');
+        // Handle the case when the user is not signed in
+        return;
+      }
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference storageRef = storage.ref().child('profile_images');
+      String fileName = Path.basename(widget.imagePath);
+      UploadTask uploadTask = storageRef.child(fileName).putFile(File(widget.imagePath));
+
+      await uploadTask.whenComplete(() {
+        storageRef.child(fileName).getDownloadURL().then((url) {
+          print('Download URL: $url');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OnBoardingView()),
+          );
+        });
+      });
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -115,12 +145,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
                     height: screenHeight * 0.065,
                     width: screenWidth * 0.77,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => OnBoardingView()),
-                        );
-                      },
+                      onPressed: () => uploadImage(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: ColorManager.primary,
                         shape: RoundedRectangleBorder(

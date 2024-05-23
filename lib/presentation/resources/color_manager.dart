@@ -11,6 +11,7 @@ class ColorManager {
   static Color darkGrey = HexColor.fromHex("#525252");
   static Color darkGreyOpacity40 = HexColor.fromHex("#313131");
   static Color grey = HexColor.fromHex("#737477");
+  static Color greyText = HexColor.fromHex("40403B");
   static Color dullYellow = HexColor.fromHex("#443F16");
   static Color statusAccepted = HexColor.fromHex("D0F4D5");
   static Color statusRequested = Colors.white;
