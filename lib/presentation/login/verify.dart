@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evfi/presentation/login/name.dart';
 import 'package:evfi/presentation/login/profileImage.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -233,7 +234,7 @@ class _VerifyState extends State<Verify> {
                               // child: RegisterView(
                               //   phoneNumber: widget.phoneNumber,
                               // ),
-                              child: ProfileImage(),
+                              child: Name(),
                             ),
                           );
                         }

@@ -310,11 +310,11 @@ class _SignupPageState extends State<SignupPage> {
                                 //   verificationId: verificationId,
                                 //   phoneNumber: phoneNumber,
                                 // ),
-                                // child: Verify(
-                                //   verificationId: verificationId,
-                                //   phoneNumber: phoneNumber,
-                                // ),
-                                child: Name(phoneNumber: phoneNumber)),
+                                child: Verify(
+                                  verificationId: verificationId,
+                                  phoneNumber: phoneNumber,
+                                ),)
+                                // child: Name(phoneNumber: phoneNumber)),
                           );
                         },
                         codeAutoRetrievalTimeout: (String verificationId) {
