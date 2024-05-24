@@ -18,7 +18,6 @@ import 'new_station.dart';
 String username = "";
 String firstname = "";
 String lastname = "";
-String email = "";
 String phoneNo = "";
 File? clickedImage;
 String country = "";
@@ -67,7 +66,6 @@ class _AccountState extends State<Account> {
         phoneNo = userData['phoneNumber'];
         firstname = userData['firstName'];
         lastname = userData['lastName'];
-        email = userData['email'];
         country = userData['country'];
         state = userData['state'];
         city = userData['city'];
@@ -75,7 +73,6 @@ class _AccountState extends State<Account> {
         imageurl = userData["imageUrl"];
         isProvider = userData["level3"];
         chargers = userData["chargers"];
-        //clickedImage = userData['userImage'];
         print("In fetching block");
         print('username is : ${username}');
         print('phone number is :${phoneNo}');
@@ -92,7 +89,6 @@ class _AccountState extends State<Account> {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
       builder: (context) => EditProfileScreen(
-        email: email,
         phoneNo: phoneNo,
         firstname: firstname,
         lastname: lastname,

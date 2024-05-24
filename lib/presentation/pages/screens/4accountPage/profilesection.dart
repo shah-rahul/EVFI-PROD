@@ -12,8 +12,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen(
-      {required this.email,
+  const EditProfileScreen({
       required this.firstname,
       required this.lastname,
       required this.country,
@@ -23,7 +22,6 @@ class EditProfileScreen extends StatefulWidget {
       required this.phoneNo});
   final String firstname;
   final String lastname;
-  final String email;
   final String phoneNo;
   final String country;
   final String state;
@@ -38,7 +36,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _formkey = GlobalKey<FormState>();
   var _enteredFName = firstname;
   var _enteredLName = lastname;
-  var _enteredEmail = email;
   //File? _selectedImage;
   var _enteredMobileno = phoneNo;
   var _enteredCountry = country;
@@ -77,7 +74,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         'firstName': _enteredFName,
         'lastName': _enteredLName,
         //'phoneNumber': _enteredMobileno,
-        'email': _enteredEmail,
         'country': _enteredCountry,
         'city': _enteredCity,
         'state': _enteredState,
@@ -87,7 +83,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       //updating variables locally :-
       firstname = _enteredFName;
       lastname = _enteredLName;
-      email = _enteredEmail;
       phoneNo = _enteredMobileno;
       country = _enteredCountry;
       state = _enteredState;
@@ -179,30 +174,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //3rd column
-                  TextFormField(
-                    style: const TextStyle(color: Colors.black),
-                    decoration: const InputDecoration(
-                      labelText: 'User email',
-                      counterText: '',
-                    ),
-                    maxLength: 30,
-                    initialValue: widget.email,
-                    onSaved: (newValue) {
-                      _enteredEmail = newValue!;
-                    },
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Email is required';
-                      }
-                      final emailRegex =
-                          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                      if (!emailRegex.hasMatch(value)) {
-                        return 'Enter a valid email address';
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.015),
+                  // TextFormField(
+                  //   style: const TextStyle(color: Colors.black),
+                  //   decoration: const InputDecoration(
+                  //     labelText: 'User email',
+                  //     counterText: '',
+                  //   ),
+                  //   maxLength: 30,
+                  //   initialValue: widget.email,
+                  //   onSaved: (newValue) {
+                  //     _enteredEmail = newValue!;
+                  //   },
+                  //   validator: (value) {
+                  //     if (value!.isEmpty) {
+                  //       return 'Email is required';
+                  //     }
+                  //     final emailRegex =
+                  //         RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  //     if (!emailRegex.hasMatch(value)) {
+                  //       return 'Enter a valid email address';
+                  //     }
+                  //     return null;
+                  //   },
+                  // ),
+                  //SizedBox(height: MediaQuery.of(context).size.height * 0.015),
                   //5th column
                   TextFormField(
                     style: const TextStyle(color: Colors.black),
