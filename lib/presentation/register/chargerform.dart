@@ -263,8 +263,7 @@ class _ChargerFormState extends State<ChargerForm> {
                           );
                         },
                         style: TextButton.styleFrom(
-                          backgroundColor: ColorManager.greyText,
-                          primary: Colors.white,
+                          foregroundColor: Colors.white, backgroundColor: ColorManager.greyText,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
