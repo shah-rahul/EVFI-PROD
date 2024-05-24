@@ -11,7 +11,9 @@ import 'package:evfi/presentation/pages/screens/4accountPage/settings.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'new_station.dart';
 
@@ -38,7 +40,39 @@ class Account extends StatefulWidget {
 class _AccountState extends State<Account> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
   User? _user;
+
+  Future<void> _pickImageFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      File imageFile = File(image.path);
+      try {
+        String imageUrl = await _uploadImageToFirebase(imageFile);
+        await _updateUserImageUrl(imageUrl);
+        imageurl = imageUrl;
+        setState(() {});
+      } catch (e) {
+        print('Error uploading image: $e');
+      }
+    }
+  }
+
+    Future<String> _uploadImageToFirebase(File imageFile) async {
+    String fileName = 'profile_${auth.currentUser!.uid}.jpg';
+    Reference ref = _storage.ref().child('profile_images').child(fileName);
+    UploadTask uploadTask = ref.putFile(imageFile);
+    TaskSnapshot taskSnapshot = await uploadTask;
+    return await taskSnapshot.ref.getDownloadURL();
+  }
+
+  Future<void> _updateUserImageUrl(String imageUrl) async {
+    await _firestore.collection('user').doc(auth.currentUser!.uid).update({
+      'imageUrl': imageUrl,
+    });
+  }
 
   @override
   void initState() {
@@ -242,35 +276,6 @@ Widget profileSection(BuildContext context) {
           errorWidget: (context, url, error) => Icon(Icons.error),
         );
 
-  Future<void> _showPhotoOptionsDialog() {
-    return showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('Pick station images using'),
-              actions: [
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    // await _takeChargerImages(ImageSource.camera)
-                    //     .then((value) => Navigator.of(context).pop());
-                  },
-                  icon: Icon(Icons.camera_alt_outlined,
-                      color: ColorManager.primary),
-                  label: const Text('Camera'),
-                  style: Theme.of(context).elevatedButtonTheme.style,
-                ),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    // await _takeChargerImages(ImageSource.gallery)
-                    //     .then((value) => Navigator.of(context).pop());
-                  },
-                  icon: Icon(Icons.image_outlined, color: ColorManager.primary),
-                  label: const Text('Gallery'),
-                  style: Theme.of(context).elevatedButtonTheme.style,
-                ),
-              ],
-            ));
-  }
-
   return Card(
     elevation: 4,
     shape: const RoundedRectangleBorder(
@@ -296,16 +301,12 @@ Widget profileSection(BuildContext context) {
                 bottom: height * 0.01,
                 left: width * 0.2,
                 child: GestureDetector(
-                  onTap: _showPhotoOptionsDialog,
+                  onTap: () => _AccountState()._pickImageFromGallery(),
                   child: Container(
                     padding: EdgeInsets.all(3),
                     decoration: BoxDecoration(
                       color: ColorManager.primary,
                       shape: BoxShape.circle,
-                      // border: Border.all(
-                      //   color: Colors.black,
-                      //   width: 2,
-                      // )
                     ),
                     child: Icon(
                       Icons.add,
@@ -317,7 +318,6 @@ Widget profileSection(BuildContext context) {
               ),
             ],
           ),
-          //content,
           //2nd row.....................................
           SizedBox(width: width * 0.05),
           //3rd row.....................................
