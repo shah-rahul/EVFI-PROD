@@ -3,9 +3,8 @@
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-
+import '../main/main_view.dart';
 import '../resources/font_manager.dart';
 import '../storage/UserData.dart';
 import '../storage/UserDataProvider.dart';
@@ -30,6 +29,7 @@ class _VehicleFormState extends State<VehicleForm> {
   TextEditingController vehicleMileageController = TextEditingController();
   String chargingRequirement = '';
   bool isFormValid = false;
+  String _selectedChargerType = '1';
 
   bool isVehicleManufacturerValid = true;
   bool isVehicleRegistrationValid = true;
@@ -63,74 +63,6 @@ class _VehicleFormState extends State<VehicleForm> {
           isVehicleMileageValid;
     });
   }
-  // Widget constructTextField(
-  //     String label,
-  //     String description,
-  //     TextEditingController controller,
-  //     FocusNode focusNode,
-  //     FocusNode nextFocus) {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Row(
-  //         children: [
-  //           Text(
-  //             label,
-  //             style: TextStyle(fontSize: AppSize.s14, color: ColorManager.primary),
-  //           ),
-  //           IconButton(
-  //             icon: Icon(Icons.info_outline, color: ColorManager.primary, size: 20),
-  //             onPressed: () {
-  //               showDialog(
-  //                 context: context,
-  //                 builder: (BuildContext context) {
-  //                   return AlertDialog(
-  //                     title: Text(label),
-  //                     content: Text(description),
-  //                     actions: [
-  //                       TextButton(
-  //                         child: Text("OK"),
-  //                         onPressed: () {
-  //                           Navigator.of(context).pop();
-  //                         },
-  //                       ),
-  //                     ],
-  //                   );
-  //                 },
-  //               );
-  //             },
-  //           ),
-  //         ],
-  //       ),
-  //       TextField(
-  //         onChanged: (value) {},
-  //         keyboardType: getKeyboard(focusNode),
-  //         style: TextStyle(color: ColorManager.darkGrey),
-  //         controller: controller,
-  //         focusNode: focusNode,
-  //         onSubmitted: (value) {
-  //           FocusScope.of(context).requestFocus(nextFocus);
-  //           if (focusNode == vehicleMileageFocus) {
-  //             FocusScope.of(context).unfocus();
-  //           }
-  //         },
-  //         decoration: InputDecoration(
-  //           filled: true,
-  //           fillColor: ColorManager.greyText, // Grey background color
-  //           enabledBorder: OutlineInputBorder(
-  //             borderSide: BorderSide(
-  //               width: 1,
-  //               color: ColorManager.greyText,
-  //             ),
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //           labelStyle: const TextStyle(fontSize: AppSize.s14),
-  //         ),
-  //       ),
-  //       SizedBox(height: 8),
-  //     ],
-  //   );
-  // }
   Widget constructTextField(
       String label,
       String description,
@@ -138,6 +70,8 @@ class _VehicleFormState extends State<VehicleForm> {
       FocusNode focusNode,
       FocusNode nextFocus,
       bool isValid) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -145,10 +79,10 @@ class _VehicleFormState extends State<VehicleForm> {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: AppSize.s14,color: ColorManager.primary),
+              style: TextStyle(fontSize: height * 0.018,color: ColorManager.primary),
             ),
             IconButton(
-              icon: Icon(Icons.info_outline, color: ColorManager.primary, size: 20),
+              icon: Icon(Icons.info_outline, color: ColorManager.primary, size: height * 0.025),
               onPressed: () {
                 showDialog(
                   context: context,
@@ -171,7 +105,7 @@ class _VehicleFormState extends State<VehicleForm> {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: height * 0.01),
         TextField(
           onChanged: (value) {
             validateForm();
@@ -207,10 +141,10 @@ class _VehicleFormState extends State<VehicleForm> {
         ),
         if (!isValid)
           Padding(
-            padding: const EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: height * 0.01),
             child: Text(
-              'This field is required',
-              style: TextStyle(color: Colors.red, fontSize: AppSize.s12),
+              AppStrings.errorMessage,
+              style: TextStyle(color: ColorManager.error, fontSize: AppSize.s12),
             ),
           ),
       ],
@@ -235,6 +169,12 @@ class _VehicleFormState extends State<VehicleForm> {
       userDataProvider.setUserData(userData);
     }
 
+    final Map<String, String> dropdownItems = {
+      '1': 'Level 1',
+      '2': 'Level 2',
+      '3': 'Level 3',
+    };
+
     return Scaffold(
       backgroundColor: ColorManager.primary,
       body: SingleChildScrollView(
@@ -242,10 +182,10 @@ class _VehicleFormState extends State<VehicleForm> {
           children: [
             Container(
               padding: EdgeInsets.only(
-                top: AppPadding.p50,
-                right: AppPadding.p20,
-                bottom: AppPadding.p30,
-                left: AppPadding.p20,
+                top: height * 0.05,
+                right: width * 0.05,
+                bottom: height * 0.03,
+                left: width * 0.05,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,18 +194,18 @@ class _VehicleFormState extends State<VehicleForm> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Vehicle Info",
+                        AppStrings.vehicleformTitle,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: height * 0.04,
                           fontFamily: FontConstants.appTitleFontFamily,
                           color: ColorManager.appBlack,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "   Let's get your \n   vehicle info ready!",
+                        AppStrings.vehicleformSubTitle,
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: height * 0.02,
                           color: ColorManager.appBlack,
                           fontWeight: FontWeightManager.regular
                         ),
@@ -274,15 +214,15 @@ class _VehicleFormState extends State<VehicleForm> {
                   ),
                   Image.asset(
                     ImageAssets.splashlogo,
-                    height: 70,
-                    width: 70,
+                    height: height * 0.08,
+                    width: height * 0.08,
                   ),
                 ],
               ),
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              padding: EdgeInsets.all(AppPadding.p20),
+              padding: EdgeInsets.all(height * 0.025),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(37),
@@ -304,7 +244,7 @@ class _VehicleFormState extends State<VehicleForm> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 40),
+                  SizedBox(height: height * 0.025),
                   constructTextField(
                     "Vehicle Manufacturer",
                     "Enter the manufacturer of your vehicle",
@@ -313,7 +253,7 @@ class _VehicleFormState extends State<VehicleForm> {
                     vehicleregisFocus,
                       isVehicleManufacturerValid
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: height * 0.025),
                   constructTextField(
                     "Vehicle Registration",
                     "Enter the registration number of your vehicle",
@@ -322,7 +262,7 @@ class _VehicleFormState extends State<VehicleForm> {
                     vehicleBatteryFocus,
                       isVehicleRegistrationValid
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: height * 0.025),
                   constructTextField(
                     "Battery Capacity",
                     "Enter the battery capacity of your vehicle in kWh",
@@ -331,7 +271,7 @@ class _VehicleFormState extends State<VehicleForm> {
                     vehicleMileageFocus,
                       isVehicleBatteryCapValid
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: height * 0.025),
                   constructTextField(
                     "Vehicle Mileage",
                     "Enter the mileage or range of your vehicle in miles",
@@ -340,7 +280,74 @@ class _VehicleFormState extends State<VehicleForm> {
                     vehicleMileageFocus,
                       isVehicleMileageValid
                   ),
-                  SizedBox(height: 30),
+                  SizedBox(height: height * 0.025),
+                  Row(
+                    children: [
+                      Text(
+                        'Select Charger Type',
+                        style: TextStyle(fontSize: height * 0.018,color: ColorManager.primary),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.info_outline, color: ColorManager.primary, size: height * 0.025),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Charger Type'),
+                                content: Text('Choose anyone from Level 1, Level 2, Level 3'),
+                                actions: [
+                                  TextButton(
+                                    child: Text("OK"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  Container(
+                    // padding: const EdgeInsets.symmetric(
+                    //     horizontal: AppPadding.p8,
+                    //     vertical: AppPadding.p4),
+                    decoration: BoxDecoration(
+                      color: ColorManager.greyText,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        canvasColor: ColorManager.greyText,
+                      ),
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p8),
+                        ),
+                        value: _selectedChargerType,
+                        onChanged: (newValue) {
+                          setState(() {
+                            print(newValue);
+                            _selectedChargerType = newValue!;
+                          });
+                        },
+                        items: dropdownItems.keys.map((String key) {
+                          return DropdownMenuItem<String>(
+                            value: key,
+                            child: Text(
+                              dropdownItems[key]!,
+                              style: TextStyle(color: ColorManager.primary),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.03),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -356,9 +363,9 @@ class _VehicleFormState extends State<VehicleForm> {
                           Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                ctx: context,
-                                child: const ChargerForm()),
+                              type: PageTransitionType.rightToLeft,
+                              child: MainView(),
+                            ),
                           );
                         },
                         child: Text(
@@ -377,8 +384,8 @@ class _VehicleFormState extends State<VehicleForm> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: AppSize.s12,
+                      SizedBox(
+                        width: width * 0.03,
                       ),
                       ElevatedButton(
                         onPressed: isFormValid
@@ -393,9 +400,9 @@ class _VehicleFormState extends State<VehicleForm> {
                           Navigator.push(
                             context,
                             PageTransition(
-                                type: PageTransitionType.rightToLeft,
-                                ctx: context,
-                                child: const ChargerForm()),
+                              type: PageTransitionType.rightToLeft,
+                              child: MainView(),
+                            ),
                           );
                         }
                             : () {
@@ -411,7 +418,7 @@ class _VehicleFormState extends State<VehicleForm> {
                           "Save",
                           style: TextStyle(
                               color: ColorManager.appBlack,
-                              fontSize: AppSize.s16),
+                              fontSize: height * 0.02),
                         ),
                       ),
                     ],

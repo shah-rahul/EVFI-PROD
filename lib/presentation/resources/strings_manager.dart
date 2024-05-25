@@ -35,6 +35,7 @@ class AppStrings {
   static const chargerTitle = "Rent With \nUs";
   static const chargerButton = "Proceed To List";
   static const vehicleformTitle = "Vehicle Info";
+  static const vehicleformSubTitle ="   Let's get your \n   vehicle info ready!";
   static const chargerFormTitle = "List your Charger";
 
   static const chargerformtitle = "Charger Info";
@@ -59,5 +60,6 @@ class AppStrings {
 
   static const topLabel = "Time  left";
   static const myChargers = "My Chargers";
+  static const errorMessage = "This field is required";
 
 }
