@@ -28,16 +28,10 @@ class _ChargerFormState extends State<ChargerForm> {
     return chargerspeedController.text.isNotEmpty;
   }
 
-  void _showErrorMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      backgroundColor: Colors.red,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     final userDataProvider = Provider.of<UserDataProvider>(context);
 
     void updateChargingData(String type, String speed) {
@@ -72,7 +66,7 @@ class _ChargerFormState extends State<ChargerForm> {
                       Text(
                         AppStrings.chargerformtitle,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: FontSize.s30,
                           fontFamily: FontConstants.appTitleFontFamily,
                           color: ColorManager.appBlack,
                           fontWeight: FontWeight.bold
@@ -81,7 +75,7 @@ class _ChargerFormState extends State<ChargerForm> {
                       Text(
                         "   Let's get your \n   charger info ready!",
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: height * 0.018,
                           color: ColorManager.appBlack,
                             fontWeight: FontWeightManager.regular
                         ),
@@ -90,15 +84,15 @@ class _ChargerFormState extends State<ChargerForm> {
                   ),
                   Image.asset(
                     ImageAssets.splashlogo,
-                    height: 70,
-                    width: 70,
+                    height: height*0.08,
+                    width: height*0.08,
                   ),
                 ],
               ),
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-              padding: EdgeInsets.all(AppPadding.p20),
+              padding: EdgeInsets.all(height * 0.025),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(37),
@@ -119,7 +113,7 @@ class _ChargerFormState extends State<ChargerForm> {
                   ]),
               child: Column(
                 children: <Widget>[
-                  const SizedBox(height: 60),
+                  SizedBox(height: height * 0.07),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -127,10 +121,10 @@ class _ChargerFormState extends State<ChargerForm> {
                         children: [
                           Text(
                             'Select Charger Type',
-                            style: TextStyle(fontSize: AppSize.s14,color: ColorManager.primary),
+                            style: TextStyle(fontSize: height * 0.018,color: ColorManager.primary),
                           ),
                           IconButton(
-                            icon: Icon(Icons.info_outline, color: ColorManager.primary, size: 20),
+                            icon: Icon(Icons.info_outline, color: ColorManager.primary, size: height * 0.025),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -190,15 +184,15 @@ class _ChargerFormState extends State<ChargerForm> {
                         ),
                       ),
 
-                      const SizedBox(height: 30),
+                      SizedBox(height: height * 0.04),
                       Row(
                         children: [
                           Text(
                             'Charger Speed',
-                            style: TextStyle(fontSize: AppSize.s14,color: ColorManager.primary),
+                            style: TextStyle(fontSize: height * 0.018,color: ColorManager.primary),
                           ),
                           IconButton(
-                            icon: Icon(Icons.info_outline, color: ColorManager.primary, size: 20),
+                            icon: Icon(Icons.info_outline, color: ColorManager.primary, size: height * 0.025),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -238,7 +232,7 @@ class _ChargerFormState extends State<ChargerForm> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: height * 0.01),
                       if (showError)
                         Text(
                           'This field is required',
@@ -246,7 +240,7 @@ class _ChargerFormState extends State<ChargerForm> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 200),
+                  SizedBox(height: height * 0.2),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
