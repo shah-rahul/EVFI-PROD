@@ -43,6 +43,7 @@ class _AccountState extends State<Account> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
   User? _user;
 
+//======================= IMAGE UPLOAD CODE ====================================
   Future<void> _pickImageFromGallery() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
@@ -60,7 +61,7 @@ class _AccountState extends State<Account> {
     }
   }
 
-    Future<String> _uploadImageToFirebase(File imageFile) async {
+  Future<String> _uploadImageToFirebase(File imageFile) async {
     String fileName = 'profile_${auth.currentUser!.uid}.jpg';
     Reference ref = _storage.ref().child('profile_images').child(fileName);
     UploadTask uploadTask = ref.putFile(imageFile);
@@ -74,6 +75,7 @@ class _AccountState extends State<Account> {
     });
   }
 
+//======================= INIT METHOD CODE ====================================
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,7 @@ class _AccountState extends State<Account> {
       _user = user;
       if (user != null) {
         // User is signed in, fetch user data from Firestore
+        print(user.uid);
         _fetchUserData(user.uid);
         print("I am fetching data");
         setState(() {});
@@ -88,6 +91,7 @@ class _AccountState extends State<Account> {
     });
   }
 
+//=============== FETCH USER DATA FROM FIREBASE CODE ===========================
   Future<void> _fetchUserData(String userId) async {
     try {
       DocumentSnapshot userDoc =
@@ -118,7 +122,7 @@ class _AccountState extends State<Account> {
     }
   }
 
-//........EDIT PROFILE.....................................................................
+//======================= EDIT PROFILE CODE ====================================
   void editProfile() async {
     final newDetails =
         await Navigator.of(context).push<UserProfile>(MaterialPageRoute(
@@ -172,14 +176,24 @@ class _AccountState extends State<Account> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            //...................PROFILE....................................................................
+            //======================= USER PROFILE ====================================
             profileSection(context),
             SizedBox(height: height * 0.015),
-            //....................BUTTONS IN ROW............................................................
+            //======================= BUTTONS IN ROW ====================================
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                serviceSection(context, Icons.lightbulb_outline, 'Chargers'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MyChargersScreen(
+                        chargers: chargers,
+                      ),
+                    ));
+                  },
+                  child: serviceSection(
+                      context, Icons.lightbulb_outline, 'Chargers'),
+                ),
                 GestureDetector(
                     onTap: clickPayment,
                     child:
@@ -187,7 +201,7 @@ class _AccountState extends State<Account> {
                 serviceSection(context, Icons.drive_eta, 'Bookings'),
               ],
             ),
-            //.............................COLUMN BUTTONS...................................................
+            //======================= COLUMN BUTTONS ====================================
             SizedBox(height: height * 0.015),
             GestureDetector(
               onTap: () {
@@ -196,16 +210,13 @@ class _AccountState extends State<Account> {
               child: settingSection(
                   context, Icons.person_2_outlined, 'Edit Profile'),
             ),
-            //..............................................................................................
             SizedBox(height: height * 0.015),
             GestureDetector(
                 onTap: _addStation,
                 child: settingSection(
                     context, Icons.location_on_outlined, 'Add Station')),
-            //..............................................................................................
             SizedBox(height: height * 0.015),
             settingSection(context, Icons.contact_support_outlined, 'Support'),
-            //..............................................................................................
             SizedBox(height: height * 0.015),
             GestureDetector(
               child: settingSection(context, Icons.settings, 'Settings'),
@@ -215,7 +226,6 @@ class _AccountState extends State<Account> {
                 ));
               },
             ),
-            //..............................................................................................
             SizedBox(height: height * 0.015),
             GestureDetector(
               onTap: () async {
@@ -233,7 +243,7 @@ class _AccountState extends State<Account> {
     );
   }
 
-//..............ADD STATION AND SIGNOUT METHODS.................................................
+//======================= ADD STATION METHOD ====================================
   void _addStation() {
     showModalBottomSheet(
       context: context,
@@ -247,6 +257,7 @@ class _AccountState extends State<Account> {
     );
   }
 
+//======================= SIGN OUT METHOD ====================================
   signOut() async {
     await auth.signOut();
     var sharedPref = await SharedPreferences.getInstance();
@@ -353,43 +364,32 @@ Widget serviceSection(BuildContext context, IconData icon, String str) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
 
-  return GestureDetector(
-    onTap: () {
-      if (str == "Chargers") {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => MyChargersScreen(
-            chargers: chargers,
+  return Card(
+    elevation: 4,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8))),
+    child: Container(
+      padding: EdgeInsetsDirectional.all(width * 0.03),
+      width: width * 0.28,
+      height: height * 0.11,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(width * 0.02),
+        border: Border.all(width: 1.5, color: Colors.black26),
+      ),
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: ColorManager.primary,
+            size: height * 0.05,
           ),
-        ));
-      }
-    },
-    child: Card(
-      elevation: 4,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8))),
-      child: Container(
-        padding: EdgeInsetsDirectional.all(width * 0.03),
-        width: width * 0.28,
-        height: height * 0.11,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(width * 0.02),
-          border: Border.all(width: 1.5, color: Colors.black26),
-        ),
-        child: Column(
-          children: [
-            Icon(
-              icon,
-              color: ColorManager.primary,
-              size: height * 0.05,
-            ),
-            Spacer(),
-            Text(str,
-                style: const TextStyle(
-                    fontSize: AppSize.s14,
-                    fontWeight: FontWeight.w800,
-                    fontFamily: 'fonts/Poppins')),
-          ],
-        ),
+          Spacer(),
+          Text(str,
+              style: const TextStyle(
+                  fontSize: AppSize.s14,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'fonts/Poppins')),
+        ],
       ),
     ),
   );
