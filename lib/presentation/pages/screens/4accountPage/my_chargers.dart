@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
-import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:evfi/presentation/resources/styles_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
@@ -59,14 +58,17 @@ class _MyChargersScreenState extends State<MyChargersScreen> {
         foregroundColor: Colors.black,
         backgroundColor: ColorManager.primary,
         title: Text(
-          AppStrings.myChargers,
-          style: getSemiBoldStyle(color: Colors.black, fontSize: AppSize.s20),
+          "My Chargers",
+          style: getSemiBoldStyle(
+              color: Colors.black,
+              fontSize: AppSize.s20,
+              fontFamily: 'fonts/Poppins'),
         ),
       ),
       body: _chargerDetails.isEmpty
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: Text('You do not have any chargers'))
           : Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               child: ListView.builder(
                 itemCount: _chargerDetails.length,
                 itemBuilder: (context, index) {
@@ -83,10 +85,7 @@ class _MyChargersScreenState extends State<MyChargersScreen> {
                           toggleChargerStatus(chargerId, newValue);
                         },
                       ),
-                      Divider(
-                        thickness: 0.45,
-                        color: ColorManager.grey,
-                      )
+                      const SizedBox(height: AppSize.s4),
                     ],
                   );
                 },
@@ -108,20 +107,58 @@ class ChargerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        chargerInfo['stationName'],
-        style: getRegularStyle().copyWith(fontSize: AppSize.s18),
-      ),
-      subtitle: Text(
-        '${chargerInfo['address']}, ${chargerInfo['city']}',
-        style: getBoldStyle(color: Colors.black87)
-            .copyWith(fontWeight: FontWeight.w300),
-      ),
-      trailing: Switch(
-        value: chargerInfo['status'] == 1,
-        activeColor: ColorManager.primary,
-        onChanged: onChanged,
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppMargin.m12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  chargerInfo['stationName'],
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: AppSize.s18,
+                    fontFamily: 'fonts/Poppins',
+                  ),
+                ),
+                // Switch(
+                //   value: chargerInfo['status'] == 1,
+                //   activeColor: ColorManager.primary,
+                //   onChanged: onChanged,
+                // ),
+                Text(
+                  chargerInfo['status'] == 1 ? 'ACTIVE' : 'INACTIVE',
+                  style: TextStyle(
+                    color:
+                        chargerInfo['status'] == 1 ? Colors.green : Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'fonts/Poppins',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSize.s4),
+            Text(
+              '${chargerInfo['address']}, ${chargerInfo['city']}',
+              style: const TextStyle(
+                  fontSize: AppSize.s14, fontFamily: 'fonts/Poppins'),
+            ),
+            const SizedBox(height: AppSize.s4),
+            Row(
+              children: List.generate(
+                5,
+                (index) => Icon(
+                  Icons.star,
+                  size: AppMargin.m20,
+                  color: index < 3 ? Colors.yellow : Colors.grey,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
