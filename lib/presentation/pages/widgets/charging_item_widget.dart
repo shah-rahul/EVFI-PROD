@@ -226,11 +226,11 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                               ),
                             ),
                             SizedBox(height: height * 0.02),
-                            Icon(
-                              Icons.assistant_direction,
-                              color: Colors.black,
-                              size: width * 0.07,
-                            ),
+                            // Icon(
+                            //   Icons.assistant_direction,
+                            //   color: Colors.black,
+                            //   size: width * 0.07,
+                            // ),
                           ]),
                     ],
                   ),
