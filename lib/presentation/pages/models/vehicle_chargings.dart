@@ -8,7 +8,7 @@ class Charging {
   int slotChosen;
   String id;
   String date;
-  String amount;
+  int amount;
   String phoneNumber;
   LatLng position;
 

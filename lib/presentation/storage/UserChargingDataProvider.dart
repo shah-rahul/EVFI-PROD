@@ -56,6 +56,8 @@ class UserChargingDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       User? user = FirebaseAuth.instance.currentUser;
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(user!.uid);
       DocumentReference documentRef = await _chargersCollection.add({
         'chargerId': _userChargingData.chargerId,
         'uid': user!.uid,

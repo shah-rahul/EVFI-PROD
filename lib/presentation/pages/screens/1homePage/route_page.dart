@@ -278,7 +278,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       vsync: this, duration: const Duration(milliseconds: 400)),
                   backgroundColor: Colors.amber.withOpacity(0.0),
                   builder: (context) {
-                    double price =
+                    int price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
                       stationName: stnName,

@@ -90,7 +90,7 @@ class MyPricing {
     return (batteryCap / range) * dist * (costPerKWH[myState]!);
   }
 
-  double fullChargeCost(double batteryCap, String state) {
+  int fullChargeCost(double batteryCap, String state) {
     States myState = States.Delhi;
     for (var i = 0; i < States.values.length; i++) {
       if (States.values[i].toString().split('.')[1] == state) {
@@ -99,8 +99,7 @@ class MyPricing {
     }
     print(state);
 
-    return double.parse(
-        (batteryCap * (costPerKWH[myState]!)).toStringAsFixed(2));
+    return int.parse((batteryCap * (costPerKWH[myState]!)).toStringAsFixed(2));
   }
 }
 

@@ -23,7 +23,7 @@ class BookingDataProvider {
       );
 
   Future<void> addBooking(
-      String providerId, String chargerId, String price, int timeSlot) async {
+      String providerId, String chargerId, int price, int timeSlot) async {
     try {
       _booking.add({
         'status': LendingStatus.requested.code,

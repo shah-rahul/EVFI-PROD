@@ -394,7 +394,7 @@ class HomeState extends State<Home> {
                   builder: (context) {
                     print(batteryCap);
                    
-                    double price =
+                    int price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     if (res != false) {
                       print(res);
@@ -501,7 +501,7 @@ class HomeState extends State<Home> {
               isScrollControlled: true,
               backgroundColor: Colors.amber.withOpacity(0.0),
               builder: (context) {
-                double price = mypricing.fullChargeCost(batteryCap, stateName);
+                int price = mypricing.fullChargeCost(batteryCap, stateName);
                 return CustomMarkerPopup(
                     stationName: stnName,
                     address: stnAddress,

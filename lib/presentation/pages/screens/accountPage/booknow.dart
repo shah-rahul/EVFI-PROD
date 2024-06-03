@@ -30,7 +30,7 @@ class Booknow extends StatefulWidget {
   final String stationName;
   final String address;
   final List<dynamic> imageUrl;
-  final double costOfFullCharge;
+  final int costOfFullCharge;
   final num startTime;
   final num endTime;
   final int timeslot;
@@ -292,7 +292,7 @@ class _Booknow extends State<Booknow> {
                       BookingDataProvider().addBooking(
                         widget.providerId,
                         widget.chargerId,
-                        "${widget.costOfFullCharge}",
+                        widget.costOfFullCharge,
                         selectedTimeSlot,
                       );
                       // BookingDataProvider(

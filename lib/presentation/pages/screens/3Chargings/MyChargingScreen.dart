@@ -198,7 +198,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 child: MyChargingWidget(
                                   chargingItem: Charging(
                                       amount:
-                                          documents[index]['price'] as String,
+                                          documents[index]['price'],
                                       phoneNumber: phoneNumber.length > 0
                                           ? phoneNumber[phoneNumber.length - 1]
                                           : "",
