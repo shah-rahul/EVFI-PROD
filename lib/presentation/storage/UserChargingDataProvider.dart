@@ -93,6 +93,10 @@ class UserChargingDataProvider extends ChangeNotifier {
       });
       // Log the ID of the newly created document
       //  print('User document ID: ${documentRef.id}');
+      //add charger id in user chargers field
+      await userDocRef.update({
+        'chargers': FieldValue.arrayUnion([documentRef.id])
+      });
     } catch (e) {
       print('Error saving user data: $e');
     }
