@@ -7,6 +7,7 @@ import 'package:evfi/presentation/pages/screens/2Bookings/BookingsScreen.dart';
 import 'package:evfi/presentation/resources/custom_buttons.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image/image.dart' as img;
 
@@ -32,9 +33,7 @@ import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingData.dart';
 import '../../../storage/UserChargingDataProvider.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
-import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/storage/UserChargingDataProvider.dart';
-import 'package:evfi/presentation/pages/screens/3Chargings/MyChargingScreen.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 
 class ListChargerForm extends StatefulWidget {
@@ -72,7 +71,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
   double? amount, latitude = 0.0, longitude = 0.0;
   bool _isPinning = false;
   var _isLoading = false;
-  typeCharger? _type;
 
   void _submitForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -88,10 +86,10 @@ class _ListChargerFormState extends State<ListChargerForm> {
     setState(() {
       _isLoading = false;
     });
-    Navigator.pop(
-        context,
-        PageTransition(
-            type: PageTransitionType.fade, child: const MyChargingScreen()));
+    // Navigator.pop(
+    //     context,
+    //     PageTransition(
+    //         type: PageTransitionType.fade, child: const MyChargingScreen()));
   }
 
   Widget _makeTitle({required String title}) {
@@ -103,8 +101,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
   late Marker _station = const Marker(markerId: MarkerId('Station'));
   _pinMarkerOnMap(LatLng position) async {
-    // BitmapDescriptor chargerIcon = await BitmapDescriptor.fromAssetImage(
-    //     ImageConfiguration.empty, ImageAssets.mapSourceMarker);
     setState(() {
       _station = Marker(
         markerId: const MarkerId('Station'),
@@ -178,100 +174,38 @@ class _ListChargerFormState extends State<ListChargerForm> {
   }
 
   int chargerType = -1;
+  List<String> buttonList = ["Level1", "Level2", "Level3"];
+
   Widget _chargerTypeRadioButtons() {
-    return Row(
-      children: <Widget>[
-        Expanded(
-            child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: RadioListTile<typeCharger>(
-            contentPadding: const EdgeInsets.all(0.0),
-            dense: true,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            activeColor: Colors.transparent,
-            value: typeCharger.Level1,
-            groupValue: _type,
-            tileColor: (_type == typeCharger.Level1)
-                ? Colors.green[400]
-                : Colors.white,
-            onChanged: (val) {
-              setState(() {
-                // debugPrint('Selected Charger: \t$val');
-                _type = val;
-                chargerType = _type!.index;
-                // print('8***********************$chargerType');
-              });
-            },
-            title: const Text(
-              'Level 1',
-              style: TextStyle(color: Colors.black87),
-            ),
-          ),
-        )),
-        const SizedBox(width: 12),
-        Expanded(
-            child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: RadioListTile<typeCharger>(
-            contentPadding: const EdgeInsets.all(0.0),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            activeColor: Colors.transparent,
-            dense: true,
-            value: typeCharger.Level2,
-            groupValue: _type,
-            tileColor: (_type == typeCharger.Level2)
-                ? Colors.green[400]
-                : Colors.white,
-            onChanged: (val) {
-              setState(() {
-                debugPrint('Selected Charger: \t$val');
-                _type = val;
-                chargerType = _type!.index;
-              });
-            },
-            title: const Text(
-              'Level 2',
-              style: TextStyle(color: Colors.black87),
-            ),
-          ),
-        )),
-        const SizedBox(width: 12),
-        Expanded(
-            child: Card(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 4,
-          child: RadioListTile<typeCharger>(
-            contentPadding: const EdgeInsets.all(0.0),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            dense: true,
-            activeColor: Colors.transparent,
-            value: typeCharger.Level3,
-            groupValue: _type,
-            tileColor: (_type == typeCharger.Level3)
-                ? Colors.green[400]
-                : Colors.white,
-            onChanged: (val) {
-              setState(() {
-                debugPrint('Selected Charger: \t$val');
-                _type = val;
-                chargerType = _type!.index;
-              });
-            },
-            title: const Text(
-              'Level 3',
-              style: TextStyle(color: Colors.black87),
-            ),
-          ),
-        )),
-      ],
+    return CustomRadioButton(
+      buttonLables: buttonList,
+      buttonValues: buttonList,
+      elevation: 4,
+      radioButtonValue: (value, index) {
+        setState(() {
+          switch (value) {
+            case 'Level1':
+              chargerType = typeCharger.Level1.index;
+              break;
+            case 'Level2':
+              chargerType = typeCharger.Level2.index;
+              break;
+            case 'Level3':
+              chargerType = typeCharger.Level3.index;
+              break;
+          }
+          print('Selected Charger: $chargerType');
+        });
+      },
+      customShape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      horizontal: true,
+      enableShape: true,
+      buttonSpace: 2,
+      buttonColor: Colors.white,
+      selectedColor: Colors.green[400],
+      buttonWidth: MediaQuery.of(context).size.width * 0.27,
     );
   }
 
@@ -448,7 +382,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
 
     void StoreChargerType(int type) {
       String chargerType = '';
-      chargerType =  'Level $type';
+      chargerType = 'Level $type';
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.chargerType = chargerType;
@@ -485,7 +419,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
       userChargingData.amenities = amenities;
 
       // userChargingDataProvider.setUserChargingData(userChargingData);
-      
     }
 
     void StoreImageurl(List<String> imageUrls) {
@@ -537,10 +470,20 @@ class _ListChargerFormState extends State<ListChargerForm> {
       final prefs = await SharedPreferences.getInstance();
       prefs.setBool('isProvider', true);
 
-      userChargingDataProvider.saveUserChargingData().then((_) => Navigator.pop(
-          context,
-          PageTransition(
-              type: PageTransitionType.fade, child: const BookingsScreen())));
+      userChargingDataProvider.saveUserChargingData().then((_) {
+        Navigator.pop(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade, child: const BookingsScreen()));
+      });
+      // => Navigator.pop(
+      //     context,
+      //     PageTransition(
+      //         type: PageTransitionType.fade, child: const BookingsScreen())));
+      // Navigator.pop(
+      //     context,
+      //     PageTransition(
+      //         type: PageTransitionType.fade, child: BookingsScreen())));
     }
 
     return Scaffold(
@@ -618,12 +561,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                             ),
                             child: TextFormField(
                               onChanged: StoreHostName,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please enter valid names.';
-                                }
-                                return "";
-                              },
+                              // validator: (value) {
+                              //   if (value!.isEmpty) {
+                              //     return 'Please enter valid names.';
+                              //   }
+                              //   return "";
+                              // },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'Owner\'s Name',
@@ -729,16 +672,18 @@ class _ListChargerFormState extends State<ListChargerForm> {
                           ),
                           Row(
                             children: [
-                              _makeTitle(title: 'Pin/Postal Code'),
+                              _makeTitle(title: 'Pin Code'),
                               SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.19,
+                                width: MediaQuery.of(context).size.width * 0.16,
                               ),
                               _makeTitle(title: 'State/Province')
                             ],
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.38,
                                 child: Card(
                                   elevation: 4,
                                   shape: const RoundedRectangleBorder(
@@ -785,9 +730,6 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                     },
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 3,
                               ),
                               Expanded(
                                 child: Card(
@@ -977,12 +919,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                   .requestFocus(_amenitiesFocusNode),
                               keyboardType: TextInputType.number,
                               textInputAction: TextInputAction.next,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please provide a price greater than zero.';
-                                }
-                                return "";
-                              },
+                              // validator: (value) {
+                              //   if (value!.isEmpty) {
+                              //     return 'Please provide a price greater than zero.';
+                              //   }
+                              //   return "";
+                              // },
                               onSaved: (newValue) {
                                 setState(() {
                                   amount = double.parse(newValue!);
@@ -1000,12 +942,12 @@ class _ListChargerFormState extends State<ListChargerForm> {
                             ),
                             child: TextFormField(
                               onChanged: Storeamenities,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Please provide a list of available services';
-                                }
-                                return "";
-                              },
+                              // validator: (value) {
+                              //   if (value!.isEmpty) {
+                              //     return 'Please provide a list of available services';
+                              //   }
+                              //   return "";
+                              // },
                               style: TextStyle(color: ColorManager.darkGrey),
                               decoration: const InputDecoration(
                                   hintText: 'Cafeteria/Toilets/Rest Room',

@@ -34,50 +34,40 @@ class _BookingsScreenState extends State<BookingsScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // checkIfProvider();
-    });
-    // checkIfProvider();
+    checkIfProvider();
   }
 
   Future<void> checkIfProvider() async {
     final prefs = await SharedPreferences.getInstance();
-    var provider = prefs.getBool('isProvider');
-    if (provider == null) {
+    debugPrint(
+        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${prefs.getBool('isProvider')}');
+    if (prefs.getBool('isProvider') == true) {
+      setState(() {
+        print('Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        _isProvider = true;
+      });
+    } else {
       _userCollection = await FirebaseFirestore.instance
           .collection('user')
           .where('uid', isEqualTo: userId)
           .get();
       if (_userCollection!.docs.isNotEmpty) {
-        var doc = _userCollection!.docs[0];
-        provider = doc.data()['level3'];
-        prefs.setBool('isProvider', provider!);
+        var provider = _userCollection!.docs[0].data()['level3'];
         setState(() {
+          prefs.setBool('isProvider', provider);
           _isProvider = provider!;
+          debugPrint(
+              '#######################################################$_isProvider');
         });
       }
     }
   }
 
   @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //       appBar: AppBar(
-  //         title: const Text(
-  //           AppStrings.BookingTitle,
-  //           textAlign: TextAlign.start,
-  //           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-  //         ),
-  //         backgroundColor: Colors.white,
-  //       ),
-  //       body: Container(
-  //         child: _currentSelected ? PendingScreen(context) : RecentScreen(),
-  //       ));
-  // }
   Widget build(BuildContext context) {
-    // final screenHeight = MediaQuery.of(context).size.height;
-    // final screenWidth = MediaQuery.of(context).size.width;
-    checkIfProvider();
+    if(_isProvider != true) {
+      checkIfProvider();
+    }
     if (_isProvider == true) {
       return Scaffold(
         appBar: AppBar(
@@ -106,8 +96,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
     }
   }
 
-
-
   Widget streamBuilder(String tab) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
@@ -131,8 +119,6 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                
-             
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Shimmer.fromColors(
                     baseColor: Colors.grey[300]!,
@@ -145,17 +131,17 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     ),
                   );
                 }
-               
+
                 if (!snapshot.hasData) {
                   return const Center(
                     child: Text('No Bookings yet..'),
                   );
                 }
-                
+
                 if (snapshot.hasError) {
                   return const Center(child: Text('Something went wrong'));
                 }
-                
+
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
                 if (documents.isEmpty) {
@@ -163,7 +149,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Text('No Bookings yet...'),
                   );
                 }
-              
+
                 return ListView.builder(
                   itemBuilder: (context, index) {
                     return FutureBuilder(
@@ -179,7 +165,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                               ConnectionState.waiting) {
                             return shimmerPlaceholder();
                           }
-                         
+
                           if (!snapshots.hasData) {
                             return const Center(
                               child: Text('No Bookings yet..'),
@@ -190,20 +176,21 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                 child: Text('Something went wrong'));
                           }
 
-
                           return Column(
                             children: [
                               Container(
                                 padding: EdgeInsets.symmetric(
                                     vertical: screenHeight * 0.01),
                                 height: screenHeight * 0.2,
-                                child:BookingWidget(
+                                child: BookingWidget(
                                   bookingItem: Booking(
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: stationName,
-                                      customerName: snapshots.data!['firstName'],
-                                      customerMobileNumber: snapshots.data!['phoneNumber'],
+                                      customerName:
+                                          snapshots.data!['firstName'],
+                                      customerMobileNumber:
+                                          snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index]['bookingId'],
@@ -300,7 +287,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
     return Column(
       children: [
         Container(
-        height: screenHeight * 0.08,
+          height: screenHeight * 0.08,
           color: ColorManager.white,
           child: Row(
             children: [

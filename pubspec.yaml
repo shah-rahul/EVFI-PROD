@@ -68,6 +68,7 @@ dependencies:
   cached_network_image: ^3.3.0
   pinput: ^3.0.1
   sleek_circular_slider: ^2.0.1
+  radio_grouped_buttons: ^1.0.1
 
 analyzer:
   exclude:

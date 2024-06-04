@@ -278,8 +278,7 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       vsync: this, duration: const Duration(milliseconds: 400)),
                   backgroundColor: Colors.amber.withOpacity(0.0),
                   builder: (context) {
-                    int price =
-                        mypricing.fullChargeCost(batteryCap, stateName);
+                    int price = mypricing.fullChargeCost(batteryCap, stateName);
                     return CustomMarkerPopup(
                       stationName: stnName,
                       address: stnAddress,
@@ -298,10 +297,12 @@ class _RouteMapState extends State<RouteMap> with TickerProviderStateMixin {
                       status: status,
                     );
                   },
-                  );
+                );
               },
               position: LatLng(geoPoint.latitude, geoPoint.longitude),
-              icon: BitmapDescriptor.fromBytes((status==1)? stationMarker : RedDisabledChargerMarkerIcon)));
+              icon: BitmapDescriptor.fromBytes((status == 1)
+                  ? stationMarker
+                  : RedDisabledChargerMarkerIcon)));
         }
         setState(() {
           updateMarkers(_newMarkers);
