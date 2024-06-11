@@ -351,42 +351,42 @@ class _VehicleFormState extends State<VehicleForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TextButton(
-                        onPressed: () async {
-                          updateVehicleData(
-                              vehicleManufacturerController.text,
-                              vehicleregistrationController.text,
-                              vehicleBatteryCapController.text,
-                              vehicleMileageController.text,
-                              chargingRequirement);
-
-                          Navigator.push(
-                            context,
-                            PageTransition(
-                              type: PageTransitionType.rightToLeft,
-                              child: MainView(),
-                            ),
-                          );
-                        },
-                        child: Text(
-                          AppStrings.skip,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: ColorManager.white,
-                              fontSize: AppSize.s16,
-                              fontWeight: FontWeightManager.regular
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorManager.greyText,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: width * 0.03,
-                      ),
+                      // TextButton(
+                      //   onPressed: () async {
+                      //     updateVehicleData(
+                      //         vehicleManufacturerController.text,
+                      //         vehicleregistrationController.text,
+                      //         vehicleBatteryCapController.text,
+                      //         vehicleMileageController.text,
+                      //         chargingRequirement);
+                      //
+                      //     Navigator.push(
+                      //       context,
+                      //       PageTransition(
+                      //         type: PageTransitionType.rightToLeft,
+                      //         child: MainView(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Text(
+                      //     AppStrings.skip,
+                      //     textAlign: TextAlign.center,
+                      //     style: TextStyle(
+                      //         color: ColorManager.white,
+                      //         fontSize: AppSize.s16,
+                      //         fontWeight: FontWeightManager.regular
+                      //     ),
+                      //   ),
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: ColorManager.greyText,
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //   ),
+                      // ),
+                      // SizedBox(
+                      //   width: width * 0.03,
+                      // ),
                       ElevatedButton(
                         onPressed: isFormValid
                             ? () {

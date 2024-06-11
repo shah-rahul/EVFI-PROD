@@ -207,7 +207,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                             ],
                           ),
                           Text(
-                            "₹ ${widget.costOfFullCharge}",
+                            "₹"+widget.costOfFullCharge.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -220,16 +220,16 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 //.......................BOOK NOW BUTTON............................................
                 GestureDetector(
                   onTap: () async {
-                    final currentUser = FirebaseAuth.instance.currentUser;
-                    if (currentUser != null) {
-                      try {
-                        final userDoc = await FirebaseFirestore.instance.collection('user').doc(currentUser.uid).get();
-                        if (userDoc.exists) {
-                          final level2Data = userDoc.data();
-                          if (level2Data != null && level2Data['level2'] != null) {
-                            final level2 = level2Data['level2'];
-                            final vehicleRegNumber = level2['vehicleRegistrationNumber'];
-                            if (vehicleRegNumber != null && vehicleRegNumber.isNotEmpty) {
+                    // final currentUser = FirebaseAuth.instance.currentUser;
+                    // if (currentUser != null) {
+                    //   try {
+                    //     final userDoc = await FirebaseFirestore.instance.collection('user').doc(currentUser.uid).get();
+                    //     if (userDoc.exists) {
+                    //       final level2Data = userDoc.data();
+                    //       if (level2Data != null && level2Data['level2'] != null) {
+                    //         final level2 = level2Data['level2'];
+                    //         final vehicleRegNumber = level2['vehicleRegistrationNumber'];
+                    //         if (vehicleRegNumber != null && vehicleRegNumber.isNotEmpty) {
                               Navigator.push(
                                 context,
                                 PageTransition(
@@ -250,40 +250,40 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                                   ),
                                 ),
                               );
-                            } else {
-                              Navigator.push(
-                                context,
-                                PageTransition(
-                                  type: PageTransitionType.rightToLeft,
-                                  child: VForm(
-                                    stationName: widget.stationName,
-                                    address: widget.address,
-                                    imageUrl: widget.imageUrl,
-                                    costOfFullCharge: widget.costOfFullCharge,
-                                    chargerType: widget.chargerType,
-                                    amenities: widget.amenities,
-                                    hostName: widget.hostName,
-                                    startTime: widget.startTime,
-                                    endTime: widget.endTime,
-                                    timeslot: widget.timeslot,
-                                    chargerId: widget.chargerId,
-                                    providerId: widget.providerId,
-                                  ),
-                                ),
-                              );
-                            }
-                          } else {
-                            print('Level2 data is missing or null!');
-                          }
-                        } else {
-                          print('User document does not exist!');
-                        }
-                      } catch (e) {
-                        print('Error fetching user document: $e');
-                      }
-                    } else {
-                      print('Current user is null!');
-                    }
+                    //         } else {
+                    //           Navigator.push(
+                    //             context,
+                    //             PageTransition(
+                    //               type: PageTransitionType.rightToLeft,
+                    //               child: VForm(
+                    //                 stationName: widget.stationName,
+                    //                 address: widget.address,
+                    //                 imageUrl: widget.imageUrl,
+                    //                 costOfFullCharge: widget.costOfFullCharge,
+                    //                 chargerType: widget.chargerType,
+                    //                 amenities: widget.amenities,
+                    //                 hostName: widget.hostName,
+                    //                 startTime: widget.startTime,
+                    //                 endTime: widget.endTime,
+                    //                 timeslot: widget.timeslot,
+                    //                 chargerId: widget.chargerId,
+                    //                 providerId: widget.providerId,
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }
+                    //       } else {
+                    //         print('Level2 data is missing or null!');
+                    //       }
+                    //     } else {
+                    //       print('User document does not exist!');
+                    //     }
+                    //   } catch (e) {
+                    //     print('Error fetching user document: $e');
+                    //   }
+                    // } else {
+                    //   print('Current user is null!');
+                    // }
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.04,
