@@ -68,7 +68,6 @@ class HomeState extends State<Home> {
   void getUserData() async {
     Provider.of<UserDataProvider>(context, listen: false)
         .intialiseUserDataFromFireBase();
-
     print(userData);
   }
 
@@ -394,8 +393,9 @@ class HomeState extends State<Home> {
                   builder: (context) {
                     print(batteryCap);
                    
-                    int price =
-                        mypricing.fullChargeCost(batteryCap, stateName);
+                    int price = mypricing.fullChargeCost(batteryCap, stateName);
+                    print("price is:");
+                    print(price);
                     if (res != false) {
                       print(res);
                       return ProgressWidget(res[0], res[1]);
@@ -502,6 +502,8 @@ class HomeState extends State<Home> {
               backgroundColor: Colors.amber.withOpacity(0.0),
               builder: (context) {
                 int price = mypricing.fullChargeCost(batteryCap, stateName);
+                print("price:");
+                print(price);
                 return CustomMarkerPopup(
                     stationName: stnName,
                     address: stnAddress,
