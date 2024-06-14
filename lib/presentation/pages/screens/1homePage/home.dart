@@ -393,7 +393,7 @@ class HomeState extends State<Home> {
                   builder: (context) {
                     print(batteryCap);
                    
-                    int price = mypricing.fullChargeCost(batteryCap, stateName);
+                    int price = mypricing.fullChargeCost(chargerType, stateName);
                     print("price is:");
                     print(price);
                     if (res != false) {
