@@ -112,7 +112,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.08, vertical: width * 0.005),
                       child: Text(
-                        widget.bookingItem.customerName,
+                        widget.bookingItem.stationName,
                         style: TextStyle(
                           color: textColor,
                           fontSize: width * 0.04,
