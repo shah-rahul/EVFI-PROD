@@ -43,7 +43,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${prefs.getBool('isProvider')}');
     if (prefs.getBool('isProvider') == true) {
       setState(() {
-        print('Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        print(
+            'Hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
         _isProvider = true;
       });
     } else {
@@ -65,7 +66,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(_isProvider != true) {
+    if (_isProvider != true) {
       checkIfProvider();
     }
     if (_isProvider == true) {
@@ -152,11 +153,12 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
                 return ListView.builder(
                   itemBuilder: (context, index) {
+                    List<String> station = [stationName];
                     return FutureBuilder(
                         future: getCustomerDetailsByUserId(
                             documents[index].data()!['uId'],
                             documents[index].data()!['chargerId'],
-                            [stationName]),
+                            station),
                         builder: ((context,
                             AsyncSnapshot<
                                     DocumentSnapshot<Map<String, dynamic>>>
@@ -175,7 +177,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             return const Center(
                                 child: Text('Something went wrong'));
                           }
-
+                          print(
+                              '\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$${station.last}');
                           return Column(
                             children: [
                               Container(
@@ -186,7 +189,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                   bookingItem: Booking(
                                       amount: documents[index]['price'],
                                       timeStamp: documents[index]['timeSlot'],
-                                      stationName: stationName,
+                                      stationName: station.last,
                                       customerName:
                                           snapshots.data!['firstName'],
                                       customerMobileNumber:
