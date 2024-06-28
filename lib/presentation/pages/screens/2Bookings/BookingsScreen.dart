@@ -111,13 +111,13 @@ class _BookingsScreenState extends State<BookingsScreen> {
             child: StreamBuilder(
               stream: (tab == AppStrings.BookingScreenPendingTab)
                   ? FirebaseFirestore.instance
-                      .collection('booking')
-                      .where('providerId', isEqualTo: currentUid)
-                      .where('status', whereIn: [0, 1, 2]).snapshots()
+                  .collection('booking')
+                  .where('providerId', isEqualTo: currentUid)
+                  .where('status', whereIn: [0, 1, 2]).snapshots()
                   : FirebaseFirestore.instance
-                      .collection('booking')
-                      .where('providerId', isEqualTo: currentUid)
-                      .where('status', whereIn: [-1, -2, 3]).snapshots(),
+                  .collection('booking')
+                  .where('providerId', isEqualTo: currentUid)
+                  .where('status', whereIn: [-1, -2, 3]).snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -127,7 +127,7 @@ class _BookingsScreenState extends State<BookingsScreen> {
                     child: Column(
                       children: List.generate(
                         5,
-                        (index) => shimmerPlaceholder(),
+                            (index) => shimmerPlaceholder(),
                       ),
                     ),
                   );
@@ -161,8 +161,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
                             station),
                         builder: ((context,
                             AsyncSnapshot<
-                                    DocumentSnapshot<Map<String, dynamic>>>
-                                snapshots) {
+                                DocumentSnapshot<Map<String, dynamic>>>
+                            snapshots) {
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
                             return shimmerPlaceholder();
@@ -191,9 +191,9 @@ class _BookingsScreenState extends State<BookingsScreen> {
                                       timeStamp: documents[index]['timeSlot'],
                                       stationName: station.last,
                                       customerName:
-                                          snapshots.data!['firstName'],
+                                      snapshots.data!['firstName'],
                                       customerMobileNumber:
-                                          snapshots.data!['phoneNumber'],
+                                      snapshots.data!['phoneNumber'],
                                       status: documents[index]['status'],
                                       date: documents[index]['bookingDate'],
                                       id: documents[index]['bookingId'],

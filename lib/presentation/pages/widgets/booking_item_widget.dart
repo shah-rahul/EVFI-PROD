@@ -206,7 +206,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
+                        MaterialStateProperty.all<Color>(Colors.green),
                       ),
                       child: const Text(AppStrings.AcceptButton,
                           style: TextStyle(color: Colors.black)),
@@ -225,7 +225,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
+                        MaterialStateProperty.all<Color>(Colors.red),
                       ),
                       child: const Text(AppStrings.DeclineButton,
                           style: TextStyle(color: Colors.black)),
