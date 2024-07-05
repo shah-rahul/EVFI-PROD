@@ -110,46 +110,59 @@ class _BookingWidgetState extends State<BookingWidget> {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.08, vertical: width * 0.005),
+                          horizontal: width * 0.08, vertical: width * 0.003),
                       child: Text(
                         widget.bookingItem.stationName,
                         style: TextStyle(
                           color: textColor,
-                          fontSize: width * 0.04,
+                          fontSize: width * 0.035,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.08, vertical: width * 0.005),
+                          horizontal: width * 0.08, vertical: width * 0.003),
+                      child: Text(
+                        widget.bookingItem.customerName,
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: width * 0.030,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: width * 0.08, vertical: width * 0.003),
                       child: Text(
                         'Time slot- ${convertTime(widget.bookingItem.timeStamp)}',
                         style: TextStyle(
                           color: textColor,
-                          fontSize: width * 0.04,
+                          fontSize: width * 0.03,
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.08, vertical: width * 0.005),
+                          horizontal: width * 0.08, vertical: width * 0.003),
                       child: Text(
                         '+' + widget.bookingItem.customerMobileNumber,
                         style: TextStyle(
                           color: textColor,
-                          fontSize: width * 0.04,
+                          fontSize: width * 0.03,
+                          fontWeight: FontWeight.bold
                         ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.08, vertical: width * 0.005),
+                          horizontal: width * 0.08, vertical: width * 0.001),
                       child: Text(
                         '₹ ${widget.bookingItem.amount}',
                         style: TextStyle(
                           color: textColor,
-                          fontSize: width * 0.06,
+                          fontSize: width * 0.05,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -195,10 +208,10 @@ class _BookingWidgetState extends State<BookingWidget> {
             children: [
               if (widget.bookingItem.status == 1)
                 Padding(
-                  padding: EdgeInsets.all(width * 0.02),
+                  padding: EdgeInsets.all(width * 0.01),
                   child: Container(
                     //margin: EdgeInsets.symmetric(horizontal: height * 0.01),
-                    width: width * 0.3,
+                    width: width * 0.28,
                     height: height * 0.03,
                     child: ElevatedButton(
                       onPressed: () {
@@ -215,9 +228,9 @@ class _BookingWidgetState extends State<BookingWidget> {
                 ),
               if (widget.bookingItem.status == 1)
                 Padding(
-                  padding: EdgeInsets.all(width * 0.02),
+                  padding: EdgeInsets.all(width * 0.01),
                   child: Container(
-                    width: width * 0.3,
+                    width: width * 0.28,
                     height: height * 0.03,
                     child: ElevatedButton(
                       onPressed: () {

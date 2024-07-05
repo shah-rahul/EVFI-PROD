@@ -102,10 +102,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       height: screenHeight * 0.75,
+      padding: EdgeInsets.only(bottom: screenHeight * 0.05),
       //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
-            height: screenHeight * 0.85,
+            height: screenHeight * 0.68,
             width: screenWidth,
             color: ColorManager.white,
             child: StreamBuilder(
