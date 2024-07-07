@@ -87,8 +87,11 @@ class HomeState extends State<Home> {
     _getCurrentLocation();
     getUserData();
     getBatteryCap().then((val) => batteryCap = val);
-   
+
     getUserBookings();
+     Timer.periodic(Duration(minutes: 2), (timer) {
+      checkIfAnyBookingCompleted();
+    });
   }
 
   late CameraPosition _kGooglePlex = const CameraPosition(
@@ -132,6 +135,32 @@ class HomeState extends State<Home> {
 
   void checkIfAnyBookingCompleted() async {
     List<int> timeSlots = [];
+    DateTime now = DateTime.now();
+
+    int hour = now.hour;
+    int minute = now.minute;
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('booking')
+        .where('status', isEqualTo: 1)
+        .get();
+    querySnapshot.docs.forEach((bookingDoc) {
+      Map<String, dynamic> bookingData = bookingDoc.data();
+
+      DateTime startTime =
+          DateTime(now.year, now.month, now.day, bookingData['timeSlot'], 0);
+      DateTime endTime = startTime.add(Duration(hours: 1));
+      print(startTime);
+      print(endTime);
+      // Check if current time is between start and end times
+      if (now.isAfter(endTime)) {
+        FirebaseFirestore.instance
+            .collection('booking')
+            .doc(bookingData['bookingId'])
+            .update({'status': 3});
+      }
+    });
+
     for (int i = 0; i < _userBookings.length; i++) {
       DocumentSnapshot snapshot = await getBookingById(_userBookings[i]);
 
@@ -139,8 +168,7 @@ class HomeState extends State<Home> {
         dynamic data = snapshot.data();
         int res =
             await getTimeSlotByBookingId(_userBookings[i], data['chargerId']);
-        print('first________________');
-        print(res);
+
         if (res != 0) timeSlots.add(res);
       }
     }
@@ -166,7 +194,7 @@ class HomeState extends State<Home> {
       print(data);
       print(chargerId);
       print('******');
-      if (chargerId == data['chargerId']) {
+      if (chargerId == data['chargerId'] && data['status'] == 1) {
         return data['timeSlot'];
       }
     }
@@ -222,7 +250,7 @@ class HomeState extends State<Home> {
     Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
 
     dynamic level2 = snapshot['level2'];
-    
+
     if (level2 != null && level2 != false) {
       String batteryCapacity = level2['batteryCapacity'];
       return (double.parse(batteryCapacity));
@@ -232,7 +260,7 @@ class HomeState extends State<Home> {
 
   void _getCurrentLocation() async {
     bool isLocationServiceEnabled = await Geolocator.isLocationServiceEnabled();
-   
+
     if (!isLocationServiceEnabled) {
       bool serviceEnabled = await Geolocator.openLocationSettings();
 
@@ -323,7 +351,7 @@ class HomeState extends State<Home> {
     stream.listen((event) {
       for (var ds in event) {
         final data = ds.data();
-     
+
         if (data == null) {
           continue;
         }
@@ -340,10 +368,10 @@ class HomeState extends State<Home> {
         var amenities = (data['info'] as Map<String, dynamic>)['amenities'];
         var hostName = (data['info'] as Map<String, dynamic>)['hostName'];
         var status = (data['info'] as Map<String, dynamic>)['status'];
-     
+
         // DateTime? endTime =
         //     (data['info'] as Map<String, dynamic>)['availability']['end'];
-    
+
         if (geoPoint != null &&
             geohash != null &&
             stnName != null &&
@@ -357,7 +385,6 @@ class HomeState extends State<Home> {
             amenities != null &&
             hostName != null &&
             status != null) {
-         
           geoPoint = geoPoint as GeoPoint;
           geohash = geohash as String;
           stnName = stnName as String;
@@ -393,7 +420,7 @@ class HomeState extends State<Home> {
                       const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
                   builder: (context) {
                     print(batteryCap);
-                   
+
                     double price =
                         mypricing.fullChargeCost(batteryCap, stateName);
                     if (res != false) {
@@ -534,12 +561,10 @@ class HomeState extends State<Home> {
     _markers.clear();
     if (_mapController != null) {
       if (cachedChargersBox.isNotEmpty) {
-        debugPrint(
-            '@@@@@Already cached chargers available-------');
+        debugPrint('@@@@@Already cached chargers available-------');
         addCachedChargersToMarkers();
       } else {
-        debugPrint(
-            '@@@@@No cached chargers currently-------');
+        debugPrint('@@@@@No cached chargers currently-------');
         setIntialMarkers(
             10, LatLng(currentPosition.latitude, currentPosition.longitude));
       }
