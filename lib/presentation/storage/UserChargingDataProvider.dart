@@ -75,7 +75,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'aadharNumber': _userChargingData.aadharNumber,
           'hostName': _userChargingData.hostName,
           'chargerType': _userChargingData.chargerType,
-          'price': _userChargingData.price,
+          // 'price': _userChargingData.price,
           'amenities': _userChargingData.amenities,
           'imageUrl': _userChargingData.imageUrl,
           'start': _userChargingData.start,

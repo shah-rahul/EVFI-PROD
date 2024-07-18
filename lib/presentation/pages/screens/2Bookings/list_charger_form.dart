@@ -48,7 +48,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
   late GoogleMapController _controller;
 
   final _formKey = GlobalKey<FormState>();
-  final _priceFocusNode = FocusNode();
+  // final _priceFocusNode = FocusNode();
   final _aadharFocusNode = FocusNode();
   final _hostsFocusNode = FocusNode();
   final _addressFocusNode = FocusNode();
@@ -820,7 +820,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                 AadharNumberFormatter(),
                               ],
                               onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_hostsFocusNode),
+                                  .requestFocus(_amenitiesFocusNode),
                               onSaved: (newValue) {
                                 aadharNumber = newValue!;
                               },
@@ -890,49 +890,49 @@ class _ListChargerFormState extends State<ListChargerForm> {
                           const SizedBox(
                             height: 15,
                           ),
-                          _makeTitle(title: 'Price (₹KW/h)'),
-                          Card(
-                            elevation: 4,
-                            shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8)),
-                            ),
-                            child: TextFormField(
-                              onChanged: StorePrice,
-                              style: TextStyle(color: ColorManager.darkGrey),
-                              decoration: const InputDecoration(
-                                  prefixText: '₹\t',
-                                  prefixStyle:
-                                      TextStyle(fontSize: FontSize.s16),
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide.none,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                  )),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly,
-                              ],
-                              focusNode: _priceFocusNode,
-                              onFieldSubmitted: (_) => FocusScope.of(context)
-                                  .requestFocus(_amenitiesFocusNode),
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.next,
-                              // validator: (value) {
-                              //   if (value!.isEmpty) {
-                              //     return 'Please provide a price greater than zero.';
-                              //   }
-                              //   return "";
-                              // },
-                              onSaved: (newValue) {
-                                setState(() {
-                                  amount = double.parse(newValue!);
-                                });
-                              },
-                            ),
-                          ),
-                          const SizedBox(height: 15),
+                          // _makeTitle(title: 'Price (₹KW/h)'),
+                          // Card(
+                          //   elevation: 4,
+                          //   shape: RoundedRectangleBorder(
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(8)),
+                          //   ),
+                          //   child: TextFormField(
+                          //     onChanged: StorePrice,
+                          //     style: TextStyle(color: ColorManager.darkGrey),
+                          //     decoration: const InputDecoration(
+                          //         prefixText: '₹\t',
+                          //         prefixStyle:
+                          //             TextStyle(fontSize: FontSize.s16),
+                          //         fillColor: Colors.white,
+                          //         filled: true,
+                          //         enabledBorder: OutlineInputBorder(
+                          //           borderSide: BorderSide.none,
+                          //           borderRadius:
+                          //               BorderRadius.all(Radius.circular(8)),
+                          //         )),
+                          //     inputFormatters: [
+                          //       FilteringTextInputFormatter.digitsOnly,
+                          //     ],
+                          //     focusNode: _priceFocusNode,
+                          //     onFieldSubmitted: (_) => FocusScope.of(context)
+                          //         .requestFocus(_amenitiesFocusNode),
+                          //     keyboardType: TextInputType.number,
+                          //     textInputAction: TextInputAction.next,
+                          //     // validator: (value) {
+                          //     //   if (value!.isEmpty) {
+                          //     //     return 'Please provide a price greater than zero.';
+                          //     //   }
+                          //     //   return "";
+                          //     // },
+                          //     onSaved: (newValue) {
+                          //       setState(() {
+                          //         amount = double.parse(newValue!);
+                          //       });
+                          //     },
+                          //   ),
+                          // ),
+                          // const SizedBox(height: 15),
                           _makeTitle(title: 'Amenities'),
                           Card(
                             elevation: 4,

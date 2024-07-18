@@ -39,8 +39,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
 
   Future<void> checkIfProvider() async {
     final prefs = await SharedPreferences.getInstance();
-    debugPrint(
-        '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${prefs.getBool('isProvider')}');
+    // debugPrint(
+    //     '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@${prefs.getBool('isProvider')}');
     if (prefs.getBool('isProvider') == true) {
       setState(() {
         print(
@@ -57,8 +57,8 @@ class _BookingsScreenState extends State<BookingsScreen> {
         setState(() {
           prefs.setBool('isProvider', provider);
           _isProvider = provider!;
-          debugPrint(
-              '#######################################################$_isProvider');
+          // debugPrint(
+          //     '#######################################################$_isProvider');
         });
       }
     }
@@ -244,11 +244,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.012),
+                            horizontal: screenWidth * 0.012, vertical: screenHeight * 0.005),
                         child: Container(
                           height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.appBlack,
+                          color: ColorManager.primary,
                         ),
                       )
                     ],
@@ -329,11 +329,11 @@ class _BookingsScreenState extends State<BookingsScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.012),
+                            horizontal: screenWidth * 0.012, vertical: screenHeight * 0.005),
                         child: Container(
                           height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.appBlack,
+                          color: ColorManager.primary,
                         ),
                       )
                     ],
