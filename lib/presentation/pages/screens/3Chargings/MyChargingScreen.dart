@@ -123,9 +123,10 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
       //padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12 - 4),
       child: SingleChildScrollView(
         child: Container(
-            height: screenHeight * 0.85,
             width: screenWidth,
             color: ColorManager.white,
+            padding: EdgeInsets.only(bottom: screenHeight * 0.05),
+            height: screenHeight*0.74,
             child: StreamBuilder(
               stream: (tab == AppStrings.ChargingScreenCurrentTab)
                   ? FirebaseFirestore.instance
