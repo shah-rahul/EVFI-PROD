@@ -125,7 +125,7 @@ class _NameState extends State<Name> {
                           color: ColorManager.appBlack,
                         ),
                       ),
-                      style: TextStyle(color: ColorManager.appBlack),
+                      style: TextStyle(color: ColorManager.primary),
                     ),
                   ),
                 ),

@@ -87,15 +87,16 @@ class _LoginViewState extends State<LoginView> {
                     height: screenHeight * 0.07,
                     width: screenWidth * 0.77,
                     child: IntlPhoneField(
-                    
                       initialCountryCode: 'IN',
                       cursorColor: ColorManager.primary,
                       dropdownTextStyle:
                           TextStyle(color: ColorManager.darkGrey),
                       disableLengthCheck: false,
-                      
+                      style: TextStyle(
+                        color: ColorManager.primary, 
+                      ),
                       decoration: InputDecoration(
-                          counterText: '',
+                        counterText: '',
                         filled: true,
                         fillColor: ColorManager.grey4,
                         // hintText: '7303440170',
@@ -206,7 +207,8 @@ class _LoginViewState extends State<LoginView> {
                     //     MaterialPageRoute(builder: (context) => Verify()),
                     //   );
                     // },
-                    style: ElevatedButton.styleFrom(backgroundColor:ColorManager.primary ,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorManager.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),
@@ -229,6 +231,6 @@ class _LoginViewState extends State<LoginView> {
           ),
         ),
       ),
-     );
+    );
   }
 }
