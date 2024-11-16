@@ -56,6 +56,8 @@ class UserChargingDataProvider extends ChangeNotifier {
       // Store user data in Firestore
       // ignore: unused_local_variable
       User? user = FirebaseAuth.instance.currentUser;
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('user').doc(user!.uid);
       DocumentReference documentRef = await _chargersCollection.add({
         'chargerId': _userChargingData.chargerId,
         'uid': user!.uid,
@@ -73,7 +75,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           'aadharNumber': _userChargingData.aadharNumber,
           'hostName': _userChargingData.hostName,
           'chargerType': _userChargingData.chargerType,
-          'price': _userChargingData.price,
+          // 'price': _userChargingData.price,
           'amenities': _userChargingData.amenities,
           'imageUrl': _userChargingData.imageUrl,
           'start': _userChargingData.start,
@@ -93,6 +95,10 @@ class UserChargingDataProvider extends ChangeNotifier {
       });
       // Log the ID of the newly created document
       //  print('User document ID: ${documentRef.id}');
+      //add charger id in user chargers field
+      await userDocRef.update({
+        'chargers': FieldValue.arrayUnion([documentRef.id])
+      });
     } catch (e) {
       print('Error saving user data: $e');
     }

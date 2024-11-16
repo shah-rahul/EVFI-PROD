@@ -90,17 +90,32 @@ class MyPricing {
     return (batteryCap / range) * dist * (costPerKWH[myState]!);
   }
 
-  double fullChargeCost(double batteryCap, String state) {
+  int fullChargeCost(var chargerType, String state) {
     States myState = States.Delhi;
     for (var i = 0; i < States.values.length; i++) {
       if (States.values[i].toString().split('.')[1] == state) {
         myState = States.values[i];
       }
     }
+    double power;
+    if(chargerType == 'Level 1' ){
+      power=1.65;
+    }
+    else if(chargerType == 'Level 2'){
+      power=11.25;
+    }
+    else{
+      power=200;
+    }
     print(state);
-
-    return double.parse(
-        (batteryCap * (costPerKWH[myState]!)).toStringAsFixed(2));
+    print("chargerType");
+    print(chargerType);
+    print("Power");
+    print(power);
+    double cost = double.parse((power * (1+(costPerKWH[myState]!))).toStringAsFixed(2));
+    print("cost");
+    print(cost);
+    return cost.toInt();
   }
 }
 

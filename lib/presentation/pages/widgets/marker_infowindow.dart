@@ -5,6 +5,7 @@ import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
 import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:evfi/presentation/pages/widgets/complaint.dart';
 import 'package:evfi/presentation/pages/widgets/review.dart';
+import 'package:evfi/presentation/register/vForm.dart';
 import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../resources/values_manager.dart';
 import '../../resources/color_manager.dart';
 
@@ -21,7 +23,7 @@ class CustomMarkerPopup extends StatefulWidget {
   final String stationName;
   final String address;
   final List<dynamic> imageUrl;
-  final double costOfFullCharge;
+  final int costOfFullCharge;
   final num startTime;
   final num endTime;
   final int timeslot;
@@ -56,7 +58,7 @@ class CustomMarkerPopup extends StatefulWidget {
 
 class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
   int _currentIndex = 0;
-  final CarouselController carouselController = CarouselController();
+  final CarouselSliderController carouselController = CarouselSliderController();
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +206,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                             ],
                           ),
                           Text(
-                            "₹ ${widget.costOfFullCharge}",
+                            "₹"+widget.costOfFullCharge.toString(),
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -216,22 +218,71 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                 //..................................................................................
                 //.......................BOOK NOW BUTTON............................................
                 GestureDetector(
-                  onTap: widget.status == 0? null :  () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => Booknow(
-                              stationName: widget.stationName,
-                              address: widget.address,
-                              imageUrl: widget.imageUrl,
-                              costOfFullCharge: widget.costOfFullCharge,
-                              chargerType: widget.chargerType,
-                              amenities: widget.amenities,
-                              hostName: widget.hostName,
-                              startTime: widget.startTime,
-                              endTime: widget.endTime,
-                              timeslot: widget.timeslot,
-                              chargerId: widget.chargerId,
-                              providerId: widget.providerId,
-                            )));
+                  onTap: () async {
+                    // final currentUser = FirebaseAuth.instance.currentUser;
+                    // if (currentUser != null) {
+                    //   try {
+                    //     final userDoc = await FirebaseFirestore.instance.collection('user').doc(currentUser.uid).get();
+                    //     if (userDoc.exists) {
+                    //       final level2Data = userDoc.data();
+                    //       if (level2Data != null && level2Data['level2'] != null) {
+                    //         final level2 = level2Data['level2'];
+                    //         final vehicleRegNumber = level2['vehicleRegistrationNumber'];
+                    //         if (vehicleRegNumber != null && vehicleRegNumber.isNotEmpty) {
+                              Navigator.push(
+                                context,
+                                PageTransition(
+                                  type: PageTransitionType.rightToLeft,
+                                  child: Booknow(
+                                    stationName: widget.stationName,
+                                    address: widget.address,
+                                    imageUrl: widget.imageUrl,
+                                    costOfFullCharge: widget.costOfFullCharge,
+                                    chargerType: widget.chargerType,
+                                    amenities: widget.amenities,
+                                    hostName: widget.hostName,
+                                    startTime: widget.startTime,
+                                    endTime: widget.endTime,
+                                    timeslot: widget.timeslot,
+                                    chargerId: widget.chargerId,
+                                    providerId: widget.providerId,
+                                  ),
+                                ),
+                              );
+                    //         } else {
+                    //           Navigator.push(
+                    //             context,
+                    //             PageTransition(
+                    //               type: PageTransitionType.rightToLeft,
+                    //               child: VForm(
+                    //                 stationName: widget.stationName,
+                    //                 address: widget.address,
+                    //                 imageUrl: widget.imageUrl,
+                    //                 costOfFullCharge: widget.costOfFullCharge,
+                    //                 chargerType: widget.chargerType,
+                    //                 amenities: widget.amenities,
+                    //                 hostName: widget.hostName,
+                    //                 startTime: widget.startTime,
+                    //                 endTime: widget.endTime,
+                    //                 timeslot: widget.timeslot,
+                    //                 chargerId: widget.chargerId,
+                    //                 providerId: widget.providerId,
+                    //               ),
+                    //             ),
+                    //           );
+                    //         }
+                    //       } else {
+                    //         print('Level2 data is missing or null!');
+                    //       }
+                    //     } else {
+                    //       print('User document does not exist!');
+                    //     }
+                    //   } catch (e) {
+                    //     print('Error fetching user document: $e');
+                    //   }
+                    // } else {
+                    //   print('Current user is null!');
+                    // }
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height * 0.04,

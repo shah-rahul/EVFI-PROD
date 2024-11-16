@@ -68,7 +68,6 @@ class HomeState extends State<Home> {
   void getUserData() async {
     Provider.of<UserDataProvider>(context, listen: false)
         .intialiseUserDataFromFireBase();
-
     print(userData);
   }
 
@@ -420,9 +419,10 @@ class HomeState extends State<Home> {
                       const ui.Color.fromRGBO(255, 193, 7, 1).withOpacity(0.0),
                   builder: (context) {
                     print(batteryCap);
-
-                    double price =
-                        mypricing.fullChargeCost(batteryCap, stateName);
+                   
+                    int price = mypricing.fullChargeCost(chargerType, stateName);
+                    print("price is:");
+                    print(price);
                     if (res != false) {
                       print(res);
                       return ProgressWidget(res[0], res[1]);
@@ -528,7 +528,9 @@ class HomeState extends State<Home> {
               isScrollControlled: true,
               backgroundColor: Colors.amber.withOpacity(0.0),
               builder: (context) {
-                double price = mypricing.fullChargeCost(batteryCap, stateName);
+                int price = mypricing.fullChargeCost(batteryCap, stateName);
+                print("price:");
+                print(price);
                 return CustomMarkerPopup(
                     stationName: stnName,
                     address: stnAddress,

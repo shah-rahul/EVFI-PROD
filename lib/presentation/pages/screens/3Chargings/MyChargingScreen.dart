@@ -198,7 +198,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                 child: MyChargingWidget(
                                   chargingItem: Charging(
                                       amount:
-                                          documents[index]['price'] as String,
+                                          documents[index]['price'],
                                       phoneNumber: phoneNumber.length > 0
                                           ? phoneNumber[phoneNumber.length - 1]
                                           : "",
@@ -371,11 +371,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.012),
+                            horizontal: screenWidth * 0.012, vertical: screenHeight * 0.005),
                         child: Container(
                           height: screenHeight * 0.005,
                           width: screenWidth * 0.2,
-                          color: ColorManager.appBlack,
+                          color: ColorManager.primary,
                         ),
                       ),
                     ],
@@ -462,11 +462,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: screenWidth * 0.012),
+                              horizontal: screenWidth * 0.012, vertical: screenHeight * 0.005),
                           child: Container(
                             height: screenHeight * 0.005,
                             width: screenWidth * 0.2,
-                            color: ColorManager.appBlack,
+                            color: ColorManager.primary,
                           ),
                         )
                       ],

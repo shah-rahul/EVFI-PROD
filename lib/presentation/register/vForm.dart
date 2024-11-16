@@ -1,28 +1,56 @@
 // ignore_for_file: library_private_types_in_public_api, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
 
-import 'package:evfi/presentation/resources/strings_manager.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../main/main_view.dart';
-import '../resources/font_manager.dart';
-import '../storage/UserData.dart';
-import '../storage/UserDataProvider.dart';
-import '../resources/color_manager.dart';
-import '../resources/assets_manager.dart';
-import './chargerform.dart';
-
+import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
+import 'package:evfi/presentation/register/vForm.dart';
+import 'package:evfi/presentation/storage/UserDataProvider.dart';
+import 'package:evfi/presentation/storage/UserData.dart';
+import 'package:evfi/presentation/main/main_view.dart';
+import 'package:evfi/presentation/resources/values_manager.dart';
+import 'package:evfi/presentation/resources/color_manager.dart';
+import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:page_transition/page_transition.dart';
-import '../resources/values_manager.dart';
+import 'package:provider/provider.dart';
 
-class VehicleForm extends StatefulWidget {
-  const VehicleForm({Key? key}) : super(key: key);
+import '../pages/widgets/marker_infowindow.dart';
+import '../resources/assets_manager.dart';
+import '../resources/font_manager.dart';
+
+class VForm extends StatefulWidget {
+  final String stationName;
+  final String address;
+  final List<dynamic> imageUrl;
+  final int costOfFullCharge;
+  final num startTime;
+  final num endTime;
+  final int timeslot;
+  final String chargerType;
+  final String amenities;
+  final String hostName;
+  final String chargerId;
+  final String providerId;
+  const VForm({
+    required this.stationName,
+    required this.address,
+    required this.imageUrl,
+    required this.costOfFullCharge,
+    required this.chargerType,
+    required this.amenities,
+    required this.hostName,
+    required this.startTime,
+    required this.endTime,
+    required this.timeslot,
+    required this.chargerId,
+    required this.providerId,
+}) ;
 
   @override
   _VehicleFormState createState() => _VehicleFormState();
 }
 
-class _VehicleFormState extends State<VehicleForm> {
+class _VehicleFormState extends State<VForm> {
   TextEditingController vehicleManufacturerController = TextEditingController();
   TextEditingController vehicleregistrationController = TextEditingController();
   TextEditingController vehicleBatteryCapController = TextEditingController();
@@ -205,9 +233,9 @@ class _VehicleFormState extends State<VehicleForm> {
                       Text(
                         AppStrings.vehicleformSubTitle,
                         style: TextStyle(
-                          fontSize: height * 0.02,
-                          color: ColorManager.appBlack,
-                          fontWeight: FontWeightManager.regular
+                            fontSize: height * 0.02,
+                            color: ColorManager.appBlack,
+                            fontWeight: FontWeightManager.regular
                         ),
                       ),
                     ],
@@ -246,38 +274,38 @@ class _VehicleFormState extends State<VehicleForm> {
                 children: [
                   SizedBox(height: height * 0.025),
                   constructTextField(
-                    "Vehicle Manufacturer",
-                    "Enter the manufacturer of your vehicle",
-                    vehicleManufacturerController,
-                    vehicleManfFocus,
-                    vehicleregisFocus,
+                      "Vehicle Manufacturer",
+                      "Enter the manufacturer of your vehicle",
+                      vehicleManufacturerController,
+                      vehicleManfFocus,
+                      vehicleregisFocus,
                       isVehicleManufacturerValid
                   ),
                   SizedBox(height: height * 0.025),
                   constructTextField(
-                    "Vehicle Registration",
-                    "Enter the registration number of your vehicle",
-                    vehicleregistrationController,
-                    vehicleregisFocus,
-                    vehicleBatteryFocus,
+                      "Vehicle Registration",
+                      "Enter the registration number of your vehicle",
+                      vehicleregistrationController,
+                      vehicleregisFocus,
+                      vehicleBatteryFocus,
                       isVehicleRegistrationValid
                   ),
                   SizedBox(height: height * 0.025),
                   constructTextField(
-                    "Battery Capacity",
-                    "Enter the battery capacity of your vehicle in kWh",
-                    vehicleBatteryCapController,
-                    vehicleBatteryFocus,
-                    vehicleMileageFocus,
+                      "Battery Capacity",
+                      "Enter the battery capacity of your vehicle in kWh",
+                      vehicleBatteryCapController,
+                      vehicleBatteryFocus,
+                      vehicleMileageFocus,
                       isVehicleBatteryCapValid
                   ),
                   SizedBox(height: height * 0.025),
                   constructTextField(
-                    "Vehicle Mileage",
-                    "Enter the mileage or range of your vehicle in miles",
-                    vehicleMileageController,
-                    vehicleMileageFocus,
-                    vehicleMileageFocus,
+                      "Vehicle Mileage",
+                      "Enter the mileage or range of your vehicle in miles",
+                      vehicleMileageController,
+                      vehicleMileageFocus,
+                      vehicleMileageFocus,
                       isVehicleMileageValid
                   ),
                   SizedBox(height: height * 0.025),
@@ -351,42 +379,57 @@ class _VehicleFormState extends State<VehicleForm> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      // TextButton(
-                      //   onPressed: () async {
-                      //     updateVehicleData(
-                      //         vehicleManufacturerController.text,
-                      //         vehicleregistrationController.text,
-                      //         vehicleBatteryCapController.text,
-                      //         vehicleMileageController.text,
-                      //         chargingRequirement);
-                      //
-                      //     Navigator.push(
-                      //       context,
-                      //       PageTransition(
-                      //         type: PageTransitionType.rightToLeft,
-                      //         child: MainView(),
-                      //       ),
-                      //     );
-                      //   },
-                      //   child: Text(
-                      //     AppStrings.skip,
-                      //     textAlign: TextAlign.center,
-                      //     style: TextStyle(
-                      //         color: ColorManager.white,
-                      //         fontSize: AppSize.s16,
-                      //         fontWeight: FontWeightManager.regular
-                      //     ),
-                      //   ),
-                      //   style: ElevatedButton.styleFrom(
-                      //     backgroundColor: ColorManager.greyText,
-                      //     shape: RoundedRectangleBorder(
-                      //       borderRadius: BorderRadius.circular(10),
-                      //     ),
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   width: width * 0.03,
-                      // ),
+                      TextButton(
+                        onPressed: () async {
+                          updateVehicleData(
+                            vehicleManufacturerController.text,
+                            vehicleregistrationController.text,
+                            vehicleBatteryCapController.text,
+                            vehicleMileageController.text,
+                            chargingRequirement,
+                          );
+                          Navigator.pop(context);
+                          // Navigator.push(
+                          //   context,
+                          //   PageTransition(
+                          //     type: PageTransitionType.rightToLeft,
+                          //     child: CustomMarkerPopup(stationName: widget.stationName,
+                          //         address: widget.address,
+                          //         imageUrl: widget.imageUrl,
+                          //         geopoint: widget.geopoint,
+                          //         geohash: widget.geohash,
+                          //         costOfFullCharge: widget.costOfFullCharge,
+                          //         chargerType: widget.chargerType,
+                          //         amenities: widget.amenities,
+                          //         hostName: widget.hostName,
+                          //         startTime: widget.startTime,
+                          //         endTime: widget.endTime,
+                          //         timeslot: widget.timeslot,
+                          //         chargerId: widget.chargerId,
+                          //         providerId: widget.providerId,
+                          //         status: widget.status),
+                          //   ),
+                          // );
+                        },
+                        child: Text(
+                          AppStrings.skip,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: ColorManager.white,
+                              fontSize: AppSize.s16,
+                              fontWeight: FontWeightManager.regular
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.greyText,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.03,
+                      ),
                       ElevatedButton(
                         onPressed: isFormValid
                             ? () {
@@ -397,11 +440,22 @@ class _VehicleFormState extends State<VehicleForm> {
                               vehicleMileageController.text,
                               chargingRequirement);
 
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             PageTransition(
                               type: PageTransitionType.rightToLeft,
-                              child: MainView(),
+                              child: Booknow(stationName: widget.stationName,
+                                address: widget.address,
+                                imageUrl: widget.imageUrl,
+                                costOfFullCharge: widget.costOfFullCharge,
+                                chargerType: widget.chargerType,
+                                amenities: widget.amenities,
+                                hostName: widget.hostName,
+                                startTime: widget.startTime,
+                                endTime: widget.endTime,
+                                timeslot: widget.timeslot,
+                                chargerId: widget.chargerId,
+                                providerId: widget.providerId,),
                             ),
                           );
                         }
@@ -409,7 +463,7 @@ class _VehicleFormState extends State<VehicleForm> {
                           validateForm();
                         },
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorManager.primary,
+                          backgroundColor: ColorManager.primary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -432,4 +486,3 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 }
-

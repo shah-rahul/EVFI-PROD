@@ -112,7 +112,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.08, vertical: width * 0.005),
                       child: Text(
-                        widget.bookingItem.customerName,
+                        widget.bookingItem.stationName,
                         style: TextStyle(
                           color: textColor,
                           fontSize: width * 0.04,
@@ -206,7 +206,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
+                        MaterialStateProperty.all<Color>(Colors.green),
                       ),
                       child: const Text(AppStrings.AcceptButton,
                           style: TextStyle(color: Colors.black)),
@@ -225,7 +225,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red),
+                        MaterialStateProperty.all<Color>(Colors.red),
                       ),
                       child: const Text(AppStrings.DeclineButton,
                           style: TextStyle(color: Colors.black)),
