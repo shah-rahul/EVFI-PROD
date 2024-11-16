@@ -88,7 +88,7 @@ class _MainViewState extends State<MainView> {
         body: IndexedStack(
           index: _currentScreen,
           children: 
-         [
+         const [
           Home(),
           BookingsScreen(),
           MyChargingScreen(),

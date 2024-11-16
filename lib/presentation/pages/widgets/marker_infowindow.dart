@@ -1,16 +1,10 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
-import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:evfi/presentation/pages/widgets/complaint.dart';
 import 'package:evfi/presentation/pages/widgets/review.dart';
-import 'package:evfi/presentation/register/vForm.dart';
-import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:page_transition/page_transition.dart';
@@ -166,7 +160,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                     ),
                     //..................................................................................
                     //..................CHARGER INFORMATION.............................................
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height * 0.18,
                       width: MediaQuery.of(context).size.width * 0.25,
                       //color: Colors.blueAccent,
@@ -206,7 +200,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                             ],
                           ),
                           Text(
-                            "₹"+widget.costOfFullCharge.toString(),
+                            "₹${widget.costOfFullCharge}",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],

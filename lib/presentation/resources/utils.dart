@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 String convertTime(int startHour) {
   // Calculate the ending time
@@ -54,7 +53,7 @@ String timeToBinary(int time) {
   while (n > 0) {
     // storing remainder in binary array
     binaryTime = (n % 2).toString() + binaryTime;
-    n = (n / 2).toInt();
+    n = n ~/ 2;
   }
   print(binaryTime);
   return binaryTime;
@@ -64,18 +63,18 @@ String timeToBinary(int time) {
 
 int binaryToDecimal(String n) {
   String num = n;
-  int dec_value = 0;
+  int decValue = 0;
 
   // Initializing base value to 1, i.e 2^0
   int base = 1;
 
   int len = num.length;
   for (int i = len - 1; i >= 0; i--) {
-    if (num[i] == '1') dec_value += base;
+    if (num[i] == '1') decValue += base;
     base = base * 2;
   }
 
-  return dec_value;
+  return decValue;
 }
 
 DateTime parseTime(String timeString) {

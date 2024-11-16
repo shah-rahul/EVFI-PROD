@@ -1,8 +1,5 @@
 // ignore_for_file: unused_local_variable, use_key_in_widget_constructors, prefer_const_constructors_in_immutables, library_private_types_in_public_api, non_constant_identifier_names, avoid_unnecessary_containers, use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evfi/presentation/main/main_view.dart';
-import 'package:evfi/presentation/onboarding/onboarding.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -204,7 +201,7 @@ class _RegisterViewState extends State<RegisterView> {
                                         
                                        
                                         // child: OnBoardingView()),
-                                        child: Onboarding1()),
+                                        child: const Onboarding1()),
                                   );
                                 },
                                 style: ElevatedButton.styleFrom(

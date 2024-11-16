@@ -2,14 +2,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/payments.dart';
 import 'package:evfi/presentation/resources/utils.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:evfi/presentation/storage/booking_data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:page_transition/page_transition.dart';
 import '../../../resources/color_manager.dart';
 
 class Booknow extends StatefulWidget {
@@ -264,7 +262,7 @@ class _Booknow extends State<Booknow> {
                     )),
                     elevation: 4,
                     color: Colors.white,
-                    child: Container(
+                    child: SizedBox(
                       height: height * 0.07,
                       width: double.infinity,
                       child: const Center(
@@ -350,7 +348,7 @@ class _Booknow extends State<Booknow> {
                       )),
                       elevation: 4,
                       color: ColorManager.primary,
-                      child: Container(
+                      child: SizedBox(
                         height: height * 0.05,
                         width: double.infinity,
                         child: const Center(
@@ -402,8 +400,9 @@ class _Booknow extends State<Booknow> {
           print("previousTImeSlot");
           print(previousTImeSlot);
           bookedSlots = timeToBinary((snapshot.data!['timeSlot']));
-          for (int i = bookedSlots.length; i < 24; i++)
-            bookedSlots = "0" + bookedSlots;
+          for (int i = bookedSlots.length; i < 24; i++) {
+            bookedSlots = "0$bookedSlots";
+          }
           print("bookedSlots");
           print(bookedSlots);
           return containersTable(context);
@@ -440,7 +439,7 @@ class _Booknow extends State<Booknow> {
           height: MediaQuery.of(context).size.height * 0.03,
           width: MediaQuery.of(context).size.width * 0.18,
           decoration: BoxDecoration(
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(blurRadius: 2.0),
             ],
             borderRadius: BorderRadius.circular(40),
@@ -477,7 +476,7 @@ class _Booknow extends State<Booknow> {
       if (i == 0) columns.add(timeSlot("12 am", context));
       for (int j = 0; j < 4; j++) {
         if (i == 0 && j == 0) continue;
-        columns.add(timeSlot('${time} am', context));
+        columns.add(timeSlot('$time am', context));
         time++;
       }
       rows.add(
@@ -493,7 +492,7 @@ class _Booknow extends State<Booknow> {
       if (i == 0) columns.add(timeSlot("12 pm", context));
       for (int j = 0; j < 4; j++) {
         if (i == 0 && j == 0) continue;
-        columns.add(timeSlot('${time} pm', context));
+        columns.add(timeSlot('$time pm', context));
         time++;
       }
 

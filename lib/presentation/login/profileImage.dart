@@ -42,6 +42,7 @@ class ProfileImage extends StatelessWidget {
   }
 
   const ProfileImage({Key? key}) : super(key: key);
+  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -108,7 +109,7 @@ class ProfileImage extends StatelessWidget {
                       letterSpacing: 2.0,
                       shadows: <Shadow>[
                         Shadow(
-                            offset: Offset(2.0, 2.0),
+                            offset: const Offset(2.0, 2.0),
                             color: ColorManager.primary20),
                       ],
                     ),
@@ -127,7 +128,7 @@ class ProfileImage extends StatelessWidget {
                       letterSpacing: 2.0,
                       shadows: <Shadow>[
                         Shadow(
-                            offset: Offset(2.0, 2.0),
+                            offset: const Offset(2.0, 2.0),
                             color: ColorManager.primary20),
                       ],
                     ),
@@ -144,7 +145,7 @@ class ProfileImage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => OnBoardingView()),
+                              builder: (context) => const OnBoardingView()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

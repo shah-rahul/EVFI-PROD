@@ -7,8 +7,6 @@ import 'dart:typed_data';
 import 'package:evfi/domain/cachedChargers.dart';
 import 'package:evfi/domain/chargers.dart';
 import 'package:evfi/presentation/pages/widgets/ProgressWidget.dart';
-import 'package:evfi/presentation/resources/utils.dart';
-import 'package:evfi/presentation/storage/UserData.dart';
 import 'package:evfi/presentation/storage/UserDataProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +33,7 @@ void main() async {
 }
 
 class Home extends StatefulWidget {
-  const Home();
+  const Home({super.key});
 
   @override
   State<Home> createState() => HomeState();
@@ -62,7 +60,7 @@ class HomeState extends State<Home> {
   );
   var userData;
   double batteryCap = 0;
-  CollectionReference _usersCollection =
+  final CollectionReference _usersCollection =
       FirebaseFirestore.instance.collection('user');
   User? user = FirebaseAuth.instance.currentUser;
   void getUserData() async {
@@ -143,7 +141,7 @@ class HomeState extends State<Home> {
         .collection('booking')
         .where('status', isEqualTo: 1)
         .get();
-    querySnapshot.docs.forEach((bookingDoc) {
+    for (var bookingDoc in querySnapshot.docs) {
       Map<String, dynamic> bookingData = bookingDoc.data();
 
       DateTime startTime =
@@ -158,7 +156,7 @@ class HomeState extends State<Home> {
             .doc(bookingData['bookingId'])
             .update({'status': 3});
       }
-    });
+    }
 
     for (int i = 0; i < _userBookings.length; i++) {
       DocumentSnapshot snapshot = await getBookingById(_userBookings[i]);

@@ -37,7 +37,7 @@ class SplashViewState extends State<SplashView> {
         backgroundColor: ColorManager.appBlack,
         body: Align(
           alignment: Alignment.center,
-          child: Container(
+          child: SizedBox(
             width: width * 0.3,
             child: Image.asset(
               ImageAssets.splashlogo,

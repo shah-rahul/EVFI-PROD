@@ -1,20 +1,16 @@
 // ignore_for_file: library_private_types_in_public_api, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:evfi/presentation/pages/screens/accountPage/booknow.dart';
-import 'package:evfi/presentation/register/vForm.dart';
 import 'package:evfi/presentation/storage/UserDataProvider.dart';
 import 'package:evfi/presentation/storage/UserData.dart';
-import 'package:evfi/presentation/main/main_view.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-import '../pages/widgets/marker_infowindow.dart';
 import '../resources/assets_manager.dart';
 import '../resources/font_manager.dart';
 
@@ -31,7 +27,7 @@ class VForm extends StatefulWidget {
   final String hostName;
   final String chargerId;
   final String providerId;
-  const VForm({
+  const VForm({super.key, 
     required this.stationName,
     required this.address,
     required this.imageUrl,
@@ -64,11 +60,11 @@ class _VehicleFormState extends State<VForm> {
   bool isVehicleBatteryCapValid = true;
   bool isVehicleMileageValid = true;
 
-  final FocusNode vehicleManfFocus = new FocusNode();
-  final FocusNode vehicleregisFocus = new FocusNode();
-  final FocusNode vehicleBatteryFocus = new FocusNode();
-  final FocusNode vehicleMileageFocus = new FocusNode();
-  final FocusNode chargingRequirementFocus = new FocusNode();
+  final FocusNode vehicleManfFocus = FocusNode();
+  final FocusNode vehicleregisFocus = FocusNode();
+  final FocusNode vehicleBatteryFocus = FocusNode();
+  final FocusNode vehicleMileageFocus = FocusNode();
+  final FocusNode chargingRequirementFocus = FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
 
   TextInputType getKeyboard(FocusNode fn) {
@@ -120,7 +116,7 @@ class _VehicleFormState extends State<VForm> {
                       content: Text(description),
                       actions: [
                         TextButton(
-                          child: Text("OK"),
+                          child: const Text("OK"),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -152,14 +148,14 @@ class _VehicleFormState extends State<VForm> {
             filled: true,
             fillColor: ColorManager.greyText,
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 width: 1,
                 color: ColorManager.greyText,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 width: 2,
                 color: ColorManager.greyText,
@@ -249,7 +245,7 @@ class _VehicleFormState extends State<VForm> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               padding: EdgeInsets.all(height * 0.025),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -322,11 +318,11 @@ class _VehicleFormState extends State<VForm> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Charger Type'),
-                                content: Text('Choose anyone from Level 1, Level 2, Level 3'),
+                                title: const Text('Charger Type'),
+                                content: const Text('Choose anyone from Level 1, Level 2, Level 3'),
                                 actions: [
                                   TextButton(
-                                    child: Text("OK"),
+                                    child: const Text("OK"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -352,7 +348,7 @@ class _VehicleFormState extends State<VForm> {
                         canvasColor: ColorManager.greyText,
                       ),
                       child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p8),
                         ),
@@ -411,6 +407,12 @@ class _VehicleFormState extends State<VForm> {
                           //   ),
                           // );
                         },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorManager.greyText,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                         child: Text(
                           AppStrings.skip,
                           textAlign: TextAlign.center,
@@ -418,12 +420,6 @@ class _VehicleFormState extends State<VForm> {
                               color: ColorManager.white,
                               fontSize: AppSize.s16,
                               fontWeight: FontWeightManager.regular
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: ColorManager.greyText,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                       ),

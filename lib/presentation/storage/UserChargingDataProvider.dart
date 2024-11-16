@@ -60,7 +60,7 @@ class UserChargingDataProvider extends ChangeNotifier {
           FirebaseFirestore.instance.collection('user').doc(user!.uid);
       DocumentReference documentRef = await _chargersCollection.add({
         'chargerId': _userChargingData.chargerId,
-        'uid': user!.uid,
+        'uid': user.uid,
         'g': {
           'geohash': _userChargingData.geohash,
           'geopoint': _userChargingData.geopoint,

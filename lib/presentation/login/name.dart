@@ -13,6 +13,8 @@ import '../storage/UserData.dart';
 import '../resources/font_manager.dart';
 
 class Name extends StatefulWidget {
+  const Name({super.key});
+
   @override
   _NameState createState() => _NameState();
 }
@@ -74,7 +76,7 @@ class _NameState extends State<Name> {
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(3.0, 2.0),
+                        offset: const Offset(3.0, 2.0),
                         color: ColorManager.primary20,
                       ),
                     ],
@@ -117,7 +119,7 @@ class _NameState extends State<Name> {
                           borderRadius: BorderRadius.all(
                               Radius.circular(screenWidth * 0.02)),
                         ),
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: FontSize.s12,
                         ),
@@ -144,7 +146,7 @@ class _NameState extends State<Name> {
                             type: PageTransitionType.rightToLeft,
 
                             // child: OnBoardingView()),
-                            child: ProfileImage()),
+                            child: const ProfileImage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

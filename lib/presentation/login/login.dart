@@ -10,6 +10,8 @@ import '../resources/strings_manager.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
   @override
   _LoginViewState createState() => _LoginViewState();
 }
@@ -51,7 +53,7 @@ class _LoginViewState extends State<LoginView> {
                     letterSpacing: 3.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(3.0, 2.0),
+                        offset: const Offset(3.0, 2.0),
                         color: ColorManager.primary20,
                       ),
                     ],
@@ -65,7 +67,7 @@ class _LoginViewState extends State<LoginView> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SignupPage()),
+                        MaterialPageRoute(builder: (context) => const SignupPage()),
                       );
                     },
                     child: Text(
@@ -110,7 +112,7 @@ class _LoginViewState extends State<LoginView> {
                           borderRadius: BorderRadius.all(
                               Radius.circular(screenWidth * 0.02)),
                         ),
-                        labelStyle: TextStyle(
+                        labelStyle: const TextStyle(
                           color: Colors.white,
                           fontSize: FontSize.s12,
                         ),
@@ -127,7 +129,7 @@ class _LoginViewState extends State<LoginView> {
                         });
                       },
                       onCountryChanged: (country) {
-                        print('Country changed to: ' + country.name);
+                        print('Country changed to: ${country.name}');
                       },
                     ),
                     // TextField(

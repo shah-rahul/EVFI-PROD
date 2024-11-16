@@ -63,6 +63,7 @@ class _BookingWidgetState extends State<BookingWidget> {
     }
   }
 
+  @override
   void initState() {
     super.initState();
   }
@@ -76,6 +77,7 @@ class _BookingWidgetState extends State<BookingWidget> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     statusButton(widget.bookingItem.status);
     final height = MediaQuery.of(context).size.height;
@@ -147,7 +149,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.08, vertical: width * 0.003),
                       child: Text(
-                        '+' + widget.bookingItem.customerMobileNumber,
+                        '+${widget.bookingItem.customerMobileNumber}',
                         style: TextStyle(
                           color: textColor,
                           fontSize: width * 0.03,
@@ -209,7 +211,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               if (widget.bookingItem.status == 1)
                 Padding(
                   padding: EdgeInsets.all(width * 0.01),
-                  child: Container(
+                  child: SizedBox(
                     //margin: EdgeInsets.symmetric(horizontal: height * 0.01),
                     width: width * 0.28,
                     height: height * 0.03,
@@ -219,7 +221,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.green),
+                        WidgetStateProperty.all<Color>(Colors.green),
                       ),
                       child: const Text(AppStrings.AcceptButton,
                           style: TextStyle(color: Colors.black)),
@@ -229,7 +231,7 @@ class _BookingWidgetState extends State<BookingWidget> {
               if (widget.bookingItem.status == 1)
                 Padding(
                   padding: EdgeInsets.all(width * 0.01),
-                  child: Container(
+                  child: SizedBox(
                     width: width * 0.28,
                     height: height * 0.03,
                     child: ElevatedButton(
@@ -238,7 +240,7 @@ class _BookingWidgetState extends State<BookingWidget> {
                       },
                       style: ButtonStyle(
                         backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red),
+                        WidgetStateProperty.all<Color>(Colors.red),
                       ),
                       child: const Text(AppStrings.DeclineButton,
                           style: TextStyle(color: Colors.black)),

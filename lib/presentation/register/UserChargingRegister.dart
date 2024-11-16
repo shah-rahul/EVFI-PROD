@@ -27,7 +27,7 @@ class _UserChargingRegisterState extends State<UserChargingRegister> {
   final picker = ImagePicker();
 
   Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery,imageQuality: 50);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery,imageQuality: 50);
 
     setState(() {
       if (pickedFile != null) {

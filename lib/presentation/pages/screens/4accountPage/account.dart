@@ -45,8 +45,8 @@ class _AccountState extends State<Account> {
 
 //======================= IMAGE UPLOAD CODE ====================================
   Future<void> _pickImageFromGallery() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       File imageFile = File(image.path);
@@ -112,8 +112,8 @@ class _AccountState extends State<Account> {
         isProvider = userData["level3"];
         chargers = userData["chargers"];
         print("In fetching block");
-        print('username is : ${username}');
-        print('phone number is :${phoneNo}');
+        print('username is : $username');
+        print('phone number is :$phoneNo');
       });
     } catch (e) {
       print('Error fetching user data: $e');
@@ -337,12 +337,12 @@ Widget profileSection(BuildContext context) {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("Hey ${username}!",
+              Text("Hey $username!",
                   style: const TextStyle(
                       fontSize: AppSize.s20,
                       fontWeight: FontWeight.w900,
                       fontFamily: 'fonts/Poppins')),
-              Text('ID: ${phoneNo}',
+              Text('ID: $phoneNo',
                   style: const TextStyle(
                       fontSize: AppSize.s16,
                       fontWeight: FontWeight.w300,

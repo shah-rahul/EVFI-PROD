@@ -154,6 +154,8 @@ import '../resources/values_manager.dart';
 import '../resources/routes_manager.dart';
 
 class SignupPage extends StatefulWidget {
+  const SignupPage({super.key});
+
   @override
   _SignupPageState createState() => _SignupPageState();
 }
@@ -191,7 +193,7 @@ class _SignupPageState extends State<SignupPage> {
                     letterSpacing: 3.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(3.0, 2.0),
+                        offset: const Offset(3.0, 2.0),
                         color: ColorManager.primary20,
                       ),
                     ],
@@ -205,10 +207,10 @@ class _SignupPageState extends State<SignupPage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LoginView()),
+                        MaterialPageRoute(builder: (context) => const LoginView()),
                       );
                     },
-                    child: Text(
+                    child: const Text(
                       AppStrings.login,
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -251,7 +253,7 @@ class _SignupPageState extends State<SignupPage> {
                             borderRadius: BorderRadius.all(
                                 Radius.circular(screenWidth * 0.02)),
                           ),
-                          labelStyle: TextStyle(
+                          labelStyle: const TextStyle(
                             color: Colors.white,
                             fontSize: FontSize.s12,
                           ),
@@ -268,7 +270,7 @@ class _SignupPageState extends State<SignupPage> {
                           });
                         },
                         onCountryChanged: (country) {
-                          print('Country changed to: ' + country.name);
+                          print('Country changed to: ${country.name}');
                         },
                       ),
                     )),

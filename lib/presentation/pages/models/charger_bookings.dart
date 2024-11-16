@@ -1,5 +1,4 @@
 // ignore_for_file: file_names
-import 'package:evfi/presentation/resources/values_manager.dart';
 
 class Booking {
   int amount;
@@ -25,7 +24,7 @@ class Booking {
 }
 
 class ProviderBookings {
-  List<Booking> _chargerBookings = [];
+  final List<Booking> _chargerBookings = [];
 
   List<Booking> get providerBookings {
     return [..._chargerBookings];

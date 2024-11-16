@@ -1,23 +1,19 @@
-import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../resources/routes_manager.dart';
-import '../screens/1homePage/home.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../resources/color_manager.dart';
 import '../models/auto_search.dart';
-import '../screens/1homePage/search_page.dart';
 
 class SearchWidget extends StatefulWidget {
   final Function(Position) onLocationSelected;
 
   const SearchWidget(
-    this.onLocationSelected,
+    this.onLocationSelected, {super.key}
   );
 
   @override
@@ -35,17 +31,17 @@ class _SearchWidgetState extends State<SearchWidget> {
     FocusNode textFieldFocusNode,
   ) {
     final width = MediaQuery.of(context).size.width;
-    final hint = "Search chargers";
+    const hint = "Search chargers";
     return Container(
       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
       child: TextFormField(
           controller: controller,
           focusNode: textFieldFocusNode,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           keyboardType: TextInputType.streetAddress,
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(fontSize: AppSize.s12, color: Colors.white),
+            hintStyle: const TextStyle(fontSize: AppSize.s12, color: Colors.white),
             filled: true, //<-- SEE HERE
             fillColor: ColorManager.appBlack,
             contentPadding: const EdgeInsets.all(10),
@@ -82,9 +78,9 @@ class _SearchWidgetState extends State<SearchWidget> {
                 color: ColorManager.primary,
                 width: 2.0,
               ),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s20)),
+              borderRadius: const BorderRadius.all(Radius.circular(AppSize.s20)),
             ),
-            enabledBorder: OutlineInputBorder(
+            enabledBorder: const OutlineInputBorder(
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.all(Radius.circular(AppSize.s20))),
           ),
@@ -130,7 +126,7 @@ class _SearchWidgetState extends State<SearchWidget> {
     final width = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.symmetric(horizontal: width * 0.04),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(AppSize.s12))),
       height: _options.length > 4
@@ -197,7 +193,7 @@ class _SearchWidgetState extends State<SearchWidget> {
   final textFieldcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final suggestionController = SuggestionsBoxController();
+    // final suggestionController = SuggestionsBoxController();
 
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;

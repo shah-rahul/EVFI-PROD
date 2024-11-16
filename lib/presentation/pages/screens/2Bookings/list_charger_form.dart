@@ -57,7 +57,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
   final _pinCodeFocusNode = FocusNode();
   final _stateFocusNode = FocusNode();
   final ImagePicker imagePicker = ImagePicker();
-  final List<XFile>? _imageList = [];
+  final List<XFile> _imageList = [];
   final List<String> imageUrls = [];
   late LatLng _selectedLocation;
   late LatLng _position;
@@ -119,7 +119,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
     setState(() {});
     return Card(
       elevation: 4,
-      child: Container(
+      child: SizedBox(
           height: 250,
           width: double.infinity,
           child: GoogleMap(
@@ -213,14 +213,14 @@ class _ListChargerFormState extends State<ListChargerForm> {
     if (source == ImageSource.gallery) {
       final List<XFile> selectedImage = await imagePicker.pickMultiImage();
       if (selectedImage.isNotEmpty) {
-        _imageList!.addAll(selectedImage);
+        _imageList.addAll(selectedImage);
       }
     } else {
       final XFile? sekectedImage = await imagePicker.pickImage(
           source: ImageSource.camera, imageQuality: 50);
 
       if (sekectedImage != null) {
-        _imageList!.add(sekectedImage);
+        _imageList.add(sekectedImage);
       }
     }
 
@@ -316,9 +316,9 @@ class _ListChargerFormState extends State<ListChargerForm> {
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
                   childAspectRatio: 1),
-              itemCount: _imageList!.length,
+              itemCount: _imageList.length,
               itemBuilder: (context, index) => Image.file(
-                File(_imageList![index].path),
+                File(_imageList[index].path),
                 fit: BoxFit.cover,
               ),
             )),
@@ -359,7 +359,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
       UserChargingData userChargingData =
           userChargingDataProvider.userChargingData;
       userChargingData.geohash = geohash;
-      userChargingData.geopoint = gpoint as GeoPoint;
+      userChargingData.geopoint = gpoint;
 
       // userChargingDataProvider.setUserChargingData(userChargingData);
     }
@@ -454,7 +454,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
       StoreChargerType(++chargerType);
       StoreAvailability(_startAvailabilityTime!, _endAvailabilityTime!);
       Storeg(_position);
-      await uploadImages(_imageList!)
+      await uploadImages(_imageList)
           .then((value) => {StoreImageurl(imageUrls)});
 
       await FirebaseFirestore.instance
@@ -706,7 +706,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                                     decoration: InputDecoration(
                                       hintText: 'Enter Pin',
                                       hintStyle:
-                                          TextStyle(fontSize: AppSize.s14),
+                                          const TextStyle(fontSize: AppSize.s14),
                                       fillColor: Colors.white,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
@@ -936,7 +936,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                           _makeTitle(title: 'Amenities'),
                           Card(
                             elevation: 4,
-                            shape: RoundedRectangleBorder(
+                            shape: const RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(8)),
                             ),
@@ -972,7 +972,7 @@ class _ListChargerFormState extends State<ListChargerForm> {
                           // const SizedBox(width: 40),
                           Container(
                             margin: const EdgeInsets.only(top: 25),
-                            child: _imageList!.isNotEmpty
+                            child: _imageList.isNotEmpty
                                 ? _showChargerImages()
                                 : customElevatedButton(
                                     context: context,

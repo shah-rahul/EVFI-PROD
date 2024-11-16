@@ -40,9 +40,9 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (_) => const SplashView());
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (_) => LoginView());
+        return MaterialPageRoute(builder: (_) => const LoginView());
       case Routes.onBoardingRoute:
-        return MaterialPageRoute(builder: (_) => ProfileImage());
+        return MaterialPageRoute(builder: (_) => const ProfileImage());
       case Routes.registerRoute:
         return MaterialPageRoute(
             builder: (_) => RegisterView(

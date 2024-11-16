@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Complaint extends StatefulWidget {
-  const Complaint({
+  const Complaint({super.key, 
     required this.chargerId,
     required this.chargerName,
   });
@@ -38,7 +38,7 @@ class _ComplaintState extends State<Complaint> {
   }
 
   void submit() {
-    print("charger status is : ${_isWorking}");
+    print("charger status is : $_isWorking");
     print("The complaint is : ${commentController.text}");
     print("The user id is : ${_user!.uid}");
 

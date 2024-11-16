@@ -47,7 +47,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(50),
         ),
         color: ColorManager.primary,
@@ -156,7 +156,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                               context,
                               PageTransition(
                                   type: PageTransitionType.rightToLeft,
-                                  child: VehicleForm()),
+                                  child: const VehicleForm()),
                             );
                           },
                           style: ElevatedButton.styleFrom(

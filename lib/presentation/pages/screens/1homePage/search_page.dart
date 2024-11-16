@@ -103,7 +103,7 @@ class SearchPageState extends State<SearchPage> {
 
   Future<void> storeStartAndEndLocations(LatLng startL, LatLng endL) async {
     try {
-      final databaseReference = FirebaseDatabase.instance.reference();
+      final databaseReference = FirebaseDatabase.instance.ref();
 
       final routeMapReference = databaseReference.child('RouteMap').push();
 

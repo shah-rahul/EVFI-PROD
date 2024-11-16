@@ -2,14 +2,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/pages/screens/4accountPage/user_profile.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/image_input.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:flutter/widgets.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({

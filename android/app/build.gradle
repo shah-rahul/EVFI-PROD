@@ -27,7 +27,8 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
+    
     ndkVersion flutter.ndkVersion
     lint {
         baseline = file("lint-baseline.xml")
@@ -50,11 +51,13 @@ android {
         applicationId "com.example.evfi"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdkVersion 23
+        targetSdkVersion 34
+        
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
+    namespace = "com.example.evfi"
 
     buildTypes {
         release {
@@ -71,5 +74,5 @@ flutter {
 
 dependencies {
     implementation platform('com.google.firebase:firebase-bom:31.5.0')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0"
 }

@@ -78,6 +78,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     statusButton(widget.chargingItem.status);
     final height = MediaQuery.of(context).size.height;
@@ -88,7 +89,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
       decoration: BoxDecoration(
         color: buttonColor,
         borderRadius: BorderRadius.circular(width * 0.08),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             offset: Offset(4, 4),
             blurRadius: 15,
@@ -136,7 +137,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.08, vertical: width * 0.01),
                       child: Text(
-                        '+' + widget.chargingItem.phoneNumber,
+                        '+${widget.chargingItem.phoneNumber}',
                         style: TextStyle(
                           fontFamily: FontConstants.appTitleFontFamily,
                           color: textColor,
@@ -165,7 +166,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.07, vertical: width * 0.025),
                 child: Container(
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   child: Column(
                     children: [
                       Column(
@@ -241,7 +242,7 @@ class _MyChargingWidgetState extends State<MyChargingWidget> {
                 padding: EdgeInsets.symmetric(
                     horizontal: width * 0.07, vertical: width * 0.025),
                 child: Container(
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   child: Column(children: [
                     SizedBox(height: height * 0.025),
                     InkWell(

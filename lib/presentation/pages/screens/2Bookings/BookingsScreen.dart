@@ -3,14 +3,11 @@ import 'dart:async';
 
 import 'package:evfi/presentation/pages/screens/2Bookings/list_chargers_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:evfi/presentation/pages/screens/4accountPage/account.dart';
 import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:evfi/presentation/resources/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../resources/font_manager.dart';
-import '../../../storage/UserData.dart';
 import '../../models/charger_bookings.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';

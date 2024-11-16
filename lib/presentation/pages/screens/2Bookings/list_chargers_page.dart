@@ -1,4 +1,3 @@
-import 'package:evfi/presentation/pages/screens/2Bookings/list_charger_form.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
 import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
@@ -6,7 +5,6 @@ import 'package:evfi/presentation/resources/routes_manager.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:evfi/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 class ListChargersPage extends StatelessWidget {
   const ListChargersPage({super.key});

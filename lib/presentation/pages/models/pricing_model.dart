@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:flutter/material.dart';
 
 enum States {
   AndhraPradesh,

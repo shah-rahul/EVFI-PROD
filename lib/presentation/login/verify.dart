@@ -82,7 +82,7 @@ class _VerifyState extends State<Verify> {
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(3.0, 2.0),
+                        offset: const Offset(3.0, 2.0),
                         color: ColorManager.primary20,
                       ),
                     ],
@@ -98,7 +98,7 @@ class _VerifyState extends State<Verify> {
                     letterSpacing: 2.0,
                     shadows: <Shadow>[
                       Shadow(
-                        offset: Offset(3.0, 2.0),
+                        offset: const Offset(3.0, 2.0),
                         color: ColorManager.primary20,
                       ),
                     ],
@@ -234,7 +234,7 @@ class _VerifyState extends State<Verify> {
                               // child: RegisterView(
                               //   phoneNumber: widget.phoneNumber,
                               // ),
-                              child: Name(),
+                              child: const Name(),
                             ),
                           );
                         }

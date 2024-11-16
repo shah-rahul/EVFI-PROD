@@ -7,7 +7,7 @@ class ProgressWidget extends StatefulWidget {
   final DateTime startTime;
   final DateTime endTime;
 
-  ProgressWidget(this.startTime, this.endTime);
+  const ProgressWidget(this.startTime, this.endTime, {super.key});
   @override
   State<ProgressWidget> createState() => _ProgressWidgetState();
 }
@@ -20,7 +20,7 @@ class _ProgressWidgetState extends State<ProgressWidget> {
     super.initState();
     print('-----');
     // Start a timer to update UI every second
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {}); // Trigger UI update
     });
   }
@@ -59,7 +59,7 @@ class CircularTimer extends StatelessWidget {
     return SingleChildScrollView(
         child: Container(
             height: 200,
-            padding: EdgeInsets.all(AppMargin.m20),
+            padding: const EdgeInsets.all(AppMargin.m20),
             child: Card(
                 shadowColor: ColorManager.CardshadowBottomRight,
                 shape: const RoundedRectangleBorder(
@@ -69,28 +69,28 @@ class CircularTimer extends StatelessWidget {
                 elevation: 4,
                 color: Colors.white,
                 child: Padding(
-                    padding: EdgeInsets.all(AppMargin.m14),
+                    padding: const EdgeInsets.all(AppMargin.m14),
                     child: Center(
                       // Wrap CircularProgressIndicator with AspectRatio to maintain square shape
                       child: AspectRatio(
                         aspectRatio: 1.0, // 1.0 for a perfect square
                         child: Stack(children: [
                           Container(
-                            margin: EdgeInsets.only(top: 30),
+                            margin: const EdgeInsets.only(top: 30),
                             width: 60,
                             height: 60,
                             child: CircularProgressIndicator(
                               value: progress,
                               strokeWidth: 10,
                               valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.blue),
+                                  const AlwaysStoppedAnimation<Color>(Colors.blue),
                               backgroundColor: Colors.grey[300],
                               semanticsLabel: 'Booking progress',
                             ),
                           ),
                           Text(
                             'Time Left ${1 - (duration.inSeconds / 60).round()}', // Your text here
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: AppSize.s16,
                               color: Colors.black,
                             ),

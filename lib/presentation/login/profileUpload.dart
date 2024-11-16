@@ -9,12 +9,11 @@ import 'package:evfi/presentation/resources/color_manager.dart';
 import 'package:evfi/presentation/resources/strings_manager.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:evfi/presentation/resources/assets_manager.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class ProfileUpload extends StatefulWidget {
   final String imagePath;
 
-  const ProfileUpload({required this.imagePath});
+  const ProfileUpload({super.key, required this.imagePath});
 
   @override
   State<ProfileUpload> createState() => _ProfileUploadState();
@@ -48,7 +47,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
         // Navigate to the next screen (OnBoardingView in this case)
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => OnBoardingView()),
+          MaterialPageRoute(builder: (context) => const OnBoardingView()),
         );
       });
     } catch (e) {
@@ -124,7 +123,7 @@ class _ProfileUploadState extends State<ProfileUpload> {
                   });
                 },
                 child: ClipOval(
-                  child: Container(
+                  child: SizedBox(
                     width: screenWidth * 0.55,
                     height: screenWidth * 0.55,
                     child: InteractiveViewer(

@@ -16,7 +16,7 @@ Widget customElevatedButton(
       width: width,
       child: ElevatedButton(
           style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(color)),
+              backgroundColor: WidgetStateProperty.all<Color>(color)),
           onPressed: onTap,
           child:
               Text(text, style: Theme.of(context).textTheme.headlineMedium)));

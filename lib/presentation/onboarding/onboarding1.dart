@@ -9,6 +9,8 @@ import '../resources/values_manager.dart';
 import '../resources/routes_manager.dart';
 
 class Onboarding1 extends StatelessWidget {
+  const Onboarding1({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class Onboarding1 extends StatelessWidget {
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
                     Shadow(
-                        offset: Offset(-4.0, 3.0),
+                        offset: const Offset(-4.0, 3.0),
                         color: ColorManager.dullYellow
                     ),
                   ],
@@ -61,7 +63,7 @@ class Onboarding1 extends StatelessWidget {
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
                     Shadow(
-                        offset: Offset(-4.0, 3.0),
+                        offset: const Offset(-4.0, 3.0),
                         color: ColorManager.dullYellow
                     ),
                   ],
@@ -110,7 +112,7 @@ class Onboarding1 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Onboarding2()),
+                        MaterialPageRoute(builder: (context) => const Onboarding2()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -133,6 +135,8 @@ class Onboarding1 extends StatelessWidget {
 }
 
 class Onboarding2 extends StatelessWidget {
+  const Onboarding2({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +169,7 @@ class Onboarding2 extends StatelessWidget {
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
                     Shadow(
-                        offset: Offset(-4.0, 3.0),
+                        offset: const Offset(-4.0, 3.0),
                         color: ColorManager.dullYellow
                     ),
                   ],
@@ -185,7 +189,7 @@ class Onboarding2 extends StatelessWidget {
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
                     Shadow(
-                        offset: Offset(-4.0, 3.0),
+                        offset: const Offset(-4.0, 3.0),
                         color: ColorManager.dullYellow
                     ),
                   ],
@@ -203,7 +207,7 @@ class Onboarding2 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Onboarding1()),
+                        MaterialPageRoute(builder: (context) => const Onboarding1()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -238,7 +242,7 @@ class Onboarding2 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Onboarding3()),
+                        MaterialPageRoute(builder: (context) => const Onboarding3()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -262,6 +266,8 @@ class Onboarding2 extends StatelessWidget {
 }
 
 class Onboarding3 extends StatelessWidget {
+  const Onboarding3({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +299,7 @@ class Onboarding3 extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
-                    Shadow(offset: Offset(-4.0, 3.0), color: ColorManager.dullYellow),
+                    Shadow(offset: const Offset(-4.0, 3.0), color: ColorManager.dullYellow),
                   ],
                 ),
               ),
@@ -310,7 +316,7 @@ class Onboarding3 extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                   letterSpacing: 2.0,
                   shadows: <Shadow>[
-                    Shadow(offset: Offset(-4.0, 3.0), color: ColorManager.dullYellow),
+                    Shadow(offset: const Offset(-4.0, 3.0), color: ColorManager.dullYellow),
                   ],
                 ),
               ),
@@ -326,7 +332,7 @@ class Onboarding3 extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Onboarding2()),
+                        MaterialPageRoute(builder: (context) => const Onboarding2()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -367,7 +373,7 @@ class Onboarding3 extends StatelessWidget {
                         context,
                         PageTransition(
                             type: PageTransitionType.rightToLeft,
-                            child: VehicleForm()),
+                            child: const VehicleForm()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

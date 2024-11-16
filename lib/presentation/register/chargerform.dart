@@ -51,7 +51,7 @@ class _ChargerFormState extends State<ChargerForm> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 top: AppPadding.p50,
                 right: AppPadding.p20,
                 bottom: AppPadding.p30,
@@ -91,7 +91,7 @@ class _ChargerFormState extends State<ChargerForm> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               padding: EdgeInsets.all(height * 0.025),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
@@ -103,12 +103,12 @@ class _ChargerFormState extends State<ChargerForm> {
                     BoxShadow(
                       blurRadius: 2,
                       color: ColorManager.shadowBottomRight.withOpacity(0.3),
-                      offset: Offset(4, 4),
+                      offset: const Offset(4, 4),
                     ),
                     BoxShadow(
                       blurRadius: 2,
                       color: ColorManager.shadowTopLeft.withOpacity(0.4),
-                      offset: Offset(2, 2),
+                      offset: const Offset(2, 2),
                     ),
                   ]),
               child: Column(
@@ -130,11 +130,11 @@ class _ChargerFormState extends State<ChargerForm> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Charger Type'),
-                                    content: Text('Choose anyone from Level 1, Level 2, Level 3'),
+                                    title: const Text('Charger Type'),
+                                    content: const Text('Choose anyone from Level 1, Level 2, Level 3'),
                                     actions: [
                                       TextButton(
-                                        child: Text("OK"),
+                                        child: const Text("OK"),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
@@ -160,7 +160,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             canvasColor: ColorManager.greyText,
                           ),
                           child: DropdownButtonFormField<String>(
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               enabledBorder: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p8),
                             ),
@@ -198,11 +198,11 @@ class _ChargerFormState extends State<ChargerForm> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Charger Speed'),
-                                    content: Text('Tell us the charging speed'),
+                                    title: const Text('Charger Speed'),
+                                    content: const Text('Tell us the charging speed'),
                                     actions: [
                                       TextButton(
-                                        child: Text("OK"),
+                                        child: const Text("OK"),
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
@@ -226,7 +226,7 @@ class _ChargerFormState extends State<ChargerForm> {
                         child: TextField(
                           controller: chargerspeedController,
                           style: TextStyle(color: ColorManager.primary),
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Enter Charger Speed',
                           ),
@@ -234,7 +234,7 @@ class _ChargerFormState extends State<ChargerForm> {
                       ),
                       SizedBox(height: height * 0.01),
                       if (showError)
-                        Text(
+                        const Text(
                           'This field is required',
                           style: TextStyle(color: Colors.red),
                         ),
@@ -262,7 +262,7 @@ class _ChargerFormState extends State<ChargerForm> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           AppStrings.skip,
                           textAlign: TextAlign.center,
                           style: TextStyle(

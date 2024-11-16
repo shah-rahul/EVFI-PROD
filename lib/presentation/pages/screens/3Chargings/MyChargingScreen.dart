@@ -5,8 +5,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evfi/presentation/resources/font_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -15,7 +13,6 @@ import 'package:evfi/presentation/pages/models/vehicle_chargings.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../resources/strings_manager.dart';
 import '../../../resources/color_manager.dart';
-import 'package:evfi/presentation/resources/values_manager.dart';
 import '../../widgets/charging_item_widget.dart';
 
 class MyChargingScreen extends StatefulWidget {
@@ -56,8 +53,8 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
   bool _fetchingBookings = false;
   Widget shimmerPlaceholder() {
     return Shimmer.fromColors(
-      baseColor: ColorManager.grey5!,
-      highlightColor: ColorManager.white!,
+      baseColor: ColorManager.grey5,
+      highlightColor: ColorManager.white,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         decoration: BoxDecoration(
@@ -159,10 +156,11 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                 List<DocumentSnapshot<Map<String, dynamic>>> documents =
                     snapshot.data!.docs;
                 // print(documents[0]);
-                if (documents.length == 0)
-                  return Center(
+                if (documents.isEmpty) {
+                  return const Center(
                     child: Text('No Chargings yet..'),
                   );
+                }
                 List<String> phoneNumber = [];
                 return ListView.builder(
                   itemBuilder: (context, index) {
@@ -199,7 +197,7 @@ class _MyChargingScreenState extends State<MyChargingScreen> {
                                   chargingItem: Charging(
                                       amount:
                                           documents[index]['price'],
-                                      phoneNumber: phoneNumber.length > 0
+                                      phoneNumber: phoneNumber.isNotEmpty
                                           ? phoneNumber[phoneNumber.length - 1]
                                           : "",
                                       position: const LatLng(0,

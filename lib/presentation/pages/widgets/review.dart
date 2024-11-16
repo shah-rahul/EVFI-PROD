@@ -5,7 +5,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Review extends StatefulWidget {
-  const Review({
+  const Review({super.key, 
     required this.chargerId,
     required this.chargerName,
   });
@@ -25,7 +25,7 @@ class _ReviewState extends State<Review> {
 
   //submitting function.......................................................
   void submit() {
-    print("rating is : ${rating}");
+    print("rating is : $rating");
     print("comment is : ${commentController.text}");
 
     reviewCollection.add({

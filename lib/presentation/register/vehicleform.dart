@@ -10,7 +10,6 @@ import '../storage/UserData.dart';
 import '../storage/UserDataProvider.dart';
 import '../resources/color_manager.dart';
 import '../resources/assets_manager.dart';
-import './chargerform.dart';
 
 import 'package:page_transition/page_transition.dart';
 import '../resources/values_manager.dart';
@@ -36,11 +35,11 @@ class _VehicleFormState extends State<VehicleForm> {
   bool isVehicleBatteryCapValid = true;
   bool isVehicleMileageValid = true;
 
-  final FocusNode vehicleManfFocus = new FocusNode();
-  final FocusNode vehicleregisFocus = new FocusNode();
-  final FocusNode vehicleBatteryFocus = new FocusNode();
-  final FocusNode vehicleMileageFocus = new FocusNode();
-  final FocusNode chargingRequirementFocus = new FocusNode();
+  final FocusNode vehicleManfFocus = FocusNode();
+  final FocusNode vehicleregisFocus = FocusNode();
+  final FocusNode vehicleBatteryFocus = FocusNode();
+  final FocusNode vehicleMileageFocus = FocusNode();
+  final FocusNode chargingRequirementFocus = FocusNode();
   final databaseRef = FirebaseDatabase.instance.ref('user');
 
   TextInputType getKeyboard(FocusNode fn) {
@@ -92,7 +91,7 @@ class _VehicleFormState extends State<VehicleForm> {
                       content: Text(description),
                       actions: [
                         TextButton(
-                          child: Text("OK"),
+                          child: const Text("OK"),
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
@@ -124,14 +123,14 @@ class _VehicleFormState extends State<VehicleForm> {
             filled: true,
             fillColor: ColorManager.greyText,
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 width: 1,
                 color: ColorManager.greyText,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 width: 2,
                 color: ColorManager.greyText,
@@ -221,7 +220,7 @@ class _VehicleFormState extends State<VehicleForm> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+              margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               padding: EdgeInsets.all(height * 0.025),
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.only(
@@ -294,11 +293,11 @@ class _VehicleFormState extends State<VehicleForm> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Charger Type'),
-                                content: Text('Choose anyone from Level 1, Level 2, Level 3'),
+                                title: const Text('Charger Type'),
+                                content: const Text('Choose anyone from Level 1, Level 2, Level 3'),
                                 actions: [
                                   TextButton(
-                                    child: Text("OK"),
+                                    child: const Text("OK"),
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
@@ -324,7 +323,7 @@ class _VehicleFormState extends State<VehicleForm> {
                         canvasColor: ColorManager.greyText,
                       ),
                       child: DropdownButtonFormField<String>(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           enabledBorder: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(horizontal: AppPadding.p8),
                         ),
