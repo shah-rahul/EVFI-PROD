@@ -178,11 +178,8 @@ class _SignupPageState extends State<SignupPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: screenHeight * 0.10),
-                Image.asset(
-                  ImageAssets.logo3D,
-                    height: screenHeight * 0.32,
-                    width: screenWidth * 0.31
-                ),
+                Image.asset(ImageAssets.logo3D,
+                    height: screenHeight * 0.32, width: screenWidth * 0.31),
                 SizedBox(height: screenHeight * 0.08),
                 Text(
                   AppStrings.SignUp,
@@ -236,8 +233,11 @@ class _SignupPageState extends State<SignupPage> {
                         dropdownTextStyle:
                             TextStyle(color: ColorManager.darkGrey),
                         disableLengthCheck: false,
+                        style: TextStyle(
+                          color: ColorManager.primary,
+                        ),
                         decoration: InputDecoration(
-                            counterText: '',
+                          counterText: '',
                           filled: true,
                           fillColor: ColorManager.grey4,
                           // hintText: '7303440170',
@@ -303,8 +303,8 @@ class _SignupPageState extends State<SignupPage> {
                         codeSent: (String verificationId, int? resendToken) {
                           // Save verification ID and navigate to verification code page
                           Navigator.push(
-                            context,
-                            PageTransition(
+                              context,
+                              PageTransition(
                                 type: PageTransitionType.rightToLeft,
                                 // child: VerificationCodePage(
                                 //   verificationId: verificationId,
@@ -313,16 +313,18 @@ class _SignupPageState extends State<SignupPage> {
                                 child: Verify(
                                   verificationId: verificationId,
                                   phoneNumber: phoneNumber,
-                                ),)
-                                // child: Name(phoneNumber: phoneNumber)),
-                          );
+                                ),
+                              )
+                              // child: Name(phoneNumber: phoneNumber)),
+                              );
                         },
                         codeAutoRetrievalTimeout: (String verificationId) {
                           //  Handle code auto retrieval timeout
                         },
                       );
                     },
-                    style: ElevatedButton.styleFrom(backgroundColor:  ColorManager.primary,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: ColorManager.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(screenWidth * 0.02),
                       ),

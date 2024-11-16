@@ -318,7 +318,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         width: MediaQuery.of(context).size.width * 0.35,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          color: ColorManager.darkPrimary,
+                          color: ColorManager.primary,
                         ),
                         child: Center(
                           child: Text(
@@ -344,7 +344,7 @@ class _CustomMarkerPopupState extends State<CustomMarkerPopup> {
                         width: MediaQuery.of(context).size.width * 0.35,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
-                          color: ColorManager.darkPrimary,
+                          color: ColorManager.primary,
                         ),
                         child: Center(
                           child: Text(
