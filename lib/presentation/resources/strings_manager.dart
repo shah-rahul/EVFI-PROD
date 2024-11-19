@@ -10,20 +10,20 @@ class AppStrings {
   static const onboardingSubTitle2 = "";
   static const onboardingSubTitle3 = "";
   static const skip = "Skip";
-  static const next = "next";
-  static const login = "login";
+  static const next = "Next";
+  static const login = "Login";
 
   static const SignUp = "sign-up";
-  static const signUp = "signUp";
+  static const signUp = "SignUp";
   static const Login = "Login";
-  static const otp = "send otp";
+  static const otp = "Send OTP";
   static const almost = "almost";
   static const there = "there";
-  static const verify = "verify";
+  static const verify = "Verify";
   static const skipForLater = "skip for later";
-  static const uploadAnImage = "upload an image";
+  static const uploadAnImage = "Upload an Image";
   static const tap = "tap anywhere to";
-  static const upload = "upload";
+  static const upload = "Upload";
   static const lookingClean = "looking clean";
   static const weCallYou = "we call you";
   static const whatShould = "what should";
@@ -35,7 +35,8 @@ class AppStrings {
   static const chargerTitle = "Rent With \nUs";
   static const chargerButton = "Proceed To List";
   static const vehicleformTitle = "Vehicle Info";
-  static const vehicleformSubTitle ="   Let's get your \n   vehicle info ready!";
+  static const vehicleformSubTitle =
+      "   Let's get your \n   vehicle info ready!";
   static const chargerFormTitle = "List your Charger";
 
   static const chargerformtitle = "Charger Info";
@@ -61,5 +62,4 @@ class AppStrings {
   static const topLabel = "Time  left";
   static const myChargers = "My Chargers";
   static const errorMessage = "This field is required";
-
 }
